@@ -4,9 +4,9 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="https://huakunshen.com">
+        <a className="navbar-brand" href="/">
           <img
-            src={process.env.PUBLIC_URL + "./logo_S.png"}
+            src={process.env.PUBLIC_URL + "./img/logo_S.png"}
             alt=""
             width="50px"
           />
@@ -27,19 +27,19 @@ class Navbar extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="https://huakunshen.com">
+              <a className="nav-link" href="/">
                 Home <span className="sr-only">(current)</span>
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="https://huakunshen.com">
+              <a className="nav-link" href="/">
                 Link
               </a>
             </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="https://huakunshen.com"
+                href="/"
                 id="navbarDropdown"
                 role="button"
                 data-toggle="dropdown"
@@ -49,14 +49,14 @@ class Navbar extends React.Component {
                 Dropdown
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href="https://huakunshen.com">
+                <a className="dropdown-item" href="/">
                   Action
                 </a>
-                <a className="dropdown-item" href="https://huakunshen.com">
+                <a className="dropdown-item" href="/">
                   Another action
                 </a>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="https://huakunshen.com">
+                <a className="dropdown-item" href="/">
                   Something else here
                 </a>
               </div>
@@ -64,7 +64,7 @@ class Navbar extends React.Component {
             <li className="nav-item">
               <a
                 className="nav-link disabled"
-                href="https://huakunshen.com"
+                href="/"
                 tabIndex="-1"
                 aria-disabled="true"
               >

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar.jsx";
+import Post from "../Post";
 import "../../stylesheets/home.css";
 
 class Home extends Component {
@@ -7,14 +8,33 @@ class Home extends Component {
   componentDidMount() {}
   render() {
     return (
-      <div className="container">
+      <div>
         <Navbar />
-        <div class="row no-gutters">
-          <div class="col-12 col-sm-6 col-md-8">
+        <div className="container row">
+          <div className="posts col-12 col-sm-6 col-md-8">
             <h3>Posts</h3>
+            <Post />
+            <Post />
           </div>
-          <div class="col-6 col-md-4">
-            <h3>Recommendations</h3>
+          <div className="recommendations col-6 col-md-4">
+            <h4>Recommendations</h4>
+            <ul className="list-group">
+              <li className="list-group-item">
+                <a href="/"> Recommendation </a>
+              </li>
+              <li className="list-group-item">
+                <a href="/"> Recommendation </a>
+              </li>
+              <li className="list-group-item">
+                <a href="/"> Recommendation </a>
+              </li>
+              <li className="list-group-item">
+                <a href="/"> Recommendation </a>
+              </li>
+              <li className="list-group-item">
+                <a href="/"> Recommendation </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

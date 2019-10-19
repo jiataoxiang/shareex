@@ -9,5 +9,25 @@ body {
 }
 
 .container div {
-  border: black solid 1px;
+  /* border: black solid 1px; */
 }
+
+.container.row {
+  margin: auto; /* Center */
+}
+
+.row {
+  padding: 10px;
+}
+
+/* Posts Part */
+.posts {
+  /* padding-left: 20px; */
+}
+
+/* Recommendation Part */
+.recommendations {
+  /* padding-left: 20px; */
+}
+
+/* Testing */
