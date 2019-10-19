@@ -20,15 +20,6 @@ html.transition *:after {
   transition-delay: 0;
 }
 
-h3,
-h4,
-h5 {
-  color: var(--text);
-}
-p {
-  color: var(--text);
-}
-
 body {
   /* border: black solid 2px; */
   background-color: var(--background-primary);
@@ -42,10 +33,6 @@ body {
   height: 100vh;
 }
 
-.container div {
-  /* border: black solid 1px; */
-}
-
 .container.row {
   margin: auto; /* Center */
 }
@@ -55,10 +42,6 @@ body {
 }
 
 /* Posts Part */
-.posts {
-  /* padding-left: 20px; */
-}
-
 .post.card {
   background-color: var(--background-secondary);
   color: var(--text);
