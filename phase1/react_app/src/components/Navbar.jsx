@@ -1,6 +1,48 @@
 import React from "react";
+import "../stylesheets/navbar.scss";
+import $ from "jquery";
+
 class Navbar extends React.Component {
   state = {};
+  componentDidMount() {
+    $(document).ready(function() {
+      // Get click event, assign button to var, and get values from that var
+      $("#theme-btn-group button").on("click", function() {
+        const btn_clicked = $(this);
+        btn_clicked
+          .addClass("active")
+          .siblings()
+          .removeClass("active");
+        var btnValue = btn_clicked.val();
+        console.log("Color theme - ", btnValue);
+
+        if (btnValue === "light") {
+          trans();
+          document.documentElement.setAttribute("theme", "light");
+          $(".btn-light")
+            .removeClass("btn-light")
+            .addClass("btn-primary");
+        } else if (btnValue === "dark") {
+          trans();
+          document.documentElement.setAttribute("theme", "dark");
+
+          $(".btn-primary")
+            .removeClass("btn-primary")
+            .addClass("btn-light");
+        }
+      });
+      let trans = () => {
+        document.documentElement.classList.add("transition");
+
+        window.setTimeout(() => {
+          document.documentElement.classList.remove("transition");
+        }, 760);
+      };
+      // You can use this to set default value
+      // It will fire above click event which will do the updates for you
+      // $('#theme-btn-group button[value="light"]').click();
+    });
+  }
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -27,9 +69,20 @@ class Navbar extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="/">
-                Home <span className="sr-only">(current)</span>
-              </a>
+              <form className="form-inline my-2 my-lg-0">
+                <input
+                  className="form-control mr-sm-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button
+                  className="btn btn-outline-success my-2 my-sm-0"
+                  type="submit"
+                >
+                  Search
+                </button>
+              </form>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/">
@@ -61,31 +114,28 @@ class Navbar extends React.Component {
                 </a>
               </div>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link disabled"
-                href="/"
-                tabIndex="-1"
-                aria-disabled="true"
-              >
-                Disabled
-              </a>
-            </li>
           </ul>
-          <form className="form-inline my-2 my-lg-0">
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
-            >
-              Search
+          <div
+            id="theme-btn-group"
+            className="btn-group"
+            role="group"
+            aria-label="..."
+          >
+            <button className="btn btn-light" value="light" checked>
+              Light
             </button>
-          </form>
+            <button className="btn btn-dark" value="dark">
+              Dark
+            </button>
+          </div>
+          <div className="btn-group">
+            <a href="/login">
+              <button className="btn btn-primary btn-sm">Sign In</button>
+            </a>
+            <a href="/signup">
+              <button className="btn btn-success btn-sm">Sign Up</button>
+            </a>
+          </div>
         </div>
       </nav>
     );
