@@ -18,7 +18,7 @@ class NotFound404 extends Component {
               <h2>Page not found</h2>
             </div>
             <a>
-              <Link to={"./home"}>Go to Home Page</Link>
+              <Link to={"./"}>Go to Home Page</Link>
             </a>
           </div>
         </div>
