@@ -1,6 +1,44 @@
 import React from "react";
+import "../stylesheets/navbar.scss";
+import $ from "jquery";
+
 class Navbar extends React.Component {
   state = {};
+  componentDidMount() {
+    $(document).ready(function() {
+      // Get click event, assign button to var, and get values from that var
+      $("#theme-btn-group button").on("click", function() {
+        const btn_clicked = $(this);
+        btn_clicked
+          .addClass("active")
+          .siblings()
+          .removeClass("active");
+        var btnValue = btn_clicked.val();
+        console.log("Color theme - ", btnValue);
+
+        if (btnValue === "light") {
+          trans();
+          document.documentElement.setAttribute("theme", "light");
+        } else if (btnValue === "dark") {
+          trans();
+          document.documentElement.setAttribute("theme", "dark");
+        }
+      });
+      let trans = () => {
+        document.documentElement.classList.add("transition");
+        // $("h3").addClass("transition");
+        // $("*").addClass("transition");
+
+        window.setTimeout(() => {
+          document.documentElement.classList.remove("transition");
+          // $("*").removeClass("transition");
+        }, 760);
+      };
+      // You can use this to set default value
+      // It will fire above click event which will do the updates for you
+      // $('#theme-btn-group button[value="light"]').click();
+    });
+  }
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -72,6 +110,19 @@ class Navbar extends React.Component {
               </a>
             </li>
           </ul>
+          <div
+            id="theme-btn-group"
+            className="btn-group"
+            role="group"
+            aria-label="..."
+          >
+            <button className="btn btn-light" value="light" checked>
+              Light Theme
+            </button>
+            <button className="btn btn-dark" value="dark">
+              Dark Theme
+            </button>
+          </div>
           <form className="form-inline my-2 my-lg-0">
             <input
               className="form-control mr-sm-2"

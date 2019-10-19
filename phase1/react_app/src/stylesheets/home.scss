@@ -1,0 +1,79 @@
+/* Complete Page */
+
+html {
+  --background-primary: #ffffff;
+  --text: #000000;
+  --background-secondary: #efefef;
+}
+
+html[theme="dark"] {
+  --background-primary: #222222;
+  --text: #ffffff;
+  --background-secondary: #333333;
+}
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: all 750ms;
+  transition-delay: 0;
+}
+
+h3,
+h4,
+h5 {
+  color: var(--text);
+}
+p {
+  color: var(--text);
+}
+
+body {
+  /* border: black solid 2px; */
+  background-color: var(--background-primary);
+  color: var(--text);
+}
+
+.container {
+  /* border: blue solid 2px; */
+  background-color: var(--background-primary);
+  padding: 0;
+  height: 100vh;
+}
+
+.container div {
+  /* border: black solid 1px; */
+}
+
+.container.row {
+  margin: auto; /* Center */
+}
+
+.row {
+  padding: 10px;
+}
+
+/* Posts Part */
+.posts {
+  /* padding-left: 20px; */
+}
+
+.post.card {
+  background-color: var(--background-secondary);
+  color: var(--text);
+}
+
+/* Recommendation Part */
+.recommendations.list-group {
+  /* padding-left: 20px; */
+  color: var(--text);
+  background-color: var(--background-secondary) !important;
+}
+.recommendations ul li {
+  background-color: var(--background-secondary);
+  a {
+    color: var(--text);
+  }
+}
+/* Testing */

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../stylesheets/post.css";
+import "../stylesheets/post.scss";
 
 class Post extends Component {
   state = {};
@@ -43,9 +43,11 @@ class Post extends Component {
                 alt=""
               ></img>
             </div>
+            <hr />
             <a href="/" className="btn btn-primary">
               See Details
             </a>
+            {/* Thumb up button */}
             <img
               src={process.env.PUBLIC_URL + "./img/thumb_up.png"}
               alt=""
