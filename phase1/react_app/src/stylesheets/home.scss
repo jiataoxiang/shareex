@@ -59,4 +59,10 @@ body {
     color: var(--text);
   }
 }
+
+@media screen and (max-width: 600px) {
+  .recommendations {
+    margin: auto;
+  }
+}
 /* Testing */
