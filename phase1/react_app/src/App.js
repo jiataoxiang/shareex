@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
-import Home from "./components/Homepage/Home.jsx";
+import Home from "./components/Homepage/Home";
+import Signin from "./components/SignIn/Signin";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import NotFound404 from "./components/404";
 
@@ -14,6 +15,7 @@ function App() {
           {/* Similar to a switch statement - shows the component depending on the URL path */}
           {/* Each Route below shows a different component depending on the exact path in the URL  */}
           <Route exact path="/" component={Home} />
+          <Route exact path="/signin" component={Signin} />
           <Route component={NotFound404} />
         </Switch>
       </BrowserRouter>
