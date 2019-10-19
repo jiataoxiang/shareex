@@ -20,3 +20,14 @@
 .App-link {
   color: #09d3ac;
 }
+
+body {
+  /* border: black solid 2px; */
+  background-color: var(--background-primary);
+  color: var(--text);
+}
+
+.container {
+  /* border: blue solid 2px; */
+  background-color: var(--background-primary);
+}

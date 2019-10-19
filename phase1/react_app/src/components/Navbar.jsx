@@ -25,7 +25,6 @@ class Navbar extends React.Component {
         } else if (btnValue === "dark") {
           trans();
           document.documentElement.setAttribute("theme", "dark");
-
           $(".btn-primary")
             .removeClass("btn-primary")
             .addClass("btn-light");
@@ -33,9 +32,10 @@ class Navbar extends React.Component {
       });
       let trans = () => {
         document.documentElement.classList.add("transition");
-
+        // $("*").addClass("transition");
         window.setTimeout(() => {
           document.documentElement.classList.remove("transition");
+          // $("*").removeClass("transition");
         }, 760);
       };
       // You can use this to set default value

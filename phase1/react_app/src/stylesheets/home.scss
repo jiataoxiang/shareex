@@ -1,38 +1,8 @@
 /* Complete Page */
-
-html {
-  --background-primary: #ffffff;
-  --text: #000000;
-  --background-secondary: #efefef;
-}
-
-html[theme="dark"] {
-  --background-primary: #222222;
-  --text: #ffffff;
-  --background-secondary: #333333;
-}
-
-html.transition,
-html.transition *,
-html.transition *:before,
-html.transition *:after {
-  transition: all 750ms;
-  transition-delay: 0;
-}
-
-body {
-  /* border: black solid 2px; */
-  background-color: var(--background-primary);
-  color: var(--text);
-}
-
 .container {
-  /* border: blue solid 2px; */
-  background-color: var(--background-primary);
   padding: 0;
   height: 100vh;
 }
-
 .container.row {
   margin: auto; /* Center */
 }
