@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Home from "./components/Home.jsx";
+import Home from "./components/Homepage/Home.jsx";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import NotFound404 from "./components/404";
 

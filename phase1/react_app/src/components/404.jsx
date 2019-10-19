@@ -10,16 +10,13 @@ class NotFound404 extends Component {
           href="https://fonts.googleapis.com/css?family=Montserrat:700,900"
           rel="stylesheet"
         />
-        <link type="text/css" rel="stylesheet" href="css/style.css" />
         <div id="notfound">
           <div class="notfound">
             <div class="notfound-404">
               <h1>404</h1>
               <h2>Page not found</h2>
             </div>
-            <a>
-              <Link to={"./"}>Go to Home Page</Link>
-            </a>
+            <Link to={"./"}>Go to Home Page</Link>
           </div>
         </div>
       </div>
