@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
 import "../../stylesheets/login.css";
 
 class Signin extends Component {
@@ -7,7 +6,6 @@ class Signin extends Component {
   render() {
     return (
       <div>
-        <Navbar />
         <div className="form-container">
           <form action="">
             <div className="lock-container">

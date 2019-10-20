@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
 import "../../stylesheets/signup.scss";
 
 class SignUp extends Component {
@@ -7,7 +6,6 @@ class SignUp extends Component {
   render() {
     return (
       <div>
-        <Navbar />
         <div className="form-container">
           <form action="">
             <h2 id="signup-title">Sign Up</h2>

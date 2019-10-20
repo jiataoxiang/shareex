@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../stylesheets/navbar.scss";
 import $ from "jquery";
 
@@ -129,12 +130,12 @@ class Navbar extends React.Component {
             </button>
           </div>
           <div className="btn-group">
-            <a href="/login">
+            <Link to="/login">
               <button className="btn btn-primary btn-sm">Sign In</button>
-            </a>
-            <a href="/signup">
+            </Link>
+            <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>
