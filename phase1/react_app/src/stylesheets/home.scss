@@ -1,38 +1,40 @@
 /* Complete Page */
-.home-page > .container {
-  padding: 0;
-  height: 100vh;
-}
-.home-page > .container.row {
-  margin: auto; /* Center */
-}
+.home-page {
+  .container {
+    padding: 0;
+    height: 100vh;
+  }
+  .container.row {
+    margin: auto; /* Center */
+  }
 
-.home-page > .row {
-  padding: 10px;
-}
+  .row {
+    padding: 10px;
+  }
 
-/* Posts Part */
-.home-page > .post.card {
-  background-color: var(--background-secondary);
-  color: var(--text);
-}
-
-/* Recommendation Part */
-.home-page > .recommendations.list-group {
-  /* padding-left: 20px; */
-  color: var(--text);
-  background-color: var(--background-secondary) !important;
-}
-.home-page > .recommendations ul li {
-  background-color: var(--background-secondary);
-  a {
+  /* Posts Part */
+  .post.card {
+    background-color: var(--background-secondary);
     color: var(--text);
   }
-}
 
-@media screen and (max-width: 600px) {
-  .home-page > .recommendations {
-    margin: auto;
+  /* Recommendation Part */
+  .recommendations.list-group {
+    /* padding-left: 20px; */
+    color: var(--text);
+    background-color: var(--background-secondary) !important;
   }
+  .recommendations ul li {
+    background-color: var(--background-secondary);
+    a {
+      color: var(--text);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .recommendations {
+      margin: auto;
+    }
+  }
+  /* Testing */
 }
-/* Testing */
