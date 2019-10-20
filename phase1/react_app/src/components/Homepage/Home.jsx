@@ -7,7 +7,7 @@ class Home extends Component {
   componentDidMount() {}
   render() {
     return (
-      <div>
+      <div className="home-page">
         <div className="container row">
           <div className="posts col-12 col-sm-6 col-md-8">
             <h3>Posts</h3>

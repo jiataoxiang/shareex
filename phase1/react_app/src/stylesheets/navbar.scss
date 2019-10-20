@@ -1,36 +1,18 @@
-html {
-  --background-primary: #ffffff;
-  --text: #000000;
-  --background-secondary: #efefef;
-}
+.navbar-page {
+  .btn-dark {
+    background-color: black;
+  }
 
-html[theme="dark"] {
-  --background-primary: #222222;
-  --text: #ffffff;
-  --background-secondary: #333333;
-}
+  .btn-group {
+    margin-right: 1em;
+  }
+  #shareEx-logo-text {
+    color: white !important;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  }
 
-html.transition,
-html.transition *,
-html.transition *:before,
-html.transition *:after {
-  transition: all 750ms;
-  transition-delay: 0;
-}
-
-.btn-dark {
-  background-color: black;
-}
-
-.btn-group {
-  margin-right: 1em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-p {
-  color: var(--text);
+  input[type="search"] {
+    margin-left: 20px;
+  }
 }

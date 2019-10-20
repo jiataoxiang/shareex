@@ -46,15 +46,16 @@ class Navbar extends React.Component {
   }
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">
+      <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
+        <Link to="/">
           <img
             src={process.env.PUBLIC_URL + "./img/logo_S.png"}
             alt=""
             width="50px"
           />
-          Share
-        </a>
+          <span id="shareEx-logo-text">ShareEx</span>
+        </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -66,7 +67,6 @@ class Navbar extends React.Component {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">

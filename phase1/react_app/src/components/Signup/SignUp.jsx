@@ -5,7 +5,7 @@ class SignUp extends Component {
   state = {};
   render() {
     return (
-      <div>
+      <div className="signup-page">
         <div className="form-container">
           <form action="">
             <h2 id="signup-title">Sign Up</h2>
