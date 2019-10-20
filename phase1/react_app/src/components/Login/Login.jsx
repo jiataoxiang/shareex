@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
-import "../../stylesheets/login.css";
+import "../../stylesheets/login.scss";
 
 class Signin extends Component {
   state = {};
   render() {
     return (
-      <div>
-        <Navbar />
+      <div className="login-page">
         <div className="form-container">
           <form action="">
             <div className="lock-container">

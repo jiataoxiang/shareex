@@ -1,16 +1,18 @@
-.btn-dark {
-  background-color: black;
-}
+.navbar-page {
+  .btn-dark {
+    background-color: black;
+  }
 
-.btn-group {
-  margin-right: 1em;
-}
+  .btn-group {
+    margin-right: 1em;
+  }
+  #shareEx-logo-text {
+    color: white !important;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-p {
-  color: var(--text);
+  input[type="search"] {
+    margin-left: 20px;
+  }
 }

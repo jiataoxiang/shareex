@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../stylesheets/navbar.scss";
 import $ from "jquery";
 
@@ -25,7 +26,6 @@ class Navbar extends React.Component {
         } else if (btnValue === "dark") {
           trans();
           document.documentElement.setAttribute("theme", "dark");
-
           $(".btn-primary")
             .removeClass("btn-primary")
             .addClass("btn-light");
@@ -33,9 +33,10 @@ class Navbar extends React.Component {
       });
       let trans = () => {
         document.documentElement.classList.add("transition");
-
+        // $("*").addClass("transition");
         window.setTimeout(() => {
           document.documentElement.classList.remove("transition");
+          // $("*").removeClass("transition");
         }, 760);
       };
       // You can use this to set default value
@@ -45,15 +46,16 @@ class Navbar extends React.Component {
   }
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">
+      <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
+        <Link to="/">
           <img
             src={process.env.PUBLIC_URL + "./img/logo_S.png"}
             alt=""
             width="50px"
           />
-          Share
-        </a>
+          <span id="shareEx-logo-text">ShareEx</span>
+        </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -65,7 +67,6 @@ class Navbar extends React.Component {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
@@ -129,12 +130,12 @@ class Navbar extends React.Component {
             </button>
           </div>
           <div className="btn-group">
-            <a href="/login">
+            <Link to="/login">
               <button className="btn btn-primary btn-sm">Sign In</button>
-            </a>
-            <a href="/signup">
+            </Link>
+            <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>

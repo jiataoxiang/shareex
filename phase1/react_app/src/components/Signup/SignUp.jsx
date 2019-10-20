@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
 import "../../stylesheets/signup.scss";
 
 class SignUp extends Component {
   state = {};
   render() {
     return (
-      <div>
-        <Navbar />
+      <div className="signup-page">
         <div className="form-container">
           <form action="">
             <h2 id="signup-title">Sign Up</h2>
