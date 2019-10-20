@@ -26,7 +26,7 @@ class SinglePost extends Component {
                         <textarea>Hello from the other side....</textarea>
                     </div>
                     <div id={"comment"}>
-
+                        <div className="card-body">
                     </div>
                 </div>
             </div>
