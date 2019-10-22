@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
 import Post from "../Post";
-import "../../stylesheets/home.css";
+import "../../stylesheets/home.scss";
 
 class Home extends Component {
   state = {};
   componentDidMount() {}
   render() {
     return (
-      <div>
-        <Navbar />
+      <div className="home-page">
         <div className="container row">
           <div className="posts col-12 col-sm-6 col-md-8">
             <h3>Posts</h3>

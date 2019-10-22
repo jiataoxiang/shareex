@@ -1,0 +1,40 @@
+/* Complete Page */
+.home-page {
+  .container {
+    padding: 0;
+    height: 100vh;
+  }
+  .container.row {
+    margin: auto; /* Center */
+  }
+
+  .row {
+    padding: 10px;
+  }
+
+  /* Posts Part */
+  .post.card {
+    background-color: var(--background-secondary);
+    color: var(--text);
+  }
+
+  /* Recommendation Part */
+  .recommendations.list-group {
+    /* padding-left: 20px; */
+    color: var(--text);
+    background-color: var(--background-secondary) !important;
+  }
+  .recommendations ul li {
+    background-color: var(--background-secondary);
+    a {
+      color: var(--text);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .recommendations {
+      margin: auto;
+    }
+  }
+  /* Testing */
+}

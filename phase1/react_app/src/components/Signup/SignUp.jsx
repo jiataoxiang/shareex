@@ -1,24 +1,14 @@
 import React, { Component } from "react";
-import Navbar from "../Navbar.jsx";
-import "../../stylesheets/signin.css";
+import "../../stylesheets/signup.scss";
 
-class Signin extends Component {
+class SignUp extends Component {
   state = {};
   render() {
     return (
-      <div>
-        <Navbar />
+      <div className="signup-page">
         <div className="form-container">
           <form action="">
-            <div className="lock-container">
-              <img
-                src={process.env.PUBLIC_URL + "./img/lock.png"}
-                width="40px"
-                className="lock mx-auto"
-                alt=""
-              />
-              <p>Sign In</p>
-            </div>
+            <h2 id="signup-title">Sign Up</h2>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span
@@ -26,6 +16,22 @@ class Signin extends Component {
                   id="inputGroup-sizing-default"
                 >
                   Username
+                </span>
+              </div>
+              <input
+                type="text"
+                className="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+              />
+            </div>
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span
+                  className="input-group-text"
+                  id="inputGroup-sizing-default"
+                >
+                  Email
                 </span>
               </div>
               <input
@@ -51,8 +57,18 @@ class Signin extends Component {
                 aria-describedby="inputGroup-sizing-default"
               />
             </div>
-            <button type="submit" className="btn btn-primary btn-md btn-block">
-              Sign In
+            <div>
+              <div className="tab">
+                <span>
+                  <input type="radio" name="gender" /> Male
+                </span>
+                <span>
+                  <input type="radio" name="gender" /> Female
+                </span>
+              </div>
+            </div>
+            <button type="submit" className="btn btn-success btn-md btn-block">
+              Sign Up
             </button>
           </form>
         </div>
@@ -61,4 +77,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default SignUp;
