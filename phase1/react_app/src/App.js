@@ -8,7 +8,7 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import NotFound404 from "./components/404";
 import SinglePost from "./components/SinglePost/SinglePost";
 import Navbar from "./components/Navbar";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
