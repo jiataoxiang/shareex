@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from "../Navbar.jsx";
-import "../../stylesheets/UserProfiling.css";
+import "../../stylesheets/UserProfiling.scss";
 
 // const log = console.log;
 
@@ -9,7 +9,7 @@ class UserProfiling extends React.Component {
 
     render(){
         return (
-            <div>
+            <div id="UserProfiling">
                 <Navbar />
                 <div id="banner">
                     <img className="bannerPic" src={process.env.PUBLIC_URL + "./img/banner.jpg"} alt="Banner"/>
