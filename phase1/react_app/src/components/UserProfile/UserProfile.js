@@ -1,11 +1,11 @@
 import React from 'react';
 // import Navbar from "../Navbar.jsx";
-import "../../stylesheets/UserProfiling.scss";
+import "../../stylesheets/UserProfile.scss";
 import Post from "../Post";
 
 // const log = console.log;
 
-class UserProfiling extends React.Component {
+class UserProfile extends React.Component {
 
 
     render(){
@@ -57,4 +57,4 @@ class UserProfiling extends React.Component {
     }
 }
 
-export default UserProfiling;
+export default UserProfile;
