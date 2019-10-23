@@ -1,85 +1,88 @@
-.UserProfiling{
-    .bannerPic {
-        display: block;
-        width: 100%;
+.UserProfiling {
+  .bannerPic {
+    display: block;
+    width: 100%;
 
-        /* Add properties below */
-        height: 300px;
+    /* Add properties below */
+    height: 300px;
+  }
+
+  /* Style the big profile picture circle here. */
+  #bigProfilePicCircle {
+    /* Add properties below */
+    position: absolute;
+    top: 130px;
+    left: 100px;
+    width: 200px;
+    border-radius: 50%;
+    border: 2px solid gold;
+  }
+
+  #profileStats {
+    padding: 0;
+    background-color: gold;
+  }
+
+  #profileStats ul {
+    padding: 3px;
+
+    /* Add properties below */
+    margin-left: 390px;
+  }
+
+  #profileStats ul li {
+    text-align: center;
+    margin-right: 20px;
+    font-weight: bold;
+    list-style: none; /* Gets rid of list bullet points */
+    display: inline-block;
+    color: black;
+    span {
+      color: black;
     }
+  }
 
-    /* Style the big profile picture circle here. */
-    #bigProfilePicCircle {
-        /* Add properties below */
-        position: absolute;
-        top: 130px;
-        left: 100px;
-        width: 200px;
-        border-radius: 50%;
-        border: 2px solid gold;
-    }
+  .profileStatsNumber {
+    display: block;
 
-    #profileStats {
-        padding: 0;
-        background-color: gold;
-    }
+    /* Add properties below */
+    font-size: 150%;
+    position: center;
+  }
 
-    #profileStats ul {
-        padding: 3px;
+  /*** Profile info box styles below ***/
 
-        /* Add properties below */
-        margin-left: 390px;
-    }
+  #profileInfo {
+    background-color: var(--background-secondary);
+    padding: 10px;
 
-    #profileStats ul li {
-        text-align: center;
-        margin-right: 20px;
-        font-weight: bold;
-        list-style: none; /* Gets rid of list bullet points */
-        display: inline-block;
-    }
+    /* Add properties below */
+    margin-top: 20px;
+    margin-left: 50px;
+    width: 300px;
+    min-height: 700px;
+    float: left;
+  }
 
-    .profileStatsNumber {
-        display: block;
+  .timeline {
+    border-radius: 10px;
+    background-color: black;
 
-        /* Add properties below */
-        font-size: 150%;
-        position: center;
-    }
+    /* Add properties below */
+    width: 600px;
+    margin-top: 20px;
+    margin-left: 390px;
+  }
 
-    /*** Profile info box styles below ***/
+  .post {
+    /* Add properties below */
+    margin-left: 0;
+    overflow: auto;
+    min-height: 100px;
+    float: right;
+  }
 
-    #profileInfo {
-        background-color: white;
-        padding: 10px;
-
-        /* Add properties below */
-        margin-top: 20px;
-        margin-left: 50px;
-        width: 300px;
-        min-height: 700px;
-        float: left;
-    }
-
-    .timeline {
-        border-radius: 10px;
-        background-color: black;
-
-        /* Add properties below */
-        width: 600px;
-        margin-top: 20px;
-        margin-left: 390px;
-    }
-
-    .post {
-        /* Add properties below */
-        margin-left: 0;
-        overflow: auto;
-        min-height: 100px;
-        float: right;
-    }
-
-    .timelineheader {
-        margin-left: 400px;
-    }
-
+  .timelineheader {
+    margin-left: 400px;
+  }
 }

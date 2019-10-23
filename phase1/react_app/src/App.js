@@ -18,9 +18,6 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Switch>
-          {" "}
-          {/* Similar to a switch statement - shows the component depending on the URL path */}
-          {/* Each Route below shows a different component depending on the exact path in the URL  */}
           <Route exact path="/" component={Home} />
           <Route exact path="/userprofiling" component={UserProfiling} />
           <Route exact path="/login" component={Login} />
