@@ -18,7 +18,7 @@ class Post extends Component {
   render() {
     return (
       <div>
-        <div className="post card">
+        <div className="timeline card">
           <h5 className="card-header">Featured</h5>
           <div className="card-body">
             <h5 className="card-title">Special title treatment</h5>

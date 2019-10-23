@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Home from "./components/Homepage/Home";
 
-import UserProfiling from "./components/UserProfiling/UserProfiling";
+import UserProfile from "./components/UserProfile/UserProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
 import NewPost from "./components/NewPost/NewPost";
@@ -25,7 +25,7 @@ function App() {
           {/* Each Route below shows a different component depending on the exact path in the URL  */}
           <Route exact path="/" component={Home} />
 
-          <Route exact path="/userprofiling" component={UserProfiling} />
+          <Route exact path="/userprofiling" component={UserProfile} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/new_post" component={NewPost} />
