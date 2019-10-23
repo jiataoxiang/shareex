@@ -15,7 +15,19 @@
         left: 100px;
         width: 200px;
         border-radius: 50%;
-        border: 1px solid white;
+        border: 2px solid gold;
+    }
+
+    #profileStats {
+        padding: 0;
+        background-color: gold;
+    }
+
+    #profileStats ul {
+        padding: 3px;
+
+        /* Add properties below */
+        margin-left: 390px;
     }
 
     #profileStats ul li {
@@ -44,7 +56,30 @@
         margin-top: 20px;
         margin-left: 50px;
         width: 300px;
-        min-height: 300px;
+        min-height: 700px;
         float: left;
     }
+
+    .timeline {
+        border-radius: 10px;
+        background-color: black;
+
+        /* Add properties below */
+        width: 600px;
+        margin-top: 20px;
+        margin-left: 390px;
+    }
+
+    .post {
+        /* Add properties below */
+        margin-left: 0;
+        overflow: auto;
+        min-height: 100px;
+        float: right;
+    }
+
+    .timelineheader {
+        margin-left: 400px;
+    }
+
 }

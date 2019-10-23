@@ -1,6 +1,7 @@
 import React from 'react';
-import Navbar from "../Navbar.jsx";
+// import Navbar from "../Navbar.jsx";
 import "../../stylesheets/UserProfiling.scss";
+import Post from "../Post";
 
 // const log = console.log;
 
@@ -9,8 +10,7 @@ class UserProfiling extends React.Component {
 
     render(){
         return (
-            <div id="UserProfiling">
-                <Navbar />
+            <div className="UserProfiling">
                 <div id="banner">
                     <img className="bannerPic" src={process.env.PUBLIC_URL + "./img/banner.jpg"} alt="Banner"/>
                 </div>
@@ -23,12 +23,33 @@ class UserProfiling extends React.Component {
                     </ul>
                 </div>
                 <div id="profileInfo">
-                    <h2>University of Toronto</h2>
-                    <p>@UofT</p>
+                    <h2>Name: super JATO</h2>
+                    <p>Skill: hahahahaha</p>
+                    <p>I'm powerful</p>
                     <p>
-                        Connect with Canada's top university and one of the world’s strongest academic and research
-                        powerhouses. Find the latest news & events @uoftnews. #UofT
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事，讲的内容是：
+                        从前有座山，山里有座庙，庙里有个小和尚在讲故事。
                     </p>
+                </div>
+                <div className="timeline">
+                    <div className="post">
+                        <h3 className="timelineheader">Posts</h3>
+                        <Post />
+                        <Post />
+                    </div>
                 </div>
                 <img id="bigProfilePicCircle" src={process.env.PUBLIC_URL + "./img/User_Avatar.png"} alt="ProfilePicture"/>
             </div>
