@@ -23,7 +23,7 @@ class SinglePost extends Component {
                             <article className="article">
 
                                 <h1>Programmers can't feel cold.</h1>
-                
+
                                 <div className="counts">
                                     <span>Viewed: 999</span>
                                     <span>Liked: 999</span>
