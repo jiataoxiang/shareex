@@ -1,6 +1,7 @@
 import React from "react";
 import Home from "./components/Homepage/Home";
-import UserProfiling from "./components/UserProfiling/UserProfiling";
+
+import UserProfile from "./components/UserProfile/UserProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
 import NewPost from "./components/NewPost/NewPost";
@@ -19,7 +20,8 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/userprofiling" component={UserProfiling} />
+
+          <Route exact path="/userprofile" component={UserProfile} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/new_post" component={NewPost} />

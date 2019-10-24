@@ -1,9 +1,15 @@
 import React from "react";
+<<<<<<< HEAD:phase1/react_app/src/components/UserProfiling/UserProfiling.js
 import "../../stylesheets/UserProfiling.scss";
+=======
+// import Navbar from "../Navbar.jsx";
+import "../../stylesheets/UserProfile.scss";
+>>>>>>> bb764f7f40442f70d0548e5fa957a96f7955328a:phase1/react_app/src/components/UserProfile/UserProfile.js
 import Post from "../Post";
 import { lorem, rand_string } from "../../lib/util";
 
-class UserProfiling extends React.Component {
+
+class UserProfile extends React.Component {
   render() {
     const rand_images = [];
     for (let j = 0; j < 2; j++) {
@@ -15,7 +21,7 @@ class UserProfiling extends React.Component {
     }
 
     return (
-      <div className="UserProfiling">
+      <div className="UserProfile">
         <div id="banner">
           <img
             className="bannerPic"
@@ -97,4 +103,4 @@ class UserProfiling extends React.Component {
   }
 }
 
-export default UserProfiling;
+export default UserProfile;
