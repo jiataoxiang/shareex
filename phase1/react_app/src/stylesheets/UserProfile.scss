@@ -1,4 +1,4 @@
-.UserProfiling {
+.UserProfile {
   .bannerPic {
     display: block;
     width: 100%;
@@ -79,6 +79,11 @@
     margin-left: 0;
     overflow: auto;
     min-height: 100px;
-    float: right;
+    float: left;
   }
+
+  .timelineheader {
+    margin-left: 300px;
+  }
+
 }

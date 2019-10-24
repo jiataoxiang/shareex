@@ -3,6 +3,7 @@ import "../../stylesheets/UserProfile.scss";
 import Post from "../Post";
 import { lorem, rand_string } from "../../lib/util";
 
+
 class UserProfile extends React.Component {
   render() {
     const rand_images = [];
