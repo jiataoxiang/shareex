@@ -8,7 +8,15 @@ class ProfSet extends Component {
       profLocation: "",
       profTelephone: "",
       profPassword: "",
-      profAvatar: ""
+      profAvatarUrl: ""
+  };
+
+  inputGroups = {
+      inputUsername: null,
+      inputEmail: null,
+      inputLocation: null,
+      inputTelephone: null,
+      inputPassword: null
   };
 
   handleInputChange = (event) => {
@@ -32,7 +40,7 @@ class ProfSet extends Component {
           } else {
               const imgReader = new FileReader();
               imgReader.addEventListener('load', ()=>{
-                  this.setState({profAvatar: imgReader.result});
+                  this.setState({profAvatarUrl: imgReader.result});
               })
               imgReader.readAsDataURL(inputFile);
           }
@@ -43,28 +51,30 @@ class ProfSet extends Component {
       this.setState({profPassword: ""});
   }
   
-  clearInputError = () => {
-      const inputUsername = document.getElementById("inputUsername");
-      inputUsername.style = "background-color: white;";
-      const inputEmail = document.getElementById("inputEmail");
-      inputEmail.style = "background-color: white;";
-      const inputLocation = document.getElementById("inputLocation");
-      inputLocation.style = "background-color: white;";
-      const inputTelephone = document.getElementById("inputTelephone");
-      inputTelephone.style = "background-color: white;";
-      const inputPassword = document.getElementById("inputPassword");
-      inputPassword.style = "background-color: white;";
+  clearAllError = () => {
+      this.clearError(this.inputGroups.inputUsername);
+      this.clearError(this.inputGroups.inputEmail);
+      this.clearError(this.inputGroups.inputPassword);
+  }
+  
+  setError = (object) => {
+      object.style.backgroundColor = "lightpink";
+      object.parentElement.style.animation = "errorShake .6s ease-out";
+  }
+  
+  clearError = (object) => {
+      object.style.backgroundColor = "white";
+      object.parentElement.style.animation = "";
   }
   
   checkUsername = () => {
       const emptyString = this.state.profUsername.length === 0;
       
-      const inputUsername = document.getElementById("inputUsername");
       if (emptyString) {
-          inputUsername.style = "background-color: lightpink;";
+          this.setError(this.inputGroups.inputUsername);
           return false;
       } else {
-          inputUsername.style = "background-color: white;";
+          this.clearError(this.inputGroups.inputUsername);
           return true;
       }
   }
@@ -72,13 +82,11 @@ class ProfSet extends Component {
   checkEmail = () => {
       const correctFormat = this.state.profEmail.indexOf('@') === -1;
       
-      const inputEmail = document.getElementById("inputEmail");
       if (correctFormat) {
-          inputEmail.style = "background-color: lightpink;";
-          this.errorShake(inputEmail.parentElement);
+          this.setError(this.inputGroups.inputEmail);
           return false;
       } else {
-          inputEmail.style = "background-color: white;";
+          this.clearError(this.inputGroups.inputEmail);
           return true;
       }
   }
@@ -86,52 +94,55 @@ class ProfSet extends Component {
   checkPassword = () => {
       const emptyString = this.state.profPassword.length === 0;
       
-      const inputPassword = document.getElementById("inputPassword");
       if (emptyString) {
-          inputPassword.style = "background-color: lightpink;";
+          this.setError(this.inputGroups.inputPassword);
           return false;
       } else {
-          inputPassword.style = "background-color: white;";
+          this.clearError(this.inputGroups.inputPassword);
           return true;
       }
   }
   
   // get profile from server
   getProf = () => {
+      // to make sure the animation works properly
+      this.clearAllError();
+      
+      // this is some fake data that we get from server
       this.setState({profUsername: "tempUsername"});
       this.setState({profEmail: "tempEmail"});
       this.setState({profLocation: "tempLocation"});
       this.setState({profTelephone: "tempTelephone"});
       this.setState({profPassword: "tempPassword"});
-      this.setState({profAvatar: process.env.PUBLIC_URL + "./img/avatar_default.jpg"});
+      this.setState({profAvatarUrl: process.env.PUBLIC_URL + "./img/avatar_default.jpg"});
       
-      this.clearInputError();
-      console.log("Profile loaded from server.")
+      console.log("Profile loaded from server.");
   } 
   
   // check validity, then send new profile to server
   setProf = () => {
+      // to make sure the animation works properly
+      this.clearAllError();
+      
       const correctUsername = this.checkUsername();
       const correctEmail = this.checkEmail();
       const correctPassword = this.checkPassword();
       
       if (correctUsername && correctEmail && correctPassword) {
+          // send new profile to server
+          
           alert("Profile saved.")
-      } else {
-          alert("Please make sure your inputs are valid.")
       }
   }
   
   componentDidMount() {
+      this.inputGroups.inputUsername = document.getElementById("inputUsername");
+      this.inputGroups.inputEmail = document.getElementById("inputEmail");
+      this.inputGroups.inputLocation = document.getElementById("inputLocation");
+      this.inputGroups.inputTelephone = document.getElementById("inputTelephone");
+      this.inputGroups.inputPassword = document.getElementById("inputPassword");
+      
       this.getProf();
-  }
-
-  errorShake = (object) => {
-      if (object.style.animation == "") {
-          object.style.animation = "errorShake .6s ease-out";
-      } else {
-          object.style.animation = "";
-      }
   }
   
   render() {
@@ -228,7 +239,7 @@ class ProfSet extends Component {
         </div>
         
         <div className="avatar-container">
-            <img src={this.state.profAvatar}
+            <img src={this.state.profAvatarUrl}
                 className="avatar-img"
                 alt="" />
             <div>
