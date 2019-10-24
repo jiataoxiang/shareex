@@ -141,9 +141,9 @@ class Navbar extends React.Component {
             {/* <Link to="/userprofiling">
               <button className="btn btn-success btn-sm">UserPage</button>
             </Link> */}
-            <Link to="/userprofile">
-          </div>
 
+          </div>
+          <Link to="/userprofile" >
             <img
               src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
               alt=""
