@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import Navbar from "../Navbar.jsx";
 import "../../stylesheets/single_post.scss";
 
 class SinglePost extends Component {
@@ -26,28 +25,26 @@ class SinglePost extends Component {
                     <div id="content">
                         <section className="the-post">
                             <article className="article">
-                              <p>
                                 <h1>
-                                  Programmers can't feel cold.
+                                    Programmers can't feel cold.
                                 </h1>
-                              </p>
-                              <div className="counts">
-                                <span>Viewed: 999</span>
-                                <span>Liked: 999</span>
-                              </div>
-                              <img
-                                  src={process.env.PUBLIC_URL + "./img/saitama.jpg"}
-                                  className="content-img"
-                                  alt=""
-                              ></img>
-                              <p>Hello from the other side...
-                                  Hello from the other side....Hello from the other side...Hello from the
-                                  other side...Hello from the other side...Hello from the other side...</p>
-                              <p>Hello from the other side....</p>
-                              <p>Hello from the other side....</p>
-                              <p>Hello from the other side....</p>
-                              <p>Hello from the other side....</p>
-                              <p>Hello from the other side....</p>
+                                <div className="counts">
+                                    <span>Viewed: 999</span>
+                                    <span>Liked: 999</span>
+                                </div>
+                                <img
+                                    src={process.env.PUBLIC_URL + "./img/saitama.jpg"}
+                                    className="content-img"
+                                    alt=""
+                                ></img>
+                                <p>Hello from the other side...
+                                    Hello from the other side....Hello from the other side...Hello from the
+                                    other side...Hello from the other side...Hello from the other side...</p>
+                                <p>Hello from the other side....</p>
+                                <p>Hello from the other side....</p>
+                                <p>Hello from the other side....</p>
+                                <p>Hello from the other side....</p>
+                                <p>Hello from the other side....</p>
                             </article>
                         </section>
                     </div>
@@ -56,8 +53,8 @@ class SinglePost extends Component {
                     </div>
                 </div>
             </div>
-    );
+        );
     }
-    }
+}
 
-    export default SinglePost;
+export default SinglePost;
