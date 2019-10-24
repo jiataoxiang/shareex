@@ -75,6 +75,7 @@ class ProfSet extends Component {
       const inputEmail = document.getElementById("inputEmail");
       if (correctFormat) {
           inputEmail.style = "background-color: lightpink;";
+          this.errorShake(inputEmail.parentElement);
           return false;
       } else {
           inputEmail.style = "background-color: white;";
@@ -123,6 +124,14 @@ class ProfSet extends Component {
   
   componentDidMount() {
       this.getProf();
+  }
+
+  errorShake = (object) => {
+      if (object.style.animation == "") {
+          object.style.animation = "errorShake .6s ease-out";
+      } else {
+          object.style.animation = "";
+      }
   }
   
   render() {
