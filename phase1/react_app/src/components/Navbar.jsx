@@ -85,12 +85,7 @@ class Navbar extends React.Component {
                 </button>
               </form>
             </li>
-            <li className="nav-item">
-              {/* <a className="nav-link" href="/"></a> */}
-              <Link className="nav-link" to="new_post">
-                New Post
-              </Link>
-            </li>
+
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
@@ -117,6 +112,9 @@ class Navbar extends React.Component {
               </div>
             </li>
           </ul>
+          <Link className="nav-link nav-item" to="new_post">
+            <button className="btn btn-outline-primary">New Post</button>
+          </Link>
           <div
             id="theme-btn-group"
             className="btn-group"
