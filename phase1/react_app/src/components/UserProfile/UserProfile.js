@@ -1,13 +1,19 @@
 import React from "react";
-// import Navbar from "../Navbar.jsx";
 import "../../stylesheets/UserProfile.scss";
 import Post from "../Post";
-
-// const log = console.log;
-
+import { lorem, rand_string } from "../../lib/util";
 
 class UserProfile extends React.Component {
   render() {
+    const rand_images = [];
+    for (let j = 0; j < 2; j++) {
+      const tmp = [];
+      for (let i = 0; i < 5; i++) {
+        tmp.push("https://picsum.photos/seed/" + rand_string() + "/200/300");
+      }
+      rand_images.push(tmp);
+    }
+
     return (
       <div className="UserProfile">
         <div id="banner">
@@ -68,8 +74,16 @@ class UserProfile extends React.Component {
           <div className="timeline">
             <div className="post">
               <h3 className="timelineheader">Posts</h3>
-              <Post />
-              <Post />
+              <Post
+                title={lorem.generateSentences(1)}
+                content={lorem.generateParagraphs(2)}
+                images={rand_images[0]}
+              />
+              <Post
+                title={lorem.generateSentences(1)}
+                content={lorem.generateParagraphs(2)}
+                images={rand_images[1]}
+              />
             </div>
           </div>
           <img

@@ -47,7 +47,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link to="/">
+        <Link id="logo-btn" to="/">
           <img
             src={process.env.PUBLIC_URL + "./img/logo_S.png"}
             alt=""
@@ -86,9 +86,10 @@ class Navbar extends React.Component {
               </form>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                Link
-              </a>
+              {/* <a className="nav-link" href="/"></a> */}
+              <Link className="nav-link" to="new_post">
+                New Post
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <a
@@ -100,7 +101,7 @@ class Navbar extends React.Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Dropdown
+                Category
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="/">
@@ -122,10 +123,10 @@ class Navbar extends React.Component {
             role="group"
             aria-label="..."
           >
-            <button className="btn btn-light" value="light" checked>
+            <button className="btn btn-light btn-sm" value="light" checked>
               Light
             </button>
-            <button className="btn btn-dark" value="dark">
+            <button className="btn btn-dark btn-sm" value="dark">
               Dark
             </button>
           </div>
@@ -136,10 +137,18 @@ class Navbar extends React.Component {
             <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
             </Link>
-            <Link to="/userprofiling">
+            {/* <Link to="/userprofiling">
               <button className="btn btn-success btn-sm">UserPage</button>
-            </Link>
+            </Link> */}
           </div>
+          <Link to="/userprofiling">
+            <img
+              src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+              alt=""
+              width="40px"
+              height="40px"
+            />
+          </Link>
         </div>
       </nav>
     );
