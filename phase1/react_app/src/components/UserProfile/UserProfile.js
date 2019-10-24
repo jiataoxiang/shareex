@@ -1,10 +1,6 @@
 import React from "react";
-// import Navbar from "../Navbar.jsx";
 import "../../stylesheets/UserProfile.scss";
 import Post from "../Post";
-
-// const log = console.log;
-
 
 class UserProfile extends React.Component {
   render() {
