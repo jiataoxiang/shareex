@@ -13,11 +13,12 @@ class SinglePost extends Component {
             <div className="single-page">
                 <aside className="brief">
                     <section className="info">
-                        <div>
-                            <ul className="list-group list-group-flush" id="description">
-                                <li className="list-group-item">Author: Bill Gates</li>
-                                <li className="list-group-item">Location: US</li>
-                            </ul>
+                        <div className="description">
+                            Author: Newton Wang
+                        </div>
+                        <div className="split-line"></div>
+                        <div className="description">
+                            Location: Mars, Solar System
                         </div>
                     </section>
                 </aside>
