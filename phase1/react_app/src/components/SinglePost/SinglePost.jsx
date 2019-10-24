@@ -10,19 +10,20 @@ class SinglePost extends Component {
     render() {
         return (
             <div className="single-page">
-                <aside className="brief">
+                <div className="brief">
                     <section className="info">
                         <div className="description">Author: Newton Wang</div>
                         <div className="split-line"></div>
                         <div className="description">Location: Mars, Solar System</div>
                     </section>
-                </aside>
+                </div>
                 <div className="content-comment">
                     <div id="content">
                         <section className="the-post">
                             <article className="article">
 
                                 <h1>Programmers can't feel cold.</h1>
+                                <div className="split-line"></div>
 
                                 <div className="counts">
                                     <span>Viewed: 999</span>
@@ -47,9 +48,10 @@ class SinglePost extends Component {
                             </article>
                         </section>
                     </div>
+
                     <section className="comment-part">
                         <div className="write-comment">
-                            <img className="user-avatar" src={process.env.PUBLIC_URL + "./img/saitama.jpg"}></img>
+                            <img className="user-avatar" src={process.env.PUBLIC_URL + "./img/saitama.jpg"}/>
                             <div id="comment-box">
                                 <textarea placeholder="comment"></textarea>
                                 <div className="input-group-append" id="button-addon4">
@@ -58,8 +60,26 @@ class SinglePost extends Component {
                             </div>
                         </div>
                         <div className="comments">
+                            <div>
+                                <img className="comment-avatar" src={process.env.PUBLIC_URL + "./img/saitama.jpg"}></img>
+                                <div className="author-and-date">
+                                    <div className="comment-title"><b>Mr. Saitama</b></div>
+                                    <div className="comment-date">
+                                        <time dateTime="2019-02-25T03:19:23.000Z">Last modified date 02.24 22:19</time>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="split-line"></div>
                             <div className="one-comment">
-                                First comment here. 
+                                <div className="comment-content">
+                                    My first comment. Voluptate quis ullamco et eiusmod nulla nostrud id do. Veniam
+                                    occaecat occaecat officia minim voluptate. Eiusmod mollit enim. Adipisicing
+                                    voluptate enim. Incididunt ut ut magna amet id anim enim ea. Aute dolor ipsum
+                                    cupidatat deserunt esse enim ad magna. Excepteur sint et eiusmod eu minim dolor
+                                    tempor eiusmod mollit. Reprehenderit amet aute nulla et minim. Enim id nostrud
+                                    proident qui enim. Eiusmod occaecat ex esse nostrud. Minim tempor commodo. Ipsum
+                                    Lorem ullamco adipisicing id.
+                                </div>
                             </div>
                         </div>
                     </section>
