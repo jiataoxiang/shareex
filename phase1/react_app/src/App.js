@@ -1,6 +1,5 @@
 import React from "react";
 import Home from "./components/Homepage/Home";
-
 import UserProfile from "./components/UserProfile/UserProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
