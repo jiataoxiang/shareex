@@ -2,16 +2,30 @@ import React from "react";
 import "../../stylesheets/UserProfile.scss";
 import Post from "../Post";
 import { lorem, rand_string } from "../../lib/util";
+import { uid } from "react-uid";
 
 class UserProfile extends React.Component {
   render() {
     const rand_images = [];
-    for (let j = 0; j < 2; j++) {
+    for (let j = 0; j < 10; j++) {
       const tmp = [];
       for (let i = 0; i < 5; i++) {
         tmp.push("https://picsum.photos/seed/" + rand_string() + "/200/300");
       }
       rand_images.push(tmp);
+    }
+    // Construct Post list
+    // In phase 2, data should come from server api
+    const posts = [];
+    for (let i = 0; i < 5; i++) {
+      posts.push(
+        <Post
+          key={uid(rand_string())}
+          title={lorem.generateSentences(1)}
+          content={lorem.generateParagraphs(2)}
+          images={rand_images[i]}
+        />
+      );
     }
 
     return (
@@ -74,16 +88,7 @@ class UserProfile extends React.Component {
           <div className="timeline">
             <div className="post">
               <h3 className="timelineheader">Posts</h3>
-              <Post
-                title={lorem.generateSentences(1)}
-                content={lorem.generateParagraphs(2)}
-                images={rand_images[0]}
-              />
-              <Post
-                title={lorem.generateSentences(1)}
-                content={lorem.generateParagraphs(2)}
-                images={rand_images[1]}
-              />
+              {posts}
             </div>
           </div>
           <img

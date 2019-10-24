@@ -7,6 +7,7 @@ import NewPost from "./components/NewPost/NewPost";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import NotFound404 from "./components/404";
 import SinglePost from "./components/SinglePost/SinglePost";
+import ProfSetting from "./components/prof_set/prof_set"
 import Navbar from "./components/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/new_post" component={NewPost} />
           <Route exact path="/single_post" component={SinglePost} />
+          <Route exact path="/prof_setting" component={ProfSetting} />   
           <Route component={NotFound404} />
         </Switch>
       </BrowserRouter>
