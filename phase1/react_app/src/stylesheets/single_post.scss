@@ -7,15 +7,32 @@
   }
 
   .brief {
-    margin-left: 15%;
-    float: left;
-    margin-right: 20px;
+    margin-left: 5%;
+    margin-top: 26px;
+    margin-right: 5%;
     border-color: #1b1e21;
     display: inline-block;
+    width: 85%;
 
     .info {
       background-color: var(--background-secondary);
-      margin-top: 10%;
+      padding: 15px;
+
+      .author-link {
+        width: 50px;
+        height: 50px;
+      }
+
+      .rounded-circle {
+        width: 50px;
+        height: 50px;
+        margin: 8px;
+        float: left;
+      }
+
+      .author-info {
+        margin-left: 70px;
+      }
     }
   }
 
@@ -23,12 +40,10 @@
     position: relative;
     border-width: 10px;
     border-color: #1b1e21;
-    margin: 50px;
   }
 
   .content-comment #content {
-    margin-left: 30%;
-    margin-right: 15%;
+    margin: 3%;
 
     .the-post {
       background-color: #e6e6e6;
@@ -62,9 +77,7 @@
   }
 
   .content-comment .comment-part {
-    margin-left: 30%;
-    margin-right: 15%;
-    margin-top: inherit;
+    margin: 3%;
 
     .comments {
       background-color: #e6e6e6;
@@ -81,6 +94,7 @@
         width: 70px;
         height: 70px;
         display: inline-block;
+        margin-top: -31px;
       }
 
       .one-comment {
