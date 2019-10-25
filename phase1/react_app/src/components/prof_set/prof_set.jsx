@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../../stylesheets/prof_set.scss";
+import "../../stylesheets/animation.scss";
 
 class ProfSet extends Component {
   state = {
@@ -59,12 +60,12 @@ class ProfSet extends Component {
   
   setError = (object) => {
       object.style.backgroundColor = "lightpink";
-      object.parentElement.style.animation = "errorShake .6s ease-out";
+      object.parentElement.classList.add("errorShake");
   }
   
   clearError = (object) => {
       object.style.backgroundColor = "white";
-      object.parentElement.style.animation = "";
+      object.parentElement.classList.remove("errorShake");
   }
   
   checkUsername = () => {
