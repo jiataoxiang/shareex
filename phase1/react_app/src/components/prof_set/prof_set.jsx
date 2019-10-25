@@ -81,9 +81,10 @@ class ProfSet extends Component {
   }
   
   checkEmail = () => {
-      const correctFormat = this.state.profEmail.indexOf('@') === -1;
+      const emailFrag = this.state.profEmail.split('@');
+      const worngFormat = emailFrag.length < 2 || emailFrag.length > 2 || emailFrag[0].length === 0 || emailFrag[1].length === 0;
       
-      if (correctFormat) {
+      if (worngFormat) {
           this.setError(this.inputGroups.inputEmail);
           return false;
       } else {
