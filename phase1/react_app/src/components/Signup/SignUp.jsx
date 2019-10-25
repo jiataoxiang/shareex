@@ -96,16 +96,16 @@ class SignUp extends Component {
                 aria-describedby="inputGroup-sizing-default"
               />
             </div>
-            <div>
-              <div className="tab">
-                <span>
-                  <input type="radio" name="gender" value="male" /> Male
-                </span>
-                <span>
-                  <input type="radio" name="gender" value="female" /> Female
-                </span>
-              </div>
+
+            <div className="tab">
+              <span>
+                <input type="radio" name="gender" value="male" /> Male
+              </span>
+              <span>
+                <input type="radio" name="gender" value="female" /> Female
+              </span>
             </div>
+
             <button type="submit" className="btn btn-success btn-md btn-block">
               Sign Up
             </button>

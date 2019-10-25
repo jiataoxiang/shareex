@@ -3,26 +3,30 @@
   .container {
     padding: 0;
     height: 100vh;
+    padding-top: 2em;
   }
   .container.row {
     margin: auto; /* Center */
   }
 
-  .row {
-    padding: 10px;
-  }
-
   /* Posts Part */
-  .timeline.card {
+  .posts h3 {
+    padding-left: 20px;
+  }
+  .post.card {
     background-color: var(--background-secondary);
     color: var(--text);
   }
 
   /* Recommendation Part */
+  .recommendations h3 {
+    padding-left: 20px;
+  }
+
   .recommendations.list-group {
     /* padding-left: 20px; */
     color: var(--text);
-    background-color: var(--background-secondary) !important;
+    background-color: var(--background-secondary);
   }
   .recommendations ul li {
     background-color: var(--background-secondary);
@@ -33,7 +37,8 @@
 
   @media screen and (max-width: 600px) {
     .recommendations {
-      margin: auto;
+      width: 100%;
+      padding-bottom: 2em;
     }
   }
   /* Testing */

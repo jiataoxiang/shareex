@@ -51,9 +51,11 @@ class Home extends Component {
             <h3>Posts</h3>
             {posts}
           </div>
-          <div className="recommendations col-6 col-md-4">
-            <h3>Recommendations</h3>
-            <ul className="list-group">{recommendations}</ul>
+          <div className="recommendations col-12 col-6 col-md-4">
+            <div className="sticky-top">
+              <h3>Recommendations</h3>
+              <ul className="list-group">{recommendations}</ul>
+            </div>
           </div>
         </div>
       </div>

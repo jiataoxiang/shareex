@@ -1,18 +1,21 @@
 .single-page {
+  .split-line {
+    width: 100%;
+    height: 1px;
+    margin: 16px 0;
+    background-color: #b3b3b3;
+  }
+
   .brief {
     margin-left: 15%;
     float: left;
     margin-right: 20px;
     border-color: #1b1e21;
+    display: inline-block;
+
     .info {
       background-color: var(--background-secondary);
       margin-top: 10%;
-      .split-line {
-        width: 100%;
-        height: 1px;
-        margin: 16px 0;
-        background-color: #b3b3b3;
-      }
     }
   }
 
@@ -36,15 +39,17 @@
 
       .article {
         background-color: var(--background-secondary);
-        padding-left: 12%;
-        padding-right: 12%;
+        padding-left: 6%;
+        padding-right: 6%;
         padding-top: 6%;
         padding-bottom: 6%;
+
         .counts {
           :not(:last-child) {
             margin-right: 8px;
           }
         }
+
         .content-img {
           width: 100px;
           height: 100px;
@@ -56,8 +61,51 @@
     }
   }
 
-  .content-comment textarea {
-    width: -webkit-fill-available;
-    height: fit-content;
+  .content-comment .comment-part {
+    margin-left: 30%;
+    margin-right: 15%;
+    margin-top: inherit;
+
+    .comments {
+      background-color: #e6e6e6;
+      padding: 15px;
+      margin-top: 25px;
+
+      .author-and-date {
+        margin-left: 16px;
+        display: inline-block;
+      }
+
+
+      .comment-avatar {
+        width: 70px;
+        height: 70px;
+        display: inline-block;
+      }
+
+      .one-comment {
+        display: inline-block;
+        margin-left: 3%;
+        margin-right: 3%;
+      }
+    }
+
+    .write-comment {
+      display: block;
+
+      .user-avatar {
+        float: left;
+        width: 70px;
+        height: 70px;
+        display: inline-block;
+      }
+
+      #comment-box {
+        textarea {
+          width: -webkit-fill-available;
+          display: inline-block;
+        }
+      }
+    }
   }
 }

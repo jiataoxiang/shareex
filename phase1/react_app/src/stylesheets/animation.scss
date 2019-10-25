@@ -1,0 +1,39 @@
+.errorShake {
+    animation: errorShake .6s ease-out;
+}
+
+@keyframes errorShake {
+    0%{
+        transform: translate(0px,0px) rotate(0deg);
+    }
+    10%{
+        transform: translate(-1px,2px) rotate(1deg);
+    }
+    20%{
+        transform: translate(1px,-2px) rotate(-1deg);
+    }
+    30%{
+        transform: translate(-1px,3px) rotate(2deg);
+    }
+    40%{
+        transform: translate(1px,-3px) rotate(-2deg);
+    }
+    50%{
+        transform: translate(-2px,4px) rotate(3deg);
+    }
+    60%{
+        transform: translate(2px,-4px) rotate(-3deg);
+    }
+    70%{
+        transform: translate(-1px,3px) rotate(2deg);
+    }
+    80%{
+        transform: translate(1px,-3px) rotate(-2deg);
+    }
+    90%{
+        transform: translate(-1px,2px) rotate(1deg);
+    }
+    100%{
+        transform: translate(0px,0px) rotate(0deg);
+    }
+}
