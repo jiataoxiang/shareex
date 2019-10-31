@@ -1,4 +1,3 @@
-
 .post {
   img.img-thumbnail {
     width: 100px;
@@ -10,6 +9,7 @@
     /* border: 1px black solid; */
     border-radius: 30%;
     padding: 5px;
+    cursor: pointer;
   }
 
   html[theme="dark"] {
