@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Post from "../Post";
+import { Link } from "react-router-dom";
+// import Recommendation from "./Recommendation";
 import "../../stylesheets/home.scss";
 import { lorem, rand_string } from "../../lib/util";
 import { uid } from "react-uid";
@@ -20,12 +22,14 @@ class Home extends Component {
     }
 
     // Construct recommendation list
-    // In phase 2, should get title from server api
+    // In phase 2, should get title and href from server api
     const recommendations = [];
     for (let i = 0; i < 10; i++) {
       recommendations.push(
         <li key={uid(rand_string())} className="list-group-item">
-          <a href="/"> {lorem.generateSentences(1)} </a>
+          <Link to="/">
+            <a href="/"> {lorem.generateSentences(1)} </a>
+          </Link>
         </li>
       );
     }

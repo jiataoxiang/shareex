@@ -1,0 +1,14 @@
+.single-post-2-page {
+  .container {
+    margin-top: 1em;
+    .user-display {
+      background-color: var(--background-secondary);
+      padding: 1em;
+      border-radius: 5px;
+      .avatar {
+        height: 3em;
+        border: black;
+      }
+    }
+  }
+}

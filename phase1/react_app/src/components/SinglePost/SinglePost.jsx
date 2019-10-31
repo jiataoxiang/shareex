@@ -1,11 +1,10 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "../../stylesheets/single_post.scss";
 
 class SinglePost extends Component {
   state = {};
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     return (
@@ -48,7 +47,10 @@ class SinglePost extends Component {
                   <div id="comment-box">
                     <textarea placeholder="comment"></textarea>
                     <div className="input-group-append" id="button-addon4">
-                      <button className="btn btn-outline-secondary" type="button">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                      >
                         Submit
                       </button>
                     </div>
@@ -77,13 +79,14 @@ class SinglePost extends Component {
                     <div className="comment-content">
                       My first comment. Voluptate quis ullamco et eiusmod nulla
                       nostrud id do. Veniam occaecat occaecat officia minim
-                      voluptate. Eiusmod mollit enim. Adipisicing voluptate enim.
-                      Incididunt ut ut magna amet id anim enim ea. Aute dolor ipsum
-                      cupidatat deserunt esse enim ad magna. Excepteur sint et
-                      eiusmod eu minim dolor tempor eiusmod mollit. Reprehenderit
-                      amet aute nulla et minim. Enim id nostrud proident qui enim.
-                      Eiusmod occaecat ex esse nostrud. Minim tempor commodo. Ipsum
-                      Lorem ullamco adipisicing id.
+                      voluptate. Eiusmod mollit enim. Adipisicing voluptate
+                      enim. Incididunt ut ut magna amet id anim enim ea. Aute
+                      dolor ipsum cupidatat deserunt esse enim ad magna.
+                      Excepteur sint et eiusmod eu minim dolor tempor eiusmod
+                      mollit. Reprehenderit amet aute nulla et minim. Enim id
+                      nostrud proident qui enim. Eiusmod occaecat ex esse
+                      nostrud. Minim tempor commodo. Ipsum Lorem ullamco
+                      adipisicing id.
                     </div>
                   </div>
                 </div>
@@ -94,8 +97,11 @@ class SinglePost extends Component {
             <div className="brief">
               <section className="info">
                 <a href="/userprofile" className="author-link">
-                  <img src={process.env.PUBLIC_URL + "./img/peppa.jpeg"} alt="Profile Picture"
-                       className="rounded-circle"/>
+                  <img
+                    src={process.env.PUBLIC_URL + "./img/peppa.jpeg"}
+                    alt=""
+                    className="rounded-circle"
+                  />
                 </a>
                 <div className="author-info">
                   <div className="description">
