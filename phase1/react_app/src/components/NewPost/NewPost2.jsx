@@ -6,11 +6,7 @@ import { uid } from "react-uid";
 
 class NewPost2 extends Component {
   state = {
-    contents: [
-      { key: "key112", type: undefined, title: "test" },
-      { key: "key334", type: undefined, title: "test" },
-      { key: "key556", type: undefined, title: "test" }
-    ]
+    contents: [{ key: "key_tmp", type: undefined, title: "test" }]
   };
   // Generic handler for whenever we type in an input box.
   // We change the state for the particular property bound to the textbox from the event.

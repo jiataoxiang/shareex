@@ -69,28 +69,30 @@ class SinglePost2 extends Component {
                 </div>
               </div>
             </div>
-            <Link
+            <div
               to="/userprofile"
               className="user-info-container col-12 col-6 col-md-3"
             >
               <div className="sticky-top">
                 <div className="space"></div>
-                <div className="user-info">
-                  <div className="row">
-                    <div className="col-lg-3 col-3">
-                      <img
-                        className="avatar"
-                        src={process.env.PUBLIC_URL + "/img/saitama.jpg"}
-                        alt=""
-                      />
-                    </div>
-                    <div className="col-lg-9 col-9">
-                      <strong>Username</strong>
+                <Link to="/userprofile">
+                  <div className="user-info">
+                    <div className="row">
+                      <div className="col-lg-3 col-3">
+                        <img
+                          className="avatar"
+                          src={process.env.PUBLIC_URL + "/img/saitama.jpg"}
+                          alt=""
+                        />
+                      </div>
+                      <div className="col-lg-9 col-9">
+                        <strong>Username</strong>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
-            </Link>
+            </div>
             >
           </div>
         </div>
