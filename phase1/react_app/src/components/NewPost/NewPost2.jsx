@@ -40,31 +40,33 @@ class NewPost2 extends Component {
       <div className="new-post2-page">
         <div className="container">
           <h1>New Post</h1>
-          <div className="form-group">
-            <h4>Title</h4>
-            <input type="text" className="form-control" id="tile" />
-          </div>
-          <div id="contents">
+          <div className="secondary-container">
             <div className="form-group">
-              <h4 htmlFor="content">Content</h4>
-              <textarea
-                className="form-control"
-                rows="5"
-                id="content"
-                placeholder="What's in your mind right now?"
-              />
+              <h4>Title</h4>
+              <input type="text" className="form-control" id="tile" />
             </div>
-            {this.state.contents.map(content => {
-              return (
-                <AddContent
-                  key={uid(rand_string())}
-                  secondary_key={content.key}
-                  title={content.title}
-                  type={content.type}
-                  addInput={this.addInput}
+            <div id="contents">
+              <div className="form-group">
+                <h4 htmlFor="content">Content</h4>
+                <textarea
+                  className="form-control"
+                  rows="5"
+                  id="content"
+                  placeholder="What's in your mind right now?"
                 />
-              );
-            })}
+              </div>
+              {this.state.contents.map(content => {
+                return (
+                  <AddContent
+                    key={uid(rand_string())}
+                    secondary_key={content.key}
+                    title={content.title}
+                    type={content.type}
+                    addInput={this.addInput}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

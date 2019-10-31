@@ -2,6 +2,16 @@
   .container {
     margin-top: 1em;
     padding: 0em 10em 0em 10em;
+    h1 {
+      margin-left: 15px;
+    }
+    .secondary-container {
+      background-color: var(--background-secondary);
+      padding: 0.5em 1em 1em 1em;
+      border-radius: 10px;
+      min-height: 80vh;
+      margin-bottom: 2em;
+    }
   }
   .add-content-component {
     .add-button {

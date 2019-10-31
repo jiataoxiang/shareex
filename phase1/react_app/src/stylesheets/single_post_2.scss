@@ -5,7 +5,7 @@
       .post-content {
         margin-top: 1em;
         background-color: var(--background-secondary);
-        padding: 20px;
+        padding: 1em;
         border-radius: 10px;
         min-height: 100vh;
         .pdf {
@@ -15,6 +15,9 @@
         img {
           width: 100%;
         }
+      }
+      h3 {
+        padding-left: 1rem;
       }
     }
     .user-info-container {
