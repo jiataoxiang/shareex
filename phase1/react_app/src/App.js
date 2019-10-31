@@ -29,7 +29,6 @@ function App() {
           <Route exact path="/new_post2" component={NewPost2} />
           <Route exact path="/single_post" component={SinglePost} />
           <Route exact path="/single_post2" component={SinglePost2} />
-
           <Route exact path="/prof_setting" component={ProfSetting} />
           <Route component={NotFound404} />
         </Switch>

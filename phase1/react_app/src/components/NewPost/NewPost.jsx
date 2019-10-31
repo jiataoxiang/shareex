@@ -50,7 +50,11 @@ class PostContent extends Component {
               id={"file"}
             />
           </div>
-          <button type="submit" className="btn btn-success btn-md btn-block" id="post-button">
+          <button
+            type="submit"
+            className="btn btn-success btn-md btn-block"
+            id="post-button"
+          >
             Post
           </button>
         </div>
