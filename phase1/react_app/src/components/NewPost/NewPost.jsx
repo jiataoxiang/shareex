@@ -1,111 +1,90 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "../../stylesheets/new_post.scss";
-// import ReactSummernote from 'react-summernote';
-// import 'react-summernote/dist/react-summernote.css'; // import styles
-// import 'react-summernote/lang/summernote-ru-RU'; // you can import any other locale
+import AddContent from "./AddContent";
+import { rand_string } from "../../lib/util";
+import { uid } from "react-uid";
 
-// Import bootstrap(v3 or v4) dependencies
-// import 'bootstrap/js/modal';
-// import 'bootstrap/js/dropdown';
-// import 'bootstrap/js/tooltip';
-// import 'bootstrap/dist/css/bootstrap.css';
+class NewPost extends Component {
+  state = {
+    contents: [{ key: "key_tmp", type: undefined, title: "test" }]
+  };
+  // Generic handler for whenever we type in an input box.
+  // We change the state for the particular property bound to the textbox from the event.
+  handleInputChange = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-class PostContent extends Component {
-  state = {};
+    // 'this' is bound to the component in this arrow function.
+    this.setState({
+      [name]: value // [name] sets the object property name to the value of the 'name' variable.
+    });
+  };
 
-  componentDidMount() {
-  }
-
-  onChange(content) {
-    console.log('onChange', content);
-  }
+  addInput = (type, secondary_key) => {
+    for (let i = 0; i < this.state.contents.length; i++) {
+      if (this.state.contents[i].key === secondary_key) {
+        const content = { key: uid(rand_string()), type: type, title: type };
+        const content_list = this.state.contents;
+        content_list.splice(i + 1, 0, content);
+        this.setState({
+          contents: content_list
+        });
+        break;
+      }
+    }
+  };
 
   render() {
     return (
-      <div className="new-post-page">
-        {/*<Helmet>*/}
-        {/*  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>*/}
-        {/*  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"/>*/}
-        {/*  <script type="text/javascript"*/}
-        {/*          src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"/>*/}
-        {/*  <link href="summernote.css" rel="stylesheet"/>*/}
-        {/*  <script src="summernote.js"/>*/}
-        {/*</Helmet>*/}
+      <div className="new-post2-page">
         <div className="container">
-          <div className="article">
-            <h1 id="title">Start a New Post</h1>
+          <h1>New Post</h1>
+          <div className="secondary-container">
+            <div className="form-group">
+              <h4>Title</h4>
+              <input type="text" className="form-control" id="tile" />
+            </div>
+            <div id="contents">
+              <div className="form-group">
+                <h4>Category:</h4>
+                <select className="form-control" id="category">
+                  <option>Travel</option>
+                  <option>Education</option>
+                  <option>Computer Science</option>
+                  <option>Technology</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <h4 htmlFor="content">Content</h4>
+                <textarea
+                  className="form-control"
+                  rows="5"
+                  id="content"
+                  placeholder="What's in your mind right now?"
+                />
+              </div>
 
-            <div className="form-group">
-              <p>Title:</p>
-              <input type="text" className="form-control" id="tile"/>
-            </div>
-            <div className="form-group">
-              <p htmlFor="content">Content:</p>
-              <textarea
-                className="form-control"
-                rows="5"
-                id="content"
-                placeholder="What's in your mind right now?"
-              />
+              {this.state.contents.map(content => {
+                return (
+                  <AddContent
+                    key={uid(rand_string())}
+                    secondary_key={content.key}
+                    title={content.title}
+                    type={content.type}
+                    addInput={this.addInput}
+                  />
+                );
+              })}
             </div>
           </div>
-          <div className="addInfo">
-            <div className="form-group">
-              <p>Category:</p>
-              <select className="form-control" id="category">
-                <option>Travel</option>
-                <option>Meme</option>
-                <option>Question</option>
-                <option>Daily</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <p>File Type:</p>
-              <select className="form-control" id="file_type">
-                <option>PDF</option>
-                <option>JPEG</option>
-                <option>PNG</option>
-                <option>DOCS</option>
-              </select>
-            </div>
-            <input
-              type="file"
-              className="form-control-file border"
-              id={"file"}
-            />
-          </div>
-          <button
-            type="submit"
-            className="btn btn-success btn-md btn-block"
-            id="post-button"
-          >
-            Post
+          <button type="submit" className="btn btn-primary btn-lg float-right">
+            Submit
           </button>
-          {/*<script>*/}
-          {/*  {$(document).ready(function() {$('#summernote').summernote();})}*/}
-          {/*</script>*/}
-          {/*<ReactSummernote*/}
-          {/*  value="Default value"*/}
-          {/*  options={{*/}
-          {/*    lang: 'ru-RU',*/}
-          {/*    height: 350,*/}
-          {/*    dialogsInBody: true,*/}
-          {/*    toolbar: [*/}
-          {/*      ['style', ['style']],*/}
-          {/*      ['font', ['bold', 'underline', 'clear']],*/}
-          {/*      ['fontname', ['fontname']],*/}
-          {/*      ['para', ['ul', 'ol', 'paragraph']],*/}
-          {/*      ['table', ['table']],*/}
-          {/*      ['insert', ['link', 'picture', 'video']],*/}
-          {/*      ['view', ['fullscreen', 'codeview']]*/}
-          {/*    ]*/}
-          {/*  }}*/}
-          {/*  onChange={this.onChange}*/}
-          {/*/>*/}
         </div>
       </div>
     );
   }
 }
 
-export default PostContent;
+export default NewPost;

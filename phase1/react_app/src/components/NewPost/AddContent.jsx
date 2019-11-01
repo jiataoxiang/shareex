@@ -55,8 +55,8 @@ class AddContent extends Component {
       );
     } else if (this.props.type === "image") {
       return (
-        <div class="upload-btn-wrapper">
-          <button class="submit-file-btn">Upload a Image</button>
+        <div className="upload-btn-wrapper">
+          <button className="submit-file-btn">Upload a Image</button>
           <input type="file" name="myfile" />
         </div>
       );
@@ -69,8 +69,8 @@ class AddContent extends Component {
       );
     } else if (this.props.type === "pdf") {
       return (
-        <div class="upload-btn-wrapper">
-          <button class="submit-file-btn">Upload a PDF</button>
+        <div className="upload-btn-wrapper">
+          <button className="submit-file-btn">Upload a PDF</button>
           <input type="file" name="myfile" />
         </div>
       );
