@@ -128,6 +128,16 @@ class SinglePost2 extends Component {
     this.setState({ comments: comments });
   };
 
+  editComment = secondary_key => {
+    const comments = this.state.comments;
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].key === secondary_key) {
+        comments[i].edit_mode = true;
+      }
+    }
+    this.setState({ comments: comments });
+  };
+
   addComment = () => {
     const comments = this.state.comments;
     comments.unshift({
@@ -184,6 +194,7 @@ class SinglePost2 extends Component {
                         content={comment.content}
                         deleteComment={this.deleteComment}
                         submitComment={this.submitComment}
+                        editComment={this.editComment}
                         edit_mode={comment.edit_mode}
                       />
                     );
