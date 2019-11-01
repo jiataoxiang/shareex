@@ -19,28 +19,36 @@ class SinglePost2 extends Component {
         username: "Peter",
         user_id: "1123",
         content: "Such a nice post",
-        key: "1"
+        key: uid(rand_string()),
+        edit_mode: false,
+        submitComment: this.submitComment
       },
       {
         username: "Bob",
         user_id: "1122",
         content:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
-        key: "2"
+        key: uid(rand_string()),
+        edit_mode: false,
+        submitComment: this.submitComment
       },
       {
         username: "Peter",
         user_id: "1123",
         content:
           " Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
-        key: "3"
+        key: uid(rand_string()),
+        edit_mode: false,
+        submitComment: this.submitComment
       },
       {
         username: "William",
         user_id: "1124",
         content:
           "Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu.",
-        key: "4"
+        key: uid(rand_string()),
+        edit_mode: false,
+        submitComment: this.submitComment
       }
     ],
     attachments: [
@@ -103,6 +111,35 @@ class SinglePost2 extends Component {
     this.setState({ comments: comments });
   };
 
+  submitComment = (secondary_key, comment_content) => {
+    const comments = this.state.comments;
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].key === secondary_key) {
+        comments.splice(i, 1);
+        comments.splice(i, 0, {
+          username: "Peter",
+          user_id: "1123",
+          content: comment_content,
+          key: uid(rand_string()),
+          edit_mode: false
+        });
+      }
+    }
+    this.setState({ comments: comments });
+  };
+
+  addComment = () => {
+    const comments = this.state.comments;
+    comments.unshift({
+      username: "Peter",
+      user_id: "1123",
+      // content: "Such a nice post",
+      key: uid(rand_string()),
+      edit_mode: true
+    });
+    this.setState({ comments: comments });
+  };
+
   render() {
     return (
       <div className="single-post-2-page">
@@ -126,7 +163,15 @@ class SinglePost2 extends Component {
                 </div>
               </div>
               <div className="comment-container">
-                <h2>Comments</h2>
+                <div>
+                  <h2>Comments</h2>
+                  <button
+                    className="btn btn-outline-success float-right"
+                    onClick={this.addComment}
+                  >
+                    New Comment
+                  </button>
+                </div>
                 <div className="comments">
                   {this.state.comments.map(comment => {
                     return (
@@ -138,6 +183,8 @@ class SinglePost2 extends Component {
                         username={comment.username}
                         content={comment.content}
                         deleteComment={this.deleteComment}
+                        submitComment={this.submitComment}
+                        edit_mode={comment.edit_mode}
                       />
                     );
                   })}

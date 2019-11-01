@@ -17,10 +17,6 @@ class Tmp extends Component {
       </pre>
     );
   }
-
-  // render() {
-
-  // }
 }
 
 export default Tmp;

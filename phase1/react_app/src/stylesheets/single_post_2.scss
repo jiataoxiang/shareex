@@ -23,6 +23,10 @@
       }
       .comment-container {
         margin-top: 1em;
+        margin-bottom: 2em;
+        h2 {
+          display: inline-block;
+        }
         .comments {
           background-color: var(--background-secondary);
           border-radius: 10px;
