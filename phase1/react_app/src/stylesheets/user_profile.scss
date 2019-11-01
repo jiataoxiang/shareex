@@ -12,7 +12,7 @@
     /* Add properties below */
     position: absolute;
     top: 130px;
-    left: 100px;
+    left: 10em;
     width: 200px;
     border-radius: 50%;
     border: 2px solid gold;
@@ -104,5 +104,17 @@
     position: relative;
     left: 400px;
     border-radius: 10px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .user-profile-page {
+    .container {
+      .space {
+        height: 20px;
+      }
+    }
+    #bigProfilePicCircle {
+      left: 2em;
+    }
   }
 }

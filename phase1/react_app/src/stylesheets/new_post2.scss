@@ -2,6 +2,7 @@
   .container {
     margin-top: 1em;
     padding: 0em 10em 0em 10em;
+    margin-bottom: 10em;
     h1 {
       margin-left: 15px;
     }
@@ -10,15 +11,48 @@
       padding: 0.5em 1em 1em 1em;
       border-radius: 10px;
       min-height: 80vh;
-      margin-bottom: 2em;
+      margin-bottom: 1em;
     }
   }
   .add-content-component {
+    min-height: 3em;
     .add-button {
       float: right;
     }
     .content-input {
+      // display: inline-block;
+      display: block;
+    }
+    input {
+      margin-bottom: 10px;
+    }
+    .upload-btn-wrapper {
+      position: relative;
+      overflow: hidden;
       display: inline-block;
+    }
+
+    .submit-file-btn {
+      border: 2px solid gray;
+      color: gray;
+      background-color: white;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .upload-btn-wrapper input[type="file"] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+  }
+  @media screen and (max-width: 900px) {
+    .container {
+      padding: 2em;
     }
   }
 }

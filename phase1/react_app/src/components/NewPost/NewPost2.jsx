@@ -47,7 +47,7 @@ class NewPost2 extends Component {
             </div>
             <div id="contents">
               <div className="form-group">
-                <p>Category:</p>
+                <h4>Category:</h4>
                 <select className="form-control" id="category">
                   <option>Travel</option>
                   <option>Education</option>
@@ -64,6 +64,7 @@ class NewPost2 extends Component {
                   placeholder="What's in your mind right now?"
                 />
               </div>
+
               {this.state.contents.map(content => {
                 return (
                   <AddContent
@@ -77,6 +78,9 @@ class NewPost2 extends Component {
               })}
             </div>
           </div>
+          <button type="submit" className="btn btn-primary btn-lg float-right">
+            Submit
+          </button>
         </div>
       </div>
     );

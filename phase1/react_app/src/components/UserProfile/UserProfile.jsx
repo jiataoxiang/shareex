@@ -132,14 +132,14 @@ class UserProfile extends React.Component {
               </div>
             </div>
           </div>
-          {/* <button>
+          <button>
             <img
               id="bigProfilePicCircle"
               src={this.state.avatar}
               alt="ProfilePicture"
               onClick={this.handlePopup.bind(this)}
             />
-          </button> */}
+          </button>
         </div>
       </div>
     );

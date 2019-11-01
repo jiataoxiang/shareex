@@ -100,15 +100,21 @@ class Navbar extends React.Component {
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="/">
-                  Action
+                  Computer Science
                 </a>
                 <a className="dropdown-item" href="/">
-                  Another action
+                  Education
                 </a>
-                <div className="dropdown-divider"></div>
+                <a className="dropdown-item" href="/">
+                  Technology
+                </a>
+                <a className="dropdown-item" href="/">
+                  Travel
+                </a>
+                {/* <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="/">
                   Something else here
-                </a>
+                </a> */}
               </div>
             </li>
           </ul>
@@ -139,9 +145,8 @@ class Navbar extends React.Component {
             {/* <Link to="/userprofiling">
               <button className="btn btn-success btn-sm">UserPage</button>
             </Link> */}
-
           </div>
-          <Link to="/userprofile" >
+          <Link to="/userprofile">
             <img
               src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
               alt=""
