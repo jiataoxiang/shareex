@@ -1,23 +1,32 @@
 .single-post-2-page {
   .container {
     margin-top: 2em;
-    .single-post {
-      .post-content {
-        margin-top: 1em;
-        background-color: var(--background-secondary);
-        padding: 1em;
-        border-radius: 10px;
-        min-height: 100vh;
-        .pdf {
-          height: 80vh;
-          width: 100%;
+    .single-post-container {
+      .single-post {
+        .post-content {
+          margin-top: 1em;
+          background-color: var(--background-secondary);
+          padding: 1em;
+          border-radius: 10px;
+          min-height: 100vh;
+          .pdf {
+            height: 80vh;
+            width: 100%;
+          }
+          img {
+            width: 100%;
+          }
         }
-        img {
-          width: 100%;
+        h3 {
+          padding-left: 1rem;
         }
       }
-      h3 {
-        padding-left: 1rem;
+      .comment-container {
+        .comments {
+          background-color: var(--background-secondary);
+          border-radius: 10px;
+          padding: 1em;
+        }
       }
     }
     .user-info-container {

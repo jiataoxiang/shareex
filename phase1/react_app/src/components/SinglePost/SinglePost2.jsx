@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "../../stylesheets/single_post_2.scss";
+import Comment from "../Comment";
 
 class SinglePost2 extends Component {
-  state = {};
+  state = {
+    comments: [{ username: "Justin", content: "Such a nice post" }]
+  };
   render() {
     return (
       <div className="single-post-2-page">
@@ -68,6 +71,12 @@ class SinglePost2 extends Component {
                   />
                 </div>
               </div>
+              <div className="comment-container">
+                <h2>Comments</h2>
+                <div className="comments">
+                  <Comment username="huakun" content="nice post" />
+                </div>
+              </div>
             </div>
             <div
               to="/userprofile"
@@ -93,7 +102,6 @@ class SinglePost2 extends Component {
                 </Link>
               </div>
             </div>
-            >
           </div>
         </div>
       </div>
