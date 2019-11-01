@@ -5,12 +5,12 @@ import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
 import NewPost from "./components/NewPost/NewPost";
 import NewPost2 from "./components/NewPost/NewPost2";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
 import NotFound404 from "./components/404";
 import SinglePost from "./components/SinglePost/SinglePost";
 import SinglePost2 from "./components/SinglePost/SinglePost2";
 import ProfSetting from "./components/prof_set/prof_set";
 import Navbar from "./components/Navbar";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 
