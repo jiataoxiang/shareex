@@ -24,10 +24,15 @@ class Comment extends Component {
       );
     }
     if (this.props.post_user_id === this.props.user_id) {
-      const { deleteComment, secondary_key } = this.props;
+      const { deleteComment, editComment, secondary_key } = this.props;
       return (
         <div>
-          <button className="btn btn-outline-primary float-right">Edit</button>
+          <button
+            className="btn btn-outline-primary float-right"
+            onClick={editComment.bind(this, secondary_key)}
+          >
+            Edit
+          </button>
           <button
             className="btn btn-outline-danger float-right"
             onClick={deleteComment.bind(this, secondary_key)}
@@ -48,8 +53,11 @@ class Comment extends Component {
             className="form-control comment-textarea"
             rows="5"
             id="content"
+            // value={this.props.content}
+            defaultValue={this.props.content}
+            // onChange={e => {}}
             placeholder="What's in your mind right now?"
-          />
+          ></textarea>
         </div>
       );
     } else {
