@@ -10,6 +10,7 @@ import SinglePost from "./components/SinglePost/SinglePost";
 import SinglePost2 from "./components/SinglePost/SinglePost2";
 import ProfSetting from "./components/prof_set/prof_set";
 import Navbar from "./components/Navbar";
+import Tmp from "./components/Tmp";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
@@ -30,6 +31,7 @@ function App() {
           <Route exact path="/single_post" component={SinglePost} />
           <Route exact path="/single_post2" component={SinglePost2} />
           <Route exact path="/prof_setting" component={ProfSetting} />
+          <Route exact path="/tmp" component={Tmp} />
           <Route component={NotFound404} />
         </Switch>
       </BrowserRouter>
