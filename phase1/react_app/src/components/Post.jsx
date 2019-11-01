@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "../stylesheets/post.scss";
 import { uid } from "react-uid";
 
@@ -14,11 +15,14 @@ class Post extends Component {
   };
 
   render() {
-    const { title, content, images } = this.props;
+    const { title, content, images, link } = this.props;
 
     return (
       <div className="post card">
-        <h5 className="card-header">{title}</h5>
+        <Link to={link}>
+          <h5 className="card-header">{title}</h5>
+        </Link>
+
         <div className="card-body">
           {/* <h5 className="card-title">Special title treatment</h5> */}
           <p className="card-text">{content}</p>

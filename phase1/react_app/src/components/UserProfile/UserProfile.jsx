@@ -2,6 +2,7 @@ import React from "react";
 import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
 import { lorem, rand_string } from "../../lib/util";
+import { Link } from "react-router-dom";
 import { uid } from "react-uid";
 import Popup from "./Popup";
 
@@ -52,7 +53,8 @@ class UserProfile extends React.Component {
       post_list.push({
         title: lorem.generateSentences(1),
         content: lorem.generateParagraphs(2),
-        images: getRandomImages(5)
+        images: getRandomImages(5),
+        link: "/single_post"
       });
     }
     const motto = lorem.generateSentences(1);
@@ -113,6 +115,14 @@ class UserProfile extends React.Component {
                   <h2>Name: {this.state.username}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>{this.state.description}</p>
+                  <Link to="/prof_setting" id="profile-setting-btn">
+                    <button className="btn btn-light btn-block">
+                      Profile Setting
+                    </button>
+                  </Link>
+                  <button className="btn btn-success btn-block">
+                    <strong>Follow</strong>
+                  </button>
                 </div>
               </div>
             </div>
@@ -126,6 +136,7 @@ class UserProfile extends React.Component {
                       title={post.title}
                       content={post.content}
                       images={post.images}
+                      link={post.link}
                     />
                   );
                 })}
