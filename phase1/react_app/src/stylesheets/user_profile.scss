@@ -1,4 +1,4 @@
-.UserProfile {
+.user-profile-page {
   .bannerPic {
     display: block;
     width: 100%;
@@ -21,13 +21,10 @@
   #profileStats {
     padding: 0;
     background-color: gold;
-  }
-
-  #profileStats ul {
-    padding: 3px;
-
-    /* Add properties below */
-    margin-left: 390px;
+    ul {
+      margin: 0;
+      width: auto;
+    }
   }
 
   #profileStats ul li {
@@ -51,27 +48,20 @@
   }
 
   /*** Profile info box styles below ***/
+  .container {
+    .space {
+      height: 4em;
+    }
+    .timeline {
+      margin-top: 1em;
+    }
+  }
 
   #profileInfo {
     background-color: var(--background-secondary);
-    padding: 10px;
-
-    /* Add properties below */
-    margin-top: 20px;
-    margin-left: 50px;
-    width: 300px;
-    min-height: 700px;
-    float: left;
-  }
-
-  .timeline {
+    padding: 15px;
     border-radius: 10px;
-    background-color: black;
-
-    /* Add properties below */
-    width: 600px;
-    margin-top: 20px;
-    margin-left: 390px;
+    margin-bottom: 1em;
   }
 
   .post {

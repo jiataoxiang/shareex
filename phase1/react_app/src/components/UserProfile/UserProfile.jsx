@@ -1,5 +1,5 @@
 import React from "react";
-import "../../stylesheets/UserProfile.scss";
+import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
 import { lorem, rand_string } from "../../lib/util";
 import { uid } from "react-uid";
@@ -66,7 +66,7 @@ class UserProfile extends React.Component {
 
   render() {
     return (
-      <div className="UserProfile">
+      <div className="user-profile-page">
         <div>
           {this.state.showPop ? (
             <Popup
@@ -79,7 +79,7 @@ class UserProfile extends React.Component {
         </div>
 
         <div id="profileStats">
-          <ul>
+          <ul className="text-center">
             <li>
               Posts
               <br />
@@ -105,24 +105,31 @@ class UserProfile extends React.Component {
           </ul>
         </div>
         <div className="container">
-          <div id="profileInfo">
-            <h2>Name: {this.state.username}</h2>
-            <p>Motto: {this.state.motto}</p>
-            <p>{this.state.description}</p>
-          </div>
-          <div className="timeline">
-            <div className="post">
-              <h3 className="timelineheader">Posts</h3>
-              {this.state.post_list.map(post => {
-                return (
-                  <Post
-                    key={uid(rand_string())}
-                    title={post.title}
-                    content={post.content}
-                    images={post.images}
-                  />
-                );
-              })}
+          <div className="row">
+            <div className="col-md-4">
+              <div className="sticky-top">
+                <div className="space"></div>
+                <div id="profileInfo">
+                  <h2>Name: {this.state.username}</h2>
+                  <p>Motto: {this.state.motto}</p>
+                  <p>{this.state.description}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-8">
+              <div className="timeline">
+                <h3 className="timelineheader">Posts</h3>
+                {this.state.post_list.map(post => {
+                  return (
+                    <Post
+                      key={uid(rand_string())}
+                      title={post.title}
+                      content={post.content}
+                      images={post.images}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
           {/* <button>
