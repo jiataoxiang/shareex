@@ -13,7 +13,31 @@ const code = `function add(a, b) {
 `;
 
 class AddContent extends Component {
-  state = {code};
+  state = {
+    code,
+    
+  };
+
+  showInputFile = (event) => {
+    const inputFile = event.target.files[0]
+
+    if (inputFile != null) {
+      const isJPG = inputFile.type === 'image/jpeg' ? 1 : 0;
+      const isPNG = inputFile.type === 'image/png'? 1 : 0;
+      const isPDF = inputFile.type === 'application/pdf' ? 1 : 0;
+
+      if (isJPG+isPDF+isPNG > 1) {
+        inputFile.status = 'error';
+        console.log("You can only upload png or jpg files.");
+      } else {
+        const imgReader = new FileReader();
+        imgReader.addEventListener('load', () => {
+          this.setState({: imgReader.result});
+        })
+        imgReader.readAsDataURL(inputFile);
+      }
+    }
+  }
 
   getContentInput = () => {
     if (this.props.type === "text") {
@@ -69,7 +93,7 @@ class AddContent extends Component {
       return (
         <div class="upload-btn-wrapper">
           <button class="submit-file-btn">Upload a PDF</button>
-          <input type="file" name="myfile"/>
+          <input type="file" name="myfile" onChange={this.showInputFile}/>
         </div>
       );
     }
