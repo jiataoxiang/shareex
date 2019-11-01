@@ -3,6 +3,24 @@ import "../stylesheets/comment.scss";
 
 class Comment extends Component {
   state = {};
+
+  getButtons = () => {
+    if (this.props.post_user_id === this.props.user_id) {
+      const { deleteComment, secondary_key } = this.props;
+      return (
+        <div>
+          <button className="btn btn-outline-primary float-right">Edit</button>
+          <button
+            className="btn btn-outline-danger float-right"
+            onClick={deleteComment.bind(this, secondary_key)}
+          >
+            Delete
+          </button>
+        </div>
+      );
+    }
+  };
+
   render() {
     return (
       <div className="comment">
@@ -16,6 +34,7 @@ class Comment extends Component {
             <div className="content">
               <p>{this.props.content}</p>
             </div>
+            {this.getButtons()}
           </div>
         </div>
         <hr />

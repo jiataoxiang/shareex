@@ -10,12 +10,37 @@ class SinglePost2 extends Component {
   // In state, we have 2 arrays, comments and attachments
   // TODO: connect to server, get comments and attachments with API
   state = {
+    user: {
+      user_id: "1123",
+      username: "Peter"
+    },
     comments: [
-      { username: "Justin", content: "Such a nice post" },
+      {
+        username: "Peter",
+        user_id: "1123",
+        content: "Such a nice post",
+        key: "1"
+      },
       {
         username: "Bob",
+        user_id: "1122",
         content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex."
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
+        key: "2"
+      },
+      {
+        username: "Peter",
+        user_id: "1123",
+        content:
+          " Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
+        key: "3"
+      },
+      {
+        username: "William",
+        user_id: "1124",
+        content:
+          "Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu.",
+        key: "4"
       }
     ],
     attachments: [
@@ -55,6 +80,29 @@ class SinglePost2 extends Component {
     ]
   };
 
+  // Generic handler for whenever we type in an input box.
+  // We change the state for the particular property bound to the textbox from the event.
+  handleInputChange = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    // 'this' is bound to the component in this arrow function.
+    this.setState({
+      [name]: value // [name] sets the object property name to the value of the 'name' variable.
+    });
+  };
+
+  deleteComment = secondary_key => {
+    const comments = this.state.comments;
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].key === secondary_key) {
+        comments.splice(i, 1);
+      }
+    }
+    this.setState({ comments: comments });
+  };
+
   render() {
     return (
       <div className="single-post-2-page">
@@ -84,8 +132,12 @@ class SinglePost2 extends Component {
                     return (
                       <Comment
                         key={uid(rand_string())}
+                        secondary_key={comment.key}
+                        user_id={comment.user_id}
+                        post_user_id={this.state.user.user_id}
                         username={comment.username}
                         content={comment.content}
+                        deleteComment={this.deleteComment}
                       />
                     );
                   })}
