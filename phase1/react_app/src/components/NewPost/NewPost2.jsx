@@ -47,6 +47,15 @@ class NewPost2 extends Component {
             </div>
             <div id="contents">
               <div className="form-group">
+                <p>Category:</p>
+                <select className="form-control" id="category">
+                  <option>Travel</option>
+                  <option>Education</option>
+                  <option>Computer Science</option>
+                  <option>Technology</option>
+                </select>
+              </div>
+              <div className="form-group">
                 <h4 htmlFor="content">Content</h4>
                 <textarea
                   className="form-control"
