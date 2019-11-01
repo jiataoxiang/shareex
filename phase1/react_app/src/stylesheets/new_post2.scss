@@ -32,6 +32,18 @@
       display: inline-block;
     }
 
+    .npm__react-simple-code-editor__textarea,
+    .code-editor {
+      background: white;
+      color: black !important;
+    }
+
+    .code-container span,
+    pre {
+      // background: white;
+      color: black !important;
+    }
+
     .submit-file-btn {
       border: 2px solid gray;
       color: gray;

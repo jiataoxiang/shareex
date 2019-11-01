@@ -1,11 +1,10 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 // import Highlight from 'react-highlight';
-import Editor from 'react-simple-code-editor';
-import {highlight, languages} from 'prismjs';
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs";
 // import Prism from "prismjs";
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
 
 const code = `function add(a, b) {
   return a + b;
@@ -13,7 +12,7 @@ const code = `function add(a, b) {
 `;
 
 class AddContent extends Component {
-  state = {code};
+  state = { code };
 
   getContentInput = () => {
     if (this.props.type === "text") {
@@ -30,53 +29,56 @@ class AddContent extends Component {
       );
     } else if (this.props.type === "code") {
       return (
-        <div className="form-group">
-          <h4 htmlFor="content">Code</h4>
-          <Editor className="code-editor"
-            value={this.state.code}
-            onValueChange={code => this.setState({ code })}
-            highlight={code => highlight(code, languages.js)}
-            padding={10}
-            style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
-              fontSize: 12,
-            }}
-          />
+        <div className="code-container">
+          <div className="form-group">
+            <h4 htmlFor="content">Code</h4>
+            <Editor
+              className="code-editor"
+              value={this.state.code}
+              onValueChange={code => this.setState({ code })}
+              highlight={code => highlight(code, languages.js)}
+              padding={10}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12
+              }}
+            />
+          </div>
         </div>
-      )
+      );
     } else if (this.props.type === "youtube") {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
-          <input type="text" className="form-control"/>
+          <input type="text" className="form-control" />
         </div>
       );
     } else if (this.props.type === "image") {
       return (
         <div class="upload-btn-wrapper">
           <button class="submit-file-btn">Upload a Image</button>
-          <input type="file" name="myfile"/>
+          <input type="file" name="myfile" />
         </div>
       );
     } else if (this.props.type === "image_link") {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control"/>
+          <input type="text" className="form-control" />
         </div>
       );
     } else if (this.props.type === "pdf") {
       return (
         <div class="upload-btn-wrapper">
           <button class="submit-file-btn">Upload a PDF</button>
-          <input type="file" name="myfile"/>
+          <input type="file" name="myfile" />
         </div>
       );
     }
   };
 
   render() {
-    const {addInput, secondary_key} = this.props;
+    const { addInput, secondary_key } = this.props;
     return (
       <div className="add-content-component">
         <div className="content-input">{this.getContentInput()}</div>
@@ -147,8 +149,8 @@ class AddContent extends Component {
             </div>
           </div>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
       </div>
     );
   }
