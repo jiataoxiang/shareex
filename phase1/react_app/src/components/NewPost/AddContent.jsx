@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-// import Highlight from 'react-highlight';
+import React, {Component} from "react";
 import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs";
-// import Prism from "prismjs";
+import {highlight, languages} from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
+import Attachment from "../Attachment";
+import {uid} from "react-uid";
+import {rand_string} from "../../lib/util";
 
 const code = `function add(a, b) {
   return a + b;
@@ -12,9 +13,10 @@ const code = `function add(a, b) {
 `;
 
 class AddContent extends Component {
-  state = { code };
+  state = {code};
 
   getContentInput = () => {
+    const {addedAttachmentFile} = this.props;
     if (this.props.type === "text") {
       return (
         <div className="form-group">
@@ -35,7 +37,7 @@ class AddContent extends Component {
             <Editor
               className="code-editor"
               value={this.state.code}
-              onValueChange={code => this.setState({ code })}
+              onValueChange={code => this.setState({code})}
               highlight={code => highlight(code, languages.js)}
               padding={10}
               style={{
@@ -50,41 +52,54 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
-          <input type="text" className="form-control" />
+          <input type="text" className="form-control"/>
         </div>
       );
     } else if (this.props.type === "image") {
       return (
         <div className="upload-btn-wrapper">
           <button className="submit-file-btn">Upload a Image</button>
-          <input type="file" name="myfile" />
+          <input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>
         </div>
       );
     } else if (this.props.type === "image_link") {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control" />
+          <input type="text" className="form-control"/>
         </div>
       );
     } else if (this.props.type === "pdf") {
       return (
         <div className="upload-btn-wrapper">
           <button className="submit-file-btn">Upload a PDF</button>
-          <input type="file" name="myfile" />
+          <input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>
         </div>
+      );
+    } else if (this.props.type === 'pdf_attach') {
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'pdf'}
+          content={process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"}
+        />
+      );
+    } else if (this.props.type === 'image_attach') {
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'image'}
+          content={process.env.PUBLIC_URL + "/img/SSL.png"}
+        />
       );
     }
   };
 
   render() {
-    const { addInput, secondary_key } = this.props;
+    const {addInput, secondary_key} = this.props;
     return (
       <div className="add-content-component">
         <div className="content-input">{this.getContentInput()}</div>
-        {/* <div className="content-input">
-          <h2>{this.props.type}</h2>
-        </div> */}
         <div className="add-button">
           <div className="dropdown">
             <button
@@ -149,8 +164,8 @@ class AddContent extends Component {
             </div>
           </div>
         </div>
-        <br />
-        <br />
+        <br/>
+        <br/>
       </div>
     );
   }
