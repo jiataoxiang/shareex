@@ -58,7 +58,14 @@ class Home extends Component {
           attachment => attachment.post_id === posts[i].id
         );
         posts_display.push(
-          <Post key={posts[i].id} post={posts[i]} attachments={attachments} />
+          <Post
+            key={posts[i].id}
+            post={posts[i]}
+            posts={posts}
+            attachments={attachments}
+            current_user={this.props.state.current_user}
+            setAppState={this.props.state.setAppState}
+          />
         );
       }
     }

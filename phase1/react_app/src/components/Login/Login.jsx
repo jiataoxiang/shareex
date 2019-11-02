@@ -24,7 +24,6 @@ class Login extends Component {
         this.props.state.setAppState("current_user", signin_user[0]);
         // redirect to Home page when logged in
         this.props.history.push("/");
-        console.log(this.props.history);
       } else {
         console.log("Failed to sign in, password wrong");
       }

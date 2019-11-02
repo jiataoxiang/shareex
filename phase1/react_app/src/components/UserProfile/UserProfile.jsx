@@ -73,7 +73,10 @@ class UserProfile extends React.Component {
             <Post
               key={uid(rand_string())}
               post={posts[i]}
+              posts={posts}
               attachments={attachments}
+              current_user={this.props.state.current_user}
+              setAppState={this.props.state.setAppState}
             />
           );
         }
@@ -84,7 +87,7 @@ class UserProfile extends React.Component {
 
   render() {
     if (!this.props.state.current_user) {
-      return (<Redirect to="/" />)
+      return <Redirect to="/" />;
     }
     return (
       <div className="user-profile-page">
@@ -104,30 +107,22 @@ class UserProfile extends React.Component {
             <li>
               Posts
               <br />
-              <span className="profileStatsNumber">
-                {this.state.postsNum}
-              </span>
+              <span className="profileStatsNumber">{this.state.postsNum}</span>
             </li>
             <li>
               Followers
               <br />
-              <span className="profileStatsNumber">
-                {this.state.follower}
-              </span>
+              <span className="profileStatsNumber">{this.state.follower}</span>
             </li>
             <li>
               Following
               <br />
-              <span className="profileStatsNumber">
-                {this.state.following}
-              </span>
+              <span className="profileStatsNumber">{this.state.following}</span>
             </li>
             <li>
               Likes
               <br />
-              <span className="profileStatsNumber">
-                {this.state.likes}
-              </span>
+              <span className="profileStatsNumber">{this.state.likes}</span>
             </li>
           </ul>
         </div>
