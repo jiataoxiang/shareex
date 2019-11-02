@@ -1,7 +1,7 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
-import { lorem, rand_string } from "../../lib/util";
+import { rand_string } from "../../lib/util";
 import { Link } from "react-router-dom";
 import { uid } from "react-uid";
 import Popup from "./Popup";

@@ -86,7 +86,7 @@ class Home extends Component {
     return (
       <div className="home-page">
         <div className="container row">
-          <div className="posts col-12 col-sm-6 col-md-8">
+          <div className="posts col-12 col-md-8">
             <h3>Posts</h3>
             {this.getPosts().map(post => {
               return post;
