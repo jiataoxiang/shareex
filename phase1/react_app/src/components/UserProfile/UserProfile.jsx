@@ -37,34 +37,35 @@ class UserProfile extends React.Component {
     }
   };
 
-  componentDidMount() {
-    // The code below are temporary code for randomly generating some post content and recommendations
-    // TODO: replace the following initialization code in phase 2, connect to server and get real data
-    const post_list = [];
-    function getRandomImages(num) {
-      const tmp = [];
-      for (let i = 0; i < num; i++) {
-        tmp.push("https://picsum.photos/seed/" + rand_string() + "/200/300");
+  componentDidMount() {}
+
+  getPosts = () => {
+    // find all posts belonging to current user
+    const posts_display = [];
+    if (this.props.state.posts) {
+      const posts = this.props.state.posts.filter(
+        post => post.author_id === this.props.state.current_user
+      );
+
+      if (posts) {
+        for (let i = 0; i < posts.length; i++) {
+          // find all attachments
+          const attachments = this.props.state.attachments.filter(
+            attachment => attachment.post_id === posts[i].id
+          );
+          posts_display.push(
+            <Post
+              key={uid(rand_string())}
+              post={posts[i]}
+              attachments={attachments}
+            />
+          );
+        }
       }
-      return tmp;
     }
 
-    for (let i = 0; i < 10; i++) {
-      post_list.push({
-        title: lorem.generateSentences(1),
-        content: lorem.generateParagraphs(2),
-        images: getRandomImages(5),
-        link: "/single_post"
-      });
-    }
-    const motto = lorem.generateSentences(1);
-    const description = lorem.generateParagraphs(2);
-    this.setState({
-      post_list: post_list,
-      motto: motto,
-      description: description
-    });
-  }
+    return posts_display;
+  };
 
   render() {
     return (
@@ -129,16 +130,8 @@ class UserProfile extends React.Component {
             <div className="col-md-8">
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
-                {this.state.post_list.map(post => {
-                  return (
-                    <Post
-                      key={uid(rand_string())}
-                      title={post.title}
-                      content={post.content}
-                      images={post.images}
-                      link={post.link}
-                    />
-                  );
+                {this.getPosts().map(post => {
+                  return post;
                 })}
               </div>
             </div>

@@ -6,7 +6,7 @@ import Attachment from "../Attachment";
 import { rand_string } from "../../lib/util";
 import { uid } from "react-uid";
 
-class SinglePost2 extends Component {
+class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
   // TODO: connect to server, get comments and attachments with API
   state = {
@@ -220,4 +220,4 @@ class SinglePost2 extends Component {
   }
 }
 
-export default SinglePost2;
+export default SinglePost;

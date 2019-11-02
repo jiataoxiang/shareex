@@ -4,22 +4,42 @@ import "../stylesheets/post.scss";
 import { uid } from "react-uid";
 
 class Post extends Component {
-  state = {};
-  // constructor(props) {
-  //   super(props);
-  // }
-
   thumbClicked = event => {
     // console.log(event.target);
     alert("Thumb Up Button Clicked!");
   };
 
-  render() {
-    const { title, content, images, link } = this.props;
+  componentDidMount() {}
 
+  getImages = () => {
+    const images = [];
+    let count = 0;
+    for (let i = 0; i < this.props.attachments.length && count <= 5; i++) {
+      const attachment = this.props.attachments[i];
+      if (attachment.type === "image") {
+        images.push(process.env.PUBLIC_URL + attachment.content);
+        count++;
+      } else if (attachment.type === "image_link") {
+        images.push(attachment.content);
+        count++;
+      }
+    }
+    return images;
+  };
+
+  render() {
+    const { title, content, likes } = this.props.post;
+    const images = this.getImages();
     return (
       <div className="post card">
-        <Link to={link}>
+        <Link
+          to={{
+            pathname: "/single_post",
+            state: {
+              post_id: this.props.post.id
+            }
+          }}
+        >
           <h5 className="card-header">{title}</h5>
         </Link>
 
@@ -39,9 +59,19 @@ class Post extends Component {
             })}
           </div>
           <hr />
-          <a href="/" className="btn btn-primary">
+          <Link
+            to={{
+              pathname: "/single_post",
+              state: {
+                post_id: this.props.post.id
+              }
+            }}
+            className="btn btn-primary"
+          >
             See Details
-          </a>
+          </Link>
+
+          <span className="likes float-right">Likes: {likes}</span>
           {/* Thumb up button */}
           <img
             src={process.env.PUBLIC_URL + "./img/thumb_up.png"}
