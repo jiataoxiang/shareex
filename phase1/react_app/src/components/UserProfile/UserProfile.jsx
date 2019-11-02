@@ -8,17 +8,7 @@ import Popup from "./Popup";
 
 class UserProfile extends React.Component {
   state = {
-    showPop: false,
-    postsNum: 0,
-    post_list: [],
-    nickname: "",
-    banner: process.env.PUBLIC_URL + "./img/banner.jpg",
-    avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
-    follower: 0,
-    following: 0,
-    likes: 0,
-    motto: "",
-    description: ""
+    showPop: false
   };
 
   handlePopup = () => {
@@ -49,7 +39,8 @@ class UserProfile extends React.Component {
         avatar: currentUser.avatar,
         follower: currentUser.follower,
         following: currentUser.following,
-        likes: currentUser.likes
+        likes: currentUser.likes,
+        numPosts: currentUser.numPosts
       });
       console.log(currentUser);
     }
@@ -60,7 +51,7 @@ class UserProfile extends React.Component {
     const posts_display = [];
     if (this.props.state.posts) {
       const posts = this.props.state.posts.filter(
-        post => post.author_id === this.props.state.current_user
+        post => post.author_id === this.props.state.current_user.id
       );
 
       if (posts) {
@@ -108,7 +99,9 @@ class UserProfile extends React.Component {
             <li>
               Posts
               <br />
-              <span className="profileStatsNumber">{this.state.postsNum}</span>
+              <span className="profileStatsNumber">
+                {this.state.numPosts}
+              </span>
             </li>
             <li>
               Followers

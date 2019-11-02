@@ -26,7 +26,8 @@ let data = {
       following: 23554,
       likes: "1.234m",
       banner: process.env.PUBLIC_URL + "./img/banner.jpg",
-      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png"
+      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+      numPosts: 5
     }
   ],
   posts: [
@@ -158,8 +159,8 @@ let data = {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQELT-zWsTKXApSU69guKDE9L6clELaJNj8rodNesngZV0SnfyS&s"
     }
   ],
-  current_user: "0823170644"
-  // current_user: undefined
+  // current_user: "0823170644"
+  current_user: undefined
   // current_post: undefined
 };
 
