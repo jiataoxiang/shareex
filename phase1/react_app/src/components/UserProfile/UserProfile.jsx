@@ -64,6 +64,7 @@ class UserProfile extends React.Component {
       );
 
       if (posts) {
+        console.log(posts);
         for (let i = 0; i < posts.length; i++) {
           // find all attachments
           const attachments = this.props.state.attachments.filter(

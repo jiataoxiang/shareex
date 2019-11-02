@@ -8,11 +8,11 @@ class Post extends Component {
     const posts = this.props.posts;
     if (
       this.props.current_user !== undefined &&
-      !this.props.post.likes_user_id.includes(this.props.current_user)
+      !this.props.post.likes_user_id.includes(this.props.current_user.id)
     ) {
       const this_post = posts.filter(post => post.id === this.props.post.id)[0];
       this_post.likes += 1;
-      this_post.likes_user_id.push(this.props.current_user);
+      this_post.likes_user_id.push(this.props.current_user.id);
       this.props.setAppState("posts", posts);
     }
   };
