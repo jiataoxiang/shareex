@@ -31,9 +31,11 @@ let data = {
     {
       id: "19ibDhy5ft",
       author_id: "0823170644",
-      title: "title",
+      title: "AWS Tutorial",
       category: "education",
-      content: "content",
+      content:
+        "Amazon Elastic Compute Cloud (Amazon EC2) is a web service that provides secure, resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers. Amazon EC2’s simple web service interface allows you to obtain and configure capacity with minimal friction. It provides you with complete control of your computing resources and lets you run on Amazon’s proven computing environment. Amazon EC2 reduces the time required to obtain and boot new server instances to minutes, allowing you to quickly scale capacity, both up and down, as your computing requirements change. Amazon EC2 changes the economics of computing by allowing you to pay only for capacity that you actually use. Amazon EC2 provides developers the tools to build failure resilient applications and isolate them from common failure scenarios.",
+      likes: 25,
       attachments: [
         "Nmx5b25eX2",
         "RXqqke6dhk",
@@ -47,9 +49,11 @@ let data = {
     {
       id: "nIt38vzpz3",
       author_id: "0823170644",
-      title: "title",
+      title: "Traveling in Vancouver",
       category: "travel",
-      content: "content",
+      content:
+        "Vancouver, a bustling west coast seaport in British Columbia, is among Canada’s densest, most ethnically diverse cities. A popular filming location, it’s surrounded by mountains, and also has thriving art, theatre and music scenes. Vancouver Art Gallery is known for its works by regional artists, while the Museum of Anthropology houses preeminent First Nations collections.",
+      likes: 0,
       attachments: []
     }
   ],
@@ -79,13 +83,13 @@ let data = {
       id: "llQMN8cVcp",
       post_id: "19ibDhy5ft",
       type: "image",
-      content: process.env.PUBLIC_URL + "/images/SSL.png"
+      content: "/img/SSL.png"
     },
     {
       id: "jecNnn6afM",
       post_id: "19ibDhy5ft",
       type: "pdf",
-      content: process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"
+      content: "/files/AWS_Deploy_web_app_with_SSL.pdf"
     },
     {
       id: "buOxLgpgw3",
@@ -100,10 +104,59 @@ let data = {
       type: "image_link",
       content:
         "https://chiefit.me/wp-content/uploads/2019/06/Amazon-Web-Services_logo835x396.png"
+    },
+    {
+      id: "jhgMjB4xlK",
+      post_id: "nIt38vzpz3",
+      type: "image",
+      content: "/img/vancouver.jpg"
+    },
+    {
+      id: "EZ6efFTSO6",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRICoMi_kc-1hJSBOY1ATUob1aqtdjpGYCoqHJKuDYWITaXnU5hpg&s"
+    },
+    {
+      id: "pnfIHd0v3v",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4h84Mt3TwyV7s-snnF-HAxwU8wIIOhWglCwozAk1ogYLuSGCB&s"
+    },
+    {
+      id: "enmKa0jv73",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb_i8jZRoNq2tXMZjqwdZZrrORb4wHPymGASKVD8Ir0TVejYqJ2w&s"
+    },
+    {
+      id: "MepuIHM9JI",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRTNxlDQ-o1chdtphOG0u29yoLjaF-YzLdURCsw3iVKa-28Ah&s"
+    },
+    {
+      id: "4zLeQi9bkS",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPPZoB_48HCmGgK7gGntDUpUuUSCfSeQuwRvzNNjV3Uv0XChWmyg&s"
+    },
+    {
+      id: "Q60IOtk26C",
+      post_id: "nIt38vzpz3",
+      type: "image_link",
+      content:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQELT-zWsTKXApSU69guKDE9L6clELaJNj8rodNesngZV0SnfyS&s"
     }
   ],
-  current_user: undefined,
-  current_post: undefined
+  // current_user: "0823170644"
+  current_user: undefined
+  // current_post: undefined
 };
 
 export default data;

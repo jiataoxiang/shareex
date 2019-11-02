@@ -1,7 +1,7 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
-import { lorem, rand_string } from "../../lib/util";
+import { rand_string } from "../../lib/util";
 import { Link } from "react-router-dom";
 import { uid } from "react-uid";
 import Popup from "./Popup";
@@ -53,32 +53,34 @@ class UserProfile extends React.Component {
       });
       console.log(currentUser);
     }
-    const post_list = [];
-    function getRandomImages(num) {
-      const tmp = [];
-      for (let i = 0; i < num; i++) {
-        tmp.push("https://picsum.photos/seed/" + rand_string() + "/200/300");
-      }
-      return tmp;
-    }
-
-    for (let i = 0; i < 5; i++) {
-      post_list.push({
-        title: lorem.generateSentences(1),
-        content: lorem.generateParagraphs(2),
-        images: getRandomImages(5),
-        link: "/single_post"
-      });
-    }
-    const motto = lorem.generateSentences(1);
-    const description = lorem.generateParagraphs(2);
-    this.setState({
-      post_list: post_list,
-      motto: motto,
-      description: description,
-      postsNum: post_list.length
-    });
   }
+
+  getPosts = () => {
+    // find all posts belonging to current user
+    const posts_display = [];
+    if (this.props.state.posts) {
+      const posts = this.props.state.posts.filter(
+        post => post.author_id === this.props.state.current_user
+      );
+
+      if (posts) {
+        for (let i = 0; i < posts.length; i++) {
+          // find all attachments
+          const attachments = this.props.state.attachments.filter(
+            attachment => attachment.post_id === posts[i].id
+          );
+          posts_display.push(
+            <Post
+              key={uid(rand_string())}
+              post={posts[i]}
+              attachments={attachments}
+            />
+          );
+        }
+      }
+    }
+    return posts_display;
+  };
 
   render() {
     return (
@@ -149,16 +151,8 @@ class UserProfile extends React.Component {
             <div className="col-md-8">
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
-                {this.state.post_list.map(post => {
-                  return (
-                    <Post
-                      key={uid(rand_string())}
-                      title={post.title}
-                      content={post.content}
-                      images={post.images}
-                      link={post.link}
-                    />
-                  );
+                {this.getPosts().map(post => {
+                  return post;
                 })}
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "../stylesheets/navbar.scss";
 import $ from "jquery";
 
@@ -43,15 +43,46 @@ class Navbar extends React.Component {
     });
   }
 
+  logout = () => {
+    this.props.state.setAppState("current_user", undefined);
+    this.props.history.push("/");
+  };
+
   /* if signed in, display user profile button, 
       else, return sign in sign up buttons */
   getButton = () => {
-    const currentUser = this.props.val.current_user;
+    const currentUser = this.props.state.current_user;
     if (currentUser) {
       const type = currentUser.type;
       if (type === "admin") {
         return (
-          <Link to="/admin_profile">
+          <div>
+            <button
+              className="btn btn-outline-danger btn-sm logout-btn"
+              onClick={this.logout}
+            >
+              Logout
+            </button>
+            <Link to="/adminprofile">
+              <img
+                src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+                alt=""
+                width="40px"
+                height="40px"
+              />
+            </Link>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <button
+            className="btn btn-outline-danger btn-sm logout-btn"
+            onClick={this.logout}
+          >
+            Logout
+          </button>
+          <Link to="/userprofile">
             <img
               src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
               alt=""
@@ -59,17 +90,7 @@ class Navbar extends React.Component {
               height="40px"
             />
           </Link>
-        );
-      }
-      return (
-        <Link to="/userprofile">
-          <img
-            src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
-            alt=""
-            width="40px"
-            height="40px"
-          />
-        </Link>
+        </div>
       );
     } else {
       return (
@@ -180,4 +201,4 @@ class Navbar extends React.Component {
   }
 }
 
-export default Navbar;
+export default withRouter(Navbar);

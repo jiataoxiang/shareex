@@ -45,7 +45,7 @@ class App extends React.Component {
       <div>
         {/* <Hometest /> */}
         <BrowserRouter>
-          <Navbar val={this.state} />
+          <Navbar state={this.state} />
           <Switch>
             <Route
               exact
