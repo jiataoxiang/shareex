@@ -1,6 +1,7 @@
 import React from "react";
 import Home from "./components/Homepage/Home";
 import UserProfile from "./components/UserProfile/UserProfile";
+import AdminProfile from "./components/UserProfile/AdminProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
 import NewPost from "./components/NewPost/NewPost";
@@ -21,6 +22,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/userprofile" component={UserProfile} />
+          <Route exact path="/adminprofile" component={AdminProfile} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/new_post" component={NewPost} />
