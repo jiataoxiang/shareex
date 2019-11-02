@@ -51,7 +51,7 @@ class UserProfile extends React.Component {
     const posts_display = [];
     if (this.props.state.posts) {
       const posts = this.props.state.posts.filter(
-        post => post.author_id === this.props.state.current_user
+        post => post.author_id === this.props.state.current_user.id
       );
 
       if (posts) {
