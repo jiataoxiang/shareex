@@ -69,7 +69,7 @@ class Navbar extends React.Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
+            {/* <li className="nav-item active">
               <form className="form-inline my-2 my-lg-0">
                 <input
                   className="form-control mr-sm-2"
@@ -111,12 +111,8 @@ class Navbar extends React.Component {
                 <a className="dropdown-item" href="/">
                   Travel
                 </a>
-                {/* <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="/">
-                  Something else here
-                </a> */}
               </div>
-            </li>
+            </li> */}
           </ul>
           <Link className="nav-link nav-item" to="new_post">
             <button className="btn btn-outline-primary">New Post</button>
@@ -141,10 +137,6 @@ class Navbar extends React.Component {
             <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
             </Link>
-
-            {/* <Link to="/userprofiling">
-              <button className="btn btn-success btn-sm">UserPage</button>
-            </Link> */}
           </div>
           <Link to="/userprofile">
             <img

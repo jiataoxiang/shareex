@@ -88,19 +88,6 @@ class SinglePost2 extends Component {
     ]
   };
 
-  // Generic handler for whenever we type in an input box.
-  // We change the state for the particular property bound to the textbox from the event.
-  handleInputChange = event => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    // 'this' is bound to the component in this arrow function.
-    this.setState({
-      [name]: value // [name] sets the object property name to the value of the 'name' variable.
-    });
-  };
-
   deleteComment = secondary_key => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
