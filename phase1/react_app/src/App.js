@@ -1,6 +1,7 @@
 import React from "react";
 import Home from "./components/Homepage/Home";
 import UserProfile from "./components/UserProfile/UserProfile";
+import AdminProfile from "./components/UserProfile/AdminProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
 import NewPost from "./components/NewPost/NewPost";

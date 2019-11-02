@@ -10,7 +10,7 @@ class Popup extends React.Component {
     return (
       <div className='popupWindow'>
         <div className='popupInner'>
-          <h1>{this.props.header}</h1>
+          <h1 className='popupHeader'>{this.props.header}</h1>
           <br/><br/>
           <input
             type="file"
