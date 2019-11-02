@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Post from "../Post";
 import { Link } from "react-router-dom";
-// import Recommendation from "./Recommendation";
 import "../../stylesheets/home.scss";
 import { lorem, rand_string } from "../../lib/util";
 import { uid } from "react-uid";
@@ -59,21 +58,28 @@ class Home extends Component {
           attachment => attachment.post_id === posts[i].id
         );
         posts_display.push(
-          <Post
-            key={uid(rand_string())}
-            post={posts[i]}
-            attachments={attachments}
-          />
+          <Post key={posts[i].id} post={posts[i]} attachments={attachments} />
         );
       }
     }
     return posts_display;
   };
 
-  testbtn = () => {
-    const posts = this.props.state.posts;
-    posts[0].content = "edited content";
-    this.props.state.setAppState("posts", posts);
+  /* Recommendations are selected as those posts with more than 10 likes
+    Only at most 10 are selected randomly */
+  getRecommendations = () => {
+    let posts = this.props.state.posts;
+    const recommendations = [];
+    let count = 0;
+    if (posts) {
+      posts = posts.filter(post => post.likes >= 10);
+      for (let i = 0; i < posts.length && count < 10; i++) {
+        if (posts[i].likes >= 10) {
+          recommendations.push(posts[i]);
+        }
+      }
+    }
+    return recommendations;
   };
 
   render() {
@@ -90,11 +96,18 @@ class Home extends Component {
             <div className="sticky-top">
               <h3>Recommendations</h3>
               <ul className="list-group">
-                {this.state.recommendations.map(recommendation => {
+                {this.getRecommendations().map(recommendation => {
                   return (
                     <li key={uid(rand_string())} className="list-group-item">
-                      <Link to={recommendation.href}>
-                        {recommendation.content}
+                      <Link
+                        to={{
+                          pathname: "/single_post",
+                          state: {
+                            post_id: recommendation.id
+                          }
+                        }}
+                      >
+                        {recommendation.title}
                       </Link>
                     </li>
                   );

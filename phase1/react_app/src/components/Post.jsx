@@ -14,7 +14,7 @@ class Post extends Component {
   getImages = () => {
     const images = [];
     let count = 0;
-    for (let i = 0; i < this.props.attachments.length && count <= 5; i++) {
+    for (let i = 0; i < this.props.attachments.length && count < 5; i++) {
       const attachment = this.props.attachments[i];
       if (attachment.type === "image") {
         images.push(process.env.PUBLIC_URL + attachment.content);
