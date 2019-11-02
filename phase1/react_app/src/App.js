@@ -13,26 +13,29 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 
-function App() {
-  return (
-    <div>
-      {/* <Hometest /> */}
-      <BrowserRouter>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/userprofile" component={UserProfile} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={SignUp} />
-          <Route exact path="/new_post" component={NewPost} />
-          <Route exact path="/single_post" component={SinglePost} />
-          <Route exact path="/prof_setting" component={ProfSetting} />
-          <Route exact path="/tmp" component={Tmp} />
-          <Route component={NotFound404} />
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
+// function App() {
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        {/* <Hometest /> */}
+        <BrowserRouter>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/userprofile" component={UserProfile} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/new_post" component={NewPost} />
+            <Route exact path="/single_post" component={SinglePost} />
+            <Route exact path="/prof_setting" component={ProfSetting} />
+            <Route exact path="/tmp" component={Tmp} />
+            <Route component={NotFound404} />
+          </Switch>
+        </BrowserRouter>
+      </div>
+    );
+  }
 }
 
 export default App;
