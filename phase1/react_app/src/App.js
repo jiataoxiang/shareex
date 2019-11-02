@@ -46,46 +46,50 @@ class App extends React.Component {
         {/* <Hometest /> */}
         <BrowserRouter>
           <Navbar val={this.state} />
-          {/* <Switch> */}
-          <Route exact path="/" component={() => <Home state={this.state} />} />
-          <Route
-            exact
-            path="/index.html"
-            component={() => <Home state={this.state} />}
-          />
-          <Route
-            exact
-            path="/userprofile"
-            component={() => <UserProfile state={this.state} />}
-          />
-          <Route
-            exact
-            path="/login"
-            component={() => <Login state={this.state} />}
-          />
-          <Route
-            exact
-            path="/signup"
-            component={() => <SignUp state={this.state} />}
-          />
-          <Route
-            exact
-            path="/new_post"
-            component={() => <NewPost state={this.state} />}
-          />
-          <Route
-            exact
-            path="/single_post"
-            component={() => <SinglePost state={this.state} />}
-          />
-          <Route
-            exact
-            path="/prof_setting"
-            component={() => <ProfSetting state={this.state} />}
-          />
-          {/* <Route exact path="/tmp" component={Tmp} /> */}
-          <Route component={NotFound404} />
-          {/* </Switch> */}
+          <Switch>
+            <Route
+              exact
+              path="/"
+              component={() => <Home state={this.state} />}
+            />
+            <Route
+              exact
+              path="/index.html"
+              component={() => <Home state={this.state} />}
+            />
+            <Route
+              exact
+              path="/userprofile"
+              component={() => <UserProfile state={this.state} />}
+            />
+            <Route
+              exact
+              path="/login"
+              component={() => <Login state={this.state} />}
+            />
+            <Route
+              exact
+              path="/signup"
+              component={() => <SignUp state={this.state} />}
+            />
+            <Route
+              exact
+              path="/new_post"
+              component={() => <NewPost state={this.state} />}
+            />
+            <Route
+              exact
+              path="/single_post"
+              component={() => <SinglePost state={this.state} />}
+            />
+            <Route
+              exact
+              path="/prof_setting"
+              component={() => <ProfSetting state={this.state} />}
+            />
+            {/* <Route exact path="/tmp" component={Tmp} /> */}
+            <Route component={NotFound404} />
+          </Switch>
         </BrowserRouter>
       </div>
     );
