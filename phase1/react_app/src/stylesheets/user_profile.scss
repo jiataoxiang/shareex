@@ -1,4 +1,4 @@
-.UserProfile {
+.user-profile-page {
   .bannerPic {
     display: block;
     width: 100%;
@@ -12,7 +12,7 @@
     /* Add properties below */
     position: absolute;
     top: 130px;
-    left: 100px;
+    left: 10em;
     width: 200px;
     border-radius: 50%;
     border: 2px solid gold;
@@ -21,13 +21,10 @@
   #profileStats {
     padding: 0;
     background-color: gold;
-  }
-
-  #profileStats ul {
-    padding: 3px;
-
-    /* Add properties below */
-    margin-left: 390px;
+    ul {
+      margin: 0;
+      width: auto;
+    }
   }
 
   #profileStats ul li {
@@ -51,27 +48,25 @@
   }
 
   /*** Profile info box styles below ***/
+  .container {
+    .space {
+      height: 4em;
+    }
+    .timeline {
+      margin-top: 1em;
+    }
+  }
 
   #profileInfo {
     background-color: var(--background-secondary);
-    padding: 10px;
-
-    /* Add properties below */
-    margin-top: 20px;
-    margin-left: 50px;
-    width: 300px;
-    min-height: 700px;
-    float: left;
-  }
-
-  .timeline {
+    padding: 15px;
     border-radius: 10px;
-    background-color: black;
+    margin-bottom: 1em;
 
-    /* Add properties below */
-    width: 600px;
-    margin-top: 20px;
-    margin-left: 390px;
+    #profile-setting-btn,
+    button {
+      margin-bottom: 1em;
+    }
   }
 
   .post {
@@ -165,5 +160,17 @@
     height: 600px;
     margin: 10%;
     position: center;
+  }
+}
+@media screen and (max-width: 600px) {
+  .user-profile-page {
+    .container {
+      .space {
+        height: 20px;
+      }
+    }
+    #bigProfilePicCircle {
+      left: 2em;
+    }
   }
 }

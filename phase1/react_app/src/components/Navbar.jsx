@@ -15,7 +15,7 @@ class Navbar extends React.Component {
           .siblings()
           .removeClass("active");
         var btnValue = btn_clicked.val();
-        console.log("Color theme - ", btnValue);
+        // console.log("Color theme - ", btnValue);
 
         if (btnValue === "light") {
           trans();
@@ -69,7 +69,7 @@ class Navbar extends React.Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
+            {/* <li className="nav-item active">
               <form className="form-inline my-2 my-lg-0">
                 <input
                   className="form-control mr-sm-2"
@@ -100,17 +100,19 @@ class Navbar extends React.Component {
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="/">
-                  Action
+                  Computer Science
                 </a>
                 <a className="dropdown-item" href="/">
-                  Another action
+                  Education
                 </a>
-                <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="/">
-                  Something else here
+                  Technology
+                </a>
+                <a className="dropdown-item" href="/">
+                  Travel
                 </a>
               </div>
-            </li>
+            </li> */}
           </ul>
           <Link className="nav-link nav-item" to="new_post">
             <button className="btn btn-outline-primary">New Post</button>
@@ -135,13 +137,8 @@ class Navbar extends React.Component {
             <Link to="/signup">
               <button className="btn btn-success btn-sm">Sign Up</button>
             </Link>
-
-            {/* <Link to="/userprofiling">
-              <button className="btn btn-success btn-sm">UserPage</button>
-            </Link> */}
-
           </div>
-          <Link to="/userprofile" >
+          <Link to="/userprofile">
             <img
               src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
               alt=""
