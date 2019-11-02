@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 // import Tmp from "./components/Tmp";
 // import { rand_string } from "./lib/util";
 // import { uid } from "react-uid";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import {Route, Switch, BrowserRouter} from "react-router-dom";
 import mock_data from "./mock_data";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
