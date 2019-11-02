@@ -48,6 +48,8 @@ class Home extends Component {
   }
 
   render() {
+    // console.log(this.props.val.test);
+
     return (
       <div className="home-page">
         <div className="container row">

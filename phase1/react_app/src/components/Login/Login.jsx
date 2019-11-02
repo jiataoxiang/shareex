@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import "../../stylesheets/login.scss";
 import $ from "jquery";
 
@@ -37,8 +38,8 @@ class Signin extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state);
-    console.log(this.props);
+    // console.log(this.state);
+    // console.log(this.props);
   }
   render() {
     return (
@@ -86,7 +87,6 @@ class Signin extends Component {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
-                onChange={this.handlePasswordChange}
               />
             </div>
             <button type="submit" className="btn btn-primary btn-md btn-block">
