@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../../stylesheets/user_profile.scss";
+import { Redirect } from "react-router-dom";
 
 class AdminProfile extends Component {
   state = {
@@ -50,6 +51,9 @@ class AdminProfile extends Component {
   };
 
   render() {
+    if (!this.props.state.current_user) {
+      return (<Redirect to="/" />)
+    }
     return (
       <div className="user-profile-page">
         <button>

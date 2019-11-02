@@ -2,7 +2,7 @@ import React from "react";
 import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
 import { rand_string } from "../../lib/util";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { uid } from "react-uid";
 import Popup from "./Popup";
 
@@ -83,6 +83,9 @@ class UserProfile extends React.Component {
   };
 
   render() {
+    if (!this.props.state.current_user) {
+      return (<Redirect to="/" />)
+    }
     return (
       <div className="user-profile-page">
         <div>
