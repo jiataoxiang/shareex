@@ -53,19 +53,19 @@ class ProfSet extends Component {
   }
 
   clearAllError = () => {
-    this.clearError(this.inputGroups.inputUsername);
-    this.clearError(this.inputGroups.inputEmail);
-    this.clearError(this.inputGroups.inputPassword);
-  }
-
-  setError = (object) => {
-    object.style.backgroundColor = "lightpink";
-    object.parentElement.classList.add("errorShake");
+    for (let i in this.inputGroups) {
+        this.clearError(this.inputGroups[i])
+    }
   }
 
   clearError = (object) => {
     object.style.backgroundColor = "white";
     object.parentElement.classList.remove("errorShake");
+  }
+  
+  setError = (object) => {
+    object.style.backgroundColor = "lightpink";
+    object.parentElement.classList.add("errorShake");
   }
 
   checkUsername = () => {
@@ -138,11 +138,9 @@ class ProfSet extends Component {
   }
 
   componentDidMount() {
-    this.inputGroups.inputUsername = document.getElementById("inputUsername");
-    this.inputGroups.inputEmail = document.getElementById("inputEmail");
-    this.inputGroups.inputLocation = document.getElementById("inputLocation");
-    this.inputGroups.inputTelephone = document.getElementById("inputTelephone");
-    this.inputGroups.inputPassword = document.getElementById("inputPassword");
+    for (let i in this.inputGroups) {
+        this.inputGroups[i] = document.getElementById(i)
+    }
 
     this.getProf();
   }
