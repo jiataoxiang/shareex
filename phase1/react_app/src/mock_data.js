@@ -1,16 +1,30 @@
 let data = {
   users: [
     {
+      type: "admin",
       id: "7190581799",
       username: "admin",
       password: "admin",
-      gender: "male"
+      gender: "male",
+      nickname: "Admin",
+      follower: 5,
+      following: 10,
+      likes: 20,
+      banner: process.env.PUBLIC_URL + "./img/banner.jpg",
+      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png"
     },
     {
+      type: "user",
       id: "0823170644",
       username: "user",
       password: "user",
-      gender: "male"
+      gender: "male",
+      nickname: "Admin",
+      follower: 10000,
+      following: 23554,
+      likes: "1.234m",
+      banner: process.env.PUBLIC_URL + "./img/banner.jpg",
+      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png"
     }
   ],
   posts: [

@@ -8,17 +8,17 @@ import Popup from "./Popup";
 
 class UserProfile extends React.Component {
   state = {
-    username: "super JATO",
+    showPop: false,
+    postsNum: 0,
+    post_list: [],
+    nickname: "",
     banner: process.env.PUBLIC_URL + "./img/banner.jpg",
     avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
-    posts: [1, 2, 3, 4, 5],
-    follower: 373,
-    following: 309,
-    likes: 311,
+    follower: 0,
+    following: 0,
+    likes: 0,
     motto: "",
-    description: "",
-    showPop: false,
-    post_list: []
+    description: ""
   };
 
   handlePopup = () => {
@@ -40,6 +40,19 @@ class UserProfile extends React.Component {
   componentDidMount() {
     // The code below are temporary code for randomly generating some post content and recommendations
     // TODO: replace the following initialization code in phase 2, connect to server and get real data
+    // Current user info
+    const currentUser = this.props.state.current_user;
+    if (currentUser) {
+      this.setState({
+        nickname: currentUser.nickname,
+        banner: currentUser.banner,
+        avatar: currentUser.avatar,
+        follower: currentUser.follower,
+        following: currentUser.following,
+        likes: currentUser.likes
+      });
+      console.log(currentUser);
+    }
     const post_list = [];
     function getRandomImages(num) {
       const tmp = [];
@@ -49,7 +62,7 @@ class UserProfile extends React.Component {
       return tmp;
     }
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
       post_list.push({
         title: lorem.generateSentences(1),
         content: lorem.generateParagraphs(2),
@@ -62,7 +75,8 @@ class UserProfile extends React.Component {
     this.setState({
       post_list: post_list,
       motto: motto,
-      description: description
+      description: description,
+      postsNum: post_list.length
     });
   }
 
@@ -86,23 +100,29 @@ class UserProfile extends React.Component {
               Posts
               <br />
               <span className="profileStatsNumber">
-                {this.state.posts.length}
+                {this.state.postsNum}
               </span>
             </li>
             <li>
               Followers
               <br />
-              <span className="profileStatsNumber">{this.state.follower}</span>
+              <span className="profileStatsNumber">
+                {this.state.follower}
+              </span>
             </li>
             <li>
               Following
               <br />
-              <span className="profileStatsNumber">{this.state.following}</span>
+              <span className="profileStatsNumber">
+                {this.state.following}
+              </span>
             </li>
             <li>
               Likes
               <br />
-              <span className="profileStatsNumber">{this.state.likes}</span>
+              <span className="profileStatsNumber">
+                {this.state.likes}
+              </span>
             </li>
           </ul>
         </div>
@@ -112,7 +132,7 @@ class UserProfile extends React.Component {
               <div className="sticky-top">
                 <div className="space"></div>
                 <div id="profileInfo">
-                  <h2>Name: {this.state.username}</h2>
+                  <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>{this.state.description}</p>
                   <Link to="/prof_setting" id="profile-setting-btn">

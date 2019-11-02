@@ -1,6 +1,7 @@
 import React from "react";
 import Home from "./components/Homepage/Home";
 import UserProfile from "./components/UserProfile/UserProfile";
+import AdminProfile from "./components/UserProfile/AdminProfile";
 // import AdminProfile from "./components/UserProfile/AdminProfile";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Signup/SignUp";
@@ -60,6 +61,11 @@ class App extends React.Component {
               exact
               path="/userprofile"
               component={() => <UserProfile state={this.state} />}
+            />
+            <Route
+              exact
+              path="/adminprofile"
+              component={() => <AdminProfile state={this.state} />}
             />
             <Route
               exact

@@ -48,9 +48,10 @@ class AdminProfile extends Component {
     }
     id.value = "";
   };
+
   render() {
     return (
-      <div className="UserProfile">
+      <div className="user-profile-page">
         <button>
           <img
             id="AdminProfileCircle"

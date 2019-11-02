@@ -46,7 +46,21 @@ class Navbar extends React.Component {
   /* if signed in, display user profile button, 
       else, return sign in sign up buttons */
   getButton = () => {
-    if (this.props.val.current_user) {
+    const currentUser = this.props.val.current_user;
+    if (currentUser) {
+      const type = currentUser.type;
+      if (type === "admin") {
+        return (
+          <Link to="/admin_profile">
+            <img
+              src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+              alt=""
+              width="40px"
+              height="40px"
+            />
+          </Link>
+        );
+      }
       return (
         <Link to="/userprofile">
           <img
