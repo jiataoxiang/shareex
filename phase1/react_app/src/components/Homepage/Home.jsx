@@ -67,6 +67,12 @@ class Home extends Component {
     return posts_display;
   };
 
+  testbtn = () => {
+    const posts = this.props.state.posts;
+    posts[0].content = "edited content";
+    this.props.state.setAppState("posts", posts);
+  };
+
   render() {
     // console.log(this.props.state.posts);
     const posts = this.props.state.posts;

@@ -5,9 +5,7 @@ import $ from "jquery";
 
 class Navbar extends React.Component {
   state = {};
-  constructor(props) {
-    super(props);
-  }
+
   componentDidMount() {
     $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var
