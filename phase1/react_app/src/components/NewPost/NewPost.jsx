@@ -14,7 +14,7 @@ class NewPost extends Component {
     const isJPG = inputFile.type === "image/jpeg";
     const isPNG = inputFile.type === "image/png";
     const isPDF = inputFile.type === "application/pdf";
-    console.log(inputFile);
+    console.log(event.target.files);
     console.log(inputFile.type);
     console.log(inputFile.name);
     if (isPDF) {

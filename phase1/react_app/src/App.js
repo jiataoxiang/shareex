@@ -37,7 +37,7 @@ class App extends React.Component {
   }
 
   setAppState = (key, value) => {
-    this.setState({ key: value });
+    this.setState({key: value});
   };
 
   render() {
@@ -45,50 +45,50 @@ class App extends React.Component {
       <div>
         {/* <Hometest /> */}
         <BrowserRouter>
-          <Navbar val={this.state} />
+          <Navbar val={this.state}/>
           <Switch>
             <Route
               exact
               path="/"
-              component={() => <Home state={this.state} />}
+              component={() => <Home state={this.state}/>}
             />
             <Route
               exact
               path="/index.html"
-              component={() => <Home state={this.state} />}
+              component={() => <Home state={this.state}/>}
             />
             <Route
               exact
               path="/userprofile"
-              component={() => <UserProfile state={this.state} />}
+              component={() => <UserProfile state={this.state}/>}
             />
             <Route
               exact
               path="/login"
-              component={() => <Login state={this.state} />}
+              component={() => <Login state={this.state}/>}
             />
             <Route
               exact
               path="/signup"
-              component={() => <SignUp state={this.state} />}
+              component={() => <SignUp state={this.state}/>}
             />
             <Route
               exact
               path="/new_post"
-              component={() => <NewPost state={this.state} />}
+              component={() => <NewPost state={this.state}/>}
             />
             <Route
               exact
               path="/single_post"
-              component={() => <SinglePost state={this.state} />}
+              component={() => <SinglePost state={this.state}/>}
             />
             <Route
               exact
               path="/prof_setting"
-              component={() => <ProfSetting state={this.state} />}
+              component={() => <ProfSetting state={this.state}/>}
             />
             {/* <Route exact path="/tmp" component={Tmp} /> */}
-            <Route component={NotFound404} />
+            <Route component={NotFound404}/>
           </Switch>
         </BrowserRouter>
       </div>
