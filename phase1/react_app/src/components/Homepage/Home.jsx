@@ -29,7 +29,8 @@ class Home extends Component {
       posts.push({
         title: lorem.generateSentences(1),
         content: lorem.generateParagraphs(2),
-        images: getRandomImages(5)
+        images: getRandomImages(5),
+        link: "/single_post"
       });
     }
 
@@ -59,6 +60,7 @@ class Home extends Component {
                   title={post.title}
                   content={post.content}
                   images={post.images}
+                  link={post.link}
                 />
               );
             })}

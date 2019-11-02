@@ -15,7 +15,7 @@ class Navbar extends React.Component {
           .siblings()
           .removeClass("active");
         var btnValue = btn_clicked.val();
-        console.log("Color theme - ", btnValue);
+        // console.log("Color theme - ", btnValue);
 
         if (btnValue === "light") {
           trans();
