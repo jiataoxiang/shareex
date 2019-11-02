@@ -10,6 +10,8 @@ class Login extends Component {
     e.preventDefault();
     const username = $("input[name='username']").val();
     const password = $("input[name='password']").val();
+
+    // the following code should be replaced with real authentication code in phase2
     const users = this.props.state.users;
     const signin_user = users.filter(user => user.username === username);
     console.log(signin_user);

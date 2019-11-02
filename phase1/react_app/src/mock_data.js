@@ -5,12 +5,14 @@ let data = {
     {
       id: uid(rand_string()),
       username: "admin",
-      password: "admin"
+      password: "admin",
+      gender: "male"
     },
     {
       id: uid(rand_string()),
       username: "user",
-      password: "user"
+      password: "user",
+      gender: "male"
     }
   ],
   posts: [

@@ -1,43 +1,47 @@
 import React, { Component } from "react";
 import "../../stylesheets/signup.scss";
 import $ from "jquery";
+import { withRouter } from "react-router-dom";
+import { rand_string } from "../../lib/util";
+import { uid } from "react-uid";
 
 class SignUp extends Component {
-  state = {
-    users: {}
-  };
-  constructor(props) {
-    super(props);
-    this.signup = this.signup.bind(this);
-  }
+  state = {};
 
-  signup(e) {
+  signup = e => {
     e.preventDefault();
     const username = $("input[name='username']").val();
     const email = $("input[name='email']").val();
     const password = $("input[name='password']").val();
-    const gender = $("input[name='gender']").val();
+    const gender = $("input[name='gender']:checked").val();
 
     if (username === "" || password === "" || gender === "" || email === "") {
       console.log("All inputs must be filled in");
       alert("All inputs must be filled in");
     } else {
       // The following code should be replaced with code connecting to server and create an account in database
-      if (this.state.users[username]) {
+      const users = this.props.state.users;
+      if (users.filter(user => user.username === username).length !== 0) {
         console.log("Username already exists");
-        alert("Username already exists");
+        alert("Username already exists, change another one");
       } else {
-        const users = this.state.users;
         const user = {};
         user["email"] = email;
         user["password"] = password;
         user["gender"] = gender;
-        users[username] = user;
-        this.setState(users);
+        user["username"] = username;
+        user["id"] = uid(rand_string());
+        users.push(user);
+        this.props.state.setAppState("users", users);
+        console.log("user created and added to data");
+        this.props.state.setAppState(
+          "current_user",
+          this.props.state.users.filter(user => user.username === username)[0]
+        );
+        this.props.history.push("/");
       }
     }
-    console.log(this.state);
-  }
+  };
 
   render() {
     return (
@@ -116,4 +120,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);
