@@ -22,7 +22,7 @@ class AdminProfile extends Component {
     );
     this.setState({
       userList: user,
-      numUsers: this.state.numUsers - 1
+      numUsers: user.length
     });
     if (user.length === this.state.userList.length) {
       console.log("This user id is not exist!");
@@ -39,7 +39,7 @@ class AdminProfile extends Component {
     );
     this.setState({
       postList: post,
-      numPosts: this.state.numPosts - 1
+      numPosts: post.length
     });
     if (post.length === this.state.postList.length) {
       console.log("This post id is not exist!");
