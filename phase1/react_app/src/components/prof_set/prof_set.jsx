@@ -137,17 +137,7 @@ class ProfSet extends Component {
     }
   }
 
-  isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-  }
-
   componentDidMount() {
-    if (this.isMobileDevice()) {
-      const page = document.getElementById("profset-page");
-      page.classList.remove("profset-page");
-      page.classList.add("profset-page-mobile");
-    }
-
     this.inputGroups.inputUsername = document.getElementById("inputUsername");
     this.inputGroups.inputEmail = document.getElementById("inputEmail");
     this.inputGroups.inputLocation = document.getElementById("inputLocation");
