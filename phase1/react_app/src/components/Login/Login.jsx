@@ -1,46 +1,40 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "../../stylesheets/login.scss";
 import $ from "jquery";
 
-class Signin extends Component {
-  state = {
-    users: {
-      user1: {
-        password: "password1"
-      },
-      user2: {
-        password: "password2"
-      }
-    }
-  };
+class Login extends Component {
+  state = {};
 
-  constructor(props) {
-    super(props);
-    this.signin = this.signin.bind(this);
-  }
-
-  signin(e) {
+  signin = e => {
     e.preventDefault();
     const username = $("input[name='username']").val();
     const password = $("input[name='password']").val();
-    if (this.state.users[username]) {
-      console.log("User found");
-      if (this.state.users[username]["password"] === password) {
-        alert("Signin Succeeded");
-        console.log("Signed in");
-      } else {
-        console.log("failed to sign in");
-      }
-    } else {
-      console.log("User doesn't exist");
-    }
-  }
+    const users = this.props.state.users;
+    const signin_user = users.filter(user => user.username === username);
+    console.log(signin_user);
 
-  componentDidMount() {
-    // console.log(this.state);
-    // console.log(this.props);
-  }
+    if (signin_user.length === 1) {
+      console.log("User found");
+      console.log(password);
+      if (signin_user[0].password === password) {
+        console.log("Password correct, Signed in");
+        this.props.state.setAppState("current_user", signin_user[0]);
+        // redirect to Home page when logged in
+        this.props.history.push("/");
+        console.log(this.props.history);
+      } else {
+        console.log("Failed to sign in, password wrong");
+      }
+    } else if (signin_user.length === 0) {
+      console.log("User doesn't exist");
+    } else {
+      console.log("Error!!! More than one user has the same username");
+    }
+  };
+
+  componentDidMount() {}
+
   render() {
     return (
       <div className="login-page">
@@ -99,4 +93,4 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+export default withRouter(Login);

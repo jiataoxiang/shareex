@@ -30,14 +30,13 @@ class App extends React.Component {
       comments: mock_data.comments,
       attachments: mock_data.attachments,
       current_user: mock_data.current_user,
-      current_user_type: mock_data.current_user_type,
       current_post: mock_data.current_post,
       setAppState: this.setAppState
     });
   }
 
   setAppState = (key, value) => {
-    this.setState({ key: value });
+    this.setState({ [key]: value });
   };
 
   render() {
