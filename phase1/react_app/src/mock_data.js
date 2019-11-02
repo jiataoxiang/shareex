@@ -6,12 +6,14 @@ let data = {
       username: "admin",
       password: "admin",
       gender: "male",
-      nickname: "Admin",
-      follower: 5,
-      following: 10,
-      likes: 20,
-      banner: process.env.PUBLIC_URL + "./img/banner.jpg",
-      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png"
+      nickname: "Super Admin",
+      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+      mail: "coolguy@gmail.com",
+      tel: "(647)-823-9988",
+      numVisited: 1000,
+      numHit: 2000,
+      numPosts: 400,
+      numUsers: 200
     },
     {
       type: "user",

@@ -4,28 +4,25 @@ import { Redirect } from "react-router-dom";
 
 class AdminProfile extends Component {
   state = {
-    name: "Admin",
+    nickname: "Admin",
     avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
     numVisited: 300,
     numHit: 256,
     numPosts: 3,
     numUsers: 3,
-    userList: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    postList: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    user_list: [{ id: 1 }, { id: 2 }, { id: 3 }],
+    post_list: [{ id: 1 }, { id: 2 }, { id: 3 }],
     mail: "coolguy@gmail.com",
     tel: "(647)-823-9988"
   };
 
   handleUserDelete = () => {
     const id = document.getElementById("userid");
-    const user = this.state.userList.filter(
-      user => user.id !== parseInt(id.value)
+    const user = this.state.user_list.filter(
+      user => user.id !== id.value
     );
-    this.setState({
-      userList: user,
-      numUsers: user.length
-    });
-    if (user.length === this.state.userList.length) {
+    this.props.state.setAppState("users", user);
+    if (user.length === this.state.user_list.length) {
       console.log("This user id is not exist!");
     } else {
       console.log("Successful deleted the user with id: " + id.value);
@@ -35,20 +32,39 @@ class AdminProfile extends Component {
 
   handlePostDelete = () => {
     const id = document.getElementById("postid");
-    const post = this.state.postList.filter(
-      post => post.id !== parseInt(id.value)
+    const post = this.state.post_list.filter(
+      post => post.id !== id.value
     );
-    this.setState({
-      postList: post,
-      numPosts: post.length
-    });
-    if (post.length === this.state.postList.length) {
+    this.props.state.setAppState("posts", post);
+    if (post.length === this.state.post_list.length) {
       console.log("This post id is not exist!");
     } else {
       console.log("Successful deleted the post with id: " + id.value);
     }
     id.value = "";
   };
+
+  componentDidMount() {
+    // The code below are temporary code for randomly generating some post content and recommendations
+    // TODO: replace the following initialization code in phase 2, connect to server and get real data
+    // Current user info
+    const currentUser = this.props.state.current_user;
+    if (currentUser) {
+      this.setState({
+        nickname: currentUser.nickname,
+        avatar: currentUser.avatar,
+        mail: currentUser.mail,
+        tel: currentUser.tel,
+        numVisited: currentUser.numVisited,
+        numHit: currentUser.numHit,
+        numPosts: currentUser.numPosts,
+        numUsers: currentUser.numUsers,
+        user_list: this.props.state.users,
+        post_list: this.props.state.posts
+      });
+      console.log(currentUser);
+    }
+  }
 
   render() {
     if (!this.props.state.current_user) {
@@ -65,7 +81,7 @@ class AdminProfile extends Component {
         </button>
         <div id="settingPanel">
           <div id="studentContainer">
-            <p>Name: {this.state.name} </p>
+            <p>Name: {this.state.nickname} </p>
             <br />
             <p>Email: {this.state.mail} </p>
             <br />
