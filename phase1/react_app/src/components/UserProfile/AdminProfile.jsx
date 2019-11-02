@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import "../../stylesheets/UserProfile.scss";
+import "../../stylesheets/user_profile.scss";
 
 class AdminProfile extends Component {
 
