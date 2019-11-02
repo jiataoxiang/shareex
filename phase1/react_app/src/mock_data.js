@@ -32,6 +32,7 @@ let data = {
   comments: [],
   attachments: [],
   current_user: undefined,
+  current_user_type: undefined,
   current_post: undefined
 };
 

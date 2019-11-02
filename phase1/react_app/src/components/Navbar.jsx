@@ -5,6 +5,9 @@ import $ from "jquery";
 
 class Navbar extends React.Component {
   state = {};
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {
     $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var
@@ -39,12 +42,39 @@ class Navbar extends React.Component {
           // $("*").removeClass("transition");
         }, 760);
       };
-      // You can use this to set default value
-      // It will fire above click event which will do the updates for you
-      // $('#theme-btn-group button[value="light"]').click();
     });
   }
+
+  /* if signed in, display user profile button, 
+      else, return sign in sign up buttons */
+  getButton = () => {
+    if (this.props.val.current_user) {
+      return (
+        <Link to="/userprofile">
+          <img
+            src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+            alt=""
+            width="40px"
+            height="40px"
+          />
+        </Link>
+      );
+    } else {
+      return (
+        <div className="btn-group">
+          <Link to="/login">
+            <button className="btn btn-primary btn-sm">Sign In</button>
+          </Link>
+          <Link to="/signup">
+            <button className="btn btn-success btn-sm">Sign Up</button>
+          </Link>
+        </div>
+      );
+    }
+  };
+
   render() {
+    console.log(this.props.val);
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <Link id="logo-btn" to="/">
@@ -130,22 +160,8 @@ class Navbar extends React.Component {
               Dark
             </button>
           </div>
-          <div className="btn-group">
-            <Link to="/login">
-              <button className="btn btn-primary btn-sm">Sign In</button>
-            </Link>
-            <Link to="/signup">
-              <button className="btn btn-success btn-sm">Sign Up</button>
-            </Link>
-          </div>
-          <Link to="/userprofile">
-            <img
-              src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
-              alt=""
-              width="40px"
-              height="40px"
-            />
-          </Link>
+
+          {this.getButton()}
         </div>
       </nav>
     );

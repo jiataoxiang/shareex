@@ -30,19 +30,17 @@ class App extends React.Component {
       comments: mock_data.comments,
       attachments: mock_data.attachments,
       current_user: mock_data.current_user,
+      current_user_type: mock_data.current_user_type,
       current_post: mock_data.current_post
     });
-    console.log(this.state);
   }
 
   render() {
-    console.log(this.state);
-
     return (
       <div>
         {/* <Hometest /> */}
         <BrowserRouter>
-          <Navbar />
+          <Navbar val={this.state} />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/index.html" component={Home} />
