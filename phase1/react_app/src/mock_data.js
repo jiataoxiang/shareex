@@ -26,7 +26,8 @@ let data = {
       following: 23554,
       likes: "1.234m",
       banner: process.env.PUBLIC_URL + "./img/banner.jpg",
-      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png"
+      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+      numPosts: 5
     }
   ],
   posts: [
