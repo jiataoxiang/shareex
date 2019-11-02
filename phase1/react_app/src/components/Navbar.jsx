@@ -74,7 +74,7 @@ class Navbar extends React.Component {
   };
 
   render() {
-    console.log(this.props.val);
+    // console.log(this.props.val);
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <Link id="logo-btn" to="/">
