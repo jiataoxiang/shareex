@@ -42,20 +42,41 @@ class Home extends Component {
     }
 
     this.setState({
+      // posts: this.props.state.posts,
       posts: posts,
       recommendations: recommendations
     });
   }
 
-  render() {
-    // console.log(this.props.val.test);
+  getPosts = () => {
+    const posts = this.props.state.posts;
+    const posts_display = [];
+    if (posts) {
+      for (let i = 0; i < posts.length; i++) {
+        posts_display.push(
+          <Post
+            key={uid(rand_string())}
+            title={posts[i].title}
+            content={posts[i].content}
+            images={[]}
+            link={"/"}
+          />
+        );
+      }
+    }
+    return posts_display;
+  };
 
+  render() {
+    // console.log(this.props.state.posts);
+    const posts = this.props.state.posts;
+    console.log(posts);
     return (
       <div className="home-page">
         <div className="container row">
           <div className="posts col-12 col-sm-6 col-md-8">
             <h3>Posts</h3>
-            {this.state.posts.map(post => {
+            {/* {this.state.posts.map(post => {
               return (
                 <Post
                   key={uid(rand_string())}
@@ -65,6 +86,10 @@ class Home extends Component {
                   link={post.link}
                 />
               );
+            })} */}
+
+            {this.getPosts().map(post => {
+              return post;
             })}
           </div>
           <div className="recommendations col-12 col-6 col-md-4">
