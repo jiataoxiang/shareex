@@ -12,8 +12,8 @@ let data = {
       tel: "(647)-823-9988",
       numVisited: 1000,
       numHit: 2000,
-      numPosts: 400,
-      numUsers: 200
+      numPosts: 2,
+      numUsers: 1
     },
     {
       type: "user",
@@ -21,13 +21,14 @@ let data = {
       username: "user",
       password: "user",
       gender: "male",
-      nickname: "Admin",
-      follower: 10000,
-      following: 23554,
-      likes: "1.234m",
+      nickname: "GoodCitizen",
+      follower: 0,
+      following: 0,
+      likes: 0,
       banner: process.env.PUBLIC_URL + "./img/banner.jpg",
       avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
-      numPosts: 5
+      numPosts: 2,
+      motto: "I like studying!!"
     }
   ],
   posts: [
