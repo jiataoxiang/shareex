@@ -37,6 +37,7 @@ class SignUp extends Component {
         user["following"] = 0;
         user["likes"] = 0;
         user["numPosts"] =  0;
+        user["tel"] = "";
         user["motto"] = "I like studying other!!";
         user["id"] = uid(rand_string());
         users.push(user);

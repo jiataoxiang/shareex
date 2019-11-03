@@ -151,7 +151,7 @@ class ProfSet extends Component {
         this.setState({profBannerUrl: currentUser.banner});
         
         this.setState({profNickname: currentUser.nickname});
-        this.setState({profEmail: currentUser.mail});
+        this.setState({profEmail: currentUser.email});
         this.setState({profTelephone: currentUser.tel});
         this.setState({profPassword: currentUser.password});
         this.setState({profMotto: currentUser.motto});     
@@ -177,7 +177,7 @@ class ProfSet extends Component {
       currentUser.banner = this.state.profBannerUrl;
         
       currentUser.nickname = this.state.profNickname;
-      currentUser.mail = this.state.profEmail;
+      currentUser.email = this.state.profEmail;
       currentUser.tel = this.state.profTelephone;
       currentUser.password = this.state.profPassword;
       currentUser.motto = this.state.profMotto;

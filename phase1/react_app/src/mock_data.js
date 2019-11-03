@@ -8,7 +8,7 @@ let data = {
       gender: "male",
       nickname: "Super Admin",
       avatar: "./img/User_Avatar.png",
-      mail: "coolguy@gmail.com",
+      email: "coolguy@gmail.com",
       tel: "(647)-823-9988",
       numVisited: 1000,
       numHit: 2000,
@@ -27,7 +27,7 @@ let data = {
       likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
-      mail: "warmguy@gmail.com",
+      email: "warmguy@gmail.com",
       tel: "(647)-123-4567",
       numPosts: 2,
       motto: "I like studying!!"
@@ -44,7 +44,7 @@ let data = {
       likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
-      mail: "notsohotguy@gmail.com",
+      email: "notsohotguy@gmail.com",
       tel: "(647)-123-7654",
       numPosts: 0,
       motto: "I like studying too!!"
