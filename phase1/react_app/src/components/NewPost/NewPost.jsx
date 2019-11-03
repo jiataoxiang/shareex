@@ -3,12 +3,11 @@ import "../../stylesheets/new_post.scss";
 import AddContent from "./AddContent";
 import {rand_string} from "../../lib/util";
 import {uid} from "react-uid";
-import $ from "jquery";
 
 
 class NewPost extends Component {
   state = {
-    contents: [{key: "tmp", type: undefined, title: "text"}],
+    contents: [{key: "tmp", type: undefined, title: ""}],
     to_store: {
       title: "",
       category: "",
@@ -17,6 +16,7 @@ class NewPost extends Component {
     }
   };
 
+  // handle incoming image and pdf file
   addedAttachmentFile = (event, secondary_key) => {
     const inputFile = event.target.files[0];
     const isJPG = inputFile.type === "image/jpeg";
@@ -51,6 +51,7 @@ class NewPost extends Component {
     });
   };
 
+  // handle incoming video/image links
   addedAttachmentLink = (input_link, type) => {
     let link = type === 'youtube' ? input_link.replace("watch?v=", "embed/") : input_link;
     const id = uid(rand_string());
@@ -68,12 +69,67 @@ class NewPost extends Component {
       type: type,
       content: link
     });
-  }
+  };
+
+  // handle incoming text/code
+  addedAttachmentWords = (content, data_type, secondary_key) => {
+    console.log(secondary_key);
+    const result = this.alreadyExisted(secondary_key);
+    const resultContent = this.alreadyExistedContents(secondary_key);
+    // const type = data_type === 'code' ? 'code_attach' : 'text_attach';
+    const item = {
+      id: secondary_key,
+      type: data_type,
+      content: content
+    };
+
+    if (result === -1) {    // not yet existed in state
+      this.state.to_store.attachments.push(item);
+    }
+    if (resultContent === -1) {
+      this.state.contents.push({
+        key: secondary_key,
+        // TODO: changed
+        type: data_type,
+        title: content
+      });
+    } else {
+      this.state.to_store.attachments.splice(result, 1, item);
+      this.state.contents.splice(resultContent, 1, {
+        key: secondary_key,
+        // TODO: changed
+        type: data_type,
+        title: content
+      });
+    }
+    console.log('length of attach is: ' + this.state.to_store.attachments.length);
+    console.log(this.state.to_store.attachments);
+    console.log('length of contents is: ' + this.state.contents.length);
+    console.log(this.state.contents);
+  };
+
+  alreadyExisted = (secondary_key) => {
+    for (let i = 0; i < this.state.to_store.attachments.length; i++) {
+      if (this.state.to_store.attachments[i].id === secondary_key) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  alreadyExistedContents = (secondary_key) => {
+    for (let i = 0; i < this.state.contents.length; i++) {
+      if (this.state.contents[i].key === secondary_key) {
+        return i;
+      }
+    }
+    return -1;
+  };
 
   addInput = (type, secondary_key) => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
-        const content = {key: uid(rand_string()), type: type, title: type};
+        const content = {key: uid(rand_string()), type: type, title: '' ? type !== 'code' : ``};
         const content_list = this.state.contents;
         content_list.splice(i + 1, 0, content);
         this.setState({
@@ -92,8 +148,8 @@ class NewPost extends Component {
 
   inputCategory = (event) => {
     this.state.to_store.category = event.target.value;
-    console.log(this.state.to_store.category);
-  }
+    // console.log(this.state.to_store.category);
+  };
 
   inputContent = (event) => {
     this.state.to_store.content = event.target.value;
@@ -114,32 +170,45 @@ class NewPost extends Component {
     // const data_list = this.state.to_store;
     // data_list.push(data);
     // this.setState({to_store: data_list});
-  }
+  };
 
+  // store the data in this.state.to_store to the database
   addToDatabase = (event) => {
-    // TODO: add this.state.to_store to the database.
-    // TODO: check if there is any empty space????
-    // TODO: how to get the current author_id ???
-
     // generate a post id when the 'submit' button is clicked
     const post_id = uid(rand_string());
     const a_post = {
       id: post_id,
-      author_id: "???",
+      author_id: this.props.state.current_user,
       title: this.state.to_store.title,
       category: this.state.to_store.category,
       content: this.state.to_store.content,
       likes: 0,
       likes_user_id: [],
-      attachments: this.state.to_store.attachments.map((attach)=>{return attach.id})
-    }
+      attachments: this.state.to_store.attachments.map((attach) => {
+        return attach.id
+      })
+    };
+
     // now add this post to the database
     console.log(this.props.state.posts.length);
     console.log(this.props.state.posts);
     this.props.state.posts.push(a_post);
     console.log(this.props.state.posts.length);
     console.log(this.props.state.posts);
-  }
+
+    console.log(this.props.state.attachments.length);
+    console.log(this.props.state.attachments);
+    this.state.to_store.attachments.map((attach) => {
+      this.props.state.attachments.push({
+        id: attach.id,
+        post_id: post_id,
+        type: attach.type,
+        content: attach.content
+      });
+    });
+    console.log(this.props.state.attachments.length);
+    console.log(this.props.state.attachments);
+  };
 
   render() {
     return (
@@ -182,6 +251,7 @@ class NewPost extends Component {
                     addInput={this.addInput}
                     addedAttachmentFile={this.addedAttachmentFile}
                     addedAttachmentLink={this.addedAttachmentLink}
+                    addedAttachmentWords={this.addedAttachmentWords}
                   />
                 );
               })}
