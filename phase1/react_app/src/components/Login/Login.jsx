@@ -26,6 +26,7 @@ class Login extends Component {
         this.props.history.push("/");
       } else {
         console.log("Failed to sign in, password wrong");
+        alert("Password is wrong");
       }
     } else if (signin_user.length === 0) {
       console.log("User doesn't exist");

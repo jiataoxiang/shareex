@@ -23,7 +23,7 @@ class Comment extends Component {
         </button>
       );
     }
-    if (this.props.post_user_id === this.props.user_id) {
+    if (this.props.current_user_id === this.props.user_id) {
       const { deleteComment, editComment, secondary_key } = this.props;
       return (
         <div>

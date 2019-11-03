@@ -82,12 +82,14 @@ let data = {
     {
       id: "FoiF2XhsMD",
       post_id: "19ibDhy5ft",
+      username: "user2",
       user_id: "0823170645",
       content: "Such a nice post"
     },
     {
       id: "HY5A7zEt7K",
       post_id: "19ibDhy5ft",
+      username: "user",
       user_id: "0823170644",
       content:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex."
@@ -95,6 +97,7 @@ let data = {
     {
       id: "sEiOyC3vX1",
       post_id: "19ibDhy5ft",
+      username: "user2",
       user_id: "0823170645",
       content:
         "Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex."
@@ -102,21 +105,10 @@ let data = {
     {
       id: "FiUpe9WCda",
       post_id: "19ibDhy5ft",
+      username: "user",
       user_id: "0823170644",
       content:
         "Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu."
-    },
-    {
-      id: "qdS5yUbenc",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
-    },
-    {
-      id: "F8o7yrjoVe",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
     }
   ],
   attachments: [

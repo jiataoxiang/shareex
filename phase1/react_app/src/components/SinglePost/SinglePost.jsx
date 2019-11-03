@@ -94,8 +94,16 @@ class SinglePost extends Component {
   deleteComment = secondary_key => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
-      if (comments[i].key === secondary_key) {
-        comments.splice(i, 1);
+      if (comments[i].id === secondary_key) {
+        const all_comments = this.props.state.comments;
+        for (let j = 0; j < all_comments.length; j++) {
+          if (all_comments[j].id === comments[i].id) {
+            all_comments.splice(j, 1);
+            this.props.state.setAppState("comments", all_comments);
+            break;
+          }
+        }
+        break;
       }
     }
     this.setState({ comments: comments });
@@ -104,15 +112,17 @@ class SinglePost extends Component {
   submitComment = (secondary_key, comment_content) => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
-      if (comments[i].key === secondary_key) {
-        comments.splice(i, 1);
-        comments.splice(i, 0, {
-          username: "Peter",
-          user_id: "1123",
+      if (comments[i].id === secondary_key) {
+        const all_comments = this.props.state.comments;
+        all_comments.unshift({
+          id: uid(rand_string()),
+          username: this.props.state.current_user.username,
+          user_id: this.props.state.current_user.id,
+          post_id: this.state.post_id,
           content: comment_content,
-          key: uid(rand_string()),
           edit_mode: false
         });
+        this.props.state.setAppState("comments", all_comments);
       }
     }
     this.setState({ comments: comments });
@@ -121,7 +131,7 @@ class SinglePost extends Component {
   editComment = secondary_key => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
-      if (comments[i].key === secondary_key) {
+      if (comments[i].id === secondary_key) {
         comments[i].edit_mode = true;
       }
     }
@@ -129,15 +139,18 @@ class SinglePost extends Component {
   };
 
   addComment = () => {
-    const comments = this.state.comments;
-    comments.unshift({
-      username: "Peter",
-      user_id: "1123",
-      // content: "Such a nice post",
-      key: uid(rand_string()),
-      edit_mode: true
-    });
-    this.setState({ comments: comments });
+    if (this.props.state.current_user) {
+      const comments = this.state.comments;
+      comments.unshift({
+        id: uid(rand_string()),
+        username: this.props.state.current_user.username,
+        user_id: this.props.state.current_user.id,
+        edit_mode: true
+      });
+      this.setState({ comments: comments });
+    } else {
+      alert("Please Sign in first, then you can create a comment.");
+    }
   };
 
   render() {
@@ -156,6 +169,14 @@ class SinglePost extends Component {
     if (this.state.user) {
       username = this.state.user.username;
       avatar = this.state.user.avatar;
+    }
+    let comments = [];
+    if (this.state.comments) {
+      comments = this.state.comments;
+    }
+    let current_user_id = "";
+    if (this.props.state.current_user) {
+      current_user_id = this.props.state.current_user.id;
     }
     return (
       <div className="single-post-2-page">
@@ -187,13 +208,14 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
-                  {/* {this.state.comments.map(comment => {
+                  {comments.map(comment => {
                     return (
                       <Comment
-                        key={uid(rand_string())}
-                        secondary_key={comment.key}
+                        key={comment.id}
+                        secondary_key={comment.id}
                         user_id={comment.user_id}
-                        post_user_id={this.state.user.user_id}
+                        post_user_id={this.state.post.author_id}
+                        current_user_id={current_user_id}
                         username={comment.username}
                         content={comment.content}
                         deleteComment={this.deleteComment}
@@ -202,7 +224,7 @@ class SinglePost extends Component {
                         edit_mode={comment.edit_mode}
                       />
                     );
-                  })} */}
+                  })}
                 </div>
               </div>
             </div>
