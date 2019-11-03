@@ -2,8 +2,18 @@ import React, { Component } from "react";
 import "../../stylesheets/user_profile.scss";
 import "../../stylesheets/admin_profile.scss";
 import { Redirect } from "react-router-dom";
-
+const myVar = {
+  showUserWarn: false,
+  showUserSuccess: false,
+  showPostWarn: false,
+  showPostSuccess: false,
+  userWarnMessage: "This user id is not exist!",
+  userSuccessMessage: "Successful deleted the user",
+  postWarnMessage: "This post id is not exist!",
+  postSuccessMessage: "Successful deleted the user"
+};
 class AdminProfile extends Component {
+
   state = {
     nickname: "Admin",
     avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
@@ -14,7 +24,7 @@ class AdminProfile extends Component {
     user_list: [{ id: 1 }, { id: 2 }, { id: 3 }],
     post_list: [{ id: 1 }, { id: 2 }, { id: 3 }],
     mail: "coolguy@gmail.com",
-    tel: "(647)-823-9988"
+    tel: "(647)-823-9988",
   };
 
   handleUserDelete = () => {
@@ -23,8 +33,16 @@ class AdminProfile extends Component {
     this.props.state.setAppState("users", user);
     if (user.length === this.state.user_list.length) {
       console.log("This user id is not exist!");
+      myVar.showUserWarn = true;
+      myVar.showUserSuccess = false;
+      myVar.showPostWarn = false;
+      myVar.showPostSuccess = false;
     } else {
       console.log("Successful deleted the user with id: " + id.value);
+      myVar.showUserWarn = false;
+      myVar.showUserSuccess = true;
+      myVar.showPostWarn = false;
+      myVar.showPostSuccess = false;
       this.props.state.current_user.numUsers -= 1;
       const posts = this.props.state.posts.filter(
         post => post.author_id !== id.value
@@ -54,8 +72,16 @@ class AdminProfile extends Component {
     this.props.state.setAppState("posts", post);
     if (post.length === this.state.post_list.length) {
       console.log("This post id is not exist!");
+      myVar.showUserWarn = false;
+      myVar.showUserSuccess = false;
+      myVar.showPostWarn = true;
+      myVar.showPostSuccess = false;
     } else {
       console.log("Successful deleted the post with id: " + id.value);
+      myVar.showUserWarn = false;
+      myVar.showUserSuccess = false;
+      myVar.showPostWarn = false;
+      myVar.showPostSuccess = true;
       this.props.state.current_user.numPosts -= 1;
       const post = this.props.state.posts.filter(post => post.id === id.value);
       const user = this.props.state.users.filter(
@@ -75,7 +101,6 @@ class AdminProfile extends Component {
   };
 
   componentDidMount() {
-    // The code below are temporary code for randomly generating some post content and recommendations
     // TODO: replace the following initialization code in phase 2, connect to server and get real data
     // Current user info
     const currentUser = this.props.state.current_user;
@@ -92,7 +117,6 @@ class AdminProfile extends Component {
         user_list: this.props.state.users,
         post_list: this.props.state.posts
       });
-      console.log(currentUser);
     }
   }
 
@@ -135,6 +159,22 @@ class AdminProfile extends Component {
                       </button>
                     </div>
                   </div>
+                  {myVar.showUserWarn ? (
+                    <div>
+                      <p>
+                        {myVar.userWarnMessage}
+                      </p>
+                    </div>
+                  ) : null
+                  }
+                  {myVar.showUserSuccess ? (
+                    <div>
+                      <p>
+                        {myVar.userSuccessMessage}
+                      </p>
+                    </div>
+                  ) : null
+                  }
                   <br />
                   <div className="input-group mb-3">
                     <div>
@@ -157,6 +197,23 @@ class AdminProfile extends Component {
                       </button>
                     </div>
                   </div>
+                  {myVar.showPostWarn ? (
+                    <div>
+                      <p>
+                        {myVar.postWarnMessage}
+                      </p>
+                    </div>
+                  ) : null
+                  }
+                  {myVar.showPostSuccess ? (
+                    <div>
+                      <p>
+                        {myVar.postSuccessMessage}
+                      </p>
+                    </div>
+                  ) : null
+                  }
+                  <br />
                 </div>
               </div>
             </div>

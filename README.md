@@ -5,7 +5,7 @@
 * Jiatao Xiang (xiangji5), git log name (Jiatao xiang, Jato xiang)
 * Huakun Shen (shenhuak)
 * Xu Wang
-* Yuan Xu
+* Yuan Xu (xuyuan11)
 
 # Instruction
 
@@ -24,11 +24,14 @@ For admin, only the profile page is different from the user (features of other p
    * password: "admin"
 2. After log in, you will  be able to see a profile icon in the rightmost side of navigation bar.
 3. Click on the profile icon, you will be directed to admin profile page.
-4. You will see the basic admin info at the left side, and there are two input boxes. You can delete users and posts based on the user id and post id.
-5. You will see a slideshow panel that contain 4 slides (number visited, number hit, number posts, number users).
-6. After you delete a user, it will automatically delete the posts that user have and delete the attachments and comments for each post. Also, the number of user, which showed in the sideshow panel, will be decreased by 1, and the number of posts (also in sideshow panel) will be decrease by the number of posts that the user owns.
+4. You will see the basic admin info at the left side, and there are two input boxes. You can delete users and posts based on the user id and post id. If you enter invalid user id or post id, "This user /post id is not exists" will be showed under the boxes.  
+   * Valid user id: "0823170644", "0823170645"
+   * Valid post id: "19ibDhy5ft", "nIt38vzpz3"
+5. You will see 4 panels at right (number visited, number hit, number posts, number users).
+6. After you delete a user, it will automatically delete the posts that user have and delete the attachments and comments for each post. Also, the number of user, which showed in one of the right panels, will be decreased by 1, and the number of posts will be decrease by the number of posts that the user owns.
 7. After you delete a post, it will delete the attachments and comments for that single post, and the number of post will be decrease by 1.
 8. You can log out by clicking the `Logout` button beside user profile icon.
+9. You can go to home page by clicking the left most icon `shareEx`
 
 ## User Instruction
 
@@ -73,6 +76,7 @@ For admin, only the profile page is different from the user (features of other p
 4. Click on the password inputbox will delete whatever is in there.
 5. There are three buttons at the bottom. Reset reload the user info form server. Cancel goes back to user profile page and ignores whatever have been changed.
 6. Save checks if all the inputs are valid. If not valid, the inputbox that contains invalid info will turn red. Otherwise, the changed info are saved to the server, and you will return to "User Profile" page.
+*. For changing the avatar, what is changed in the mock data is the url of the avatar picture, not the actual picture. In phase 2, the picture will be uploaded to the server after saving, so this won't be a problem.
 
 ### * Single Post
 
@@ -81,6 +85,7 @@ For admin, only the profile page is different from the user (features of other p
 3. Details of a post is displayed on this page.
 4. At the bottom, there is a comment section. Users can make comment if they are signed in. 
 5. For each comment, if the comment belongs to the current logged in user, `Delete` and `Edit` button are displayed, and you can delete or edit the comment. If you don't own a comment, you would not be able to delete or edit it.
+6. You can click icon showed at the right side of the page. That is the owner of the post, and by clicking the icon, you will be direct to `other profile` page, which showed the info of the post owner. You can only like the posts here or follow that user (The following functionality is not working right now because we need server code to implement this functionality).
 
 ### * New Post
 

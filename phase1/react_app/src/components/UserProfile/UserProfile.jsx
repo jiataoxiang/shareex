@@ -158,7 +158,7 @@ class UserProfile extends React.Component {
         <div>
           {this.state.showPop ? (
             <Popup
-              header="You can change your avatar here"
+              header="This is not BUG, It's feature ^v^"
               closePopup={this.closePopup.bind(this)}
             />
           ) : (
@@ -219,9 +219,6 @@ class UserProfile extends React.Component {
                       Profile Setting
                     </button>
                   </Link>
-                  <button className="btn btn-success btn-block">
-                    <strong>Follow</strong>
-                  </button>
                 </div>
               </div>
             </div>
