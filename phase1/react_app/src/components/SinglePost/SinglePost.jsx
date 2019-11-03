@@ -17,6 +17,8 @@ class SinglePost extends Component {
     post: undefined
   };
 
+  // constructor initialize the post_id of this post
+  // this.props.location.state.post_id comes from the link to this page
   constructor(props) {
     super(props);
     if (this.props.location.state) {
@@ -32,6 +34,7 @@ class SinglePost extends Component {
     }
   }
 
+  /* Get the post object to be displayed on this page */
   getPost = () => {
     // Get posts from server
     // code below requires server call
@@ -46,6 +49,7 @@ class SinglePost extends Component {
     return post;
   };
 
+  /* get attachments belonging to the post on this page */
   getAttachment = () => {
     // Get attachments from server
     // code below requires server call
@@ -59,6 +63,7 @@ class SinglePost extends Component {
     return attachments;
   };
 
+  /* get comments belonging to the post on this page */
   getComments = () => {
     // Get comments from server
     // code below requires server call
@@ -76,6 +81,7 @@ class SinglePost extends Component {
     return comments;
   };
 
+  /* Get the owner (user) of this post */
   getUser = post => {
     // Get user from server
     // code below requires server call
@@ -90,6 +96,7 @@ class SinglePost extends Component {
     return user;
   };
 
+  /* call helper functions to setup post, attachments, comments and user */
   componentDidMount() {
     const post = this.getPost();
     const attachments = this.getAttachment();
@@ -99,6 +106,7 @@ class SinglePost extends Component {
     this.setState({ user: user });
   }
 
+  /* callback passed to a Comment to delete a Comment on this page */
   deleteComment = secondary_key => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
@@ -107,6 +115,7 @@ class SinglePost extends Component {
         for (let j = 0; j < all_comments.length; j++) {
           if (all_comments[j].id === comments[i].id) {
             all_comments.splice(j, 1);
+            // server call to delete comment from database required here
             this.props.state.setAppState("comments", all_comments);
             break;
           }
@@ -117,6 +126,7 @@ class SinglePost extends Component {
     this.setState({ comments: comments });
   };
 
+  /* callback passed to a Comment to submit a Comment on this page */
   submitComment = (secondary_key, comment_content) => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
@@ -130,12 +140,14 @@ class SinglePost extends Component {
           content: comment_content,
           edit_mode: false
         });
+        // server call to update comment to database required here
         this.props.state.setAppState("comments", all_comments);
       }
     }
     this.setState({ comments: comments });
   };
 
+  /* callback passed to a Comment to edit a Comment on this page */
   editComment = secondary_key => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
@@ -143,9 +155,11 @@ class SinglePost extends Component {
         comments[i].edit_mode = true;
       }
     }
+    // server call to update comment to database required here
     this.setState({ comments: comments });
   };
 
+  /* display an empty comment which can be edited in comment list */
   addComment = () => {
     if (this.props.state.current_user) {
       const comments = this.state.comments;
@@ -236,17 +250,17 @@ class SinglePost extends Component {
                 </div>
               </div>
             </div>
-            <div
-              className="user-info-container col-12 col-6 col-md-3"
-            >
+            <div className="user-info-container col-12 col-6 col-md-3">
               <div className="sticky-top">
                 <div className="space"></div>
-                <Link to={{
-                  pathname: "/otherprofile",
-                  state: {
-                    post_id: this.state.post_id
-                  }
-                }}>
+                <Link
+                  to={{
+                    pathname: "/otherprofile",
+                    state: {
+                      post_id: this.state.post_id
+                    }
+                  }}
+                >
                   <div className="user-info">
                     <div className="row">
                       <div className="col-lg-3 col-3">
