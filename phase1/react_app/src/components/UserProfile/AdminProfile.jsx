@@ -30,6 +30,7 @@ class AdminProfile extends Component {
       const posts = this.props.state.posts.filter(post => post.author_id !== id.value);
       this.props.state.setAppState("posts", posts);
       const user_posts = this.props.state.posts.filter(post => post.author_id === id.value);
+      this.props.state.current_user.numPosts -= user_posts.length;
       for (let i = 0; i < user_posts.length; i++) {
         const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== user_posts[i].id);
         this.props.state.setAppState("attachments", attachments);
