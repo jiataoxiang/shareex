@@ -7,6 +7,19 @@ import { uid } from "react-uid";
 
 class OtherProfile extends React.Component {
 
+  state = {
+    nickname: "",
+    banner: "",
+    avatar: "",
+    follower: -1,
+    following: -1,
+    likes: -1,
+    numPosts: -1,
+    motto: "",
+    
+    post_id: ""
+  };  
+    
   constructor(props) {
     super(props);
     if (this.props.location.state) {
@@ -23,9 +36,13 @@ class OtherProfile extends React.Component {
   }
 
   componentDidMount() {
-    // The code below are temporary code for randomly generating some post content and recommendations
-    // TODO: replace the following initialization code in phase 2, connect to server and get real data
-    // Current user info
+    this.loadUserFromServer();
+  } 
+ 
+  // The code below are temporary code for randomly generating some post content and recommendations
+  // TODO: replace the following initialization code in phase 2, connect to server and get real data
+  // Current user info
+  loadUserFromServer() {
     const users = this.props.state.users;
     const posts = this.props.state.posts;
     if (posts) {
