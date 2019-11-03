@@ -19,10 +19,13 @@
     width: 200px;
     height: 100px;
     border-radius: 0 0 100px 100px;
-    
-    opacity:0.5;
     background-color: dimgrey;
+    border-bottom-style: hidden;
     
+    -webkit-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    -o-transition: opacity .3s;
+    transition: opacity .3s;
   }
   /* Style the big profile picture circle here. */
   #bigProfilePicCircle {

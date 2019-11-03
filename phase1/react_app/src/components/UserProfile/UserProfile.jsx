@@ -116,12 +116,12 @@ class UserProfile extends React.Component {
   }
   
   showAvatarEditor = () => {
-      const bannerButton = document.getElementById("change-avatar-pre");
-      bannerButton.removeAttribute("hidden");
+      const avatarButton = document.getElementById("change-avatar-pre");
+      avatarButton.style.opacity = 0.6;
   }
   hideAvatarEditor = () => {
-      const bannerButton = document.getElementById("change-avatar-pre");
-      bannerButton.setAttribute("hidden",true);
+      const avatarButton = document.getElementById("change-avatar-pre");
+      avatarButton.style.opacity = 0;
   }
   
   changeAvatarPre = () => { document.getElementById("change-avatar").click(); }
@@ -244,7 +244,6 @@ class UserProfile extends React.Component {
               onMouseOut={this.hideAvatarEditor}
             />
             <button id="change-avatar-pre"
-                hidden="hidden" 
                 onClick={this.changeAvatarPre}
                 onMouseOver={this.showAvatarEditor}>
                 <h5>Change Avatar</h5>
