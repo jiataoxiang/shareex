@@ -15,6 +15,8 @@ class Post extends Component {
       this_post.likes += 1;
       this_post.likes_user_id.push(this.props.current_user.id);
       this.props.setAppState("posts", posts);
+      const post_owner = this.props.users.filter(user => user.id === this_post.author_id)[0];
+      post_owner.likes += 1;
     }
   };
 
