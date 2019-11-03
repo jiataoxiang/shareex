@@ -13,7 +13,9 @@ const code = `function add(a, b) {
 `;
 
 class AddContent extends Component {
-  state = {};
+  state = {
+    code_data: code
+  };
 
   handleInputLink = (event) => {
     this.setState({input_link: event.target.value});
@@ -34,7 +36,7 @@ class AddContent extends Component {
 
   sendCodeBack = (event) => {
     const {addedAttachmentWords, secondary_key} = this.props;
-    console.log('the code is:'+event);
+    console.log('the code is: '+event);
     this.setState({code_data: event});
     addedAttachmentWords(event, 'code', secondary_key);
   };
@@ -66,8 +68,7 @@ class AddContent extends Component {
             <h4 htmlFor="content">Code</h4>
             <Editor
               className="code-editor"
-              value={content}
-              // value={`print('hello')`}
+              value={this.state.code_data}
               // onValueChange={code => this.setState({code_data: code})}
               onValueChange={this.sendCodeBack}
               highlight={code => highlight(code, languages.js)}
