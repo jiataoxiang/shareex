@@ -33,6 +33,8 @@ class AdminProfile extends Component {
       for (let i = 0; i < user_posts.length; i++) {
         const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== user_posts[i].id);
         this.props.state.setAppState("attachments", attachments);
+        const comments = this.props.state.comments.filter(comment => comment.post_id !== user_posts[i].id);
+        this.props.state.setAppState("comments", comments);
       }
     }
     id.value = "";
@@ -54,6 +56,8 @@ class AdminProfile extends Component {
       user[0].numPosts -= 1;
       const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== post[0].id);
       this.props.state.setAppState("attachments", attachments);
+      const comments = this.props.state.comments.filter(comment => comment.post_id !== post[0].id);
+      this.props.state.setAppState("comments", comments);
     }
     id.value = "";
   };
