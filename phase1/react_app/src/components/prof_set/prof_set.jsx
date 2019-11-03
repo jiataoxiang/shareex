@@ -6,7 +6,6 @@ import "../../stylesheets/animation.scss";
 class ProfSet extends Component {
   state = {
     profAvatarUrl: "",
-    profBannerUrl: "",
     
     profNickname: "",
     profEmail: "",
@@ -47,28 +46,6 @@ class ProfSet extends Component {
         const imgReader = new FileReader();
         imgReader.addEventListener('load', () => {
           this.setState({profAvatarUrl: imgReader.result});
-        })
-        imgReader.readAsDataURL(inputFile);
-      }
-    }
-  }
-  
-  // this funtion gets the temp url of the uploaded img
-  // might be changed in phase 2
-  changeBanner = (event) => {
-    const inputFile = event.target.files[0]
-
-    if (inputFile != null) {
-      const isJPG = inputFile.type === 'image/jpeg';
-      const isPNG = inputFile.type === 'image/png';
-
-      if (!isJPG && !isPNG) {
-        inputFile.status = 'error';
-        console.log("You can only upload png or jpg files.");
-      } else {
-        const imgReader = new FileReader();
-        imgReader.addEventListener('load', () => {
-          this.setState({profBannerUrl: imgReader.result});
         })
         imgReader.readAsDataURL(inputFile);
       }
@@ -148,7 +125,6 @@ class ProfSet extends Component {
         this.props.history.push("/");
     } else {
         this.setState({profAvatarUrl: currentUser.avatar});
-        this.setState({profBannerUrl: currentUser.banner});
         
         this.setState({profNickname: currentUser.nickname});
         this.setState({profEmail: currentUser.email});
@@ -174,7 +150,6 @@ class ProfSet extends Component {
       const currentUser = this.props.state.current_user;
         
       currentUser.avatar = this.state.profAvatarUrl;
-      currentUser.banner = this.state.profBannerUrl;
         
       currentUser.nickname = this.state.profNickname;
       currentUser.email = this.state.profEmail;
