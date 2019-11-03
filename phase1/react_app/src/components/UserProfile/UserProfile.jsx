@@ -12,6 +12,7 @@ class UserProfile extends React.Component {
   };
 
   handlePopup = () => {
+    // Show the pop up window.
     if (this.state.showPop === false) {
       this.setState({
         showPop: true
@@ -20,6 +21,7 @@ class UserProfile extends React.Component {
   };
 
   closePopup = () => {
+    // Close the pop up window.
     if (this.state.showPop === true) {
       this.setState({
         showPop: false
@@ -83,15 +85,15 @@ class UserProfile extends React.Component {
       const bannerButton = document.getElementById("banner-button-container");
       bannerButton.removeAttribute("hidden");
       bannerButton.classList.add("buttonDrop");
-  }
+  };
   hideBannerEditor = () => {
       const bannerButton = document.getElementById("banner-button-container");
       bannerButton.setAttribute("hidden",true);
       bannerButton.classList.remove("buttonDrop");
-  }
+  };
   
   changeBannerPre = () => { document.getElementById("change-banner").click(); }
-  // this funtion gets the temp url of the uploaded img
+  // this function gets the temp url of the uploaded img
   // might be changed in phase 2
   changeBanner = (event) => {
     const inputFile = event.target.files[0]
@@ -109,20 +111,21 @@ class UserProfile extends React.Component {
           this.setState({banner: imgReader.result});
           // save the new banner to mock data
           this.props.state.current_user.banner = imgReader.result;
-        })
+        });
         imgReader.readAsDataURL(inputFile);
       }
     }
-  }
+  };
   
   showAvatarEditor = () => {
       const avatarButton = document.getElementById("change-avatar-pre");
       avatarButton.style.opacity = 0.6;
-  }
+  };
+
   hideAvatarEditor = () => {
       const avatarButton = document.getElementById("change-avatar-pre");
       avatarButton.style.opacity = 0;
-  }
+  };
   
   changeAvatarPre = () => { document.getElementById("change-avatar").click(); }
   // this funtion gets the temp url of the uploaded img
@@ -147,7 +150,7 @@ class UserProfile extends React.Component {
         imgReader.readAsDataURL(inputFile);
       }
     }
-  }
+  };
 
   render() {
     if (!this.props.state.current_user) {

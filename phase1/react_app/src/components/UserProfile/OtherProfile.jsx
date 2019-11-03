@@ -39,10 +39,10 @@ class OtherProfile extends React.Component {
     this.loadUserFromServer();
   } 
 
-  // The code below are temporary code for randomly generating some post content and recommendations
-  // TODO: replace the following initialization code in phase 2, connect to server and get real data
-  // Current user info
   loadUserFromServer() {
+    // Loading user from our fake data
+    // TODO: replace the following initialization code in phase 2, connect to server and get real data
+    // Current user info
     const users = this.props.state.users;
     const posts = this.props.state.posts;
     if (posts) {
