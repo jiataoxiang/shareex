@@ -219,9 +219,6 @@ class UserProfile extends React.Component {
                       Profile Setting
                     </button>
                   </Link>
-                  <button className="btn btn-success btn-block">
-                    <strong>Follow</strong>
-                  </button>
                 </div>
               </div>
             </div>

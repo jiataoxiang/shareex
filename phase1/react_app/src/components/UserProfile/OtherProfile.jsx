@@ -1,12 +1,11 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import Post from "../Post";
 import { rand_string } from "../../lib/util";
 import { uid } from "react-uid";
 
 class OtherProfile extends React.Component {
-  state = {post_id: ""};
 
   constructor(props) {
     super(props);
@@ -14,6 +13,12 @@ class OtherProfile extends React.Component {
       this.state = {
         post_id: this.props.location.state.post_id
       };
+    }else {
+      /* if other profile is accessed by typing URL instead of clicking a link
+        post_id is not available, we don't know which post to render, thus
+        redirect to home page
+      */
+      this.props.history.push("/");
     }
   }
 
@@ -22,62 +27,68 @@ class OtherProfile extends React.Component {
     // TODO: replace the following initialization code in phase 2, connect to server and get real data
     // Current user info
     const users = this.props.state.users;
-    const post = this.props.state.posts.filter(post => post.id === this.state.post_id)[0];
-    const currentUser = users.filter(user => user.id === post.author_id)[0];
-    if (currentUser) {
-      this.setState({
-        nickname: currentUser.nickname,
-        banner: currentUser.banner,
-        avatar: currentUser.avatar,
-        follower: currentUser.follower,
-        following: currentUser.following,
-        likes: currentUser.likes,
-        numPosts: currentUser.numPosts,
-        motto: currentUser.motto
-      });
-      console.log(currentUser);
+    const posts = this.props.state.posts;
+    if (posts) {
+      const post = posts.filter(post => post.id === this.state.post_id)[0];
+      const currentUser = users.filter(user => user.id === post.author_id)[0];
+      if (currentUser) {
+        this.setState({
+          nickname: currentUser.nickname,
+          banner: currentUser.banner,
+          avatar: currentUser.avatar,
+          follower: currentUser.follower,
+          following: currentUser.following,
+          likes: currentUser.likes,
+          numPosts: currentUser.numPosts,
+          motto: currentUser.motto
+        });
+        console.log(currentUser);
+      }
     }
   }
 
   getPosts = () => {
     // find all posts belonging to current user
     const users = this.props.state.users;
-    console.log(users);
-    const post = this.props.state.posts.filter(post => post.id === this.state.post_id)[0];
-    console.log(this.props);
-    console.log(post);
-    const current_user = users.filter(user => user.id === post.author_id)[0];
-    const posts_display = [];
-    if (this.props.state.posts) {
-      const posts = this.props.state.posts.filter(
-        post => post.author_id === current_user.id
-      );
+    const posts = this.props.state.posts;
+    if (posts) {
+      const post = posts.filter(post => post.id === this.state.post_id)[0];
+      const current_user = users.filter(user => user.id === post.author_id)[0];
+      const posts_display = [];
+      if (this.props.state.posts) {
+        const posts = this.props.state.posts.filter(
+          post => post.author_id === current_user.id
+        );
 
-      if (posts) {
-        console.log(posts);
-        for (let i = 0; i < posts.length; i++) {
-          // find all attachments
-          const attachments = this.props.state.attachments.filter(
-            attachment => attachment.post_id === posts[i].id
-          );
-          posts_display.push(
-            <Post
-              key={uid(rand_string())}
-              post={posts[i]}
-              posts={posts}
-              users={this.props.state.users}
-              attachments={attachments}
-              current_user={current_user}
-              setAppState={this.props.state.setAppState}
-            />
-          );
+        if (posts) {
+          console.log(posts);
+          for (let i = 0; i < posts.length; i++) {
+            // find all attachments
+            const attachments = this.props.state.attachments.filter(
+              attachment => attachment.post_id === posts[i].id
+            );
+            posts_display.push(
+              <Post
+                key={uid(rand_string())}
+                post={posts[i]}
+                posts={posts}
+                users={this.props.state.users}
+                attachments={attachments}
+                current_user={current_user}
+                setAppState={this.props.state.setAppState}
+              />
+            );
+          }
         }
       }
+      return posts_display;
+    }else {
+      return [];
     }
-    return posts_display;
   };
 
   render() {
+
     return (
       <div className="user-profile-page">
         <img
