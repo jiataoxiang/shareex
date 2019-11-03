@@ -200,14 +200,14 @@ class AddContent extends Component {
               >
                 Text
               </button>
-              <button
-                className="dropdown-item"
-                href="new_post2"
-                value="code"
-                onClick={addInput.bind(this, "code", secondary_key)}
-              >
-                Code
-              </button>
+              {/*<button*/}
+              {/*  className="dropdown-item"*/}
+              {/*  href="new_post2"*/}
+              {/*  value="code"*/}
+              {/*  onClick={addInput.bind(this, "code", secondary_key)}*/}
+              {/*>*/}
+              {/*  Code*/}
+              {/*</button>*/}
               <button
                 className="dropdown-item"
                 href="new_post2"
