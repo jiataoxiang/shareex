@@ -16,7 +16,7 @@ class AddContent extends Component {
   state = {code};
 
   getContentInput = () => {
-    const {addedAttachmentFile} = this.props;
+    const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
     if (this.props.type === "text") {
       return (
         <div className="form-group">
@@ -52,7 +52,7 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
-          <input type="text" className="form-control"/>
+          <input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>
         </div>
       );
     } else if (this.props.type === "image") {
@@ -90,6 +90,14 @@ class AddContent extends Component {
           key={uid(rand_string())}
           type={'image'}
           content={process.env.PUBLIC_URL + "/img/SSL.png"}
+        />
+      );
+    } else if (this.props.type === 'youtube_attach') {
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'youtube'}
+          content={title}
         />
       );
     }
