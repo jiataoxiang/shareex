@@ -7,6 +7,7 @@ class Login extends Component {
   state = {};
 
   signin = e => {
+    // TODO: connect to server, need signIn info from database
     // for debugging admin code
     // this.props.state.setAppState("current_user", this.props.state.users[0]);
     // return;

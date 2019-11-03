@@ -9,6 +9,7 @@ class SignUp extends Component {
   state = {};
 
   signup = e => {
+    // TODO: connect to server, update account info to database
     e.preventDefault();
     const username = $("input[name='username']").val();
     const email = $("input[name='email']").val();
