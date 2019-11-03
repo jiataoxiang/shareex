@@ -89,6 +89,8 @@ For admin, only the profile page is different from the user (features of other p
 
 ### * New Post
 
+1. We have set `Title`, ``
+
 ### * Home
 
 1. All posts are displayed on this page under posts

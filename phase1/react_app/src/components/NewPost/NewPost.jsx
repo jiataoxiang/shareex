@@ -217,6 +217,13 @@ class NewPost extends Component {
     this.props.history.push("/");
   };
 
+  componentDidMount() {
+    if (!this.props.state.current_user) {
+      alert("Please sign in first !");
+      this.props.history.push("/");
+    }
+  }
+
   render() {
     return (
       <div className="new-post2-page">
