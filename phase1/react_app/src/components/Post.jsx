@@ -7,7 +7,7 @@ class Post extends Component {
   thumbClicked = () => {
     const posts = this.props.posts;
     if (
-      this.props.current_user !== undefined &&
+      this.props.current_user &&
       (!this.props.post.likes_user_id.includes(this.props.current_user.id) ||
         this.props.current_user.type === "admin")
     ) {
@@ -15,12 +15,16 @@ class Post extends Component {
       this_post.likes += 1;
       this_post.likes_user_id.push(this.props.current_user.id);
       this.props.setAppState("posts", posts);
-      const post_owner = this.props.users.filter(user => user.id === this_post.author_id)[0];
+      const post_owner = this.props.users.filter(
+        user => user.id === this_post.author_id
+      )[0];
       post_owner.likes += 1;
+    } else if (this.props.current_user === undefined) {
+      alert("You must first sign in to like a post.");
+    } else {
+      alert("You have liked the post, and you cannot like it more than once.");
     }
   };
-
-  componentDidMount() {}
 
   getImages = () => {
     const images = [];
