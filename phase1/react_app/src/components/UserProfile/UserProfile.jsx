@@ -90,7 +90,6 @@ class UserProfile extends React.Component {
       bannerButton.classList.remove("buttonDrop");
   }
   
-  
   changeBannerPre = () => { document.getElementById("change-banner").click(); }
   // this funtion gets the temp url of the uploaded img
   // might be changed in phase 2
