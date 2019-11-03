@@ -83,8 +83,9 @@ class Navbar extends React.Component {
             Logout
           </button>
           <Link to="/userprofile">
-            <img
-              src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+            <img 
+              id="user-avatar"
+              src={currentUser.avatar}
               alt=""
               width="40px"
               height="40px"
