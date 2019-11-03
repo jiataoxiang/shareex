@@ -67,6 +67,13 @@ For admin, only the profile page is different from the user (features of other p
 
 ### * Profile Setting Page
 
+1. To access this page, you need to login as a normal user (not admin), and click the "Profile Setting" button on the "User Profile" page.
+2. On this page, you can change your avatar, nickname, password, and some other infomation.
+3. Email must be in the correct format; nickname and password cannot be empty.
+4. Click on the password inputbox will delete whatever is in there.
+5. There are three buttons at the bottom. Reset reload the user info form server. Cancel goes back to user profile page and ignores whatever have been changed.
+6. Save checks if all the inputs are valid. If not valid, the inputbox that contains invalid info will turn red. Otherwise, the changed info are saved to the server, and you will return to "User Profile" page.
+
 ### * Single Post
 
 1. On home page or user profile page, click on `See Details` or title to enter `single_post` page.
