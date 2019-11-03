@@ -19,10 +19,9 @@
     width: 200px;
     height: 100px;
     border-radius: 0 0 100px 100px;
-    
-    opacity:0.5;
+
+    opacity: 0.5;
     background-color: dimgrey;
-    
   }
   /* Style the big profile picture circle here. */
   #bigProfilePicCircle {
@@ -143,6 +142,7 @@
     //background-color: gainsboro;
     width: 300px;
     height: 540px;
+    margin-top: 4em;
   }
 
   .Panel {
@@ -158,17 +158,27 @@
     text-align: center;
   }
 
-  #AdminProfileCircle {
+  #stats {
     position: absolute;
-    top: 100px;
-    left: 160px;
+    top: 30%;
+    width: 100%;
+  }
+
+  #stats.stat {
+  }
+
+  #AdminProfileCircle {
+    // position: absolute;
+    // top: 100px;
+    // left: 160px;
     width: 100px;
     border-radius: 50%;
     border: 2px solid black;
+    cursor: pointer;
   }
 
   #studentContainer {
-    margin-top: 100px;
+    margin-top: 20px;
   }
 
   #carouselContainer {
