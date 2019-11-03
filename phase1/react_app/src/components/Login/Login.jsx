@@ -8,8 +8,8 @@ class Login extends Component {
 
   signin = e => {
     // for debugging admin code
-    this.props.state.setAppState("current_user", this.props.state.users[0]);
-    return;
+    // this.props.state.setAppState("current_user", this.props.state.users[0]);
+    // return;
     e.preventDefault();
     const username = $("input[name='username']").val();
     const password = $("input[name='password']").val();
