@@ -4,20 +4,22 @@ import "../../stylesheets/animation.scss";
 
 class ProfSet extends Component {
   state = {
-    profUsername: "",
+    profAvatarUrl: "",
+    profBannerUrl: "",
+    
+    profNickname: "",
     profEmail: "",
-    profLocation: "",
     profTelephone: "",
     profPassword: "",
-    profAvatarUrl: ""
+    profMotto: ""
   };
 
   inputGroups = {
-    inputUsername: null,
+    inputNickname: null,
     inputEmail: null,
-    inputLocation: null,
     inputTelephone: null,
-    inputPassword: null
+    inputPassword: null,
+    inputMotto: null
   };
 
   handleInputChange = (event) => {
@@ -28,7 +30,9 @@ class ProfSet extends Component {
     this.setState({[name]: value});
   }
 
-  handleInputFile = (event) => {
+  // this funtion gets the temp url of the uploaded img
+  // might be changed in phase 2
+  changeAvatar = (event) => {
     const inputFile = event.target.files[0]
 
     if (inputFile != null) {
@@ -42,6 +46,28 @@ class ProfSet extends Component {
         const imgReader = new FileReader();
         imgReader.addEventListener('load', () => {
           this.setState({profAvatarUrl: imgReader.result});
+        })
+        imgReader.readAsDataURL(inputFile);
+      }
+    }
+  }
+  
+  // this funtion gets the temp url of the uploaded img
+  // might be changed in phase 2
+  changeBanner = (event) => {
+    const inputFile = event.target.files[0]
+
+    if (inputFile != null) {
+      const isJPG = inputFile.type === 'image/jpeg';
+      const isPNG = inputFile.type === 'image/png';
+
+      if (!isJPG && !isPNG) {
+        inputFile.status = 'error';
+        console.log("You can only upload png or jpg files.");
+      } else {
+        const imgReader = new FileReader();
+        imgReader.addEventListener('load', () => {
+          this.setState({profBannerUrl: imgReader.result});
         })
         imgReader.readAsDataURL(inputFile);
       }
@@ -68,14 +94,14 @@ class ProfSet extends Component {
     object.parentElement.classList.add("errorShake");
   }
 
-  checkUsername = () => {
-    const emptyString = this.state.profUsername.length === 0;
+  checkNickname = () => {
+    const emptyString = this.state.profNickname.length === 0;
 
     if (emptyString) {
-      this.setError(this.inputGroups.inputUsername);
+      this.setError(this.inputGroups.inputNickname);
       return false;
     } else {
-      this.clearError(this.inputGroups.inputUsername);
+      this.clearError(this.inputGroups.inputNickname);
       return true;
     }
   }
@@ -110,13 +136,19 @@ class ProfSet extends Component {
     // to make sure the animation works properly
     this.clearAllError();
 
-    // this is some fake data that we get from server
-    this.setState({profUsername: "tempUsername"});
-    this.setState({profEmail: "tempEmail"});
-    this.setState({profLocation: "tempLocation"});
-    this.setState({profTelephone: "tempTelephone"});
-    this.setState({profPassword: "tempPassword"});
-    this.setState({profAvatarUrl: process.env.PUBLIC_URL + "./img/avatar_default.jpg"});
+    // this is some fake data that we get from server,
+    // will be replaced in phase 2
+    const currentUser = this.props.state.current_user;
+    if (currentUser) {
+        this.setState({profAvatarUrl: currentUser.avatar});
+        this.setState({profBannerUrl: currentUser.banner});
+        
+        this.setState({profNickname: currentUser.nickname});
+        this.setState({profEmail: currentUser.mail});
+        this.setState({profTelephone: currentUser.tel});
+        this.setState({profPassword: currentUser.password});
+        this.setState({profMotto: currentUser.motto});
+    }
 
     console.log("Profile loaded from server.");
   }
@@ -126,12 +158,22 @@ class ProfSet extends Component {
     // to make sure the animation works properly
     this.clearAllError();
 
-    const correctUsername = this.checkUsername();
+    const correctNickname = this.checkNickname();
     const correctEmail = this.checkEmail();
     const correctPassword = this.checkPassword();
 
-    if (correctUsername && correctEmail && correctPassword) {
+    if (correctNickname && correctEmail && correctPassword) {
       // send new profile to server
+      const currentUser = this.props.state.current_user;
+        
+      currentUser.avatar = this.state.profAvatarUrl;
+      currentUser.banner = this.state.profBannerUrl;
+        
+      currentUser.nickname = this.state.profNickname;
+      currentUser.mail = this.state.profEmail;
+      currentUser.tel = this.state.profTelephone;
+      currentUser.password = this.state.profPassword;
+      currentUser.motto = this.state.profMotto;
 
       alert("Profile saved.")
     }
@@ -158,7 +200,7 @@ class ProfSet extends Component {
             <h6>Change Avatar</h6>
             <input type="file"
                    id="import-file-avatar"
-                   onChange={this.handleInputFile}/>
+                   onChange={this.changeAvatar}/>
           </div>
         </div>
 
@@ -166,17 +208,17 @@ class ProfSet extends Component {
           <div className="input-group mb-3">
             <div className="input-group-prepend">
                 <span className="input-group-text">
-                  Username
+                  Nickname
                 </span>
             </div>
             <input
               type="text"
               className="form-control"
-              id="inputUsername"
+              id="inputNickname"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-default"
-              name="profUsername"
-              value={this.state.profUsername}
+              name="profNickname"
+              value={this.state.profNickname}
               onChange={this.handleInputChange}
             />
           </div>
@@ -194,23 +236,6 @@ class ProfSet extends Component {
               aria-describedby="inputGroup-sizing-default"
               name="profEmail"
               value={this.state.profEmail}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">
-                  Location
-                </span>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              id="inputLocation"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-default"
-              name="profLocation"
-              value={this.state.profLocation}
               onChange={this.handleInputChange}
             />
           </div>
@@ -247,6 +272,23 @@ class ProfSet extends Component {
               value={this.state.profPassword}
               onChange={this.handleInputChange}
               onClick={this.clearPassword}
+            />
+          </div>
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+                <span className="input-group-text">
+                  Motto
+                </span>
+            </div>
+            <input
+              type="text"
+              className="form-control"
+              id="inputMotto"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+              name="profMotto"
+              value={this.state.profMotto}
+              onChange={this.handleInputChange}
             />
           </div>
         </div>
