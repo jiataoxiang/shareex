@@ -14,6 +14,16 @@ class NewPost extends Component {
     const isJPG = inputFile.type === "image/jpeg";
     const isPNG = inputFile.type === "image/png";
     const isPDF = inputFile.type === "application/pdf";
+    const reader = new FileReader();
+    // const url = reader.readAsDataURL(inputFile);
+    reader.onload = function(e) {
+      let dataURL = reader.result;
+      console.log(dataURL);
+      console.log("+++++++++++++++++++++++++++-_______________________");
+    }
+    const the_url = reader.readAsDataURL(inputFile);
+    console.log(the_url);
+    console.log("++++++++");
     console.log(event.target.files);
     console.log(inputFile.type);
     console.log(inputFile.name);
