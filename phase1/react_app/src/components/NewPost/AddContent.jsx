@@ -6,7 +6,6 @@ import "prismjs/components/prism-javascript";
 import Attachment from "../Attachment";
 import {uid} from "react-uid";
 import {rand_string} from "../../lib/util";
-import $ from "jquery";
 
 const code = `function add(a, b) {
   return a + b;
@@ -20,13 +19,27 @@ class AddContent extends Component {
 
   handleInputLink = (event) => {
     this.setState({input_link: event.target.value});
-  }
+  };
 
   sendLinkBack = (event) => {
     const {addedAttachmentLink} = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
     addedAttachmentLink(this.state.input_link, type);
-  }
+  };
+
+  sendTextBack = (event) => {
+    const {addedAttachmentWords, secondary_key} = this.props;
+    console.log(event.target.value);
+    this.state.text = event.target.value;
+    addedAttachmentWords(event.target.value, 'text', secondary_key);
+  };
+
+  sendCodeBack = (event) => {
+    const {addedAttachmentWords, secondary_key} = this.props;
+    console.log('the code is: '+event);
+    this.setState({code_data: event});
+    addedAttachmentWords(event, 'code', secondary_key);
+  };
 
   getContentInput = () => {
     const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
@@ -39,10 +52,16 @@ class AddContent extends Component {
             rows="5"
             id="content"
             placeholder="What's in your mind right now?"
+            onChange={this.sendTextBack}
+            defaultValue={this.props.title}
           />
         </div>
       );
     } else if (this.props.type === "code") {
+      let content = `# write your JS code here`;
+      if (title !== ``) {
+        content = '`'+title+'`';
+      }
       return (
         <div className="code-container">
           <div className="form-group">
@@ -50,7 +69,8 @@ class AddContent extends Component {
             <Editor
               className="code-editor"
               value={this.state.code_data}
-              onValueChange={code => this.setState({code_data: code})}
+              // onValueChange={code => this.setState({code_data: code})}
+              onValueChange={this.sendCodeBack}
               highlight={code => highlight(code, languages.js)}
               padding={10}
               style={{
@@ -131,6 +151,24 @@ class AddContent extends Component {
           key={uid(rand_string())}
           type={'image_link'}
           content={title}
+        />
+      );
+    } else if (this.props.type === 'text_attach') {
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'text'}
+          content={title}
+          sendTextBack={this.sendTextBack}
+        />
+      );
+    } else if (this.props.type === 'code_attach') {
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'code'}
+          content={title}
+          sendCodeBack={this.sendCodeBack}
         />
       );
     }

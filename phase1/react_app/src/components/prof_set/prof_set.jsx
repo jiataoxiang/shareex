@@ -124,13 +124,14 @@ class ProfSet extends Component {
         alert("admin accounts cannot change profile");
         this.props.history.push("/");
     } else {
-        this.setState({profAvatarUrl: currentUser.avatar});
-        
-        this.setState({profNickname: currentUser.nickname});
-        this.setState({profEmail: currentUser.email});
-        this.setState({profTelephone: currentUser.tel});
-        this.setState({profPassword: currentUser.password});
-        this.setState({profMotto: currentUser.motto});     
+        this.setState({
+          profAvatarUrl: currentUser.avatar,
+          profNickname: currentUser.nickname,
+          profEmail: currentUser.email,
+          profTelephone: currentUser.tel,
+          profPassword: currentUser.password,
+          profMotto: currentUser.motto
+        });     
     }
 
     console.log("Profile loaded from server.");

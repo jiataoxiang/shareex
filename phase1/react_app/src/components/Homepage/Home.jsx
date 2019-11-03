@@ -42,6 +42,7 @@ class Home extends Component {
 
   /* Recommendations are selected as those posts with more than 10 likes
     Only at most 10 are selected randomly */
+  // getRecommendations() returns the recommendations to be displayed on home page
   getRecommendations = () => {
     // Get posts from server
     // code below requires server call
