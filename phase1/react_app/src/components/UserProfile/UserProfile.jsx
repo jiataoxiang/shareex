@@ -40,7 +40,8 @@ class UserProfile extends React.Component {
         follower: currentUser.follower,
         following: currentUser.following,
         likes: currentUser.likes,
-        numPosts: currentUser.numPosts
+        numPosts: currentUser.numPosts,
+        motto: currentUser.motto
       });
       console.log(currentUser);
     }

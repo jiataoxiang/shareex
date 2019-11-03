@@ -26,6 +26,17 @@ class AdminProfile extends Component {
       console.log("This user id is not exist!");
     } else {
       console.log("Successful deleted the user with id: " + id.value);
+      this.props.state.current_user.numUsers -= 1;
+      const posts = this.props.state.posts.filter(post => post.author_id !== id.value);
+      this.props.state.setAppState("posts", posts);
+      const user_posts = this.props.state.posts.filter(post => post.author_id === id.value);
+      this.props.state.current_user.numPosts -= user_posts.length;
+      for (let i = 0; i < user_posts.length; i++) {
+        const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== user_posts[i].id);
+        this.props.state.setAppState("attachments", attachments);
+        const comments = this.props.state.comments.filter(comment => comment.post_id !== user_posts[i].id);
+        this.props.state.setAppState("comments", comments);
+      }
     }
     id.value = "";
   };
@@ -40,6 +51,14 @@ class AdminProfile extends Component {
       console.log("This post id is not exist!");
     } else {
       console.log("Successful deleted the post with id: " + id.value);
+      this.props.state.current_user.numPosts -= 1;
+      const post = this.props.state.posts.filter(post => post.id === id.value);
+      const user = this.props.state.users.filter(user => user.id === post[0].author_id);
+      user[0].numPosts -= 1;
+      const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== post[0].id);
+      this.props.state.setAppState("attachments", attachments);
+      const comments = this.props.state.comments.filter(comment => comment.post_id !== post[0].id);
+      this.props.state.setAppState("comments", comments);
     }
     id.value = "";
   };

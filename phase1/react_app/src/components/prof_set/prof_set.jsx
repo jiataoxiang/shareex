@@ -147,8 +147,7 @@ class ProfSet extends Component {
 
   render() {
     return (
-      <div className="container profset-page"
-           id="profset-page">
+      <div className="container profset-page">
         <h1 className="prof-set-title">Edit Profile</h1>
 
         <div className="avatar-container">

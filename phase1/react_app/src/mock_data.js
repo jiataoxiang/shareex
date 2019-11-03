@@ -12,8 +12,8 @@ let data = {
       tel: "(647)-823-9988",
       numVisited: 1000,
       numHit: 2000,
-      numPosts: 400,
-      numUsers: 200
+      numPosts: 2,
+      numUsers: 1
     },
     {
       type: "user",
@@ -21,13 +21,14 @@ let data = {
       username: "user",
       password: "user",
       gender: "male",
-      nickname: "cookie",
-      follower: 10000,
-      following: 23554,
-      likes: "1.234m",
+      nickname: "GoodCitizen",
+      follower: 0,
+      following: 0,
+      likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
-      numPosts: 5
+      numPosts: 2,
+      motto: "I like studying!!"
     },
     {
       type: "user",
@@ -35,13 +36,14 @@ let data = {
       username: "user2",
       password: "user2",
       gender: "female",
-      nickname: "huskey",
-      follower: 35,
-      following: 56,
-      likes: "1.234m",
+      nickname: "Huskey",
+      follower: 0,
+      following: 0,
+      likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
-      numPosts: 5
+      numPosts: 0,
+      motto: "I like studying too!!"
     }
   ],
   posts: [
