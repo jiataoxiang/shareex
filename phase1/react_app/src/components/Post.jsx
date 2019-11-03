@@ -7,9 +7,9 @@ class Post extends Component {
   thumbClicked = () => {
     const posts = this.props.posts;
     if (
-      (this.props.current_user !== undefined &&
-        !this.props.post.likes_user_id.includes(this.props.current_user.id)) ||
-      this.props.current_user.type === "admin"
+      this.props.current_user !== undefined &&
+      (!this.props.post.likes_user_id.includes(this.props.current_user.id) ||
+        this.props.current_user.type === "admin")
     ) {
       const this_post = posts.filter(post => post.id === this.props.post.id)[0];
       this_post.likes += 1;

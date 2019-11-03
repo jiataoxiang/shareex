@@ -2,12 +2,12 @@ let data = {
   users: [
     {
       type: "admin",
-      id: "7190581799",
+      id: "0000000001",
       username: "admin",
       password: "admin",
       gender: "male",
       nickname: "Super Admin",
-      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+      avatar: "./img/User_Avatar.png",
       mail: "coolguy@gmail.com",
       tel: "(647)-823-9988",
       numVisited: 1000,
@@ -25,10 +25,25 @@ let data = {
       follower: 0,
       following: 0,
       likes: 0,
-      banner: process.env.PUBLIC_URL + "./img/banner.jpg",
-      avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+      banner: "./img/banner.jpg",
+      avatar: "./img/User_Avatar.png",
       numPosts: 2,
       motto: "I like studying!!"
+    },
+    {
+      type: "user",
+      id: "0823170645",
+      username: "user2",
+      password: "user2",
+      gender: "female",
+      nickname: "Huskey",
+      follower: 0,
+      following: 0,
+      likes: 0,
+      banner: "./img/banner.jpg",
+      avatar: "./img/User_Avatar.png",
+      numPosts: 0,
+      motto: "I like studying too!!"
     }
   ],
   posts: [
@@ -66,27 +81,30 @@ let data = {
   comments: [
     {
       id: "FoiF2XhsMD",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
+      post_id: "19ibDhy5ft",
+      user_id: "0823170645",
+      content: "Such a nice post"
     },
     {
       id: "HY5A7zEt7K",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
+      post_id: "19ibDhy5ft",
+      user_id: "0823170644",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex."
     },
     {
       id: "sEiOyC3vX1",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
+      post_id: "19ibDhy5ft",
+      user_id: "0823170645",
+      content:
+        "Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex."
     },
     {
       id: "FiUpe9WCda",
-      post_id: "post_id",
-      user_id: "user_id",
-      content: "content"
+      post_id: "19ibDhy5ft",
+      user_id: "0823170644",
+      content:
+        "Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu."
     },
     {
       id: "qdS5yUbenc",
