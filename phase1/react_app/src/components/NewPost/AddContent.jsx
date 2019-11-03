@@ -66,7 +66,7 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control"/>
+          <input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>
         </div>
       );
     } else if (this.props.type === "pdf") {
@@ -97,6 +97,14 @@ class AddContent extends Component {
         <Attachment
           key={uid(rand_string())}
           type={'youtube'}
+          content={title}
+        />
+      );
+    } else if(this.props.type === 'image_link_attach'){
+      return (
+        <Attachment
+          key={uid(rand_string())}
+          type={'image_link'}
           content={title}
         />
       );

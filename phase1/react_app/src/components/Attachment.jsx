@@ -23,7 +23,15 @@ class Attachment extends Component {
     } else if (this.props.type === "image") {
       return <img src={this.props.content} alt="" />;
     } else if (this.props.type === "image_link") {
-      return <img src={this.props.content} alt="" />;
+      return (
+        <iframe
+          width="100%"
+          height="100"
+          title="image"
+          src={this.props.content}
+          frameBorder="0"
+        ></iframe>
+      );
     } else if (this.props.type === "pdf") {
       return (
         <embed
