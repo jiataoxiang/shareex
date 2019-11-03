@@ -79,6 +79,41 @@ class UserProfile extends React.Component {
     return posts_display;
   };
 
+  showBannerEditor = () => {
+      const bannerButton = document.getElementById("banner-button-container");
+      bannerButton.removeAttribute("hidden");
+      bannerButton.classList.add("buttonDrop");
+  }
+  hideBannerEditor = () => {
+      const bannerButton = document.getElementById("banner-button-container");
+      bannerButton.setAttribute("hidden",true);
+      bannerButton.classList.remove("buttonDrop");
+  }
+  
+  
+  changeBannerPre = () => { document.getElementById("change-banner").click(); }
+  // this funtion gets the temp url of the uploaded img
+  // might be changed in phase 2
+  changeBanner = (event) => {
+    const inputFile = event.target.files[0]
+
+    if (inputFile != null) {
+      const isJPG = inputFile.type === 'image/jpeg';
+      const isPNG = inputFile.type === 'image/png';
+
+      if (!isJPG && !isPNG) {
+        inputFile.status = 'error';
+        console.log("You can only upload png or jpg files.");
+      } else {
+        const imgReader = new FileReader();
+        imgReader.addEventListener('load', () => {
+          this.setState({banner: imgReader.result});
+        })
+        imgReader.readAsDataURL(inputFile);
+      }
+    }
+  }
+
   render() {
     if (!this.props.state.current_user) {
       return <Redirect to="/" />;
@@ -92,9 +127,25 @@ class UserProfile extends React.Component {
               closePopup={this.closePopup.bind(this)}
             />
           ) : (
-            <img className="bannerPic" src={this.state.banner} alt="Banner" />
+            <img className="bannerPic" 
+                src={this.state.banner} 
+                alt="Banner" 
+                onMouseOver={this.showBannerEditor}
+                onMouseOut={this.hideBannerEditor}/>
           )}
         </div>
+        
+        <div id="banner-button-container" hidden="hidden">
+            <button className="btn btn-warning" 
+                onClick={this.changeBannerPre} 
+                onMouseOver={this.showBannerEditor}>
+                Change Banner
+            </button>
+        </div>
+        <input type="file" 
+            id="change-banner" 
+            hidden="hidden" 
+            onChange={this.changeBanner}/>
 
         <div id="profileStats">
           <ul className="text-center">
