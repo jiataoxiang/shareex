@@ -24,7 +24,7 @@ For admin, only the profile page is different from the user (features of other p
    * password: "admin"
 2. After log in, you will  be able to see a profile icon in the rightmost side of navigation bar.
 3. Click on the profile icon, you will be directed to admin profile page.
-4. You will see the basic admin info at the left side, and there are two input boxes. You can delete users and posts based on the user id and post id. If you enter invalid user id or post id, "This user /post id is not exists" will be showed under the boxes.  
+4. You will see the basic admin info at the left side, and there are two input boxes. You can delete users and posts based on the user id and post id. If you enter invalid user id or post id, "This user /post id is not exists" will be shown under the boxes.  
    * Valid user id: "0823170644", "0823170645"
    * Valid post id: "19ibDhy5ft", "nIt38vzpz3"
 5. You will see 4 panels at right (number visited, number hit, number posts, number users).
@@ -39,10 +39,10 @@ For admin, only the profile page is different from the user (features of other p
 
 1. Click `Sign In` button in navigation bar, then you will be able to log in. To log in as user, use
    - username: "user"
-   - password: "user"
+   - password: "user" 
 2. After log in, you will  be able to see a profile icon in the rightmost side of navigation bar.
 3. Click on the profile icon, you will be directed to user profile page.
-4. You will see a banner on the top, and some user stats under the banner. And there will be some user information displayed at the left of the page and their corresponding posts at right of the page.
+4. You will see a banner on the top, and some user stats under the banner. And there will be some user information displayed at the left of the page and their corresponding posts at right of the page. (By the way, when your mouse slide over the banner, there will be a button drop down, which allows you to change the banner).
 5. When you click profile setting, you will be direct to the profile setting page.
 6. When you click see details below each post, you will be direct to single post page.
 7. You can like each of your own post at most once.

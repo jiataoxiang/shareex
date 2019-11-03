@@ -28,6 +28,7 @@ class AdminProfile extends Component {
   };
 
   handleUserDelete = () => {
+    // When delete a user, delete related info as well, or show a warning.
     const id = document.getElementById("userid");
     const user = this.state.user_list.filter(user => user.id !== id.value);
     this.props.state.setAppState("users", user);
@@ -67,6 +68,7 @@ class AdminProfile extends Component {
   };
 
   handlePostDelete = () => {
+    // When delete a post, delete the related info as well, or show a warning.
     const id = document.getElementById("postid");
     const post = this.state.post_list.filter(post => post.id !== id.value);
     this.props.state.setAppState("posts", post);

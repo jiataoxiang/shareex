@@ -1,6 +1,6 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter} from "react-router-dom";
 import Post from "../Post";
 import { rand_string } from "../../lib/util";
 import { uid } from "react-uid";
@@ -38,11 +38,11 @@ class OtherProfile extends React.Component {
   componentDidMount() {
     this.loadUserFromServer();
   } 
- 
-  // The code below are temporary code for randomly generating some post content and recommendations
-  // TODO: replace the following initialization code in phase 2, connect to server and get real data
-  // Current user info
+
   loadUserFromServer() {
+    // Loading user from our fake data
+    // TODO: replace the following initialization code in phase 2, connect to server and get real data
+    // Current user info
     const users = this.props.state.users;
     const posts = this.props.state.posts;
     if (posts) {
@@ -91,7 +91,7 @@ class OtherProfile extends React.Component {
                 posts={posts}
                 users={this.props.state.users}
                 attachments={attachments}
-                current_user={current_user}
+                current_user={this.props.state.current_user}
                 setAppState={this.props.state.setAppState}
               />
             );

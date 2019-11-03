@@ -8,6 +8,7 @@ class Post extends Component {
   // code below requires server call
   thumbClicked = () => {
     const posts = this.props.posts;
+    console.log(this.props.current_user);
     if (
       this.props.current_user &&
       (!this.props.post.likes_user_id.includes(this.props.current_user.id) ||
