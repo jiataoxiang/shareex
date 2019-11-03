@@ -164,20 +164,15 @@ class SinglePost extends Component {
           this.state.post.title === undefined ? "" : this.state.post.title;
       }
     }
-    let username = "";
-    let avatar = "";
-    if (this.state.user) {
-      username = this.state.user.username;
-      avatar = this.state.user.avatar;
-    }
-    let comments = [];
-    if (this.state.comments) {
-      comments = this.state.comments;
-    }
-    let current_user_id = "";
-    if (this.props.state.current_user) {
-      current_user_id = this.props.state.current_user.id;
-    }
+    const username = this.state.user ? this.state.user.username : "";
+    const avatar = this.state.user ? this.state.user.avatar : "";
+    const comments = this.state.comments ? this.state.comments : [];
+    const current_user_id = this.props.state.current_user
+      ? this.props.state.current_user.id
+      : "";
+    const post_brief_description = this.state.post
+      ? this.state.post.content
+      : "";
     return (
       <div className="single-post-2-page">
         <div className="container">
@@ -186,6 +181,11 @@ class SinglePost extends Component {
               <div className="single-post">
                 <h3>{title}</h3>
                 <div className="post-content">
+                  <Attachment
+                    key={uid(rand_string())}
+                    type="text"
+                    content={post_brief_description}
+                  />
                   {attachments.map(attachment => {
                     return (
                       <Attachment
