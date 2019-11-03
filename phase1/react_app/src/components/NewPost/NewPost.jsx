@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import "../../stylesheets/new_post.scss";
 import AddContent from "./AddContent";
 import {rand_string} from "../../lib/util";
+import {Link, withRouter} from "react-router-dom";
 import {uid} from "react-uid";
 
 
@@ -47,7 +48,7 @@ class NewPost extends Component {
     this.state.to_store.attachments.push({
       id: attach_id,
       type: file_type,
-      content: '/a_fake_path'
+      content: process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"
     });
   };
 
@@ -55,7 +56,7 @@ class NewPost extends Component {
   addedAttachmentLink = (input_link, type) => {
     let link = type === 'youtube' ? input_link.replace("watch?v=", "embed/") : input_link;
     const id = uid(rand_string());
-    const type_to_show = type === 'youtube' ? 'youtube_attach' : 'image_attach';
+    const type_to_show = type === 'youtube' ? 'youtube_attach' : 'image_link_attach';
     const content = {
       key: id,
       type: type_to_show,
@@ -69,6 +70,8 @@ class NewPost extends Component {
       type: type,
       content: link
     });
+    // console.log(this.state.contents);
+    // console.log(this.state.to_store.attachments);
   };
 
   // handle incoming text/code
@@ -178,7 +181,7 @@ class NewPost extends Component {
     const post_id = uid(rand_string());
     const a_post = {
       id: post_id,
-      author_id: this.props.state.current_user,
+      author_id: this.props.state.current_user.id,
       title: this.state.to_store.title,
       category: this.state.to_store.category,
       content: this.state.to_store.content,
@@ -208,6 +211,10 @@ class NewPost extends Component {
     });
     console.log(this.props.state.attachments.length);
     console.log(this.props.state.attachments);
+
+    // redirect to home page
+    alert("Sure to submit?");
+    this.props.history.push("/");
   };
 
   render() {
@@ -266,4 +273,4 @@ class NewPost extends Component {
   }
 }
 
-export default NewPost;
+export default withRouter(NewPost);

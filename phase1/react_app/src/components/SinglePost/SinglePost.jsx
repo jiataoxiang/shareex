@@ -187,6 +187,7 @@ class SinglePost extends Component {
       }
     }
     const username = this.state.user ? this.state.user.username : "";
+    // console.log("the username is: "+username);
     const avatar = this.state.user ? this.state.user.avatar : "";
     const comments = this.state.comments ? this.state.comments : [];
     const current_user_id = this.props.state.current_user
