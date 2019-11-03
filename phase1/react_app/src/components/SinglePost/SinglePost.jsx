@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import "../../stylesheets/single_post.scss";
 import Comment from "../Comment";
 import Attachment from "../Attachment";
@@ -68,12 +68,11 @@ class SinglePost extends Component {
       },
       {
         type: "image",
-        content: process.env.PUBLIC_URL + "/images/SSL.png"
+        content: "/img/SSL.png"
       },
       {
         type: "pdf",
-        content:
-          process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"
+        content: "/files/AWS_Deploy_web_app_with_SSL.pdf"
       },
       {
         type: "text",
@@ -87,6 +86,11 @@ class SinglePost extends Component {
       }
     ]
   };
+
+  componentDidMount() {
+    console.log(this.props.location.state);
+    this.setState({ post_id: this.props.location.state });
+  }
 
   deleteComment = secondary_key => {
     const comments = this.state.comments;
@@ -220,4 +224,4 @@ class SinglePost extends Component {
   }
 }
 
-export default SinglePost;
+export default withRouter(SinglePost);
