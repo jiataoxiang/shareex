@@ -237,12 +237,16 @@ class SinglePost extends Component {
               </div>
             </div>
             <div
-              to="/userprofile"
               className="user-info-container col-12 col-6 col-md-3"
             >
               <div className="sticky-top">
                 <div className="space"></div>
-                <Link to="/userprofile">
+                <Link to={{
+                  pathname: "/otherprofile",
+                  state: {
+                    post_id: this.state.post_id
+                  }
+                }}>
                   <div className="user-info">
                     <div className="row">
                       <div className="col-lg-3 col-3">

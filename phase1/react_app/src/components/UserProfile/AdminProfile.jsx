@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "../../stylesheets/user_profile.scss";
 import "../../stylesheets/admin_profile.scss";
 import { Redirect } from "react-router-dom";
-import Popup from "./Popup";
 const myVar = {
   showUserWarn: false,
   showUserSuccess: false,
