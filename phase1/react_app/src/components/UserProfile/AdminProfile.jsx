@@ -18,23 +18,29 @@ class AdminProfile extends Component {
 
   handleUserDelete = () => {
     const id = document.getElementById("userid");
-    const user = this.state.user_list.filter(
-      user => user.id !== id.value
-    );
+    const user = this.state.user_list.filter(user => user.id !== id.value);
     this.props.state.setAppState("users", user);
     if (user.length === this.state.user_list.length) {
       console.log("This user id is not exist!");
     } else {
       console.log("Successful deleted the user with id: " + id.value);
       this.props.state.current_user.numUsers -= 1;
-      const posts = this.props.state.posts.filter(post => post.author_id !== id.value);
+      const posts = this.props.state.posts.filter(
+        post => post.author_id !== id.value
+      );
       this.props.state.setAppState("posts", posts);
-      const user_posts = this.props.state.posts.filter(post => post.author_id === id.value);
+      const user_posts = this.props.state.posts.filter(
+        post => post.author_id === id.value
+      );
       this.props.state.current_user.numPosts -= user_posts.length;
       for (let i = 0; i < user_posts.length; i++) {
-        const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== user_posts[i].id);
+        const attachments = this.props.state.attachments.filter(
+          attachment => attachment.post_id !== user_posts[i].id
+        );
         this.props.state.setAppState("attachments", attachments);
-        const comments = this.props.state.comments.filter(comment => comment.post_id !== user_posts[i].id);
+        const comments = this.props.state.comments.filter(
+          comment => comment.post_id !== user_posts[i].id
+        );
         this.props.state.setAppState("comments", comments);
       }
     }
@@ -43,9 +49,7 @@ class AdminProfile extends Component {
 
   handlePostDelete = () => {
     const id = document.getElementById("postid");
-    const post = this.state.post_list.filter(
-      post => post.id !== id.value
-    );
+    const post = this.state.post_list.filter(post => post.id !== id.value);
     this.props.state.setAppState("posts", post);
     if (post.length === this.state.post_list.length) {
       console.log("This post id is not exist!");
@@ -53,11 +57,17 @@ class AdminProfile extends Component {
       console.log("Successful deleted the post with id: " + id.value);
       this.props.state.current_user.numPosts -= 1;
       const post = this.props.state.posts.filter(post => post.id === id.value);
-      const user = this.props.state.users.filter(user => user.id === post[0].author_id);
+      const user = this.props.state.users.filter(
+        user => user.id === post[0].author_id
+      );
       user[0].numPosts -= 1;
-      const attachments = this.props.state.attachments.filter(attachment => attachment.post_id !== post[0].id);
+      const attachments = this.props.state.attachments.filter(
+        attachment => attachment.post_id !== post[0].id
+      );
       this.props.state.setAppState("attachments", attachments);
-      const comments = this.props.state.comments.filter(comment => comment.post_id !== post[0].id);
+      const comments = this.props.state.comments.filter(
+        comment => comment.post_id !== post[0].id
+      );
       this.props.state.setAppState("comments", comments);
     }
     id.value = "";
@@ -87,16 +97,12 @@ class AdminProfile extends Component {
 
   render() {
     if (!this.props.state.current_user) {
-      return (<Redirect to="/" />)
+      return <Redirect to="/" />;
     }
     return (
       <div className="user-profile-page">
         <button>
-          <img
-            id="AdminProfileCircle"
-            src={this.state.avatar}
-            alt="ProfilePicture"
-          />
+          <img id="AdminProfileCircle" src={this.state.avatar} alt="" />
         </button>
         <div id="settingPanel">
           <div id="studentContainer">

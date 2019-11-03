@@ -7,11 +7,17 @@ class Login extends Component {
   state = {};
 
   signin = e => {
+    // for debugging admin code
+    // this.props.state.setAppState("current_user", this.props.state.users[0]);
+    // return;
     e.preventDefault();
     const username = $("input[name='username']").val();
     const password = $("input[name='password']").val();
 
     // the following code should be replaced with real authentication code in phase2
+    // Get authentication from server
+    // Send username and password to server
+    // code below requires server call
     const users = this.props.state.users;
     const signin_user = users.filter(user => user.username === username);
     console.log(signin_user);
@@ -30,12 +36,11 @@ class Login extends Component {
       }
     } else if (signin_user.length === 0) {
       console.log("User doesn't exist");
+      alert("User doesn't exist");
     } else {
       console.log("Error!!! More than one user has the same username");
     }
   };
-
-  componentDidMount() {}
 
   render() {
     return (

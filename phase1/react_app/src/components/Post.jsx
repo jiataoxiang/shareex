@@ -4,6 +4,8 @@ import "../stylesheets/post.scss";
 import { uid } from "react-uid";
 
 class Post extends Component {
+  // Get posts likes info from server
+  // code below requires server call
   thumbClicked = () => {
     const posts = this.props.posts;
     if (
@@ -18,6 +20,7 @@ class Post extends Component {
       const post_owner = this.props.users.filter(
         user => user.id === this_post.author_id
       )[0];
+      // update posts likes number with server
       post_owner.likes += 1;
     } else if (this.props.current_user === undefined) {
       alert("You must first sign in to like a post.");
