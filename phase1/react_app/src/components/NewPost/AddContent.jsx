@@ -24,7 +24,8 @@ class AddContent extends Component {
 
   sendLinkBack = (event) => {
     const {addedAttachmentLink} = this.props;
-    addedAttachmentLink(this.state.input_link);
+    const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
+    addedAttachmentLink(this.state.input_link, type);
   }
 
   getContentInput = () => {
@@ -70,7 +71,7 @@ class AddContent extends Component {
           {/*</form>*/}
 
           <input type="text" className="form-control" id="youtube-link" onChange={this.handleInputLink}/>
-          <button type="submit" className='btn btn-primary btn-lg float-right'
+          <button type="submit" className='btn btn-primary btn-lg float-right input-link-button' id="youtube"
                   onClick={this.sendLinkBack}>Confirm
           </button>
         </div>
@@ -88,7 +89,7 @@ class AddContent extends Component {
           <h4>Image Link</h4>
           {/*<input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>*/}
           <input type="text" className="form-control" onChange={this.handleInputLink}/>
-          <button type="submit" className='btn btn-primary btn-lg float-right'
+          <button type="submit" className='btn btn-primary btn-lg float-right input-link-button' id="image-link"
                   onClick={this.sendLinkBack}>Confirm
           </button>
         </div>
