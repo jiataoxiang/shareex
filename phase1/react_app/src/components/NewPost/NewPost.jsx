@@ -3,6 +3,8 @@ import "../../stylesheets/new_post.scss";
 import AddContent from "./AddContent";
 import {rand_string} from "../../lib/util";
 import {uid} from "react-uid";
+import $ from "jquery";
+
 
 class NewPost extends Component {
   state = {
@@ -15,19 +17,6 @@ class NewPost extends Component {
     const isPNG = inputFile.type === "image/png";
     const isPDF = inputFile.type === "application/pdf";
 
-    // const reader = new FileReader();
-    // // const url = reader.readAsDataURL(inputFile);
-    // reader.onload = function(e) {
-    //   let dataURL = reader.result;
-    //   console.log(dataURL);
-    //   console.log("+++++++++++++++++++++++++++-_______________________");
-    // }
-    // const the_url = reader.readAsDataURL(inputFile);
-    // console.log(the_url);
-    // console.log("++++++++");
-    // console.log(event.target.files);
-    // console.log(inputFile.type);
-    // console.log(inputFile.name);
     if (isPDF) {
       const content = {
         key: uid(rand_string()),
@@ -49,10 +38,18 @@ class NewPost extends Component {
     }
   };
 
-  addedAttachmentLink = (event) => {
-    console.log(event.target.value);
-    let link = event.target.value.replace("watch?v=", "embed/");
-    console.log(link);
+  addedAttachmentLink = (input_link) => {
+    // event.preventDefault();
+    // event.persist();
+    // console.log(event);
+    // console.log(event.target.value);
+    // const input = event.target.querySelector("#input-link").value;
+    // console.log(input);
+    // console.log(event.target.value);
+    // console.log($("input[id='youtube-link']").val())
+    // console.log(event.target.value);
+    // let link = event.target.value.replace("watch?v=", "embed/");
+    let link = input_link.replace("watch?v=", "embed/");
     const content = {
       key: uid(rand_string()),
       type: "youtube_attach",

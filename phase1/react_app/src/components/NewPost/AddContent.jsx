@@ -6,6 +6,7 @@ import "prismjs/components/prism-javascript";
 import Attachment from "../Attachment";
 import {uid} from "react-uid";
 import {rand_string} from "../../lib/util";
+import $ from "jquery";
 
 const code = `function add(a, b) {
   return a + b;
@@ -13,7 +14,18 @@ const code = `function add(a, b) {
 `;
 
 class AddContent extends Component {
-  state = {code};
+  state = {
+    code_data: code
+  };
+
+  handleInputLink = (event) => {
+    this.setState({input_link: event.target.value});
+  }
+
+  sendLinkBack = (event) => {
+    const {addedAttachmentLink} = this.props;
+    addedAttachmentLink(this.state.input_link);
+  }
 
   getContentInput = () => {
     const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
@@ -36,8 +48,8 @@ class AddContent extends Component {
             <h4 htmlFor="content">Code</h4>
             <Editor
               className="code-editor"
-              value={this.state.code}
-              onValueChange={code => this.setState({code})}
+              value={this.state.code_data}
+              onValueChange={code => this.setState({code_data: code})}
               highlight={code => highlight(code, languages.js)}
               padding={10}
               style={{
@@ -52,7 +64,15 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
-          <input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>
+          {/*<form onSubmit={addedAttachmentLink.bind($("input[name='Confirm']"))}>*/}
+          {/*  <input type="text" className="form-control"/>*/}
+          {/*  <input type="submit" id='input-link' name="Confirm"/>*/}
+          {/*</form>*/}
+
+          <input type="text" className="form-control" id="youtube-link" onChange={this.handleInputLink}/>
+          <button type="submit" className='btn btn-primary btn-lg float-right'
+                  onClick={this.sendLinkBack}>Confirm
+          </button>
         </div>
       );
     } else if (this.props.type === "image") {
@@ -66,7 +86,11 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>
+          {/*<input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>*/}
+          <input type="text" className="form-control" onChange={this.handleInputLink}/>
+          <button type="submit" className='btn btn-primary btn-lg float-right'
+                  onClick={this.sendLinkBack}>Confirm
+          </button>
         </div>
       );
     } else if (this.props.type === "pdf") {
@@ -100,7 +124,7 @@ class AddContent extends Component {
           content={title}
         />
       );
-    } else if(this.props.type === 'image_link_attach'){
+    } else if (this.props.type === 'image_link_attach') {
       return (
         <Attachment
           key={uid(rand_string())}
