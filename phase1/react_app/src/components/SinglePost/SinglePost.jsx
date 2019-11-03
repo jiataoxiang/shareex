@@ -10,86 +10,85 @@ class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
   // TODO: connect to server, get comments and attachments with API
   state = {
-    user: {
-      user_id: "1123",
-      username: "Peter"
-    },
-    comments: [
-      {
-        username: "Peter",
-        user_id: "1123",
-        content: "Such a nice post",
-        key: uid(rand_string()),
-        edit_mode: false,
-        submitComment: this.submitComment
-      },
-      {
-        username: "Bob",
-        user_id: "1122",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a porttitor odio. Sed blandit maximus elit et mattis. Donec quis arcu eu risus condimentum feugiat. Fusce sit amet pharetra lectus. Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu. Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
-        key: uid(rand_string()),
-        edit_mode: false,
-        submitComment: this.submitComment
-      },
-      {
-        username: "Peter",
-        user_id: "1123",
-        content:
-          " Vestibulum eleifend felis sed ipsum hendrerit dignissim. Fusce id nibh enim. Nullam metus neque, pharetra quis gravida in, pharetra tincidunt ex.",
-        key: uid(rand_string()),
-        edit_mode: false,
-        submitComment: this.submitComment
-      },
-      {
-        username: "William",
-        user_id: "1124",
-        content:
-          "Ut vehicula cursus elit, non posuere libero mattis non. Donec aliquet nunc scelerisque diam hendrerit scelerisque. Donec fringilla risus at nisi gravida, non vulputate risus gravida. Etiam condimentum, tortor sed scelerisque pretium, lorem nisl venenatis neque, a vehicula mauris velit sed arcu.",
-        key: uid(rand_string()),
-        edit_mode: false,
-        submitComment: this.submitComment
+    post_id: "",
+    title: "",
+    comments: [],
+    attachments: [],
+    post: undefined
+  };
+
+  constructor(props) {
+    super(props);
+    if (this.props.location.state) {
+      this.state = {
+        post_id: this.props.location.state.post_id
+      };
+    } else {
+      /* if single post is accessed by typing URL instead of clicking a link
+        post_id is not available, we don't know which post to render, thus 
+        redirect to login page    
+      */
+      this.props.history.push("/login");
+    }
+  }
+
+  getPost = () => {
+    const posts = this.props.state.posts;
+    let post;
+    if (posts) {
+      post = posts.filter(post => post.id === this.state.post_id);
+      if (post.length === 1) {
+        post = post[0];
       }
-    ],
-    attachments: [
-      {
-        type: "youtube",
-        content: "https://www.youtube.com/embed/dMVy3BQB314"
-      },
-      {
-        type: "text",
-        content:
-          "Praesent et leo eget mauris imperdiet tempus. Maecenas id orci augue. In vel enim vel leo commodo placerat. Nulla sed commodo diam, a laoreet ipsum. Ut eu massa dictum, iaculis felis ac, dapibus sem. Integer ut velit mi. Phasellus in orci tellus. Morbi quis aliquam sapien, nec rhoncus odio. Curabitur pellentesque mi quis mauris consectetur, in faucibus libero fermentum. Praesent rhoncus metus ut ultricies interdum. Maecenas facilisis purus id sapien efficitur, accumsan dictum justo dapibus. In vitae congue nibh. Ut sollicitudin nulla mollis massa mattis iaculis."
-      },
-      {
-        type: "text",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac purus vitae orci congue bibendum ut sed velit. Duis nec sodales quam, sit amet sollicitudin nibh. Praesent faucibus tortor at faucibus maximus. In euismod nisi in tincidunt convallis. In non velit vitae ligula semper ornare vitae id odio. Integer cursus massa malesuada imperdiet pharetra. Fusce aliquam diam risus, eu vulputate velit auctor elementum."
-      },
-      {
-        type: "image",
-        content: "/img/SSL.png"
-      },
-      {
-        type: "pdf",
-        content: "/files/AWS_Deploy_web_app_with_SSL.pdf"
-      },
-      {
-        type: "text",
-        content:
-          "Nam interdum sapien et nibh eleifend scelerisque vitae eu mauris. Nulla facilisi. Nam eget neque vitae nunc dignissim semper. Curabitur sed gravida neque. Proin blandit semper mollis. Aenean egestas pulvinar sapien. Sed auctor, neque non consequat vulputate, neque turpis tincidunt sem, eu dictum ipsum metus at metus. Aenean accumsan lectus eu porttitor luctus. Etiam fringilla gravida fringilla. Phasellus in rhoncus ipsum. Mauris congue libero sed mollis tincidunt. Sed condimentum sapien ligula. Sed porttitor, nulla ac tristique suscipit, dui lectus porttitor est, ac vulputate urna mauris ut nibh. Curabitur quis quam orci. Donec et accumsan sapien."
-      },
-      {
-        type: "image_link",
-        content:
-          "https://chiefit.me/wp-content/uploads/2019/06/Amazon-Web-Services_logo835x396.png"
+    }
+    return post;
+  };
+
+  getAttachment = () => {
+    const all_attachments = this.props.state.attachments;
+    let attachments = [];
+    if (all_attachments) {
+      attachments = all_attachments.filter(
+        attachment => attachment.post_id === this.state.post_id
+      );
+    }
+    return attachments;
+  };
+
+  getComments = () => {
+    const all_comments = this.props.state.comments;
+    let comments = [];
+    if (all_comments) {
+      comments = all_comments.filter(
+        comment => comment.post_id === this.state.post_id
+      );
+      comments.forEach(comment => {
+        comment.submitComment = this.submitComment;
+        comment.edit_mode = false;
+      });
+    }
+    return comments;
+  };
+
+  getUser = post => {
+    let user;
+    if (post) {
+      const author_id = post.author_id;
+      user = this.props.state.users.filter(user => user.id === author_id);
+      if (user.length === 1) {
+        user = user[0];
       }
-    ]
+    }
+    return user;
   };
 
   componentDidMount() {
-    console.log(this.props.location.state);
-    this.setState({ post_id: this.props.location.state });
+    const post = this.getPost();
+    const attachments = this.getAttachment();
+    const comments = this.getComments();
+    this.setState({ post: post, attachments: attachments, comments: comments });
+    const user = this.getUser(post);
+    this.setState({ user: user });
   }
 
   deleteComment = secondary_key => {
@@ -142,17 +141,31 @@ class SinglePost extends Component {
   };
 
   render() {
+    let attachments = [];
+    let title = "";
+    if (this.state) {
+      attachments =
+        this.state.attachments === undefined ? [] : this.state.attachments;
+      if (this.state.post) {
+        title =
+          this.state.post.title === undefined ? "" : this.state.post.title;
+      }
+    }
+    let username = "";
+    let avatar = "";
+    if (this.state.user) {
+      username = this.state.user.username;
+      avatar = this.state.user.avatar;
+    }
     return (
       <div className="single-post-2-page">
         <div className="container">
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
-                <h3>
-                  How to deploy Nodejs Web app on AWS EC2, with SSL certificate
-                </h3>
+                <h3>{title}</h3>
                 <div className="post-content">
-                  {this.state.attachments.map(attachment => {
+                  {attachments.map(attachment => {
                     return (
                       <Attachment
                         key={uid(rand_string())}
@@ -174,7 +187,7 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
-                  {this.state.comments.map(comment => {
+                  {/* {this.state.comments.map(comment => {
                     return (
                       <Comment
                         key={uid(rand_string())}
@@ -189,7 +202,7 @@ class SinglePost extends Component {
                         edit_mode={comment.edit_mode}
                       />
                     );
-                  })}
+                  })} */}
                 </div>
               </div>
             </div>
@@ -203,14 +216,10 @@ class SinglePost extends Component {
                   <div className="user-info">
                     <div className="row">
                       <div className="col-lg-3 col-3">
-                        <img
-                          className="avatar"
-                          src={process.env.PUBLIC_URL + "/img/saitama.jpg"}
-                          alt=""
-                        />
+                        <img className="avatar" src={avatar} alt="" />
                       </div>
                       <div className="col-lg-9 col-9">
-                        <strong>Username</strong>
+                        <strong>{username}</strong>
                       </div>
                     </div>
                   </div>
