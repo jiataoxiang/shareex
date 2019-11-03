@@ -63,7 +63,44 @@ let data = {
       attachments: []
     }
   ],
-  comments: [],
+  comments: [
+    {
+      id: "FoiF2XhsMD",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    },
+    {
+      id: "HY5A7zEt7K",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    },
+    {
+      id: "sEiOyC3vX1",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    },
+    {
+      id: "FiUpe9WCda",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    },
+    {
+      id: "qdS5yUbenc",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    },
+    {
+      id: "F8o7yrjoVe",
+      post_id: "post_id",
+      user_id: "user_id",
+      content: "content"
+    }
+  ],
   attachments: [
     {
       id: "Nmx5b25eX2",

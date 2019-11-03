@@ -1,0 +1,27 @@
+.rich-text-editor {
+    .nav-buttons {
+        display: flex;
+        background-color: whitesmoke;
+    }
+    .format-button {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+        padding: 3px;
+    }
+    .format-color {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+    }
+    .dropdown-toggle {
+        height: 40px;
+        margin: 5px;
+    }
+    
+    .content {
+        background-color: white;
+        color: black;
+        min-height: 400px;
+    }
+}

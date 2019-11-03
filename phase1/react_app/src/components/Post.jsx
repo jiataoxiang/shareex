@@ -7,8 +7,9 @@ class Post extends Component {
   thumbClicked = () => {
     const posts = this.props.posts;
     if (
-      this.props.current_user !== undefined &&
-      !this.props.post.likes_user_id.includes(this.props.current_user.id)
+      (this.props.current_user !== undefined &&
+        !this.props.post.likes_user_id.includes(this.props.current_user.id)) ||
+      this.props.current_user.type === "admin"
     ) {
       const this_post = posts.filter(post => post.id === this.props.post.id)[0];
       this_post.likes += 1;
@@ -24,10 +25,7 @@ class Post extends Component {
     let count = 0;
     for (let i = 0; i < this.props.attachments.length && count < 5; i++) {
       const attachment = this.props.attachments[i];
-      if (attachment.type === "image") {
-        images.push(process.env.PUBLIC_URL + attachment.content);
-        count++;
-      } else if (attachment.type === "image_link") {
+      if (attachment.type === "image" || attachment.type === "image_link") {
         images.push(attachment.content);
         count++;
       }
@@ -82,7 +80,7 @@ class Post extends Component {
           <span className="likes float-right">Likes: {likes}</span>
           {/* Thumb up button */}
           <img
-            src={process.env.PUBLIC_URL + "./img/thumb_up.png"}
+            src={"./img/thumb_up.png"}
             alt=""
             width="40px"
             className="float-right thumb-up-btn"
