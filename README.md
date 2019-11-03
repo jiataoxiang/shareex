@@ -5,7 +5,7 @@
 * Jiatao Xiang (xiangji5), git log name (Jiatao xiang, Jato xiang)
 * Huakun Shen (shenhuak)
 * Xu Wang
-* Yuan Xu
+* Yuan Xu (xuyuan11)
 
 # Instruction
 
