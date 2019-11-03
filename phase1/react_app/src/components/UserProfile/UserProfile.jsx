@@ -67,6 +67,7 @@ class UserProfile extends React.Component {
               key={uid(rand_string())}
               post={posts[i]}
               posts={posts}
+              users = {this.props.state.users}
               attachments={attachments}
               current_user={this.props.state.current_user}
               setAppState={this.props.state.setAppState}

@@ -27,6 +27,8 @@ let data = {
       likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
+      mail: "warmguy@gmail.com",
+      tel: "(647)-123-4567",
       numPosts: 2,
       motto: "I like studying!!"
     },
@@ -42,6 +44,8 @@ let data = {
       likes: 0,
       banner: "./img/banner.jpg",
       avatar: "./img/User_Avatar.png",
+      mail: "notsohotguy@gmail.com",
+      tel: "(647)-123-7654",
       numPosts: 0,
       motto: "I like studying too!!"
     }

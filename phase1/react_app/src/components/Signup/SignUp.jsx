@@ -30,6 +30,14 @@ class SignUp extends Component {
         user["password"] = password;
         user["gender"] = gender;
         user["username"] = username;
+        user["avatar"] = "./img/User_Avatar.png";
+        user["banner"] = "./img/banner.jpg";
+        user["nickname"] = "Huskey";
+        user["follower"] = 0;
+        user["following"] = 0;
+        user["likes"] = 0;
+        user["numPosts"] =  0;
+        user["motto"] = "I like studying other!!";
         user["id"] = uid(rand_string());
         users.push(user);
         this.props.state.setAppState("users", users);
