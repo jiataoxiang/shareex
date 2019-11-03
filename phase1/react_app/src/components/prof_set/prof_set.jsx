@@ -289,7 +289,7 @@ class ProfSet extends Component {
             </button>
           </Link>
           <button type="submit"
-                  className="btn btn-primary btn-md btn-block"
+                  className="btn btn-light btn-md btn-block"
                   onClick={this.setProf}>
             Save
           </button>

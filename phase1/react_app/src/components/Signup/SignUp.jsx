@@ -20,6 +20,8 @@ class SignUp extends Component {
       alert("All inputs must be filled in");
     } else {
       // The following code should be replaced with code connecting to server and create an account in database
+      // Check if user exists from server
+      // code below requires server call
       const users = this.props.state.users;
       if (users.filter(user => user.username === username).length !== 0) {
         console.log("Username already exists");
@@ -36,7 +38,7 @@ class SignUp extends Component {
         user["follower"] = 0;
         user["following"] = 0;
         user["likes"] = 0;
-        user["numPosts"] =  0;
+        user["numPosts"] = 0;
         user["tel"] = "";
         user["motto"] = "I like studying other!!";
         user["id"] = uid(rand_string());

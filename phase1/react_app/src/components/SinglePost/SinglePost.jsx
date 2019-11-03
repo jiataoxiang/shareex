@@ -26,13 +26,15 @@ class SinglePost extends Component {
     } else {
       /* if single post is accessed by typing URL instead of clicking a link
         post_id is not available, we don't know which post to render, thus 
-        redirect to login page    
+        redirect to home page    
       */
-      this.props.history.push("/login");
+      this.props.history.push("/");
     }
   }
 
   getPost = () => {
+    // Get posts from server
+    // code below requires server call
     const posts = this.props.state.posts;
     let post;
     if (posts) {
@@ -45,6 +47,8 @@ class SinglePost extends Component {
   };
 
   getAttachment = () => {
+    // Get attachments from server
+    // code below requires server call
     const all_attachments = this.props.state.attachments;
     let attachments = [];
     if (all_attachments) {
@@ -56,6 +60,8 @@ class SinglePost extends Component {
   };
 
   getComments = () => {
+    // Get comments from server
+    // code below requires server call
     const all_comments = this.props.state.comments;
     let comments = [];
     if (all_comments) {
@@ -71,6 +77,8 @@ class SinglePost extends Component {
   };
 
   getUser = post => {
+    // Get user from server
+    // code below requires server call
     let user;
     if (post) {
       const author_id = post.author_id;

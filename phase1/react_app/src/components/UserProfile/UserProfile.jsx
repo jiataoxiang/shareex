@@ -90,7 +90,6 @@ class UserProfile extends React.Component {
       bannerButton.classList.remove("buttonDrop");
   }
   
-  
   changeBannerPre = () => { document.getElementById("change-banner").click(); }
   // this funtion gets the temp url of the uploaded img
   // might be changed in phase 2
@@ -115,6 +114,40 @@ class UserProfile extends React.Component {
       }
     }
   }
+  
+  showAvatarEditor = () => {
+      const avatarButton = document.getElementById("change-avatar-pre");
+      avatarButton.style.opacity = 0.6;
+  }
+  hideAvatarEditor = () => {
+      const avatarButton = document.getElementById("change-avatar-pre");
+      avatarButton.style.opacity = 0;
+  }
+  
+  changeAvatarPre = () => { document.getElementById("change-avatar").click(); }
+  // this funtion gets the temp url of the uploaded img
+  // might be changed in phase 2
+  changeAvatar = (event) => {
+    const inputFile = event.target.files[0]
+
+    if (inputFile != null) {
+      const isJPG = inputFile.type === 'image/jpeg';
+      const isPNG = inputFile.type === 'image/png';
+
+      if (!isJPG && !isPNG) {
+        inputFile.status = 'error';
+        console.log("You can only upload png or jpg files.");
+      } else {
+        const imgReader = new FileReader();
+        imgReader.addEventListener('load', () => {
+          this.setState({avatar: imgReader.result});
+          // save the new banner to mock data
+          this.props.state.current_user.avatar = imgReader.result;
+        })
+        imgReader.readAsDataURL(inputFile);
+      }
+    }
+  }
 
   render() {
     if (!this.props.state.current_user) {
@@ -132,22 +165,21 @@ class UserProfile extends React.Component {
             <img className="bannerPic" 
                 src={this.state.banner} 
                 alt="Banner" 
-                onMouseOver={this.showBannerEditor}
+                onMouseOver={() => {this.showBannerEditor(); this.hideAvatarEditor();}}
                 onMouseOut={this.hideBannerEditor}/>
           )}
-        </div>
-        
-        <div id="banner-button-container" hidden="hidden">
+          <div id="banner-button-container" hidden="hidden">
             <button className="btn btn-warning" 
                 onClick={this.changeBannerPre} 
                 onMouseOver={this.showBannerEditor}>
                 Change Banner
             </button>
-        </div>
-        <input type="file" 
+          </div>
+          <input type="file" 
             id="change-banner" 
             hidden="hidden" 
             onChange={this.changeBanner}/>
+        </div>
 
         <div id="profileStats">
           <ul className="text-center">
@@ -202,14 +234,25 @@ class UserProfile extends React.Component {
               </div>
             </div>
           </div>
-          <button>
+          <div id="profileImgContainer">
             <img
               id="bigProfilePicCircle"
               src={this.state.avatar}
               alt="ProfilePicture"
               onClick={this.handlePopup.bind(this)}
+              onMouseOver={this.showAvatarEditor}
+              onMouseOut={this.hideAvatarEditor}
             />
-          </button>
+            <button id="change-avatar-pre"
+                onClick={this.changeAvatarPre}
+                onMouseOver={this.showAvatarEditor}>
+                <h5>Change Avatar</h5>
+            </button>
+            <input type="file" 
+                id="change-avatar" 
+                hidden="hidden" 
+                onChange={this.changeAvatar}/>
+          </div>
         </div>
       </div>
     );

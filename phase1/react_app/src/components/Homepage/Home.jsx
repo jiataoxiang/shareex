@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Post from "../Post";
 import { Link } from "react-router-dom";
 import "../../stylesheets/home.scss";
-import { lorem, rand_string } from "../../lib/util";
+import { rand_string } from "../../lib/util";
 import { uid } from "react-uid";
 
 class Home extends Component {
@@ -11,43 +11,10 @@ class Home extends Component {
     recommendations: []
   };
 
-  componentDidMount() {
-    // The code below are temporary code for randomly generating some post content and recommendations
-    // TODO: replace the following initialization code in phase 2, connect to server and get real data
-    const posts = [];
-    const recommendations = [];
-    function getRandomImages(num) {
-      const tmp = [];
-      for (let i = 0; i < num; i++) {
-        tmp.push("https://picsum.photos/seed/" + rand_string() + "/200/300");
-      }
-      return tmp;
-    }
-
-    for (let i = 0; i < 10; i++) {
-      posts.push({
-        title: lorem.generateSentences(1),
-        content: lorem.generateParagraphs(2),
-        images: getRandomImages(5),
-        link: "/single_post"
-      });
-    }
-
-    for (let i = 0; i < 10; i++) {
-      recommendations.push({
-        href: "/",
-        content: lorem.generateSentences(1)
-      });
-    }
-
-    this.setState({
-      // posts: this.props.state.posts,
-      posts: posts,
-      recommendations: recommendations
-    });
-  }
-
+  // the following code is for getting all posts to be displayed on home page
   getPosts = () => {
+    // Get posts from server
+    // code below requires server call
     const posts = this.props.state.posts;
     const posts_display = [];
 
@@ -62,7 +29,7 @@ class Home extends Component {
             key={posts[i].id}
             post={posts[i]}
             posts={posts}
-            users = {this.props.state.users}
+            users={this.props.state.users}
             attachments={attachments}
             current_user={this.props.state.current_user}
             setAppState={this.props.state.setAppState}
@@ -76,6 +43,8 @@ class Home extends Component {
   /* Recommendations are selected as those posts with more than 10 likes
     Only at most 10 are selected randomly */
   getRecommendations = () => {
+    // Get posts from server
+    // code below requires server call
     let posts = this.props.state.posts;
     const recommendations = [];
     let count = 0;
