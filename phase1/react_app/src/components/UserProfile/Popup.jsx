@@ -2,9 +2,6 @@ import React from 'react';
 
 class Popup extends React.Component {
 
-  saveHandler = () => {
-    console.log("saved!!!")
-  };
 
   render() {
     return (
@@ -12,15 +9,11 @@ class Popup extends React.Component {
         <div className='popupInner'>
           <h1 className='popupHeader'>{this.props.header}</h1>
           <br/><br/>
-          <input
-            type="file"
-            className="form-control-file border"
-            id={"file"}
-          />
           <br/>
-          <button id="saveButton" onClick={this.saveHandler}>save</button>
+          <br/>
+          <br/>
+          <button id="closeButton" onClick={this.props.closePopup}>close</button>
         </div>
-        <button id="closeButton" onClick={this.props.closePopup}>close</button>
       </div>
     );
   }

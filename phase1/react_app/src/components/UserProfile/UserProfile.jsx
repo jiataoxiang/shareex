@@ -158,7 +158,7 @@ class UserProfile extends React.Component {
         <div>
           {this.state.showPop ? (
             <Popup
-              header="You can change your avatar here"
+              header="This is not BUG, It's feature ^v^"
               closePopup={this.closePopup.bind(this)}
             />
           ) : (
