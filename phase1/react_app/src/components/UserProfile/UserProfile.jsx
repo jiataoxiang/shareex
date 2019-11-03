@@ -7,6 +7,7 @@ import { uid } from "react-uid";
 import Popup from "./Popup";
 
 class UserProfile extends React.Component {
+
   state = {
     showPop: false
   };
@@ -50,6 +51,7 @@ class UserProfile extends React.Component {
   }
 
   getPosts = () => {
+    // TODO: connect to server, get posts from server.
     // find all posts belonging to current user
     const posts_display = [];
     if (this.props.state.posts) {

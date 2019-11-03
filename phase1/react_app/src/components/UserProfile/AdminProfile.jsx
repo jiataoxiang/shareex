@@ -13,7 +13,7 @@ const myVar = {
   postSuccessMessage: "Successful deleted the user"
 };
 class AdminProfile extends Component {
-
+  // TODO: connect to server, get info from API
   state = {
     nickname: "Admin",
     avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
@@ -28,6 +28,7 @@ class AdminProfile extends Component {
   };
 
   handleUserDelete = () => {
+    // TODO: connect to server, update information
     // When delete a user, delete related info as well, or show a warning.
     const id = document.getElementById("userid");
     const user = this.state.user_list.filter(user => user.id !== id.value);
@@ -68,6 +69,7 @@ class AdminProfile extends Component {
   };
 
   handlePostDelete = () => {
+    // TODO: connect to server, update information
     // When delete a post, delete the related info as well, or show a warning.
     const id = document.getElementById("postid");
     const post = this.state.post_list.filter(post => post.id !== id.value);

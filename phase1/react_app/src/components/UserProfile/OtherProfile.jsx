@@ -7,6 +7,7 @@ import { uid } from "react-uid";
 
 class OtherProfile extends React.Component {
 
+  // TODO: connect to server, get information
   state = {
     nickname: "",
     banner: "",
@@ -65,6 +66,7 @@ class OtherProfile extends React.Component {
   }
 
   getPosts = () => {
+    // TODO: connect to server, get posts from server
     // find all posts belonging to current user
     const users = this.props.state.users;
     const posts = this.props.state.posts;
