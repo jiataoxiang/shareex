@@ -108,6 +108,8 @@ class UserProfile extends React.Component {
         const imgReader = new FileReader();
         imgReader.addEventListener('load', () => {
           this.setState({banner: imgReader.result});
+          // save the new banner to mock data
+          this.props.state.current_user.banner = imgReader.result;
         })
         imgReader.readAsDataURL(inputFile);
       }
