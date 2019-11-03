@@ -1,4 +1,5 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
 import "../../stylesheets/prof_set.scss";
 import "../../stylesheets/animation.scss";
 
@@ -139,7 +140,13 @@ class ProfSet extends Component {
     // this is some fake data that we get from server,
     // will be replaced in phase 2
     const currentUser = this.props.state.current_user;
-    if (currentUser) {
+    if (! currentUser) {
+        alert("You need to log in first");
+        this.props.history.push("/");
+    } else if (currentUser.type === "admin") {
+        alert("admin accounts cannot change profile");
+        this.props.history.push("/");
+    } else {
         this.setState({profAvatarUrl: currentUser.avatar});
         this.setState({profBannerUrl: currentUser.banner});
         
@@ -147,7 +154,7 @@ class ProfSet extends Component {
         this.setState({profEmail: currentUser.mail});
         this.setState({profTelephone: currentUser.tel});
         this.setState({profPassword: currentUser.password});
-        this.setState({profMotto: currentUser.motto});
+        this.setState({profMotto: currentUser.motto});     
     }
 
     console.log("Profile loaded from server.");
@@ -175,7 +182,8 @@ class ProfSet extends Component {
       currentUser.password = this.state.profPassword;
       currentUser.motto = this.state.profMotto;
 
-      alert("Profile saved.")
+      alert("Profile saved.");
+      this.props.history.push("/userprofile");
     }
   }
 
@@ -295,10 +303,16 @@ class ProfSet extends Component {
 
         <div className="btn-toolbar" role="toolbar">
           <button type="submit"
-                  className="btn btn-outline-primary btn-md btn-block"
+                  className="btn btn-light btn-md btn-block"
                   onClick={this.getProf}>
-            Cancel
+            Reset
           </button>
+          <Link to="/userprofile">
+            <button type="submit"
+                  className="btn btn-light btn-md btn-block">
+                Cancel
+            </button>
+          </Link>
           <button type="submit"
                   className="btn btn-primary btn-md btn-block"
                   onClick={this.setProf}>
@@ -310,4 +324,4 @@ class ProfSet extends Component {
   }
 }
 
-export default ProfSet;
+export default withRouter(ProfSet);
