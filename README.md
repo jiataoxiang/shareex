@@ -4,7 +4,7 @@
 
 * Jiatao Xiang (xiangji5), git log name (Jiatao xiang, Jato xiang)
 * Huakun Shen (shenhuak)
-* Xu Wang
+* Xu Wang (wangx562)
 * Yuan Xu (xuyuan11)
 
 # Instruction
@@ -89,7 +89,18 @@ For admin, only the profile page is different from the user (features of other p
 
 ### * New Post
 
-1. We have set `Title`, ``
+1. We have set `Title`, `Category`, and `Content` fileds for each new post.
+
+2. You can also add more attachments by clicking the `Add` dropdown button. You can add text, image(upload from local machine), PDF, YouTube link, image link(image address from web).
+
+   * You can add as many attachments as you wish. You can also change the content you types in text area and the value of category before you click submit. The data will be uploaded in the exact order you add them.
+
+   * Notice: For now, the preview of the uploaded local image and local PDF file are the default content we set. Because we cannot store the local PDF or image file at this stage without a database server. 
+   * For other uploaded attachments, the functionality works fine.
+
+3. When you click submit, all the data about your post will be uploaded to mock_data.js.
+
+4. Also, if you want to access new post page by just copy paste the url without logging in, you will be directed to the home page and asked to log in first.
 
 ### * Home
 
