@@ -54,6 +54,14 @@ class SignUp extends Component {
       }
     }
   };
+  
+  componentDidMount() {
+    // If alreadly loged in, go to home page.
+    if (this.props.state.current_user) {
+        alert("You already loged in!")
+        this.props.history.push("/");
+    }
+  }
 
   render() {
     return (
