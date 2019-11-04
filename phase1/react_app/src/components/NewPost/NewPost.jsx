@@ -202,7 +202,7 @@ class NewPost extends Component {
 
     // console.log(this.props.state.attachments.length);
     // console.log(this.props.state.attachments);
-    this.state.to_store.attachments.map((attach) => {
+    this.state.to_store.attachments.forEach((attach) => {
       this.props.state.attachments.push({
         id: attach.id,
         post_id: post_id,

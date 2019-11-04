@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import "../../stylesheets/single_post.scss";
 import Comment from "../Comment";
 import Attachment from "../Attachment";
@@ -145,6 +145,7 @@ class SinglePost extends Component {
       }
     }
     this.setState({ comments: comments });
+    document.getElementById("new-comment-button").removeAttribute("hidden");
   };
 
   /* callback passed to a Comment to edit a Comment on this page */
@@ -170,6 +171,8 @@ class SinglePost extends Component {
         edit_mode: true
       });
       this.setState({ comments: comments });
+      
+      document.getElementById("new-comment-button").setAttribute("hidden",true);
     } else {
       alert("Please Sign in first, then you can create a comment.");
     }
@@ -239,6 +242,7 @@ class SinglePost extends Component {
                   <h2>Comments</h2>
                   <button
                     className="btn btn-outline-success float-right"
+                    id="new-comment-button"
                     onClick={this.addComment}
                   >
                     New Comment

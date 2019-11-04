@@ -48,7 +48,8 @@ class AddContent extends Component {
 
   // generate and return the required attachment
   getContentInput = () => {
-    const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
+    // const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
+    const {addedAttachmentFile, title} = this.props;
     if (this.props.type === "text") {
       return (
         <div className="form-group">
@@ -64,10 +65,8 @@ class AddContent extends Component {
         </div>
       );
     } else if (this.props.type === "code") {
-      let content = `# write your JS code here`;
-      if (title !== ``) {
-        content = '`' + title + '`';
-      }
+      // let content = `# write your JS code here`;
+      // if (title !== ``) { content = '`' + title + '`'; }
       return (
         <div className="code-container">
           <div className="form-group">
