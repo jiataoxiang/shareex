@@ -30,8 +30,8 @@ class ProfSet extends Component {
     this.setState({[name]: value});
   }
 
-  // this funtion gets the temp url of the uploaded img
-  // might be changed in phase 2
+  // This funtion only gets the temp url of the uploaded img now
+  // TODO: change the following code in phase 2, so that we keep the file
   changeAvatar = (event) => {
     const inputFile = event.target.files[0]
 
@@ -115,7 +115,7 @@ class ProfSet extends Component {
     this.clearAllError();
 
     // this is some fake data that we get from server,
-    // will be replaced in phase 2
+    // TODO: change the following code in phase 2, to upload changed data to server
     const currentUser = this.props.state.current_user;
     if (! currentUser) {
         alert("You need to log in first");
@@ -148,6 +148,7 @@ class ProfSet extends Component {
 
     if (correctNickname && correctEmail && correctPassword) {
       // send new profile to server
+      // TODO: change the following code in phase 2, to download data from server
       const currentUser = this.props.state.current_user;
         
       currentUser.avatar = this.state.profAvatarUrl;

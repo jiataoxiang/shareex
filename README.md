@@ -76,7 +76,6 @@ For admin, only the profile page is different from the user (features of other p
 4. Click on the password inputbox will delete whatever is in there.
 5. There are three buttons at the bottom. Reset reload the user info form server. Cancel goes back to user profile page and ignores whatever have been changed.
 6. Save checks if all the inputs are valid. If not valid, the inputbox that contains invalid info will turn red. Otherwise, the changed info are saved to the server, and you will return to "User Profile" page.
-*. For changing the avatar, what is changed in the mock data is the url of the avatar picture, not the actual picture. In phase 2, the picture will be uploaded to the server after saving, so this won't be a problem.
 
 ### * Single Post
 
