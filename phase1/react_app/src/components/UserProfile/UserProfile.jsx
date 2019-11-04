@@ -96,7 +96,7 @@ class UserProfile extends React.Component {
   
   changeBannerPre = () => { document.getElementById("change-banner").click(); }
   // this function gets the temp url of the uploaded img
-  // might be changed in phase 2
+  // TODO: change the following code in phase 2, so that we keep the file
   changeBanner = (event) => {
     const inputFile = event.target.files[0]
 
@@ -111,7 +111,7 @@ class UserProfile extends React.Component {
         const imgReader = new FileReader();
         imgReader.addEventListener('load', () => {
           this.setState({banner: imgReader.result});
-          // save the new banner to mock data
+          // save the new banner to mock data, change in phase 2
           this.props.state.current_user.banner = imgReader.result;
         });
         imgReader.readAsDataURL(inputFile);
@@ -131,7 +131,7 @@ class UserProfile extends React.Component {
   
   changeAvatarPre = () => { document.getElementById("change-avatar").click(); }
   // this funtion gets the temp url of the uploaded img
-  // might be changed in phase 2
+  // TODO: change the following code in phase 2, so that we keep the file
   changeAvatar = (event) => {
     const inputFile = event.target.files[0]
 
@@ -146,7 +146,7 @@ class UserProfile extends React.Component {
         const imgReader = new FileReader();
         imgReader.addEventListener('load', () => {
           this.setState({avatar: imgReader.result});
-          // save the new banner to mock data
+          // save the new banner to mock data, change in phase 2
           this.props.state.current_user.avatar = imgReader.result;
         })
         imgReader.readAsDataURL(inputFile);
