@@ -56,7 +56,11 @@ class Navbar extends React.Component {
       const type = currentUser.type;
       if (type === "admin") {
         return (
-          <div>
+          <div className="navbar-buttons-container">
+            <Link className="nav-link nav-item" to="new_post">
+                <button className="btn btn-outline-primary">New Post</button>
+            </Link>    
+                
             <button
               className="btn btn-outline-danger btn-sm logout-btn"
               onClick={this.logout}
@@ -64,18 +68,20 @@ class Navbar extends React.Component {
               Logout
             </button>
             <Link to="/adminprofile">
-              <img
+              <img id="user-avatar"
                 src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
                 alt=""
-                width="40px"
-                height="40px"
               />
             </Link>
           </div>
         );
       }
       return (
-        <div>
+        <div className="navbar-buttons-container">
+          <Link className="nav-link nav-item" to="new_post">
+            <button className="btn btn-outline-primary">New Post</button>
+          </Link>      
+        
           <button
             className="btn btn-outline-danger btn-sm logout-btn"
             onClick={this.logout}
@@ -87,8 +93,6 @@ class Navbar extends React.Component {
               id="user-avatar"
               src={currentUser.avatar}
               alt=""
-              width="40px"
-              height="40px"
             />
           </Link>
         </div>
@@ -179,9 +183,7 @@ class Navbar extends React.Component {
               </div>
             </li> */}
           </ul>
-          <Link className="nav-link nav-item" to="new_post">
-            <button className="btn btn-outline-primary">New Post</button>
-          </Link>
+          
           <div
             id="theme-btn-group"
             className="btn-group"
