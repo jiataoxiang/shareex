@@ -175,6 +175,20 @@ class SinglePost extends Component {
     }
   };
 
+  /* redirect to the proper profile page */
+  redirectProf = () => {
+      const user = this.props.state.current_user;
+      const author = this.getUser(this.getPost());
+      if ((!user) || (!(user.id === author.id))) {
+          this.props.history.push({
+              pathname: "/otherprofile",
+              state: { post_id: this.state.post_id }
+          });
+      } else {
+          this.props.history.push("/userprofile");
+      }
+  }
+
   render() {
     let attachments = [];
     let title = "";
@@ -254,15 +268,8 @@ class SinglePost extends Component {
             <div className="user-info-container col-12 col-6 col-md-3">
               <div className="sticky-top">
                 <div className="space"></div>
-                <Link
-                  to={{
-                    pathname: "/otherprofile",
-                    state: {
-                      post_id: this.state.post_id
-                    }
-                  }}
-                >
-                  <div className="user-info">
+                  
+                  <div className="user-info" onClick={this.redirectProf}>
                     <div className="row">
                       <div className="col-lg-3 col-3">
                         <img className="avatar" src={avatar} alt="" />
@@ -272,7 +279,7 @@ class SinglePost extends Component {
                       </div>
                     </div>
                   </div>
-                </Link>
+                  
               </div>
             </div>
           </div>

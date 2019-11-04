@@ -83,11 +83,13 @@ class UserProfile extends React.Component {
     return posts_display;
   };
 
+  // Display the banner editing button.
   showBannerEditor = () => {
       const bannerButton = document.getElementById("banner-button-container");
       bannerButton.removeAttribute("hidden");
       bannerButton.classList.add("buttonDrop");
   };
+  // Hide the banner editing button.
   hideBannerEditor = () => {
       const bannerButton = document.getElementById("banner-button-container");
       bannerButton.setAttribute("hidden",true);
@@ -119,11 +121,12 @@ class UserProfile extends React.Component {
     }
   };
   
+  // Display the avatar editing button.
   showAvatarEditor = () => {
       const avatarButton = document.getElementById("change-avatar-pre");
       avatarButton.style.opacity = 0.6;
   };
-
+  // Hide the avatar editing button.
   hideAvatarEditor = () => {
       const avatarButton = document.getElementById("change-avatar-pre");
       avatarButton.style.opacity = 0;
