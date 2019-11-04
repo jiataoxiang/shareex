@@ -14,6 +14,7 @@ class ProfSet extends Component {
     profMotto: ""
   };
 
+  // The text boxes for input.
   inputGroups = {
     inputNickname: null,
     inputEmail: null,
@@ -22,6 +23,7 @@ class ProfSet extends Component {
     inputMotto: null
   };
 
+  // Text box input handler.
   handleInputChange = (event) => {
     const target = event.target;
     const name = target.name;
@@ -52,26 +54,31 @@ class ProfSet extends Component {
     }
   }
 
+  // Clear content in the password text box.
   clearPassword = () => {
     this.setState({profPassword: ""});
   }
 
+  // Remove error properties for all textboxes.
   clearAllError = () => {
     for (let i in this.inputGroups) {
         this.clearError(this.inputGroups[i])
     }
   }
 
+  // Remove error properties.
   clearError = (object) => {
     object.style.backgroundColor = "white";
     object.parentElement.classList.remove("errorShake");
   }
   
+  // Add error properties.
   setError = (object) => {
     object.style.backgroundColor = "lightpink";
     object.parentElement.classList.add("errorShake");
   }
 
+  // Check if nickname is valid.
   checkNickname = () => {
     const emptyString = this.state.profNickname.length === 0;
 
@@ -84,6 +91,7 @@ class ProfSet extends Component {
     }
   }
 
+  // Check if email is valid.
   checkEmail = () => {
     const emailFrag = this.state.profEmail.split('@');
     const worngFormat = emailFrag.length < 2 || emailFrag.length > 2 || emailFrag[0].length === 0 || emailFrag[1].length === 0;
@@ -97,6 +105,7 @@ class ProfSet extends Component {
     }
   }
 
+  // Check if password is valid.
   checkPassword = () => {
     const emptyString = this.state.profPassword.length === 0;
 
@@ -165,10 +174,12 @@ class ProfSet extends Component {
   }
 
   componentDidMount() {
+    // Get the text boxes.
     for (let i in this.inputGroups) {
         this.inputGroups[i] = document.getElementById(i)
     }
 
+    // Read data from server.
     this.getProf();
   }
 

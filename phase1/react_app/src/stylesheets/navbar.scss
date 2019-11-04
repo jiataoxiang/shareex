@@ -17,8 +17,21 @@
     margin-left: 20px;
   }
 
+  .navbar-buttons-container {
+    display: flex;  
+  }
+    
   .logout-btn {
+    margin-top: 8px;
+    margin-bottom: 10px;
     margin-right: 1em;
+  }
+    
+  #user-avatar {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 40px;
+    height: 40px;
   }
 
   #user-avatar {
