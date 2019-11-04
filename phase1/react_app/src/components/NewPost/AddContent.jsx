@@ -17,30 +17,36 @@ class AddContent extends Component {
     code_data: code
   };
 
+  // handle the input link
   handleInputLink = (event) => {
     this.setState({input_link: event.target.value});
   };
 
+  // send the input link to the NewPost component
   sendLinkBack = (event) => {
     const {addedAttachmentLink} = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
     addedAttachmentLink(this.state.input_link, type);
   };
 
+  // send the input text to the NewPost component
   sendTextBack = (event) => {
     const {addedAttachmentWords, secondary_key} = this.props;
-    console.log(event.target.value);
-    this.state.text = event.target.value;
+    // console.log(event.target.value);
+    // this.state.text = event.target.value;
+    this.setState({text: event.target.value});
     addedAttachmentWords(event.target.value, 'text', secondary_key);
   };
 
+  // send the input code to the NewPost component
   sendCodeBack = (event) => {
     const {addedAttachmentWords, secondary_key} = this.props;
-    console.log('the code is: '+event);
+    // console.log('the code is: '+event);
     this.setState({code_data: event});
     addedAttachmentWords(event, 'code', secondary_key);
   };
 
+  // generate and return the required attachment
   getContentInput = () => {
     const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
     if (this.props.type === "text") {
@@ -60,7 +66,7 @@ class AddContent extends Component {
     } else if (this.props.type === "code") {
       let content = `# write your JS code here`;
       if (title !== ``) {
-        content = '`'+title+'`';
+        content = '`' + title + '`';
       }
       return (
         <div className="code-container">
@@ -107,7 +113,6 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          {/*<input type="text" className="form-control" onChange={addedAttachmentLink.bind(this)}/>*/}
           <input type="text" className="form-control" onChange={this.handleInputLink}/>
           <button type="submit" className='btn btn-primary btn-lg float-right input-link-button' id="image-link"
                   onClick={this.sendLinkBack}>Confirm

@@ -8,9 +8,9 @@ import "prismjs/components/prism-javascript";
 class Attachment extends Component {
   state = {};
 
+  // show the generate and return the specified <Attachment> tag
   getElement = () => {
     if (this.props.type === "text") {
-      // return <p onChange={this.props.sendTextBack}>{this.props.content}</p>;
       return (
         <div className="form-group">
           <h4 htmlFor="content">Text</h4>
@@ -20,7 +20,7 @@ class Attachment extends Component {
             id="content"
             placeholder="What's in your mind right now?"
             onChange={this.props.sendTextBack}
-            value={this.props.content}
+            defaultValue={this.props.content}
           />
         </div>
       );

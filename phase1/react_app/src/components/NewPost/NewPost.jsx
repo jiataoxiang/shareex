@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import "../../stylesheets/new_post.scss";
 import AddContent from "./AddContent";
 import {rand_string} from "../../lib/util";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {uid} from "react-uid";
 
 
 class NewPost extends Component {
+  // TODO: connect to server, and fetch the data we need. Then, store them in the state.
   state = {
     contents: [{key: "tmp", type: undefined, title: ""}],
     to_store: {
@@ -17,7 +18,7 @@ class NewPost extends Component {
     }
   };
 
-  // handle incoming image and pdf file
+  // handle incoming image and pdf file, and store them in state
   addedAttachmentFile = (event, secondary_key) => {
     const inputFile = event.target.files[0];
     const isJPG = inputFile.type === "image/jpeg";
@@ -48,11 +49,11 @@ class NewPost extends Component {
     this.state.to_store.attachments.push({
       id: attach_id,
       type: file_type,
-      content: process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"
+      content: file_type === 'pdf' ? process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf" : process.env.PUBLIC_URL + "/img/logo192.png"
     });
   };
 
-  // handle incoming video/image links
+  // handle incoming video/image links and store them in state
   addedAttachmentLink = (input_link, type) => {
     let link = type === 'youtube' ? input_link.replace("watch?v=", "embed/") : input_link;
     const id = uid(rand_string());
@@ -74,12 +75,10 @@ class NewPost extends Component {
     // console.log(this.state.to_store.attachments);
   };
 
-  // handle incoming text/code
+  // handle incoming text/code and store them in state
   addedAttachmentWords = (content, data_type, secondary_key) => {
-    console.log(secondary_key);
     const result = this.alreadyExisted(secondary_key);
     const resultContent = this.alreadyExistedContents(secondary_key);
-    // const type = data_type === 'code' ? 'code_attach' : 'text_attach';
     const item = {
       id: secondary_key,
       type: data_type,
@@ -105,12 +104,13 @@ class NewPost extends Component {
         title: content
       });
     }
-    console.log('length of attach is: ' + this.state.to_store.attachments.length);
-    console.log(this.state.to_store.attachments);
-    console.log('length of contents is: ' + this.state.contents.length);
-    console.log(this.state.contents);
+    // console.log('length of attach is: ' + this.state.to_store.attachments.length);
+    // console.log(this.state.to_store.attachments);
+    // console.log('length of contents is: ' + this.state.contents.length);
+    // console.log(this.state.contents);
   };
 
+  // check if a element already in this.state.to_store.attachments
   alreadyExisted = (secondary_key) => {
     for (let i = 0; i < this.state.to_store.attachments.length; i++) {
       if (this.state.to_store.attachments[i].id === secondary_key) {
@@ -120,6 +120,7 @@ class NewPost extends Component {
     return -1;
   };
 
+  // check if a element already in this.state.contents
   alreadyExistedContents = (secondary_key) => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
@@ -129,6 +130,7 @@ class NewPost extends Component {
     return -1;
   };
 
+  // add corresponding input box selected from dropdown menu
   addInput = (type, secondary_key) => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
@@ -145,38 +147,37 @@ class NewPost extends Component {
 
   // Update the title whenever user changes their title.
   inputTitle = (event) => {
-    this.state.to_store.title = event.target.value;
-    console.log(this.state.to_store.title);
-  }
+    const property = this.state.to_store;
+    property.title = event.target.value;
+    this.setState({property});
 
+    // this.state.to_store.title = event.target.value;
+    // console.log(this.state.to_store.title);
+  };
+
+  // Update the category whenever user changes their title.
   inputCategory = (event) => {
-    this.state.to_store.category = event.target.value;
+    const property = this.state.to_store;
+    property.category = event.target.value;
+    this.setState({property});
+
+    // this.state.to_store.category = event.target.value;
     // console.log(this.state.to_store.category);
   };
 
+  // Update the content whenever user changes their title.
   inputContent = (event) => {
-    this.state.to_store.content = event.target.value;
-    console.log(this.state.to_store.content);
-    // for (let i = 0; i < this.state.to_store.length; i++) {
-    //   if (this.state.to_store[i].type === "content") {
-    //     this.state.to_store[i].value = event.target.value;
-    //     console.log("the content now is:");
-    //     console.log(this.state.to_store[i].value);
-    //     return;
-    //   }
-    // }
-    // const data = {
-    //   key: uid(rand_string()),
-    //   type: "content",
-    //   value: event.target.value,
-    // };
-    // const data_list = this.state.to_store;
-    // data_list.push(data);
-    // this.setState({to_store: data_list});
+    const property = this.state.to_store;
+    property.content = event.target.value;
+    this.setState({property});
+
+    // this.state.to_store.content = event.target.value;
+    // console.log(this.state.to_store.content);
   };
 
   // store the data in this.state.to_store to the database
   addToDatabase = (event) => {
+    // TODO: connect server here. Then we will send data in state to the server.
     // generate a post id when the 'submit' button is clicked
     const post_id = uid(rand_string());
     const a_post = {
@@ -193,14 +194,14 @@ class NewPost extends Component {
     };
 
     // now add this post to the database
-    console.log(this.props.state.posts.length);
-    console.log(this.props.state.posts);
+    // console.log(this.props.state.posts.length);
+    // console.log(this.props.state.posts);
     this.props.state.posts.push(a_post);
-    console.log(this.props.state.posts.length);
-    console.log(this.props.state.posts);
+    // console.log(this.props.state.posts.length);
+    // console.log(this.props.state.posts);
 
-    console.log(this.props.state.attachments.length);
-    console.log(this.props.state.attachments);
+    // console.log(this.props.state.attachments.length);
+    // console.log(this.props.state.attachments);
     this.state.to_store.attachments.map((attach) => {
       this.props.state.attachments.push({
         id: attach.id,
@@ -209,14 +210,15 @@ class NewPost extends Component {
         content: attach.content
       });
     });
-    console.log(this.props.state.attachments.length);
-    console.log(this.props.state.attachments);
+    // console.log(this.props.state.attachments.length);
+    // console.log(this.props.state.attachments);
 
     // redirect to home page
     alert("Sure to submit?");
     this.props.history.push("/");
   };
 
+  // check if the user has signed in
   componentDidMount() {
     if (!this.props.state.current_user) {
       alert("Please sign in first !");

@@ -92,12 +92,14 @@ For admin, only the profile page is different from the user (features of other p
 
 2. You can also add more attachments by clicking the `Add` dropdown button. You can add text, image(upload from local machine), PDF, YouTube link, image link(image address from web).
 
-   * You can add as many attachments as you wish. You can also change the content you types in text area and the value of category before you click submit. The data will be uploaded in the exact order you add them.
+   * Notice: when you select to upload image or PDF in the dropdown menu, you can upload either type of file. 
 
+   * You can add as many attachments as you wish. You can also change the content you types in text area and the value of category before you click submit. The data will be uploaded in the exact order you add them.
    * Notice: For now, the preview of the uploaded local image and local PDF file are the default content we set. Because we cannot store the local PDF or image file at this stage without a database server. 
    * For other uploaded attachments, the functionality works fine.
+   * When you view your post after you submit, you can find everything you wrote in the original order. Notice that the uploaded image(from local machine will not be shown, since we need server to do that), but the image loaded from link can be shown.
 
-3. When you click submit, all the data about your post will be uploaded to mock_data.js.
+3. When you click submit, all the data about your post will be uploaded to mock_data.js. So in phase 2, we will add these data to our database.
 
 4. Also, if you want to access new post page by just copy paste the url without logging in, you will be directed to the home page and asked to log in first.
 
