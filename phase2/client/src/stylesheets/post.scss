@@ -1,0 +1,30 @@
+.post {
+  img.img-thumbnail {
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+  }
+
+  .thumb-up-btn {
+    /* border: 1px black solid; */
+    border-radius: 30%;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  .likes {
+    margin-top: 0.5em;
+    margin-left: 1em;
+  }
+
+  html[theme="dark"] {
+    hr {
+      background-color: #232323;
+    }
+  }
+}
+.post.card {
+  margin-top: 10px;
+  background-color: var(--background-secondary);
+  color: var(--text);
+}

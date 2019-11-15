@@ -1,0 +1,207 @@
+.user-profile-page {
+  .bannerPic {
+    display: block;
+    width: 100%;
+
+    /* Add properties below */
+    height: 300px;
+  }
+  #banner-button-container {
+    position: absolute;
+    right: 5%;
+    top: 300px;
+  }
+
+  #change-avatar-pre {
+    position: absolute;
+    top: 230px;
+    left: 10em;
+    width: 200px;
+    height: 100px;
+    border-radius: 0 0 100px 100px;
+    background-color: dimgrey;
+    border-bottom-style: hidden;
+    opacity: 0;
+    
+    -webkit-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    -o-transition: opacity .3s;
+    transition: opacity .3s;
+  }
+  /* Style the big profile picture circle here. */
+  #bigProfilePicCircle {
+    /* Add properties below */
+    position: absolute;
+    top: 130px;
+    left: 10em;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid gold;
+  }
+
+  #profileStats {
+    padding: 0;
+    background-color: gold;
+    ul {
+      margin: 0;
+      width: auto;
+    }
+  }
+
+  #profileStats ul li {
+    text-align: center;
+    margin-right: 20px;
+    font-weight: bold;
+    list-style: none; /* Gets rid of list bullet points */
+    display: inline-block;
+    color: black;
+    span {
+      color: black;
+    }
+  }
+
+  .profileStatsNumber {
+    display: block;
+
+    /* Add properties below */
+    font-size: 150%;
+    position: center;
+  }
+
+  /*** Profile info box styles below ***/
+  .container {
+    .space {
+      height: 4em;
+    }
+    .timeline {
+      margin-top: 1em;
+    }
+  }
+
+  #profileInfo {
+    background-color: var(--background-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 1em;
+
+    #profile-setting-btn,
+    button {
+      margin-bottom: 1em;
+    }
+  }
+
+  .post {
+    /* Add properties below */
+    margin-left: 0;
+    overflow: auto;
+    min-height: 100px;
+    float: left;
+  }
+    
+  .card {
+    width: 100%;
+  }
+
+  .timelineheader {
+    padding-left: 20px;
+  }
+
+  /** for popup **/
+  .popupWindow {
+    display: block;
+    width: 100%;
+    height: 300px;
+    background: black;
+  }
+  .popupInner {
+    position: relative;
+    width: 60%;
+    height: 260px;
+    top: 20px;
+    left: 400px;
+    right: 100px;
+    border-radius: 10px;
+    background: gold;
+  }
+
+  #closeButton {
+    position: relative;
+    left: 50%;
+    border-radius: 10px;
+    color: black;
+  }
+
+
+  .popupHeader {
+    color: black;
+  }
+
+  // admin profile.
+  #settingPanel {
+    margin: 5%;
+    display: inline-block;
+    float: left;
+    //background-color: gainsboro;
+    width: 300px;
+    height: 540px;
+    margin-top: 4em;
+  }
+
+  .Panel {
+    display: inline-block;
+    float: left;
+    width: 300px;
+    height: 200px;
+    margin: 5%;
+  }
+
+  .PanelText {
+    margin-top: 30%;
+    text-align: center;
+  }
+
+  #stats {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+  }
+
+  #stats.stat {
+  }
+
+  #AdminProfileCircle {
+    // position: absolute;
+    // top: 100px;
+    // left: 160px;
+    width: 100px;
+    border-radius: 50%;
+    border: 2px solid black;
+    cursor: pointer;
+  }
+
+  #studentContainer {
+    margin-top: 20px;
+  }
+
+  #carouselContainer {
+    float: left;
+    display: inline-block;
+    width: 600px;
+    height: 600px;
+    margin: 10%;
+    position: center;
+  }
+}
+@media screen and (max-width: 600px) {
+  .user-profile-page {
+    .container {
+      .space {
+        height: 20px;
+      }
+    }
+    #bigProfilePicCircle {
+      left: 2em;
+    }
+  }
+}

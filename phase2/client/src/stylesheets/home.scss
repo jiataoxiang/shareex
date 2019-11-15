@@ -1,0 +1,51 @@
+/* Complete Page */
+.home-page {
+  .container {
+    padding: 0;
+    height: 100vh;
+    padding-top: 2em;
+  }
+  .container.row {
+    margin: auto; /* Center */
+  }
+
+  /* Posts Part */
+  .posts {
+    margin-bottom: 2em;
+  }
+  .posts h3 {
+    padding-left: 20px;
+  }
+  .post.card {
+    background-color: var(--background-secondary);
+    color: var(--text);
+  }
+
+  /* Recommendation Part */
+  .recommendations h3 {
+    padding-left: 20px;
+  }
+
+  .recommendations.list-group {
+    /* padding-left: 20px; */
+    color: var(--text);
+    background-color: var(--background-secondary);
+  }
+  .recommendations ul li {
+    background-color: var(--background-secondary);
+    a {
+      color: var(--text);
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .recommendations {
+      width: 100%;
+      padding-bottom: 2em;
+    }
+    .posts {
+      width: 100%;
+    }
+  }
+  /* Testing */
+}
