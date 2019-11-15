@@ -9,7 +9,7 @@
     "dev": "concurrently \"nodemon ./bin/www\" \"npm run client\"",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "production-build": "cd client && npm install --only=dev && npm install && npm run build",
-    "deploy": "npm run production-build && npm start"
+    "deploy": "npm run production-build && npm install && npm start"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
