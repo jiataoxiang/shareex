@@ -33,6 +33,12 @@ app.get("/hello", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
 
+// handle react /:id params. Redirect routes back to react's index.html
+// instead of treating as a regular server call
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
