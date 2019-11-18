@@ -58,9 +58,9 @@ class Navbar extends React.Component {
         return (
           <div className="navbar-buttons-container">
             <Link className="nav-link nav-item" to="new_post">
-                <button className="btn btn-outline-primary">New Post</button>
-            </Link>    
-                
+              <button className="btn btn-outline-primary">New Post</button>
+            </Link>
+
             <button
               className="btn btn-outline-danger btn-sm logout-btn"
               onClick={this.logout}
@@ -68,7 +68,8 @@ class Navbar extends React.Component {
               Logout
             </button>
             <Link to="/adminprofile">
-              <img id="user-avatar"
+              <img
+                id="user-avatar"
                 src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
                 alt=""
               />
@@ -80,8 +81,8 @@ class Navbar extends React.Component {
         <div className="navbar-buttons-container">
           <Link className="nav-link nav-item" to="new_post">
             <button className="btn btn-outline-primary">New Post</button>
-          </Link>      
-        
+          </Link>
+
           <button
             className="btn btn-outline-danger btn-sm logout-btn"
             onClick={this.logout}
@@ -89,11 +90,7 @@ class Navbar extends React.Component {
             Logout
           </button>
           <Link to="/userprofile">
-            <img 
-              id="user-avatar"
-              src={currentUser.avatar}
-              alt=""
-            />
+            <img id="user-avatar" src={currentUser.avatar} alt="" />
           </Link>
         </div>
       );
@@ -110,7 +107,6 @@ class Navbar extends React.Component {
       );
     }
   };
-
 
   render() {
     // console.log(this.props.val);
@@ -183,7 +179,7 @@ class Navbar extends React.Component {
               </div>
             </li> */}
           </ul>
-          
+
           <div
             id="theme-btn-group"
             className="btn-group"
