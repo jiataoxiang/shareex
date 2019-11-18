@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+var userSchema = new Schema({
   name: String,
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -13,7 +13,8 @@ var UserSchema = new Schema({
     website: String
   },
   created_at: Date,
-  updated_at: Date
+  updated_at: Date,
+  followers: Array
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", userSchema);
