@@ -4,6 +4,7 @@ const Attachment = require("../models/Attachment");
 const Comment = require("../models/Comment");
 const Notification = require("../models/Notification");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
 require("../util/mongoose_connection"); // this line with connect to database
 User.remove({ username: "seed_user" }, err => {
   if (err) {
@@ -51,3 +52,14 @@ User.create({
     body: "random body"
   });
 });
+
+// async create user
+// async function asyncCreateUser() {
+//   const user = await User.create({
+//     username: "jiatao",
+//     password: "pwd"
+//   });
+//   console.log(user);
+// }
+
+// asyncCreateUser();

@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const { ObjectID } = require("mongodb");
 const Attachment = require("../models/Attachment");
 
 router.get("/", (req, res) => {
-  Post.find().then(
+  Post.find({}).then(
     posts => {
       res.send({ posts }); // can wrap in object if want to add more properties
     },
@@ -16,7 +17,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  Post.findById(req.params._id)
+  Post.findById(req.params.id)
     .then(post => {
       if (post) {
         return res.send(post);
@@ -28,50 +29,53 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
-  Post.create({
-    title: req.body.title,
-    author: req.body.author,
-    category: req.body.category,
-    body: req.body.body
-  })
-    .then(post => {
-      // construct all attachments and add their id to array
-      const attachments = [];
-      req.body.attachments.forEach(async attachment => {
-        await Attachment.create({
-          type: attachment.type,
-          body: attachment.body,
-          post_id: post._id
-        }).then(attachment => {
-          attachments.push(attachment._id);
-        });
-      });
-      post.attachments = attachments;
-      post.save();
-      res.send(post);
-    })
-    .catch(error => {
-      res.status(400).send(error); // 400 for bad request
+router.post("/", async (req, res) => {
+  try {
+    const post = await Post.create({
+      title: req.body.title,
+      author: req.body.author,
+      category: req.body.category,
+      body: req.body.body
     });
+    const attachments = [];
+    req.body.attachments.forEach(async attachment => {
+      const new_attachment = await Attachment.create({
+        type: attachment.type,
+        body: attachment.body,
+        post_id: post._id
+      });
+      attachments.push(new_attachment._id);
+    });
+    post.attachments = attachments;
+    post.save();
+    res.send("post created: \n", post);
+  } catch (err) {
+    res.status(400).send("post not created: bad request");
+  }
 });
 
 router.delete("/:id", (req, res) => {
-  if (!ObjectID.isValid(req.params._id)) {
+  if (!ObjectID.isValid(req.params.id)) {
     return res.status(404).send("post id not valid");
   }
-  Post.findById(req.params._id).then(post => {
-    if (!post) {
-      return res.status(400).send("post doesn't exist");
-    }
-    post.deleteOne();
-    return res.send("post deleted");
-  });
+  Post.findById(req.params.id)
+    .then(post => {
+      console.log("deleting post: ", post);
+      if (!post) {
+        return res.status(400).send("post doesn't exist");
+      }
+      post.remove();
+      return res.send("post deleted");
+    })
+    .catch(err => {
+      console.log(err);
+      res.stats(500).send("post not deleted");
+    });
 });
 
 router.patch("/:id", (req, res) => {
-  if (!ObjectID.isValid(req.params._id)) {
-    res.status(404).send();
+  if (!ObjectID.isValid(req.params.id)) {
+    res.status(404).send("post id not valid");
   }
 
   Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })

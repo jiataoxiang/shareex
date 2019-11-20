@@ -26,7 +26,23 @@ async function asyncTestMany() {
   }
   console.log(arr);
 }
-asyncTestMany();
+
+function testMany() {
+  for (let i = 0; i < 10; i++) {
+    axios
+      .get("http://localhost:5000/hello")
+      .then(res => {
+        console.log(res.data.msg);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  console.log("reached here");
+}
+
+testMany();
+// asyncTestMany();
 // axios
 //   .get("http://localhost:5000/hello")
 //   .then(res => {

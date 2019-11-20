@@ -8,6 +8,7 @@ const User = require("../models/User");
 router.get("/", (req, res) => {
   res.send("test route");
 });
+
 router.get("/create_user", function(req, res, next) {
   User.create(
     {

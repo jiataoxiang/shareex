@@ -30,7 +30,7 @@ userSchema.pre("remove", function(next) {
   console.log(`removing user ${this._id} and his/her posts`);
   Post.find({ author: this._id }).then(posts => {
     posts.forEach(post => {
-      post.deleteone();
+      post.remove();
     });
   });
   console.log(`removing user ${this._id} and his/her notifications`);

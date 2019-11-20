@@ -9,6 +9,7 @@ router.get("/", function(req, res, next) {
   res.send("respond with a resource");
 });
 
+// register
 router.post("/", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -66,12 +67,6 @@ router.post("/login", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
-  // find all posts belonging to user
-  Post.find({ author: req.params.id }).remove(err => {
-    if (err) {
-      console.log(err);
-    }
-  });
   User.findById(req.params.id, (err, user) => {
     if (err) {
       console.log("delete user: ", err);
@@ -80,7 +75,7 @@ router.delete("/:id", (req, res) => {
     if (!user) {
       return res.status(400).send("post doesn't exist");
     }
-    user.deleteOne();
+    user.remove();
 
     // req.flash("success", "Your account has been deleted.");
     // req.logout();
