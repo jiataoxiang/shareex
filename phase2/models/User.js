@@ -9,8 +9,10 @@ const userSchema = new Schema({
   email: String,
   admin: Boolean,
   created_at: { type: Date, default: Date.now },
-  updated_at: Date,
-  followers: Array
+  followers: { type: Array, default: [] },
+  following: { type: Array, default: [] },
+  banned: { type: Boolean, default: false },
+  unbanned_date: { type: Date, default: null }
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
