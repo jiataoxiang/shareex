@@ -7,7 +7,7 @@ const Comment = require("./Comment");
 const Notification = require("./Notification");
 const validator = require("validator");
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   name: String,
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -27,14 +27,26 @@ const userSchema = new Schema({
   unbanned_date: { type: Date, default: null }
 });
 
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
+UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
   });
 };
 
-userSchema.pre("remove", function(next) {
+UserSchema.pre("save", function(next) {
+  const user = this;
+  if (user.isModified("password")) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, (err, hash) => {
+        user.password = hash;
+        next();
+      });
+    });
+  }
+});
+
+UserSchema.pre("remove", function(next) {
   console.log(`removing user ${this._id} and his/her posts`);
   Post.find({ author: this._id }).then(posts => {
     posts.forEach(post => {
@@ -50,4 +62,5 @@ userSchema.pre("remove", function(next) {
   });
   next();
 });
-module.exports = mongoose.model("User", userSchema);
+
+module.exports = mongoose.model("User", UserSchema);

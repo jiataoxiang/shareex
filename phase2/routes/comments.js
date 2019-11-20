@@ -25,4 +25,34 @@ router.get("/", (req, res) => {
     );
 });
 
+// create a comment
+router.post("/", (req, res) => {
+  Comment.create({
+    author: req.body.author,
+    post_id: req.body.post_id,
+    body: req.body.body
+  })
+    .then(comment => {
+      res.send(comment);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).send("bad request");
+    });
+});
+
+router.delete("/:id", (req, res) => {
+  Comment.findByIdAndDelete(req.params.id)
+    .then(comment => {
+      if (!comment) {
+        console.log("comment doesn't exist");
+        res.status(404).send("comment doesn't exist");
+      }
+      res.json({ msg: "comment deleted", data: comment });
+    })
+    .catch(err => {
+      res.status(400).send("comment not deleted, error, bad request");
+    });
+});
+
 module.exports = router;
