@@ -18,7 +18,7 @@ const category = "test";
 const body = "body";
 
 // axios
-//   .post("http://localhost:5000/posts", {
+//   .post("http://localhost:5000/api/posts", {
 //     title: title,
 //     author: author,
 //     category: category,
@@ -31,8 +31,8 @@ const body = "body";
 
 // get posts with filter
 axios
-  .get("http://localhost:5000/posts", {
-    params: { category: "test" }
+  .get("http://localhost:5000/api/posts", {
+    params: { category: "seed" }
   })
   .then(res => {
     console.log(res.data);

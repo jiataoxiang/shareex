@@ -5,6 +5,7 @@ const Comment = require("../models/Comment");
 const { ObjectID } = require("mongodb");
 const Attachment = require("../models/Attachment");
 
+// call with query to add a filter, see post_test for an example
 router.get("/", (req, res) => {
   let filter = {};
   if (req.query.category) {
