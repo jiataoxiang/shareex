@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Attachment = require("./Attachment");
+const Comment = require("./Comment");
 
 const postSchema = new Schema({
   title: { type: String, required: true },
@@ -12,6 +14,22 @@ const postSchema = new Schema({
   likes: { type: Number, default: 0 },
   favs: { type: Number, default: 0 },
   attachments: { type: Array, default: [] }
+});
+
+postSchema.pre("remove", function(next) {
+  console.log(`removing post ${this._id} and its comments`);
+  Comment.remove({ post_id: this._id }, err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  console.log(`removing post ${this._id} and its attachments`);
+  Attachment.remove({ post_id: this._id }, err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  next();
 });
 
 module.exports = mongoose.model("Post", postSchema);

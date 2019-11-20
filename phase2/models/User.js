@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
+const Post = require("./Post");
+const Attachment = require("./Attachment");
+const Comment = require("./Comment");
+const Notification = require("./Notification");
 
 const userSchema = new Schema({
   name: String,
@@ -21,4 +25,21 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
     cb(null, isMatch);
   });
 };
+
+userSchema.pre("remove", function(next) {
+  console.log(`removing user ${this._id} and his/her posts`);
+  Post.find({ author: this._id }).then(posts => {
+    posts.forEach(post => {
+      post.deleteone();
+    });
+  });
+  console.log(`removing user ${this._id} and his/her notifications`);
+  // remove all notifications related to the user
+  Notification.remove({ $or: [{ to: this._id }, { from: this._id }] }, err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  next();
+});
 module.exports = mongoose.model("User", userSchema);
