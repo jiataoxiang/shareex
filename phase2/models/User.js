@@ -5,12 +5,20 @@ const Post = require("./Post");
 const Attachment = require("./Attachment");
 const Comment = require("./Comment");
 const Notification = require("./Notification");
+const validator = require("validator");
 
 const userSchema = new Schema({
   name: String,
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: "Not Valid Email"
+    }
+  },
   admin: Boolean,
   created_at: { type: Date, default: Date.now },
   followers: { type: Array, default: [] },
