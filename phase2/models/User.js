@@ -35,6 +35,7 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 UserSchema.pre("save", function(next) {
+  console.log("pre save for user called\n\n");
   const user = this;
   if (user.isModified("password")) {
     bcrypt.genSalt(10, (err, salt) => {

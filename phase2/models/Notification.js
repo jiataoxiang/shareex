@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const notificationSchema = new Schema({
+const NotificationSchema = new Schema({
   from: { type: String, required: true },
   to: { type: String, required: true },
   body: { type: String, required: true },
@@ -11,4 +11,4 @@ const notificationSchema = new Schema({
   read: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model("Notification", notificationSchema);
+module.exports = mongoose.model("Notification", NotificationSchema);
