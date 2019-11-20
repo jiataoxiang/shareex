@@ -6,9 +6,14 @@ const { ObjectID } = require("mongodb");
 const Attachment = require("../models/Attachment");
 
 router.get("/", (req, res) => {
-  Post.find({}).then(
+  let filter = {};
+  if (req.query.category) {
+    filter.category = req.query.category;
+  }
+  console.log(filter);
+  Post.find(filter).then(
     posts => {
-      res.send({ posts }); // can wrap in object if want to add more properties
+      res.json({ posts }); // can wrap in object if want to add more properties
     },
     error => {
       res.status(500).send(error); // server error

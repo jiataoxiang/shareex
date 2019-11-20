@@ -17,14 +17,26 @@ const author = "huakun";
 const category = "test";
 const body = "body";
 
+// axios
+//   .post("http://localhost:5000/posts", {
+//     title: title,
+//     author: author,
+//     category: category,
+//     body: body,
+//     attachments: attachments
+//   })
+//   .then(res => {
+//     console.log(res);
+//   });
+
+// get posts with filter
 axios
-  .post("http://localhost:5000/posts", {
-    title: title,
-    author: author,
-    category: category,
-    body: body,
-    attachments: attachments
+  .get("http://localhost:5000/posts", {
+    params: { category: "test" }
   })
   .then(res => {
-    console.log(res);
+    console.log(res.data);
+  })
+  .catch(err => {
+    console.log(err);
   });

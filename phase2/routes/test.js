@@ -38,4 +38,14 @@ router.get("/async-hello", async (req, res) => {
   res.json({ msg: arr });
 });
 
+router.get("/get", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
+
+router.post("/post", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
+
 module.exports = router;
