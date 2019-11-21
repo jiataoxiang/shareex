@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority",
+  "jwtSecret": "jwt_team21_csc309_secret"
+}

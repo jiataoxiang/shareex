@@ -4,6 +4,7 @@ const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const { ObjectID } = require("mongodb");
 const Attachment = require("../models/Attachment");
+const isAuth = require("../middleware/auth");
 
 // call with query to add a filter, see post_test for an example
 router.get("/", (req, res) => {
@@ -35,7 +36,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", isAuth, async (req, res) => {
   try {
     const post = await Post.create({
       title: req.body.title,
@@ -43,7 +44,14 @@ router.post("/", async (req, res) => {
       category: req.body.category,
       body: req.body.body
     });
+    console.log("post created, now attachments\n\n");
     const attachments = [];
+    if (!req.body.attachments) {
+      return res.json({
+        message: "Post Created, No Attachments.",
+        post
+      });
+    }
     req.body.attachments.forEach(async attachment => {
       const new_attachment = await Attachment.create({
         type: attachment.type,
@@ -54,9 +62,12 @@ router.post("/", async (req, res) => {
     });
     post.attachments = attachments;
     post.save();
-    res.send("post created: \n", post);
+    res.json({
+      post,
+      message: "Post created"
+    });
   } catch (err) {
-    res.status(400).send("post not created: bad request");
+    return res.status(400).send(err);
   }
 });
 
