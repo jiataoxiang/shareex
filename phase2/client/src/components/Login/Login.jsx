@@ -1,64 +1,75 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import "../../stylesheets/login.scss";
-import $ from "jquery";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import '../../stylesheets/login.scss';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/authActions';
+import { clearErrors } from '../../actions/errorActions';
 
 class Login extends Component {
-  state = {};
+  state = {
+    username: '',
+    password: '',
+    message: null
+  };
+
+  static propTypes = {
+    isAuthenticated: PropTypes.bool,
+    error: PropTypes.object.isRequired,
+    login: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired
+  };
+
+  componentDidUpdate(prevProps) {
+    const { error, isAuthenticated } = this.props;
+    if (error !== prevProps.error) {
+      // Check for register error
+      if (error.id === 'LOGIN_FAIL') {
+        this.setState({ message: error.message.message });
+      } else {
+        this.setState({ message: null });
+      }
+    }
+  }
 
   signin = e => {
-    // TODO: connect to server, need signIn info from database
-    // for debugging admin code
-    // this.props.state.setAppState("current_user", this.props.state.users[0]);
-    // return;
     e.preventDefault();
-    const username = $("input[name='username']").val();
-    const password = $("input[name='password']").val();
 
-    // the following code should be replaced with real authentication code in phase2
-    // Get authentication from server
-    // Send username and password to server
-    // code below requires server call
-    const users = this.props.state.users;
-    const signin_user = users.filter(user => user.username === username);
-    console.log(signin_user);
+    const { username, password } = this.state;
+    const user = {
+      username,
+      password
+    };
+    // Attempt to login
+    this.props.clearErrors();
+    this.props.login(user);
+  };
 
-    if (signin_user.length === 1) {
-      console.log("User found");
-      console.log(password);
-      if (signin_user[0].password === password) {
-        console.log("Password correct, Signed in");
-        this.props.state.setAppState("current_user", signin_user[0]);
-        // redirect to Home page when logged in
-        this.props.history.push("/");
-      } else {
-        console.log("Failed to sign in, password wrong");
-        alert("Password is wrong");
-      }
-    } else if (signin_user.length === 0) {
-      console.log("User doesn't exist");
-      alert("User doesn't exist");
-    } else {
-      console.log("Error!!! More than one user has the same username");
-    }
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   componentDidMount() {
-    // If alreadly loged in, go to home page.
-    if (this.props.state.current_user) {
-        alert("You already loged in!")
-        this.props.history.push("/");
-    }
+    // // If alreadly loged in, go to home page.
+    // if (this.props.state.current_user) {
+    //   alert("You already loged in!");
+    //   this.props.history.push("/");
+    // }
   }
 
   render() {
     return (
       <div className="login-page">
+        {this.state.message ? (
+          <div className="alert alert-danger" role="alert">
+            {this.state.message}
+          </div>
+        ) : null}
         <div className="form-container">
           <form action="" onSubmit={this.signin}>
             <div className="lock-container">
               <img
-                src={"./img/lock.png"}
+                src={'./img/lock.png'}
                 width="40px"
                 className="lock mx-auto"
                 alt=""
@@ -80,6 +91,7 @@ class Login extends Component {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
+                onChange={this.onChange}
               />
             </div>
             <div className="input-group mb-3">
@@ -97,6 +109,7 @@ class Login extends Component {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
+                onChange={this.onChange}
               />
             </div>
             <button type="submit" className="btn btn-primary btn-md btn-block">
@@ -109,4 +122,12 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+});
+
+export default connect(mapStateToProps, { login, clearErrors })(
+  withRouter(Login)
+);

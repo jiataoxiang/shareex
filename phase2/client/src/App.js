@@ -18,6 +18,9 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import mock_data from "./mock_data";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
+import { Provider } from "react-redux";
+import store from "./store";
+import { loadUser } from "./actions/authActions";
 
 class App extends React.Component {
   constructor(props) {
@@ -35,6 +38,7 @@ class App extends React.Component {
       current_post: mock_data.current_post,
       setAppState: this.setAppState
     });
+    store.dispatch(loadUser());
   }
 
   setAppState = (key, value) => {
@@ -43,7 +47,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Provider store={store}>
         {/* <Hometest /> */}
         <BrowserRouter>
           <Navbar state={this.state} />
@@ -102,7 +106,7 @@ class App extends React.Component {
             <Route component={NotFound404} />
           </Switch>
         </BrowserRouter>
-      </div>
+      </Provider>
     );
   }
 }

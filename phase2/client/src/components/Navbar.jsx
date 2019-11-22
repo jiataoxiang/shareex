@@ -1,52 +1,54 @@
-import React from "react";
-import { Link, withRouter } from "react-router-dom";
-import "../stylesheets/navbar.scss";
-import $ from "jquery";
+import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import '../stylesheets/navbar.scss';
+import $ from 'jquery';
+import { connect } from 'react-redux';
+import { logout } from '../actions/authActions';
+import PropTypes from 'prop-types';
 
 class Navbar extends React.Component {
   state = {};
 
+  static propTypes = {
+    logout: PropTypes.func.isRequired
+  };
+
   componentDidMount() {
     $(document).ready(function() {
       // Get click event, assign button to var, and get values from that var
-      $("#theme-btn-group button").on("click", function() {
+      $('#theme-btn-group button').on('click', function() {
         const btn_clicked = $(this);
         btn_clicked
-          .addClass("active")
+          .addClass('active')
           .siblings()
-          .removeClass("active");
+          .removeClass('active');
         var btnValue = btn_clicked.val();
         // console.log("Color theme - ", btnValue);
 
-        if (btnValue === "light") {
+        if (btnValue === 'light') {
           trans();
-          document.documentElement.setAttribute("theme", "light");
-          $(".btn-light")
-            .removeClass("btn-light")
-            .addClass("btn-primary");
-        } else if (btnValue === "dark") {
+          document.documentElement.setAttribute('theme', 'light');
+          $('.btn-light')
+            .removeClass('btn-light')
+            .addClass('btn-primary');
+        } else if (btnValue === 'dark') {
           trans();
-          document.documentElement.setAttribute("theme", "dark");
-          $(".btn-primary")
-            .removeClass("btn-primary")
-            .addClass("btn-light");
+          document.documentElement.setAttribute('theme', 'dark');
+          $('.btn-primary')
+            .removeClass('btn-primary')
+            .addClass('btn-light');
         }
       });
       let trans = () => {
-        document.documentElement.classList.add("transition");
+        document.documentElement.classList.add('transition');
         // $("*").addClass("transition");
         window.setTimeout(() => {
-          document.documentElement.classList.remove("transition");
+          document.documentElement.classList.remove('transition');
           // $("*").removeClass("transition");
         }, 760);
       };
     });
   }
-
-  logout = () => {
-    this.props.state.setAppState("current_user", undefined);
-    this.props.history.push("/");
-  };
 
   /* if signed in, display user profile button, 
       else, return sign in sign up buttons */
@@ -54,23 +56,17 @@ class Navbar extends React.Component {
     const currentUser = this.props.state.current_user;
     if (currentUser) {
       const type = currentUser.type;
-      if (type === "admin") {
+      if (type === 'admin') {
         return (
           <div className="navbar-buttons-container">
             <Link className="nav-link nav-item" to="new_post">
               <button className="btn btn-outline-primary">New Post</button>
             </Link>
 
-            <button
-              className="btn btn-outline-danger btn-sm logout-btn"
-              onClick={this.logout}
-            >
-              Logout
-            </button>
             <Link to="/adminprofile">
               <img
                 id="user-avatar"
-                src={process.env.PUBLIC_URL + "./img/user_profile_icon.png"}
+                src={process.env.PUBLIC_URL + './img/user_profile_icon.png'}
                 alt=""
               />
             </Link>
@@ -82,13 +78,6 @@ class Navbar extends React.Component {
           <Link className="nav-link nav-item" to="new_post">
             <button className="btn btn-outline-primary">New Post</button>
           </Link>
-
-          <button
-            className="btn btn-outline-danger btn-sm logout-btn"
-            onClick={this.logout}
-          >
-            Logout
-          </button>
           <Link to="/userprofile">
             <img id="user-avatar" src={currentUser.avatar} alt="" />
           </Link>
@@ -114,7 +103,7 @@ class Navbar extends React.Component {
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <Link id="logo-btn" to="/">
           <img
-            src={process.env.PUBLIC_URL + "./img/logo_S.png"}
+            src={process.env.PUBLIC_URL + './img/logo_S.png'}
             alt=""
             width="50px"
           />
@@ -195,10 +184,16 @@ class Navbar extends React.Component {
           </div>
 
           {this.getButton()}
+          <button
+            className="btn btn-outline-danger btn-sm logout-btn"
+            onClick={this.props.logout}
+          >
+            Logout
+          </button>
         </div>
       </nav>
     );
   }
 }
 
-export default withRouter(Navbar);
+export default connect(null, { logout })(withRouter(Navbar));

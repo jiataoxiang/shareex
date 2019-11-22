@@ -1,25 +1,26 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require("bcrypt");
-const Post = require("./Post");
-const Attachment = require("./Attachment");
-const Comment = require("./Comment");
-const Notification = require("./Notification");
-const validator = require("validator");
+const bcrypt = require('bcrypt');
+const Post = require('./Post');
+const Attachment = require('./Attachment');
+const Comment = require('./Comment');
+const Notification = require('./Notification');
+const validator = require('validator');
 
 const UserSchema = new Schema({
   name: String,
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  username: { type: String, required: true, unique: true, minlength: 4 },
+  password: { type: String, required: true, minlength: 4 },
   email: {
     type: String,
     unique: true,
     validate: {
       validator: validator.isEmail,
-      message: "Not Valid Email"
+      message: 'Not Valid Email'
     }
   },
-  admin: Boolean,
+  gender: { type: String },
+  admin: { type: Boolean, required: true, default: 'false' },
   created_at: { type: Date, default: Date.now },
   followers: { type: Array, default: [] },
   following: { type: Array, default: [] },
@@ -34,10 +35,10 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
-UserSchema.pre("save", function(next) {
-  console.log("\n\n-----pre save for user called-----\n\n");
+UserSchema.pre('save', function(next) {
+  console.log('\n\n-----pre save for user called-----\n\n');
   const user = this;
-  if (user.isModified("password")) {
+  if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
@@ -47,7 +48,7 @@ UserSchema.pre("save", function(next) {
   }
 });
 
-UserSchema.pre("remove", function(next) {
+UserSchema.pre('remove', function(next) {
   console.log(`removing user ${this._id} and his/her posts`);
   Post.find({ author: this._id }).then(posts => {
     posts.forEach(post => {
@@ -64,4 +65,4 @@ UserSchema.pre("remove", function(next) {
   next();
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);
