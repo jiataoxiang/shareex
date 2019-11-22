@@ -50,49 +50,18 @@ class Navbar extends React.Component {
     });
   }
 
-  /* if signed in, display user profile button, 
-      else, return sign in sign up buttons */
-  getButton = () => {
-    const currentUser = this.props.state.current_user;
-    if (currentUser) {
-      const type = currentUser.type;
-      if (type === 'admin') {
-        return (
-          <div className="navbar-buttons-container">
-            <Link className="nav-link nav-item" to="new_post">
-              <button className="btn btn-outline-primary">New Post</button>
-            </Link>
-
-            <Link to="/adminprofile">
-              <img
-                id="user-avatar"
-                src={process.env.PUBLIC_URL + './img/user_profile_icon.png'}
-                alt=""
-              />
-            </Link>
-          </div>
-        );
-      }
-      return (
-        <div className="navbar-buttons-container">
-          <Link className="nav-link nav-item" to="new_post">
-            <button className="btn btn-outline-primary">New Post</button>
-          </Link>
-          <Link to="/userprofile">
-            <img id="user-avatar" src={currentUser.avatar} alt="" />
-          </Link>
-        </div>
-      );
+  getUserProfileButton = () => {
+    if (!this.props.isAuthenticated) {
+      return null;
     } else {
-      return (
-        <div className="btn-group">
-          <Link to="/login">
-            <button className="btn btn-primary btn-sm">Sign In</button>
-          </Link>
-          <Link to="/signup">
-            <button className="btn btn-success btn-sm">Sign Up</button>
-          </Link>
-        </div>
+      return this.props.current_user.admin ? (
+        <Link to="/adminprofile">
+          <img id="user-avatar" src={'/img/user_profile_icon.png'} alt="" />
+        </Link>
+      ) : (
+        <Link to="/userprofile">
+          <img id="user-avatar" src={'/img/user_profile_icon.png'} alt="" />
+        </Link>
       );
     }
   };
@@ -183,17 +152,43 @@ class Navbar extends React.Component {
             </button>
           </div>
 
-          {this.getButton()}
-          <button
-            className="btn btn-outline-danger btn-sm logout-btn"
-            onClick={this.props.logout}
-          >
-            Logout
-          </button>
+          {this.props.isAuthenticated ? (
+            <Link className="nav-link nav-item" to="new_post">
+              <button className="btn btn-outline-primary btn-sm">
+                New Post
+              </button>
+            </Link>
+          ) : null}
+          {this.props.isAuthenticated ? (
+            <button
+              className="btn btn-outline-danger btn-sm logout-btn"
+              onClick={this.props.logout}
+            >
+              Logout
+            </button>
+          ) : (
+            <div className="btn-group">
+              <Link to="/login">
+                <button className="btn btn-primary btn-sm">Sign In</button>
+              </Link>
+              <Link to="/signup">
+                <button className="btn btn-success btn-sm">Sign Up</button>
+              </Link>
+            </div>
+          )}
         </div>
+
+        {this.getUserProfileButton()}
       </nav>
     );
   }
 }
 
-export default connect(null, { logout })(withRouter(Navbar));
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user
+});
+
+export default connect(mapStateToProps, { logout })(withRouter(Navbar));

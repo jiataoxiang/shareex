@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
+
 import '../../stylesheets/login.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -21,7 +22,8 @@ class Login extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { error, isAuthenticated } = this.props;
+    // update error message
+    const { error } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
       if (error.id === 'LOGIN_FAIL') {
@@ -51,13 +53,16 @@ class Login extends Component {
 
   componentDidMount() {
     // // If alreadly loged in, go to home page.
-    // if (this.props.state.current_user) {
-    //   alert("You already loged in!");
-    //   this.props.history.push("/");
+    // if (this.props.cur_user) {
+    //   alert('You already loged in!');
+    //   this.props.history.push('/');
     // }
   }
 
   render() {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="login-page">
         {this.state.message ? (

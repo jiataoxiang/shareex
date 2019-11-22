@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../stylesheets/signup.scss';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
@@ -35,10 +35,6 @@ class SignUp extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.clearErrors();
-  }
-
   signup = e => {
     e.preventDefault();
     this.props.clearErrors();
@@ -69,6 +65,9 @@ class SignUp extends Component {
   };
 
   render() {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="signup-page">
         {this.state.message ? (
