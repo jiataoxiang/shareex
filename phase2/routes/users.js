@@ -40,12 +40,11 @@ router.post('/', (req, res) => {
         },
         (err, token) => {
           if (err) throw err;
+          user = user.toObject();
+          delete user.password; // prevent sending hashed password to frontend
           res.json({
             token,
-            user: {
-              id: user._id,
-              username: user.username
-            }
+            user
           });
         }
       );
@@ -82,12 +81,14 @@ router.post('/login', (req, res) => {
             },
             (err, token) => {
               if (err) throw err;
+              user = user.toObject();
+              console.log('user: ', user);
+
+              delete user.password; // prevent sending hashed password to frontend
+              console.log('user: ', user);
               res.json({
                 token,
-                user: {
-                  id: user._id,
-                  username: user.username
-                },
+                user,
                 message: 'Authenticated'
               });
             }
