@@ -1,15 +1,15 @@
-import { LoremIpsum } from "lorem-ipsum";
+// import { LoremIpsum } from "lorem-ipsum";
 
-export const lorem = new LoremIpsum({
-  sentencesPerParagraph: {
-    max: 8,
-    min: 4
-  },
-  wordsPerSentence: {
-    max: 10,
-    min: 3
-  }
-});
+// export const lorem = new LoremIpsum({
+//   sentencesPerParagraph: {
+//     max: 8,
+//     min: 4
+//   },
+//   wordsPerSentence: {
+//     max: 10,
+//     min: 3
+//   }
+// });
 
 export const rand_string = () => {
   return (

@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import '../stylesheets/post.scss';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class Post extends Component {
   // Get posts likes info from server
   // code below requires server call
   thumbClicked = () => {
+    axios
+      .patch('/api/posts', { likes: this.props.post.likes + 1 })
+      .then(post => {
+        console.log(post);
+      });
+
     const posts = this.props.posts;
     console.log(this.props.current_user);
     if (
@@ -45,8 +52,8 @@ class Post extends Component {
   };
 
   render() {
-    const { title, content, likes } = this.props.post;
-    const images = this.getImages();
+    const { title, body, likes } = this.props.post;
+    // const images = this.getImages();
     return (
       <div className="post card">
         <div className="card-header">
@@ -70,9 +77,9 @@ class Post extends Component {
 
         <div className="card-body">
           {/* <h5 className="card-title">Special title treatment</h5> */}
-          <p className="card-text">{content}</p>
+          <p className="card-text">{body}</p>
           <div className="row">
-            {images.map(image => {
+            {/* {images.map(image => {
               return (
                 <img
                   key={uid(Math.random())}
@@ -81,7 +88,7 @@ class Post extends Component {
                   className="img-thumbnail"
                 />
               );
-            })}
+            })} */}
           </div>
           <hr />
           <Link
