@@ -2,9 +2,12 @@ import React from "react";
 import "../../stylesheets/user_profile.scss";
 import Post from "../Post";
 import { rand_string } from "../../lib/util";
-import { Link, Redirect } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { uid } from "react-uid";
 import Popup from "./Popup";
+import { connect } from 'react-redux';
+import axios from "axios"
+// import {tokenConfig} from "../../actions/authActions";
 
 class UserProfile extends React.Component {
 
@@ -30,58 +33,66 @@ class UserProfile extends React.Component {
     }
   };
 
+  getNumPosts = (currentUser) => {
+    axios.get(`/api/posts/user-posts/${currentUser._id.toString()}`,  this.props.tokenConfig())
+      .then(posts => {
+        this.setState({
+          numPosts: posts.data.length
+        })
+    }).catch((error) => {
+      console.log(error)
+    })
+  };
+
   componentDidMount() {
-    // The code below are temporary code for randomly generating some post content and recommendations
-    // TODO: replace the following initialization code in phase 2, connect to server and get real data
     // Current user info
-    const currentUser = this.props.state.current_user;
+    const currentUser = this.props.current_user;
     if (currentUser) {
       this.setState({
         nickname: currentUser.nickname,
         banner: currentUser.banner,
         avatar: currentUser.avatar,
-        follower: currentUser.follower,
-        following: currentUser.following,
-        likes: currentUser.likes,
-        numPosts: currentUser.numPosts,
+        followers: currentUser.followers.length,
+        following: currentUser.following.length,
+        likes: currentUser.likes.length,
         motto: currentUser.motto
       });
-      console.log(currentUser);
+      this.getNumPosts(currentUser);
     }
   }
 
-  getPosts = () => {
-    // TODO: connect to server, get posts from server.
-    // find all posts belonging to current user
-    const posts_display = [];
-    if (this.props.state.posts) {
-      const posts = this.props.state.posts.filter(
-        post => post.author_id === this.props.state.current_user.id
-      );
-
-      if (posts) {
-        console.log(posts);
-        for (let i = 0; i < posts.length; i++) {
-          // find all attachments
-          const attachments = this.props.state.attachments.filter(
-            attachment => attachment.post_id === posts[i].id
-          );
-          posts_display.push(
-            <Post
-              key={uid(rand_string())}
-              post={posts[i]}
-              posts={posts}
-              users={this.props.state.users}
-              attachments={attachments}
-              current_user={this.props.state.current_user}
-              setAppState={this.props.state.setAppState}
-            />
-          );
-        }
-      }
-    }
-    return posts_display;
-  };
+  // getPosts = () => {
+  //   // TODO: connect to server, get posts from server.
+  //   // find all posts belonging to current user
+  //   const posts_display = [];
+  //   if (this.props.state.posts) {
+  //     const posts = this.props.state.posts.filter(
+  //       post => post.author_id === this.props.state.current_user.id
+  //     );
+  //
+  //     if (posts) {
+  //       console.log(posts);
+  //       for (let i = 0; i < posts.length; i++) {
+  //         // find all attachments
+  //         const attachments = this.props.state.attachments.filter(
+  //           attachment => attachment.post_id === posts[i].id
+  //         );
+  //         posts_display.push(
+  //           <Post
+  //             key={uid(rand_string())}
+  //             post={posts[i]}
+  //             posts={posts}
+  //             users={this.props.state.users}
+  //             attachments={attachments}
+  //             current_user={this.props.state.current_user}
+  //             setAppState={this.props.state.setAppState}
+  //           />
+  //         );
+  //       }
+  //     }
+  //   }
+  //   return posts_display;
+  // };
 
   // Display the banner editing button.
   showBannerEditor = () => {
@@ -158,8 +169,8 @@ class UserProfile extends React.Component {
   };
 
   render() {
-    if (!this.props.state.current_user) {
-      return <Redirect to="/" />;
+    if(!this.props.isAuthenticated){
+      window.location.href = "/"
     }
     return (
       <div className="user-profile-page">
@@ -199,7 +210,7 @@ class UserProfile extends React.Component {
             <li>
               Followers
               <br />
-              <span className="profileStatsNumber">{this.state.follower}</span>
+              <span className="profileStatsNumber">{this.state.followers}</span>
             </li>
             <li>
               Following
@@ -233,9 +244,9 @@ class UserProfile extends React.Component {
             <div className="col-md-8">
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
-                {this.getPosts().map(post => {
-                  return post;
-                })}
+                {/*{this.getPosts().map(post => {*/}
+                {/*  return post;*/}
+                {/*})}*/}
               </div>
             </div>
           </div>
@@ -264,4 +275,22 @@ class UserProfile extends React.Component {
   }
 }
 
-export default UserProfile;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  tokenConfig: () => {
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    // If token, add to headers
+    if (state.auth.token) {
+      config.headers['x-auth-token'] = state.auth.token;
+    }
+    return config
+  }
+});
+
+export default connect(mapStateToProps)(withRouter(UserProfile));
