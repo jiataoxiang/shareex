@@ -110,4 +110,22 @@ router.patch('/:id', (req, res) => {
     });
 });
 
+router.get('/user-posts/:user_id',isAuth, (req, res) => {
+  const user_id = req.params.user_id;
+  if (!ObjectID.isValid(user_id)){
+    res.status(404).send("user id is not valid")
+  }
+
+  Post.find().then((posts) => {
+    const posts_for_user = posts.filter((post) => post.author === user_id);
+    if (posts_for_user.length === 0){
+      res.send([])
+    }else{
+      res.send(posts_for_user)
+    }
+  }).catch((error) => {
+    res.status(500).send(error + "Holy!!!");
+  })
+});
+
 module.exports = router;
