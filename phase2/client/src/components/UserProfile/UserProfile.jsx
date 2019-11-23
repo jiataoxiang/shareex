@@ -1,9 +1,9 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
-import Post from "../Post";
-import { rand_string } from "../../lib/util";
+// import Post from "../Post";
+// import { rand_string } from "../../lib/util";
 import { Link, withRouter } from "react-router-dom";
-import { uid } from "react-uid";
+// import { uid } from "react-uid";
 import Popup from "./Popup";
 import { connect } from 'react-redux';
 import axios from "axios"
