@@ -135,7 +135,7 @@ router.get('/auth', isAuth, (req, res) => {
 });
 
 //get user by id without password.
-router.get("/:user_id", isAuth, (req, res) => {
+router.get("/:user_id", (req, res) => {
   const user_id = req.params.user_id;
   if(!ObjectID.isValid(user_id)) {
     res.status(404).send()
