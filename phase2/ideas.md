@@ -28,8 +28,6 @@ phase 1 feedback说我们library用的多，功能太少了。phase1 我们其�
 
 ## TODOs：
 
-- Single Post Page: text area 改成paragraph
-- Single Post Pgae: 图片显示问题的bug修好
 - navbar中添加post分类：不同category以及只显示following的user的post
 - add search bar that can search for a post or a user
 

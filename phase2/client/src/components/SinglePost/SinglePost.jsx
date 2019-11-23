@@ -56,9 +56,17 @@ class SinglePost extends Component {
     const all_attachments = this.props.state.attachments;
     let attachments = [];
     if (all_attachments) {
-      attachments = all_attachments.filter(
-        attachment => attachment.post_id === this.state.post_id
-      );
+      all_attachments.forEach(ele=>{
+        if(ele.post_id === this.state.post_id){
+          if(ele.type === 'text'){
+            ele.type='show-text';
+          }
+          attachments.push(ele);
+        }
+      });
+      // filter(
+      //   attachment => attachment.post_id === this.state.post_id
+      // );
     }
     return attachments;
   };
@@ -190,7 +198,7 @@ class SinglePost extends Component {
       } else {
           this.props.history.push("/userprofile");
       }
-  }
+  };
 
   render() {
     let attachments = [];
@@ -223,7 +231,7 @@ class SinglePost extends Component {
                 <div className="post-content">
                   <Attachment
                     key={uid(rand_string())}
-                    type="text"
+                    type="show-text"
                     content={post_brief_description}
                   />
                   {attachments.map(attachment => {
