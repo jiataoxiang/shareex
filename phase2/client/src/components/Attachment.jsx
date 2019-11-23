@@ -24,6 +24,12 @@ class Attachment extends Component {
           />
         </div>
       );
+    } else if (this.props.type === "show-text") {
+      return (
+        <div className="form-group">
+          <p>{this.props.content}</p>
+        </div>
+      );
     } else if (this.props.type === "code") {
       return (
         <div className="code-container">
