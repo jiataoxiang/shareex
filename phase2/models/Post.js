@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Attachment = require("./Attachment");
-const Comment = require("./Comment");
+const Attachment = require('./Attachment');
+const Comment = require('./Comment');
 
 const PostSchema = new Schema({
   title: { type: String, required: true },
@@ -12,11 +12,12 @@ const PostSchema = new Schema({
   delete_date: { type: Date, default: null },
   created_at: { type: Date, default: Date.now },
   likes: { type: Number, default: 0 },
+  likes_users: { type: Array, default: [] },
   favs: { type: Number, default: 0 },
   attachments: { type: Array, default: [] }
 });
 
-PostSchema.pre("remove", function(next) {
+PostSchema.pre('remove', function(next) {
   console.log(`removing post ${this._id} and its comments`);
   Comment.remove({ post_id: this._id }, err => {
     if (err) {
@@ -32,4 +33,4 @@ PostSchema.pre("remove", function(next) {
   next();
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model('Post', PostSchema);

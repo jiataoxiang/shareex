@@ -23,6 +23,10 @@ router.get('/', (req, res) => {
   );
 });
 
+router.get('/test-reach', (req, res) => {
+  res.send('reached');
+});
+
 // get a post by id
 router.get('/:id', isAuth, (req, res) => {
   Post.findById(req.params.id)
@@ -100,9 +104,9 @@ router.patch('/:id', (req, res) => {
   Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     .then(post => {
       if (!post) {
-        res.status(404).send('Post not found, and cannot update');
+        return res.status(404).send('Post not found, and cannot update');
       } else {
-        res.send(post);
+        return res.send(post);
       }
     })
     .catch(error => {
@@ -110,22 +114,57 @@ router.patch('/:id', (req, res) => {
     });
 });
 
+
 router.get('/user-posts/:user_id',isAuth, (req, res) => {
   const user_id = req.params.user_id;
-  if (!ObjectID.isValid(user_id)){
+  if (!ObjectID.isValid(user_id)) {
     res.status(404).send("user id is not valid")
   }
 
   Post.find().then((posts) => {
     const posts_for_user = posts.filter((post) => post.author === user_id);
-    if (posts_for_user.length === 0){
+    if (posts_for_user.length === 0) {
       res.send([])
-    }else{
+    } else {
       res.send(posts_for_user)
     }
   }).catch((error) => {
     res.status(500).send(error + "Holy!!!");
-  })
+  });
+});
+
+// add like
+router.patch('/like/:post_id', isAuth, (req, res) => {
+  console.log(req.user);
+  if (!ObjectID.isValid(req.params.post_id)) {
+    return res.status(404).json({ message: 'post id not valid' });
+  }
+  Post.findById(req.params.post_id)
+    .then(post => {
+      console.log(post);
+      if (!post) {
+        return res
+          .status(404)
+          .json({ message: 'Post not found, and cannot update' });
+      }
+      // check if user has liked this post
+      if (post.likes_users) {
+        if (post.likes_users.includes(req.user.id)) {
+          return res.status(403).json({ message: 'You have liked the post' });
+        }
+      } else {
+        post.likes_users = [];
+      }
+      post.likes_users.push(req.user.id);
+      post.likes = post.likes + 1;
+      post.save().then(new_post => {
+        return res.json({ post });
+      });
+    })
+    .catch(error => {
+      res.status(400).json({ message: 'Post not updated, bad request' }); // bad request for changing the post.
+    });
 });
 
 module.exports = router;
+

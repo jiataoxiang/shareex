@@ -1,26 +1,26 @@
-import React from "react";
-import Home from "./components/Homepage/Home";
-import UserProfile from "./components/UserProfile/UserProfile";
-import AdminProfile from "./components/UserProfile/AdminProfile";
-import OtherProfile from "./components/UserProfile/OtherProfile";
+import React from 'react';
+import Home from './components/Homepage/Home';
+import UserProfile from './components/UserProfile/UserProfile';
+import AdminProfile from './components/UserProfile/AdminProfile';
+import OtherProfile from './components/UserProfile/OtherProfile';
 // import AdminProfile from "./components/UserProfile/AdminProfile";
-import Login from "./components/Login/Login";
-import SignUp from "./components/Signup/SignUp";
-import NewPost from "./components/NewPost/NewPost";
-import NotFound404 from "./components/404";
-import SinglePost from "./components/SinglePost/SinglePost";
-import ProfSetting from "./components/prof_set/prof_set";
-import Navbar from "./components/Navbar";
+import Login from './components/Login/Login';
+import SignUp from './components/Signup/SignUp';
+import NewPost from './components/NewPost/NewPost';
+import NotFound404 from './components/404';
+import SinglePost from './components/SinglePost/SinglePost';
+import ProfSetting from './components/prof_set/prof_set';
+import Navbar from './components/Navbar';
 // import Tmp from "./components/Tmp";
 // import { rand_string } from "./lib/util";
 // import { uid } from "react-uid";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
-import mock_data from "./mock_data";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.scss";
-import { Provider } from "react-redux";
-import store from "./store";
-import { loadUser } from "./actions/authActions";
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import mock_data from './mock_data';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.scss';
+import { Provider } from 'react-redux';
+import store from './store';
+import { loadUser } from './actions/authActions';
 
 class App extends React.Component {
   constructor(props) {
@@ -52,11 +52,7 @@ class App extends React.Component {
         <BrowserRouter>
           <Navbar state={this.state} />
           <Switch>
-            <Route
-              exact
-              path="/"
-              component={() => <Home state={this.state} />}
-            />
+            <Route exact path="/" component={() => <Home />} />
             <Route
               exact
               path="/index.html"

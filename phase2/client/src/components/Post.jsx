@@ -3,32 +3,47 @@ import { Link } from 'react-router-dom';
 import '../stylesheets/post.scss';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { stat } from 'fs';
 
 class Post extends Component {
   // Get posts likes info from server
   // code below requires server call
-  thumbClicked = () => {
-    const posts = this.props.posts;
-    console.log(this.props.current_user);
-    if (
-      this.props.current_user &&
-      (!this.props.post.likes_user_id.includes(this.props.current_user.id) ||
-        this.props.current_user.type === 'admin')
-    ) {
-      const this_post = posts.filter(post => post.id === this.props.post.id)[0];
-      this_post.likes += 1;
-      this_post.likes_user_id.push(this.props.current_user.id);
-      this.props.setAppState('posts', posts);
-      const post_owner = this.props.users.filter(
-        user => user.id === this_post.author_id
-      )[0];
-      // update posts likes number with server
-      post_owner.likes += 1;
-    } else if (this.props.current_user === undefined) {
-      alert('You must first sign in to like a post.');
+  state = {
+    post: this.props.post
+  };
+
+  tokenConfig = () => {
+    // Get token from localstorage
+    const token = this.props.auth.token;
+
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers['x-auth-token'] = token;
     } else {
-      alert('You have liked the post, and you cannot like it more than once.');
+      window.location.href = '/';
     }
+
+    return config;
+  };
+
+  thumbClicked = () => {
+    axios
+      .patch('/api/posts/like/' + this.state.post._id, {}, this.tokenConfig())
+      .then(res => {
+        console.log(res.data);
+        this.setState({ post: res.data.post });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   };
 
   getImages = () => {
@@ -45,8 +60,8 @@ class Post extends Component {
   };
 
   render() {
-    const { title, content, likes } = this.props.post;
-    const images = this.getImages();
+    const { title, body, likes } = this.state.post;
+    // const images = this.getImages();
     return (
       <div className="post card">
         <div className="card-header">
@@ -70,9 +85,9 @@ class Post extends Component {
 
         <div className="card-body">
           {/* <h5 className="card-title">Special title treatment</h5> */}
-          <p className="card-text">{content}</p>
+          <p className="card-text">{body}</p>
           <div className="row">
-            {images.map(image => {
+            {/* {images.map(image => {
               return (
                 <img
                   key={uid(Math.random())}
@@ -81,7 +96,7 @@ class Post extends Component {
                   className="img-thumbnail"
                 />
               );
-            })}
+            })} */}
           </div>
           <hr />
           <Link
@@ -117,7 +132,8 @@ class Post extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
-  current_user: state.auth.user
+  current_user: state.auth.user,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(Post);
