@@ -2,8 +2,11 @@ import React, {Component} from "react";
 import "../../stylesheets/new_post.scss";
 import AddContent from "./AddContent";
 import {rand_string} from "../../lib/util";
+import {connect} from 'react-redux';
 import {withRouter} from "react-router-dom";
 import {uid} from "react-uid";
+import axios from "axios";
+import {login} from "../../actions/authActions";
 
 
 class NewPost extends Component {
@@ -49,7 +52,7 @@ class NewPost extends Component {
     this.state.to_store.attachments.push({
       id: attach_id,
       type: file_type,
-      content: file_type === 'pdf' ? process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf" : process.env.PUBLIC_URL + "/img/logo192.png"
+      body: file_type === 'pdf' ? process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf" : process.env.PUBLIC_URL + "/img/logo192.png"
     });
   };
 
@@ -69,7 +72,7 @@ class NewPost extends Component {
     this.state.to_store.attachments.push({
       id: id,
       type: type,
-      content: link
+      body: link
     });
     // console.log(this.state.contents);
     // console.log(this.state.to_store.attachments);
@@ -82,7 +85,7 @@ class NewPost extends Component {
     const item = {
       id: secondary_key,
       type: data_type,
-      content: content
+      body: content
     };
 
     if (result === -1) {    // not yet existed in state
@@ -175,56 +178,86 @@ class NewPost extends Component {
     // console.log(this.state.to_store.content);
   };
 
+  tokenConfig = () => {
+    // Get token from localstorage
+    const token = this.props.auth.token;
+
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    } else {
+      window.location.href = '/';
+    }
+
+    return config;
+  };
+
   // store the data in this.state.to_store to the database
   addToDatabase = (event) => {
     // TODO: connect server here. Then we will send data in state to the server.
     // generate a post id when the 'submit' button is clicked
-    const post_id = uid(rand_string());
+    alert("Sure to submit?");
+    // const post_id = uid(rand_string());
+    // console.log(this.state.current_user);
     const a_post = {
-      id: post_id,
-      author_id: this.props.state.current_user.id,
+      // id: post_id,
+      author: this.props.current_user._id,
       title: this.state.to_store.title,
       category: this.state.to_store.category,
-      content: this.state.to_store.content,
-      likes: 0,
-      likes_user_id: [],
-      attachments: this.state.to_store.attachments.map((attach) => {
-        return attach.id
-      })
+      body: this.state.to_store.content,
+      attachments: this.state.to_store.attachments
+      //   .map((attach) => {
+      //   return attach.id
+      // })
     };
+    console.log("These are attachments:....", this.state.to_store.attachments);
+
+    axios.post('/api/posts', a_post, this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     // now add this post to the database
     // console.log(this.props.state.posts.length);
     // console.log(this.props.state.posts);
-    this.props.state.posts.push(a_post);
+    // this.props.state.posts.push(a_post);
     // console.log(this.props.state.posts.length);
     // console.log(this.props.state.posts);
 
     // console.log(this.props.state.attachments.length);
     // console.log(this.props.state.attachments);
-    this.state.to_store.attachments.forEach((attach) => {
-      this.props.state.attachments.push({
-        id: attach.id,
-        post_id: post_id,
-        type: attach.type,
-        content: attach.content
-      });
-    });
+    // this.state.to_store.attachments.forEach((attach) => {
+    //   this.props.state.attachments.push({
+    //     id: attach.id,
+    //     post_id: post_id,
+    //     type: attach.type,
+    //     content: attach.content
+    //   });
+    // });
     // console.log(this.props.state.attachments.length);
     // console.log(this.props.state.attachments);
 
     // redirect to home page
-    alert("Sure to submit?");
     this.props.history.push("/");
   };
 
   // check if the user has signed in
-  componentDidMount() {
-    if (!this.props.state.current_user) {
-      alert("Please sign in first !");
-      this.props.history.push("/");
-    }
-  }
+  // componentDidMount() {
+  //   if (!this.props.state.current_user) {
+  //     alert("Please sign in first !");
+  //     this.props.history.push("/");
+  //   }
+  // }
 
   render() {
     return (
@@ -282,4 +315,12 @@ class NewPost extends Component {
   }
 }
 
-export default withRouter(NewPost);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(withRouter(NewPost));

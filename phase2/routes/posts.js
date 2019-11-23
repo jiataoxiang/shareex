@@ -65,7 +65,9 @@ router.post('/', isAuth, async (req, res) => {
         post_id: post._id
       });
       attachments.push(new_attachment._id);
+      console.log("This is from serverside: ", attachments);
     });
+    console.log('The attachemtn list is: ', attachments);
     post.attachments = attachments;
     post.save();
     res.json({
