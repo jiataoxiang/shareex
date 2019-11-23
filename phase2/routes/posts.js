@@ -122,7 +122,6 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
   }
   Post.findById(req.params.post_id)
     .then(post => {
-      console.log(post);
       if (!post) {
         return res
           .status(404)
@@ -144,6 +143,17 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
     })
     .catch(error => {
       res.status(400).json({ message: 'Post not updated, bad request' }); // bad request for changing the post.
+    });
+});
+
+// get attachments of given post
+router.get('/:post_id/attachments', (req, res) => {
+  Attachment.find({ post_id: req.params.post_id })
+    .then(attachments => {
+      res.json({ attachments: attachments });
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
     });
 });
 
