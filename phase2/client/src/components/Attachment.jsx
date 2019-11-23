@@ -64,13 +64,15 @@ class Attachment extends Component {
       return <img src={this.props.content} alt=""/>;
     } else if (this.props.type === "image_link") {
       return (
-        <iframe
-          width="100%"
-          height="100"
-          title="image"
-          src={this.props.content}
-          frameBorder="0"
-        ></iframe>
+        <div className='form-group'>
+          <img
+            width="100%"
+            height="100%"
+            title="image"
+            src={this.props.content}
+            frameBorder="0"
+          />
+        </div>
       );
     } else if (this.props.type === "pdf") {
       return (
