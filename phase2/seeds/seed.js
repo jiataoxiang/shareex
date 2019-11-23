@@ -21,14 +21,14 @@ require('../util/mongoose_connection'); // this line with connect to database
 // lorem.generateWords(1);
 // lorem.generateSentences(5);
 // lorem.generateParagraphs(7);
-User.remove({ username: 'seed_user' }, err => {
+User.remove({ username: 'seed_user1' }, err => {
   if (err) {
     console.log(err);
   }
 });
 
 User.create({
-  username: 'seed_user',
+  username: 'seed_user1',
   password: 'seed_user_password'
 }).then(user => {
   console.log('user created: \n', user);

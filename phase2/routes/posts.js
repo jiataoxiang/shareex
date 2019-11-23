@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const User = require('../models/User');
 const Comment = require('../models/Comment');
 const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
@@ -114,28 +115,28 @@ router.patch('/:id', (req, res) => {
     });
 });
 
-
-router.get('/user-posts/:user_id',isAuth, (req, res) => {
+router.get('/user-posts/:user_id', isAuth, (req, res) => {
   const user_id = req.params.user_id;
   if (!ObjectID.isValid(user_id)) {
-    res.status(404).send("user id is not valid")
+    res.status(404).send('user id is not valid');
   }
 
-  Post.find().then((posts) => {
-    const posts_for_user = posts.filter((post) => post.author === user_id);
-    if (posts_for_user.length === 0) {
-      res.send([])
-    } else {
-      res.send(posts_for_user)
-    }
-  }).catch((error) => {
-    res.status(500).send(error + "Holy!!!");
-  });
+  Post.find()
+    .then(posts => {
+      const posts_for_user = posts.filter(post => post.author === user_id);
+      if (posts_for_user.length === 0) {
+        res.send([]);
+      } else {
+        res.send(posts_for_user);
+      }
+    })
+    .catch(error => {
+      res.status(500).send(error + 'Holy!!!');
+    });
 });
 
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
-  console.log(req.user);
   if (!ObjectID.isValid(req.params.post_id)) {
     return res.status(404).json({ message: 'post id not valid' });
   }
@@ -147,17 +148,25 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
           .json({ message: 'Post not found, and cannot update' });
       }
       // check if user has liked this post
-      if (post.likes_users) {
-        if (post.likes_users.includes(req.user.id)) {
-          return res.status(403).json({ message: 'You have liked the post' });
+      User.findById(req.user.id).then(user => {
+        if (!user.admin) {
+          // if user is admin, can skip and
+          if (post.likes_users) {
+            if (post.likes_users.includes(req.user.id)) {
+              return res
+                .status(403)
+                .json({ message: 'You have liked the post' });
+            }
+          }
         }
-      } else {
-        post.likes_users = [];
-      }
-      post.likes_users.push(req.user.id);
-      post.likes = post.likes + 1;
-      post.save().then(new_post => {
-        return res.json({ post });
+        if (!user.likes_users) {
+          user.likes_users = [];
+        }
+        post.likes_users.push(req.user.id);
+        post.likes = post.likes + 1;
+        post.save().then(new_post => {
+          return res.json({ post });
+        });
       });
     })
     .catch(error => {
@@ -177,4 +186,3 @@ router.get('/:post_id/attachments', (req, res) => {
 });
 
 module.exports = router;
-

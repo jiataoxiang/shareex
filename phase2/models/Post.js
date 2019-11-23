@@ -14,6 +14,7 @@ const PostSchema = new Schema({
   likes: { type: Number, default: 0 },
   likes_users: { type: Array, default: [] },
   favs: { type: Number, default: 0 },
+  views: { type: Number, default: 0 },
   attachments: { type: Array, default: [] }
 });
 

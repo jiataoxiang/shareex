@@ -4,7 +4,6 @@ import '../stylesheets/post.scss';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { stat } from 'fs';
 
 class Post extends Component {
   // Get posts likes info from server
@@ -78,7 +77,7 @@ class Post extends Component {
             </span>
           </Link>
           {this.props.isAuthenticated && this.props.current_user.admin ? (
-            <span className="float-right">Post id: {this.props.post.id}</span>
+            <span className="float-right">Post id: {this.props.post._id}</span>
           ) : null}
         </div>
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Post from '../Post';
-import { Link } from 'react-router-dom';
 import '../../stylesheets/home.scss';
-import { rand_string } from '../../lib/util';
+// import { rand_string } from '../../lib/util';
+import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { uid } from 'react-uid';
 import axios from 'axios';
@@ -10,29 +11,29 @@ import axios from 'axios';
 class Home extends Component {
   state = {
     posts: [],
-    recommendations: [],
-    mounted: true
+    recommendations: []
   };
 
   componentDidMount() {
-    this.setState({ mounted: true });
+    if (!this.props.isAuthenticated) {
+      // window.location.href = '/login';
+      this.props.history.push('/login');
+      return;
+    }
     this.updatePosts();
   }
-  componentDidUpdate() {
-    // this.updatePosts();
-  }
+
   // the following code is for getting all posts to be displayed on home page
   updatePosts = () => {
-    if (this.state.mounted) {
-      axios
-        .get('/api/posts')
-        .then(res => {
-          this.setState({ posts: res.data.posts });
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    axios
+      .get('/api/posts')
+      .then(res => {
+        console.log(res.data);
+        this.setState({ posts: res.data.posts });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   tokenConfig = () => {
@@ -77,7 +78,11 @@ class Home extends Component {
   };
 
   render() {
+    if (!this.props.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
     const posts = this.state.posts;
+    console.log(this.props.current_user);
     return (
       <div className="home-page">
         <div className="container row">
@@ -124,4 +129,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(withRouter(Home));
