@@ -5,40 +5,34 @@ import '../../stylesheets/home.scss';
 import { rand_string } from '../../lib/util';
 import { connect } from 'react-redux';
 import { uid } from 'react-uid';
+import axios from 'axios';
 
 class Home extends Component {
   state = {
     posts: [],
-    recommendations: []
+    recommendations: [],
+    mounted: true
   };
 
+  componentDidMount() {
+    this.setState({ mounted: true });
+    this.updatePosts();
+  }
+  componentDidUpdate() {
+    // this.updatePosts();
+  }
   // the following code is for getting all posts to be displayed on home page
-  getPosts = () => {
-    // Get posts from server
-    // code below requires server call
-    const posts = this.props.state.posts;
-    const posts_display = [];
-
-    if (posts) {
-      for (let i = 0; i < posts.length; i++) {
-        // find all attachments
-        const attachments = this.props.state.attachments.filter(
-          attachment => attachment.post_id === posts[i].id
-        );
-        posts_display.push(
-          <Post
-            key={posts[i].id}
-            post={posts[i]}
-            posts={posts}
-            users={this.props.state.users}
-            attachments={attachments}
-            current_user={this.props.state.current_user}
-            setAppState={this.props.state.setAppState}
-          />
-        );
-      }
+  updatePosts = () => {
+    if (this.state.mounted) {
+      axios
+        .get('/api/posts')
+        .then(res => {
+          this.setState({ posts: res.data.posts });
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
-    return posts_display;
   };
 
   tokenConfig = () => {
@@ -83,20 +77,21 @@ class Home extends Component {
   };
 
   render() {
+    const posts = this.state.posts;
     return (
       <div className="home-page">
         <div className="container row">
           <div className="posts col-12 col-md-8">
             <h3>Posts</h3>
-            {this.getPosts().map(post => {
-              return post;
+            {posts.map(post => {
+              return <Post key={uid(Math.random())} post={post} />;
             })}
           </div>
           <div className="recommendations col-12 col-6 col-md-4">
             <div className="sticky-top">
               <h3>Recommendations</h3>
               <ul className="list-group">
-                {this.getRecommendations().map(recommendation => {
+                {/* {this.getRecommendations().map(recommendation => {
                   return (
                     <li key={uid(rand_string())} className="list-group-item">
                       <Link
@@ -111,7 +106,7 @@ class Home extends Component {
                       </Link>
                     </li>
                   );
-                })}
+                })} */}
               </ul>
             </div>
           </div>
