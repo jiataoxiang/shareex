@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "../stylesheets/post.scss";
-import { uid } from "react-uid";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import '../stylesheets/post.scss';
+import { uid } from 'react-uid';
+import { connect } from 'react-redux';
 
 class Post extends Component {
   // Get posts likes info from server
@@ -12,21 +13,21 @@ class Post extends Component {
     if (
       this.props.current_user &&
       (!this.props.post.likes_user_id.includes(this.props.current_user.id) ||
-        this.props.current_user.type === "admin")
+        this.props.current_user.type === 'admin')
     ) {
       const this_post = posts.filter(post => post.id === this.props.post.id)[0];
       this_post.likes += 1;
       this_post.likes_user_id.push(this.props.current_user.id);
-      this.props.setAppState("posts", posts);
+      this.props.setAppState('posts', posts);
       const post_owner = this.props.users.filter(
         user => user.id === this_post.author_id
       )[0];
       // update posts likes number with server
       post_owner.likes += 1;
     } else if (this.props.current_user === undefined) {
-      alert("You must first sign in to like a post.");
+      alert('You must first sign in to like a post.');
     } else {
-      alert("You have liked the post, and you cannot like it more than once.");
+      alert('You have liked the post, and you cannot like it more than once.');
     }
   };
 
@@ -35,7 +36,7 @@ class Post extends Component {
     let count = 0;
     for (let i = 0; i < this.props.attachments.length && count < 5; i++) {
       const attachment = this.props.attachments[i];
-      if (attachment.type === "image" || attachment.type === "image_link") {
+      if (attachment.type === 'image' || attachment.type === 'image_link') {
         images.push(attachment.content);
         count++;
       }
@@ -48,16 +49,24 @@ class Post extends Component {
     const images = this.getImages();
     return (
       <div className="post card">
-        <Link
-          to={{
-            pathname: "/single_post",
-            state: {
-              post_id: this.props.post.id
-            }
-          }}
-        >
-          <h5 className="card-header">{title}</h5>
-        </Link>
+        <div className="card-header">
+          <Link
+            to={{
+              pathname: '/single_post',
+              state: {
+                post_id: this.props.post.id
+              }
+            }}
+          >
+            {/* style={{ display: 'inline-block' }} */}
+            <span>
+              <h5 className="post-title">{title}</h5>
+            </span>
+          </Link>
+          {this.props.isAuthenticated && this.props.current_user.admin ? (
+            <span className="float-right">Post id: {this.props.post.id}</span>
+          ) : null}
+        </div>
 
         <div className="card-body">
           {/* <h5 className="card-title">Special title treatment</h5> */}
@@ -77,7 +86,7 @@ class Post extends Component {
           <hr />
           <Link
             to={{
-              pathname: "/single_post",
+              pathname: '/single_post',
               state: {
                 post_id: this.props.post.id
               }
@@ -90,7 +99,7 @@ class Post extends Component {
           <span className="likes float-right">Likes: {likes}</span>
           {/* Thumb up button */}
           <img
-            src={"./img/thumb_up.png"}
+            src={'./img/thumb_up.png'}
             alt=""
             width="40px"
             className="float-right thumb-up-btn"
@@ -104,4 +113,11 @@ class Post extends Component {
   }
 }
 
-export default Post;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user
+});
+
+export default connect(mapStateToProps)(Post);

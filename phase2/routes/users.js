@@ -5,7 +5,7 @@ const Post = require('../models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const isAuth = require('../middleware/auth');
+const { isAuth } = require('../middleware/auth');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -77,7 +77,7 @@ router.post('/login', (req, res) => {
             { id: user._id },
             config.get('jwtSecret'),
             {
-              expiresIn: 1 * hour
+              expiresIn: hour * 1
             },
             (err, token) => {
               if (err) throw err;
@@ -125,6 +125,7 @@ router.delete('/:id', (req, res) => {
 
 // return user info without password, given it's logged in and token is provided and not expired
 router.get('/auth', isAuth, (req, res) => {
+  // console.log('check', req.user);
   User.findById(req.user.id)
     .select('-password')
     .then(user => {

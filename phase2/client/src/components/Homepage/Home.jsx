@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import Post from "../Post";
-import { Link } from "react-router-dom";
-import "../../stylesheets/home.scss";
-import { rand_string } from "../../lib/util";
-import { uid } from "react-uid";
+import React, { Component } from 'react';
+import Post from '../Post';
+import { Link } from 'react-router-dom';
+import '../../stylesheets/home.scss';
+import { rand_string } from '../../lib/util';
+import { connect } from 'react-redux';
+import { uid } from 'react-uid';
 
 class Home extends Component {
   state = {
@@ -38,6 +39,27 @@ class Home extends Component {
       }
     }
     return posts_display;
+  };
+
+  tokenConfig = () => {
+    // Get token from localstorage
+    const token = this.props.auth.token;
+
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    } else {
+      window.location.href = '/';
+    }
+
+    return config;
   };
 
   /* Recommendations are selected as those posts with more than 10 likes
@@ -79,7 +101,7 @@ class Home extends Component {
                     <li key={uid(rand_string())} className="list-group-item">
                       <Link
                         to={{
-                          pathname: "/single_post",
+                          pathname: '/single_post',
                           state: {
                             post_id: recommendation.id
                           }
@@ -99,4 +121,12 @@ class Home extends Component {
   }
 }
 
-export default Home;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Home);

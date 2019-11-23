@@ -163,3 +163,5 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, { register, clearErrors })(
   withRouter(SignUp)
 );
+
+// export default SignUp;

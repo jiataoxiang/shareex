@@ -123,7 +123,7 @@ class Navbar extends React.Component {
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="/">
-                  Computer Science
+                  CS
                 </a>
                 <a className="dropdown-item" href="/">
                   Education
@@ -133,6 +133,10 @@ class Navbar extends React.Component {
                 </a>
                 <a className="dropdown-item" href="/">
                   Travel
+                </a>
+                <div className="dropdown-divider"></div>
+                <a className="dropdown-item" href="/">
+                  Following
                 </a>
               </div>
             </li>
