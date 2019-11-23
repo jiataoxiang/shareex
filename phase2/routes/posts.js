@@ -116,6 +116,25 @@ router.patch('/:id', (req, res) => {
     });
 });
 
+
+router.get('/user-posts/:user_id',isAuth, (req, res) => {
+  const user_id = req.params.user_id;
+  if (!ObjectID.isValid(user_id)) {
+    res.status(404).send("user id is not valid")
+  }
+
+  Post.find().then((posts) => {
+    const posts_for_user = posts.filter((post) => post.author === user_id);
+    if (posts_for_user.length === 0) {
+      res.send([])
+    } else {
+      res.send(posts_for_user)
+    }
+  }).catch((error) => {
+    res.status(500).send(error + "Holy!!!");
+  });
+});
+
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
   console.log(req.user);
@@ -124,7 +143,6 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
   }
   Post.findById(req.params.post_id)
     .then(post => {
-      console.log(post);
       if (!post) {
         return res
           .status(404)
@@ -149,4 +167,16 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
     });
 });
 
+// get attachments of given post
+router.get('/:post_id/attachments', (req, res) => {
+  Attachment.find({ post_id: req.params.post_id })
+    .then(attachments => {
+      res.json({ attachments: attachments });
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
+    });
+});
+
 module.exports = router;
+

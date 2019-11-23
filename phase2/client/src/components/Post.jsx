@@ -10,8 +10,20 @@ class Post extends Component {
   // Get posts likes info from server
   // code below requires server call
   state = {
-    post: this.props.post
+    post: this.props.post,
+    images: []
   };
+
+  componentDidMount() {
+    axios.get(`/api/posts/${this.state.post._id}/attachments`).then(res => {
+      const attachments = res.data.attachments;
+      const attachment_images = attachments.filter(
+        attachment =>
+          attachment.type === 'image' || attachment.type === 'image_link'
+      );
+      this.setState({ images: attachment_images.slice(0, 5) });
+    });
+  }
 
   tokenConfig = () => {
     // Get token from localstorage
@@ -46,22 +58,9 @@ class Post extends Component {
       });
   };
 
-  getImages = () => {
-    const images = [];
-    let count = 0;
-    for (let i = 0; i < this.props.attachments.length && count < 5; i++) {
-      const attachment = this.props.attachments[i];
-      if (attachment.type === 'image' || attachment.type === 'image_link') {
-        images.push(attachment.content);
-        count++;
-      }
-    }
-    return images;
-  };
-
   render() {
     const { title, body, likes } = this.state.post;
-    // const images = this.getImages();
+    const { images } = this.state;
     return (
       <div className="post card">
         <div className="card-header">
@@ -87,16 +86,16 @@ class Post extends Component {
           {/* <h5 className="card-title">Special title treatment</h5> */}
           <p className="card-text">{body}</p>
           <div className="row">
-            {/* {images.map(image => {
+            {images.map(image => {
               return (
                 <img
                   key={uid(Math.random())}
-                  src={image}
+                  src={image.body}
                   alt=""
                   className="img-thumbnail"
                 />
               );
-            })} */}
+            })}
           </div>
           <hr />
           <Link
