@@ -20,14 +20,14 @@ phase 1 feedback说我们library用的多，功能太少了。phase1 我们其�
 
 9. 搜索功能，搜post，搜user
 
+10. like 完之后换成红色的thumb button
+
    
 
 
 
 ## TODOs：
 
-- Single Post Page: text area 改成paragraph
-- Single Post Pgae: 图片显示问题的bug修好
 - navbar中添加post分类：不同category以及只显示following的user的post
 - add search bar that can search for a post or a user
 

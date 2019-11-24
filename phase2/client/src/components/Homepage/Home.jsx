@@ -23,7 +23,6 @@ class Home extends Component {
     this.updatePosts();
   }
 
-  // the following code is for getting all posts to be displayed on home page
   updatePosts = () => {
     axios
       .get('/api/posts')

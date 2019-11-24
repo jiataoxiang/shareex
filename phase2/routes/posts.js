@@ -24,10 +24,15 @@ router.get('/', (req, res) => {
   );
 });
 
-router.get('/test-reach', (req, res) => {
-  res.send('reached');
+router.get('/by-user/:user_id', isAuth, (req, res) => {
+  Post.find({ author: req.params.user_id })
+    .then(posts => {
+      res.json({ posts });
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
+    });
 });
-
 // get a post by id
 router.get('/:id', isAuth, (req, res) => {
   Post.findById(req.params.id)
@@ -66,7 +71,9 @@ router.post('/', isAuth, async (req, res) => {
         post_id: post._id
       });
       attachments.push(new_attachment._id);
+      console.log('This is from serverside: ', attachments);
     });
+    console.log('The attachemtn list is: ', attachments);
     post.attachments = attachments;
     post.save();
     res.json({
