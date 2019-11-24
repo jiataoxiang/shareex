@@ -13,6 +13,7 @@ class OtherProfile extends React.Component {
   // TODO: connect to server, get information
   state = {
     post_id: this.props.location.state.post_id,
+    author: this.props.location.state.author,
     nickname: "",
     banner: "",
     avatar: "",
@@ -23,24 +24,12 @@ class OtherProfile extends React.Component {
     motto: "",
   };
 
-  getPostAuthorId() {
-    axios.get(`/api/posts/${this.state.post_id}`, this.props.tokenConfig())
-      .then((post) => {
-        this.setState({
-          post: post.data,
-          author: post.data.author
-        })
-      });
-  }
 
   componentDidMount() {
-    this.getPostAuthorId();
+    this.getUserInfo();
+    this.getNumPosts(this.state.author);
   }
 
-  componentDidUpdate(nextProps, nextState, nextContext) {
-    // this.getUserInfo();
-    // this.getNumPosts(this.state.author);
-  }
 
   getNumPosts = (currentUser) => {
     console.log("the current usr is : " + currentUser);
@@ -72,25 +61,27 @@ class OtherProfile extends React.Component {
   };
 
   isUnfollowing = () => {
-    return this.state.following.filter(following => following.equals(this.state.author)).length === 0
+    console.log(this.state.followers);
+    return this.state.followers.filter(follower => follower === this.props.current_user._id).length === 0
   };
 
   unFollowRequest = () => {
     //remove following in current user
-    axios.post(`/api/add-following/${this.props.current_user._id}`,
-      {"following_id": this.props.author},
+    axios.post(`/api/users/remove-following/${this.props.current_user._id}`,
+      {"following_id": this.state.author},
       this.props.tokenConfig())
       .then((following) => {
-        this.setState({
-          following: following.data.following
-        })
+        // this.setState({
+        //   following: following.data.following
+        // })
+        console.log(following)
       }).catch((error) => {
         console.log(error)
     });
 
     //remove follower in current user
-    axios.post(`/api/add-follower/${this.props.author}`,
-      {followers: this.props.current_user._id},
+    axios.post(`/api/users/remove-follower/${this.state.author}`,
+      {"follower_id": this.props.current_user._id},
       this.props.tokenConfig())
       .then((followers) => {
         this.setState({
@@ -103,20 +94,20 @@ class OtherProfile extends React.Component {
 
   followRequest = ()=>{
     //add following in current user
-    axios.post(`/api/add-following/${this.props.current_user._id}`,
-      {"following_id": this.props.author},
+    axios.post(`/api/users/add-following/${this.props.current_user._id}`,
+      {"following_id": this.state.author},
       this.props.tokenConfig())
       .then((following) => {
-        this.setState({
-          following: following.data.following
-        });
+        // this.setState({
+        //   following: following.data.following
+        // });
       console.log(following)
     }).catch((error) => {
       console.log(error);
     });
     //add follower in post user
-    axios.post(`/api/add-follower/${this.props.author}`,
-      {"followed_id": this.props.current_user._id},
+    axios.post(`/api/users/add-follower/${this.state.author}`,
+      {"follower_id": this.props.current_user._id},
       this.props.tokenConfig())
       .then((followers) => {
         this.setState({
@@ -217,7 +208,7 @@ class OtherProfile extends React.Component {
                     <button className="btn btn-success btn-block" onClick={this.followRequest}>
                       <strong>Follow</strong>
                     </button>:
-                    <button className="btn btn-danger" onClick={this.unFollowRequest}>
+                    <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
                       <strong>Unfollow</strong>
                     </button>
                   }

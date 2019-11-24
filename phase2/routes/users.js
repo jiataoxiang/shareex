@@ -161,7 +161,7 @@ router.post("/add-following/:id", isAuth, (req, res) => {
   User.findByIdAndUpdate(id, {$push: {following: following_id}}, {new:true})
     .then((user) => {
     if (!user){
-      res.status(400).send("user not found when add following")
+      res.status(404).send("user not found when add following")
     }
     res.send(user)
   }).catch((error) => {
