@@ -12,6 +12,7 @@ class OtherProfile extends React.Component {
   // TODO: NEED TO BE TESTED AFTER SINGLE POST FINISH.
   // TODO: connect to server, get information
   state = {
+    post_id: this.props.location.state.post_id,
     nickname: "",
     banner: "",
     avatar: "",
@@ -20,26 +21,9 @@ class OtherProfile extends React.Component {
     likes: [],
     numPosts: -1,
     motto: "",
-    
-    post_id: ""
-  };  
-    
-  constructor(props) {
-    super(props);
-    if (this.props.location.state) {
-      this.state = {
-        post_id: this.props.location.state.post_id
-      };
-    }else {
-      /* if other profile is accessed by typing URL instead of clicking a link
-        post_id is not available, we don't know which post to render, thus
-        redirect to home page
-      */
-      this.props.history.push("/");
-    }
-  }
-  componentWillMount() {
-    console.log(this.state.post_id);
+  };
+
+  getPostAuthorId() {
     axios.get(`/api/posts/${this.state.post_id}`, this.props.tokenConfig())
       .then((post) => {
         this.setState({
@@ -50,11 +34,17 @@ class OtherProfile extends React.Component {
   }
 
   componentDidMount() {
-    this.loadUserFromServer();
+    this.getPostAuthorId();
+  }
+
+  componentDidUpdate(nextProps, nextState, nextContext) {
+    // this.getUserInfo();
+    // this.getNumPosts(this.state.author);
   }
 
   getNumPosts = (currentUser) => {
-    axios.get(`/api/posts/user-posts/${currentUser._id.toString()}`,  this.props.tokenConfig())
+    console.log("the current usr is : " + currentUser);
+    axios.get(`/api/posts/user-posts/${currentUser}`,  this.props.tokenConfig())
       .then(posts => {
         this.setState({
           numPosts: posts.data.length
@@ -65,9 +55,10 @@ class OtherProfile extends React.Component {
   };
 
   getUserInfo = ()=>{
-    axios.get(`/api/users/${this.props.post.author}`, this.props.tokenConfig())
+    axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig())
       .then((user) => {
         user = user.data;
+        console.log(user);
         this.setState({
           nickname: user.nickname,
           banner: user.banner,
@@ -80,8 +71,8 @@ class OtherProfile extends React.Component {
       })
   };
 
-  isFollowing = () => {
-    return this.state.following.filter(following => following.equals(this.state.author)).length !== 0
+  isUnfollowing = () => {
+    return this.state.following.filter(following => following.equals(this.state.author)).length === 0
   };
 
   unFollowRequest = () => {
@@ -136,14 +127,6 @@ class OtherProfile extends React.Component {
         console.log(error)
     });
   };
-
-  loadUserFromServer() {
-    // Loading user from our fake data
-    // TODO: replace the following initialization code in phase 2, connect to server and get real data
-    // Current user info
-    this.getUserInfo();
-    this.getNumPosts(this.props.author);
-  }
 
   // getPosts = () => {
   //   // TODO: connect to server, get posts from server
@@ -230,11 +213,11 @@ class OtherProfile extends React.Component {
                   <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>{this.state.description}</p>
-                  {this.isFollowing() ?
+                  {this.isUnfollowing() ?
                     <button className="btn btn-success btn-block" onClick={this.followRequest}>
                       <strong>Follow</strong>
                     </button>:
-                    <button className="btn btn-success btn-block" onClick={this.unFollowRequest}>
+                    <button className="btn btn-danger" onClick={this.unFollowRequest}>
                       <strong>Unfollow</strong>
                     </button>
                   }
