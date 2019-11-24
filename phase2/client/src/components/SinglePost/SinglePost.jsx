@@ -28,10 +28,6 @@ class SinglePost extends Component {
   componentDidMount() {
     this.getPostData();
     this.getAttachData();
-    // this.setState({user: this.props.current_user});
-    // console.log(this.props.current_user);
-    // console.log(this.state.post);
-    // console.log(this.state.attachments);
   }
 
   getPostData = () => {
@@ -168,7 +164,7 @@ class SinglePost extends Component {
     if ((!user) || (!(user === author))) {
       this.props.history.push({
         pathname: "/otherprofile",
-        state: {post_id: this.state.post._id}
+        state: {post_id: this.state.post._id, author: this.state.post.author}
       });
     } else {
       this.props.history.push("/userprofile");
