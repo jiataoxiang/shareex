@@ -76,6 +76,7 @@ class UserProfile extends React.Component {
         likes: currentUser.likes.length,
         motto: currentUser.motto
       });
+      this.getNumPosts(currentUser);
       this.updatePosts();
     }
   }
