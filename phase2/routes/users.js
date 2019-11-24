@@ -144,9 +144,88 @@ router.get("/:user_id", (req, res) => {
   User.findById(user_id)
     .select("-password")
     .then((user)=> {
-      res.json(user)
+      res.send(user)
   }).catch((error) => {
     res.status(400).send(error)
+  })
+});
+
+//add following
+router.post("/add-following/:id", isAuth, (req, res) => {
+  const id = req.params.id;
+  const following_id = req.body.following_id;
+  if (!ObjectID.isValid(id)){
+    res.status(404).send("user id is invalid")
+  }
+
+  User.findByIdAndUpdate(id, {$push: {following: following_id}}, {new:true})
+    .then((user) => {
+    if (!user){
+      res.status(400).send("user not found when add following")
+    }
+    res.send(user)
+  }).catch((error) => {
+    res.status(400).send(error)
+  })
+});
+
+//add follower
+router.post("/add-follower/:id",isAuth, (req, res) => {
+  const id = req.params.id;
+  const follower_id = req.body.follower_id;
+
+  if (!ObjectID.isValid(id)){
+    res.status(404).send("user id is invalid")
+  }
+
+  User.findByIdAndUpdate(id, {$push: {followers: follower_id}}, {new: true})
+    .then((user) => {
+      if (!user) {
+        res.status(404).send("user is not found!")
+      }
+      res.send(user);
+    }).catch((error) => {
+      res.status(400).send(error)
+  })
+});
+
+//remove follower
+router.post("/remove-follower/:id", (req, res) => {
+  const id =  req.params.id;
+  const follower_id = req.body.follower_id;
+
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send("user id is invalid")
+  }
+
+  User.findByIdAndUpdate(id, {$pull: {followers: follower_id}}, {new: true})
+    .then(user => {
+      if (!user) {
+        res.status(404).send("user is not found!")
+      }
+      res.send(user)
+    }).catch((error) => {
+      res.status(400).send(error)
+  })
+});
+
+//remove following
+router.post("/remove-following/:id", (req, res) => {
+  const id = req.params.id;
+  const following_id =  req.body.following_id;
+
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send("user id is invalid")
+  }
+
+  User.findByIdAndUpdate(id, {$pull: {following: following_id}}, {new: true})
+    .then(user => {
+      if (!user) {
+        res.status(404).send("user is not found")
+      }
+      res.send(user)
+    }).catch((error) => {
+      res.status(400).send(error)
   })
 });
 

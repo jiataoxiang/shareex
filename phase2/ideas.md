@@ -31,3 +31,8 @@ phase 1 feedback说我们library用的多，功能太少了。phase1 我们其�
 - navbar中添加post分类：不同category以及只显示following的user的post
 - add search bar that can search for a post or a user
 
+## Wait to test
+follow
+
+## Finished
+
