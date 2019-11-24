@@ -244,9 +244,9 @@ class OtherProfile extends React.Component {
             <div className="col-md-8">
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
-                {this.getPosts().map(post => {
-                  return post;
-                })}
+                {/*{this.getPosts().map(post => {*/}
+                {/*  return post;*/}
+                {/*})}*/}
               </div>
             </div>
           </div>
