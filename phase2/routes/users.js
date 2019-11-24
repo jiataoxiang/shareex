@@ -144,7 +144,7 @@ router.get("/:user_id", (req, res) => {
   User.findById(user_id)
     .select("-password")
     .then((user)=> {
-      res.json(user)
+      res.send(user)
   }).catch((error) => {
     res.status(400).send(error)
   })
