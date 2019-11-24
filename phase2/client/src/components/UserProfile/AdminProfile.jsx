@@ -14,6 +14,8 @@ class AdminProfile extends Component {
     mail: "place@holder.com",
     tel: "(647)-823-9988",
     tabState: 0,
+    msg: {readMsg: [4,5,6], unreadMsg: [1,2,3]}, 
+    newMsg: false, 
       
     numVisited: 300,
     numHit: 256,
@@ -24,10 +26,34 @@ class AdminProfile extends Component {
   };
 
   tabLeft = [];
-  tabRight = [<Dashboard />, <FindUser />, <FindPost />, <Notification />];
-    
+  getTabButtons = () => {
+      this.tabLeft.push(document.getElementById("button-1"))
+      this.tabLeft.push(document.getElementById("button-2"))
+      this.tabLeft.push(document.getElementById("button-3"))
+      this.tabLeft.push(document.getElementById("button-4"))
+  }
+
+  tabRight = [<Dashboard />, <FindUser />, <FindPost />, 
+              <Notification state={this.state.msg} />];
   changeTabRight = (num) => {
+      this.tabLeft.forEach((button) => {
+          button.classList.remove("btn-selected");
+      });
+      
+      this.tabLeft[num].classList.add("btn-selected");
       this.setState({tabState: num});
+      
+      if (num === 3) {
+          const msg_badge = document.getElementById("unread-notifications");
+          msg_badge.setAttribute("hidden", true);
+      }
+  }
+  
+  getNotifications = () => {
+      //
+      
+      const msg_badge = document.getElementById("unread-notifications");
+      msg_badge.removeAttribute("hidden");
   }
 
   handleUserDelete = () => {
@@ -92,6 +118,8 @@ class AdminProfile extends Component {
   };
 
   componentDidMount() {
+    this.getTabButtons();
+    
     // TODO: replace the following initialization code in phase 2, connect to server and get real data
     // Current user info
     const currentUser = this.props.state.current_user;
@@ -112,9 +140,9 @@ class AdminProfile extends Component {
   }
 
   render() {
-    if (!this.props.state.current_user) {
-      return <Redirect to="/" />;
-    }
+    // if (!this.props.state.current_user) {
+    //   return <Redirect to="/" />;
+    // }
     return (
       <div className="user-profile-page admin-profile-page container">
         <div className="row">
@@ -129,24 +157,32 @@ class AdminProfile extends Component {
                   <div id="option-tab">
                     <div className="btn-group-vertical">
                         <button type="button" 
-                            className="btn btn-light" 
+                            id="button-1" 
+                            className="btn btn-light btn-selected" 
                             onClick={() => this.changeTabRight(0)}>
                             Dashboard
                         </button>
                         <button type="button" 
+                            id="button-2" 
                             className="btn btn-light" 
                             onClick={() => this.changeTabRight(1)}>
                             Find User
                         </button>
                         <button type="button" 
+                            id="button-3" 
                             className="btn btn-light" 
                             onClick={() => this.changeTabRight(2)}>
                             Find Post
                         </button>
                         <button type="button" 
+                            id="button-4" 
                             className="btn btn-light" 
                             onClick={() => this.changeTabRight(3)}>
                             Notification
+                            <span id="unread-notifications" 
+                                className="badge badge-danger">
+                                New
+                            </span>
                         </button>
                     </div>
                   </div>

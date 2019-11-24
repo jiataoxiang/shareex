@@ -26,6 +26,10 @@
         border-color: grey;
         background-color: var(--background-secondary);
     }
+    .btn-selected {
+        border-left-width: 0.2em;
+        border-left-color: forestgreen;
+    }
   }
 
   .dashboard {

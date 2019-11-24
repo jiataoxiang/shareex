@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { isAuth } = require('../middleware/auth');
+const {ObjectID} = require("mongodb");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -131,6 +132,22 @@ router.get('/auth', isAuth, (req, res) => {
     .then(user => {
       res.json(user);
     });
+});
+
+//get user by id without password.
+router.get("/:user_id", (req, res) => {
+  const user_id = req.params.user_id;
+  if(!ObjectID.isValid(user_id)) {
+    res.status(404).send()
+  }
+
+  User.findById(user_id)
+    .select("-password")
+    .then((user)=> {
+      res.json(user)
+  }).catch((error) => {
+    res.status(400).send(error)
+  })
 });
 
 module.exports = router;
