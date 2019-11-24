@@ -9,21 +9,43 @@ const { isAuth, isAuthorizedPost } = require('../middleware/auth');
 
 // call with query to add a filter, see post_test for an example
 router.get('/', (req, res) => {
+  console.log(
+    '\n\n\n\nSort By: ',
+    req.query.sort_by,
+    '\nCategory: ',
+    req.query.category,
+    '\n\n\n\n'
+  );
   let filter = {};
   if (req.query.category) {
     filter.category = req.query.category;
   }
-  console.log(filter);
-  Post.find(filter).then(
-    posts => {
-      res.json({ posts }); // can wrap in object if want to add more properties
-    },
-    error => {
-      res.status(500).send(error); // server error
-    }
-  );
+
+  Post.find(filter)
+    .sort({ [req.query.sort_by]: -1 })
+    // .sort({ likes: -1 })
+    .limit(100)
+    .then(
+      posts => {
+        res.json({ posts }); // can wrap in object if want to add more properties
+      },
+      error => {
+        res.status(500).send(error); // server error
+      }
+    );
 });
 
+router.get('/search/:keyword', (req, res) => {
+  Post.find({ title: { $regex: new RegExp(req.params.keyword) } })
+    .then(posts => {
+      res.json({ posts });
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
+    });
+});
+
+// get posts by user id
 router.get('/by-user/:user_id', isAuth, (req, res) => {
   Post.find({ author: req.params.user_id })
     .then(posts => {
@@ -33,6 +55,7 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
       res.status(500).json({ message: error.message });
     });
 });
+
 // get a post by id
 router.get('/:id', isAuth, (req, res) => {
   Post.findById(req.params.id)
