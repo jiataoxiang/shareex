@@ -66,6 +66,19 @@ class Navbar extends React.Component {
     }
   };
 
+  search = event => {
+    event.preventDefault();
+    const search_bar = document.getElementById('search-bar');
+    const search_content = search_bar.value;
+    // search_bar.value = '';
+    this.props.history.push({
+      pathname: '/',
+      state: {
+        search_content
+      }
+    });
+  };
+
   render() {
     // console.log(this.props.val);
     return (
@@ -93,10 +106,11 @@ class Navbar extends React.Component {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <form className="form-inline my-2 my-lg-0">
+              <form className="form-inline my-2 my-lg-0" onSubmit={this.search}>
                 <input
                   className="form-control mr-sm-2"
                   type="search"
+                  id="search-bar"
                   placeholder="Search"
                   aria-label="Search"
                 />
@@ -107,38 +121,6 @@ class Navbar extends React.Component {
                   Search
                 </button>
               </form>
-            </li>
-
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="/"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Category
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href="/">
-                  CS
-                </a>
-                <a className="dropdown-item" href="/">
-                  Education
-                </a>
-                <a className="dropdown-item" href="/">
-                  Technology
-                </a>
-                <a className="dropdown-item" href="/">
-                  Travel
-                </a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="/">
-                  Following
-                </a>
-              </div>
             </li>
           </ul>
 
@@ -180,9 +162,8 @@ class Navbar extends React.Component {
               </Link>
             </div>
           )}
+          {this.getUserProfileButton()}
         </div>
-
-        {this.getUserProfileButton()}
       </nav>
     );
   }
