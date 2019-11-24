@@ -5,11 +5,17 @@ class AdminProfileFindUser extends React.Component {
         avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
         username: "",
         nickname: "",
-        banned: false,
+        banned: false, 
         unbanned_date: null,
         
-        inputuser: ""
+        inputuser: "", 
+        inputmsg: ""
     };
+    tempElements = {
+        display_user: null,
+        display_banned: null,
+        button_ban: null
+    }
 
     handleInputChange = (event) => {
         const target = event.target;
@@ -20,7 +26,59 @@ class AdminProfileFindUser extends React.Component {
     }
     
     getUserInfo = () => {
+        //
         
+        if (true) {
+            this.setState({ inputmsg: "" });
+            this.tempElements.display_user.removeAttribute("hidden");
+            if (this.state.banned) {
+                this.tempElements.display_banned.removeAttribute("hidden");
+                this.tempElements.button_ban.innerHTML = "Unban";
+            } else {
+                this.tempElements.display_banned.setAttribute("hidden", true);
+                this.tempElements.button_ban.innerHTML = "Ban";
+            }
+        } else {
+            this.tempElements.display_user.setAttribute("hidden", true);
+            alert("The user does not exist.");
+        }
+    }
+    
+    changeBan = () => {
+        if (this.state.banned) {
+            //
+            
+            this.setState({ banned: false });
+            this.tempElements.display_banned.setAttribute("hidden", true);
+            this.tempElements.button_ban.innerHTML = "Ban";
+        } else {
+            //
+            
+            this.setState({ banned: true });
+            this.tempElements.display_banned.removeAttribute("hidden");
+            this.tempElements.button_ban.innerHTML = "Unban";
+        }
+    }
+    
+    sendMsg = () => {
+        const newMsg = {
+            from: "System",
+            to: this.state.username,
+            body: this.state.inputmsg,
+            link: null,
+        }
+        
+        //
+    }
+    
+    componentDidMount() {
+        this.tempElements.display_user = document.getElementById("display-user");
+        this.tempElements.display_user.setAttribute("hidden",true);
+        
+        this.tempElements.display_banned = document.getElementById("ban-warning");
+        this.tempElements.display_banned.setAttribute("hidden",true);
+        
+        this.tempElements.button_ban = document.getElementById("button-ban");
     }
     
     render() {
@@ -39,7 +97,8 @@ class AdminProfileFindUser extends React.Component {
                         onChange={this.handleInputChange}
                     />
                     <button type="button" 
-                        className="btn">Find</button>
+                        className="btn"
+                        onClick={this.getUserInfo}>Find</button>
                 </div>
                 
                 <div id="display-user">
@@ -60,8 +119,11 @@ class AdminProfileFindUser extends React.Component {
                              </div>
                         </div>
                         <div className="col-md-4">
-                            <button type="button" 
-                            className="btn">Ban
+                            <button type="button"
+                                id="button-ban" 
+                                className="btn"
+                                onClick={this.changeBan}>
+                                Ban
                             </button>
                         </div>
                     
@@ -73,12 +135,17 @@ class AdminProfileFindUser extends React.Component {
                                 type="text"
                                 className="form-control"
                                 aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default"
+                                aria-describedby="inputGroup-sizing-default" 
+                                name="inputmsg" 
+                                value={this.state.inputmsg} 
+                                onChange={this.handleInputChange}
                             />
                         </div>
                         <div className="col-md-4">
                             <button type="button" 
-                                className="btn">Send Message
+                                className="btn"
+                                onClick={this.sendMsg}>
+                                Send Message
                             </button>
                         </div>
                     

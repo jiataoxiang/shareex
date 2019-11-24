@@ -1,13 +1,11 @@
 import React from 'react';
 import '../../stylesheets/user_profile.scss';
 import Post from '../Post';
-// import { rand_string } from '../../lib/util';
 import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import Popup from './Popup';
 import { connect } from 'react-redux';
 import axios from 'axios';
-// import {tokenConfig} from "../../actions/authActions";
 
 class UserProfile extends React.Component {
   state = {
@@ -78,42 +76,10 @@ class UserProfile extends React.Component {
         likes: currentUser.likes.length,
         motto: currentUser.motto
       });
+      this.getNumPosts(currentUser);
       this.updatePosts();
     }
   }
-
-  // getPosts = () => {
-  //   // TODO: connect to server, get posts from server.
-  //   // find all posts belonging to current user
-  //   const posts_display = [];
-  //   if (this.props.state.posts) {
-  //     const posts = this.props.state.posts.filter(
-  //       post => post.author_id === this.props.state.current_user.id
-  //     );
-  //
-  //     if (posts) {
-  //       console.log(posts);
-  //       for (let i = 0; i < posts.length; i++) {
-  //         // find all attachments
-  //         const attachments = this.props.state.attachments.filter(
-  //           attachment => attachment.post_id === posts[i].id
-  //         );
-  //         posts_display.push(
-  //           <Post
-  //             key={uid(rand_string())}
-  //             post={posts[i]}
-  //             posts={posts}
-  //             users={this.props.state.users}
-  //             attachments={attachments}
-  //             current_user={this.props.state.current_user}
-  //             setAppState={this.props.state.setAppState}
-  //           />
-  //         );
-  //       }
-  //     }
-  //   }
-  //   return posts_display;
-  // };
 
   // Display the banner editing button.
   showBannerEditor = () => {

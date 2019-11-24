@@ -2,7 +2,8 @@ import React from 'react';
 
 class AdminProfileNotification extends React.Component {
     state = {
-        notifications: [],
+        readMsg: [],
+        unreadMsg: [],
         inputsearch: ""
     };
     
@@ -12,6 +13,11 @@ class AdminProfileNotification extends React.Component {
         const value = target.value;
 
         this.setState({[name]: value});
+    }
+    
+    componentDidMount() {
+        this.setState({readMsg: this.props.readMsg, 
+                       unreadMsg: this.props.unreadMsg});
     }
 
     render() {
