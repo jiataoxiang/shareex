@@ -70,7 +70,7 @@ class Navbar extends React.Component {
     event.preventDefault();
     const search_bar = document.getElementById('search-bar');
     const search_content = search_bar.value;
-    search_bar.value = '';
+    // search_bar.value = '';
     this.props.history.push({
       pathname: '/',
       state: {

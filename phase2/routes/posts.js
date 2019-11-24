@@ -3,9 +3,9 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
-const {ObjectID} = require('mongodb');
+const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
-const {isAuth, isAuthorizedPost} = require('../middleware/auth');
+const { isAuth, isAuthorizedPost } = require('../middleware/auth');
 
 // call with query to add a filter, see post_test for an example
 router.get('/', (req, res) => {
@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/search/:keyword', (req, res) => {
-  Post.find({ title: { $regex: new RegExp(req.params.keyword) } })
+  Post.find({ title: { $regex: `${req.params.keyword}`, $options: 'i' } })
     .then(posts => {
       res.json({ posts });
     })
@@ -87,16 +87,15 @@ router.post('/', isAuth, async (req, res) => {
       });
     }
 
-    make_post_helper(req.body.attachments, post)
-      .then(attach_list => {
-        console.log('The attac__hment list is: ', attach_list);
-        post.attachments = attach_list;
-        post.save();
-        res.json({
-          post,
-          message: 'Post created'
-        });
+    make_post_helper(req.body.attachments, post).then(attach_list => {
+      console.log('The attac__hment list is: ', attach_list);
+      post.attachments = attach_list;
+      post.save();
+      res.json({
+        post,
+        message: 'Post created'
       });
+    });
   } catch (err) {
     return res.status(400).send(err);
   }
@@ -142,7 +141,7 @@ router.patch('/:id', (req, res) => {
     res.status(404).send('post id not valid');
   }
 
-  Post.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
+  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     .then(post => {
       if (!post) {
         return res.status(404).send('Post not found, and cannot update');
@@ -178,14 +177,14 @@ router.get('/user-posts/:user_id', isAuth, (req, res) => {
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.post_id)) {
-    return res.status(404).json({message: 'post id not valid'});
+    return res.status(404).json({ message: 'post id not valid' });
   }
   Post.findById(req.params.post_id)
     .then(post => {
       if (!post) {
         return res
           .status(404)
-          .json({message: 'Post not found, and cannot update'});
+          .json({ message: 'Post not found, and cannot update' });
       }
       // check if user has liked this post
       User.findById(req.user.id).then(user => {
@@ -210,18 +209,18 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
       });
     })
     .catch(error => {
-      res.status(400).json({message: 'Post not updated, bad request'}); // bad request for changing the post.
+      res.status(400).json({ message: 'Post not updated, bad request' }); // bad request for changing the post.
     });
 });
 
 // get attachments of given post
 router.get('/:post_id/attachments', (req, res) => {
-  Attachment.find({post_id: req.params.post_id})
+  Attachment.find({ post_id: req.params.post_id })
     .then(attachments => {
-      res.json({attachments: attachments});
+      res.json({ attachments: attachments });
     })
     .catch(error => {
-      res.status(500).json({message: error.message});
+      res.status(500).json({ message: error.message });
     });
 });
 

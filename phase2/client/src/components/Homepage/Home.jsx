@@ -130,7 +130,7 @@ class Home extends Component {
               </div>
               <div className="col-10">
                 <span className="float-right">
-                  <span className="ml-3"> Sort By:</span>
+                  <span className="ml-3">Category:</span>
                   <select id="category-selection" name="category">
                     <option value="All">All</option>
                     <option value="CS">CS</option>
@@ -140,7 +140,7 @@ class Home extends Component {
                     <option value="Following">Following</option>
                   </select>
 
-                  <span className="ml-3"> Sort By:</span>
+                  <span className="ml-3">Sort By:</span>
                   <select id="sort-selection" name="sort_by">
                     <option value="created_at">Time</option>
                     <option value="views">Views</option>
