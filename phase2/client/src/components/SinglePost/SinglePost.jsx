@@ -12,9 +12,7 @@ class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
   // TODO: connect to server, get comments and attachments with API
   state = {
-    // post_id: "",
-    // title: "",
-    username: '',
+    // user: '',
     post: '',
     comments: [],
     attachments: [],
@@ -28,21 +26,12 @@ class SinglePost extends Component {
 
   /* call helper functions to setup post, attachments, comments and user */
   componentDidMount() {
-    // const post = this.getPost();
-    // const attachments = this.getAttachment();
-    // const comments = this.getComments();
-    // this.setState({post: post, attachments: attachments, comments: comments});
-    // const user = this.getUser(post);
-    // this.setState({user: user});
-    console.log('in the mount method: ');
-    // console.log("The currentuser is:......", this.props.auth.user);
     this.getPostData();
     this.getAttachData();
-    console.log(this.props);
-    this.setState({username: this.props.current_user});
-    console.log(this.props.current_user);
-    console.log(this.state.post);
-    console.log(this.state.attachments);
+    // this.setState({user: this.props.current_user});
+    // console.log(this.props.current_user);
+    // console.log(this.state.post);
+    // console.log(this.state.attachments);
   }
 
   getPostData = () => {
@@ -179,7 +168,7 @@ class SinglePost extends Component {
     if ((!user) || (!(user === author))) {
       this.props.history.push({
         pathname: "/otherprofile",
-        state: {post_id: this.state.post_id}
+        state: {post_id: this.state.post._id}
       });
     } else {
       this.props.history.push("/userprofile");
@@ -212,7 +201,14 @@ class SinglePost extends Component {
     console.log(this.state.post);
     console.log(this.state.attachments);
     console.log(this.props.current_user);
-    const avatar = 'https://images-na.ssl-images-amazon.com/images/I/711YqJG3p2L._SX425_.jpg';
+    let username = '';
+    let avatar = '';
+    if(this.props.current_user !== null){
+      username = this.props.current_user.username;
+      avatar = this.props.current_user.avatar;
+      console.log(avatar);
+    }
+    // const avatar = 'https://images-na.ssl-images-amazon.com/images/I/711YqJG3p2L._SX425_.jpg';
     // const comments = this.state.comments ? this.state.comments : [];
     // const current_user_id = this.props.current_user._id;
     return (
@@ -280,7 +276,7 @@ class SinglePost extends Component {
                       <img className="avatar" src={avatar} alt=""/>
                     </div>
                     <div className="col-lg-9 col-9">
-                      <strong>{this.state.username}</strong>
+                      <strong>{username}</strong>
                     </div>
                   </div>
                 </div>
