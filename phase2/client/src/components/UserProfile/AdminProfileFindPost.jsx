@@ -7,9 +7,15 @@ class AdminProfileFindPost extends React.Component {
         category: "",
         numlikes: -1,
         numcomments: -1,
+        deleted: false, 
         
         inputid: ""
     };
+    tempElements = {
+        display_post: null, 
+        display_delete: null,
+        button_delete: null
+    }
 
     handleInputChange = (event) => {
         const target = event.target;
@@ -17,6 +23,50 @@ class AdminProfileFindPost extends React.Component {
         const value = target.value;
 
         this.setState({[name]: value});
+    }
+    
+    getPostInfo = () => {
+        //
+        
+        if (true) {
+            this.tempElements.display_post.removeAttribute("hidden");
+            if (this.state.deleted) {
+                this.tempElements.display_delete.removeAttribute("hidden");
+                this.tempElements.button_delete.innerHTML = "Recover";
+            } else {
+                this.tempElements.display_delete.setAttribute("hidden", true);
+                this.tempElements.button_delete.innerHTML = "Delete";
+            }
+        } else {
+            this.tempElements.display_post.setAttribute("hidden", true);
+            alert("The post does not exist.");
+        }
+    }
+    
+    changeDelete = () => {
+        if (this.state.deleted) {
+            //
+            
+            this.setState({ deleted: false });
+            this.tempElements.display_delete.setAttribute("hidden", true);
+            this.tempElements.button_delete.innerHTML = "Delete";
+        } else {
+            //
+            
+            this.setState({ deleted: true });
+            this.tempElements.display_delete.removeAttribute("hidden");
+            this.tempElements.button_delete.innerHTML = "Recover";
+        }
+    }
+    
+    componentDidMount() {
+        this.tempElements.display_post = document.getElementById("display-post");
+        this.tempElements.display_post.setAttribute("hidden",true);
+        
+        this.tempElements.display_delete = document.getElementById("delete-warning");
+        this.tempElements.display_delete.setAttribute("hidden",true);
+        
+        this.tempElements.button_delete = document.getElementById("button-delete");
     }
     
     render() {
@@ -35,7 +85,10 @@ class AdminProfileFindPost extends React.Component {
                         onChange={this.handleInputChange}
                     />
                     <button type="button" 
-                        className="btn">Find</button>
+                        className="btn"
+                        onClick={this.getPostInfo}>
+                        Find
+                    </button>
                 </div>
                 
                 
@@ -54,7 +107,10 @@ class AdminProfileFindPost extends React.Component {
                         </div>
                         <div className="col-md-4">
                             <button type="button" 
-                            className="btn">Delete
+                                id="button-delete" 
+                                className="btn"
+                                onClick={this.changeDelete}>
+                                Delete
                             </button>
                         </div>
                     </div>
