@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class Post extends Component {
+  _isMount = false;
   // Get posts likes info from server
   // code below requires server call
   state = {
@@ -14,14 +15,21 @@ class Post extends Component {
   };
 
   componentDidMount() {
+    this._isMount = true;
     axios.get(`/api/posts/${this.state.post._id}/attachments`).then(res => {
       const attachments = res.data.attachments;
       const attachment_images = attachments.filter(
         attachment =>
           attachment.type === 'image' || attachment.type === 'image_link'
       );
-      this.setState({ images: attachment_images.slice(0, 5) });
+      if(this._isMount){
+        this.setState({ images: attachment_images.slice(0, 5) });
+      }
     });
+  }
+
+  componentWillUnmount() {
+    this._isMount = false;
   }
 
   tokenConfig = () => {

@@ -192,6 +192,12 @@
     margin: 10%;
     position: center;
   }
+  // Message boarder
+  .message-board-container {
+    background-color: grey;
+    width: 700px;
+    height: 400px;
+  }
 }
 @media screen and (max-width: 600px) {
   .user-profile-page {

@@ -6,11 +6,13 @@ import { uid } from 'react-uid';
 import Popup from './Popup';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import Follower from "./Follower"
 
 class UserProfile extends React.Component {
   state = {
     posts: [],
-    showPop: false
+    showPop: false,
+    followers: []
   };
 
   handlePopup = () => {
@@ -71,7 +73,7 @@ class UserProfile extends React.Component {
         nickname: currentUser.nickname,
         banner: currentUser.banner,
         avatar: currentUser.avatar,
-        followers: currentUser.followers.length,
+        followers: currentUser.followers,
         following: currentUser.following.length,
         likes: currentUser.likes.length,
         motto: currentUser.motto
@@ -164,6 +166,7 @@ class UserProfile extends React.Component {
       window.location.href = '/';
     }
     const posts = this.state.posts;
+    const followers = this.state.followers;
     return (
       <div className="user-profile-page">
         <div>
@@ -211,7 +214,7 @@ class UserProfile extends React.Component {
             <li>
               Followers
               <br />
-              <span className="profileStatsNumber">{this.state.followers}</span>
+              <span className="profileStatsNumber">{this.state.followers.length}</span>
             </li>
             <li>
               Following
@@ -243,10 +246,24 @@ class UserProfile extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
+              <div className="message-board-container">
+                <h3>Message Board</h3>
+                <div>
+                  {/*{this.getMessages()}*/}
+                </div>
+              </div>
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
                 {posts.map(post => {
                   return <Post key={uid(Math.random())} post={post} />;
+                })}
+              </div>
+            </div>
+            <div className= "col-md-12">
+              <div className="followers">
+                <h3> Followers</h3>
+                {followers.map((follower)=>{
+                  return <Follower key={uid(Math.random())} follower = {follower}/>
                 })}
               </div>
             </div>
