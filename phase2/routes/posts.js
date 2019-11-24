@@ -73,34 +73,33 @@ router.get('/:id', (req, res) => {
 
 // make a new post
 router.post('/', isAuth, async (req, res) => {
-  try {
-    const post = await Post.create({
-      title: req.body.title,
-      author: req.body.author,
-      category: req.body.category,
-      body: req.body.body
-    });
-    console.log('post created, now attachments\n\n');
-    if (!req.body.attachments) {
-      return res.json({
-        message: 'Post Created, No Attachments.',
-        post
+    try {
+      const post = await Post.create({
+        title: req.body.title,
+        author: req.body.author,
+        category: req.body.category,
+        body: req.body.body
       });
-    }
-
-    make_post_helper(req.body.attachments, post)
-      .then(attach_list => {
-        post.attachments = attach_list;
-        post.save();
-        res.json({
-          post,
-          message: 'Post created'
+      console.log('post created, now attachments\n\n');
+      if (!req.body.attachments) {
+        return res.json({
+          message: 'Post Created, No Attachments.',
+          post
         });
-      });
-    });
-  } catch (err) {
-    return res.status(400).send(err);
-  }
+      }
+
+      make_post_helper(req.body.attachments, post)
+        .then(attach_list => {
+          post.attachments = attach_list;
+          post.save();
+          res.json({
+            post,
+            message: 'Post created'
+          });
+        });
+    } catch (err) {
+      return res.status(400).send(err);
+    }
 });
 
 make_post_helper = (attachments, post) => {
