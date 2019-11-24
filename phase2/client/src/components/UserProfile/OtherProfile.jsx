@@ -39,6 +39,7 @@ class OtherProfile extends React.Component {
     }
   }
   componentWillMount() {
+    console.log(this.state.post_id);
     axios.get(`/api/posts/${this.state.post_id}`, this.props.tokenConfig())
       .then((post) => {
         this.setState({
@@ -60,7 +61,7 @@ class OtherProfile extends React.Component {
         })
       }).catch((error) => {
       console.log(error)
-    })
+    });
   };
 
   getUserInfo = ()=>{
