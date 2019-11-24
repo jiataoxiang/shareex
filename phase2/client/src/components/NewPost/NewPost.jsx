@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {withRouter} from "react-router-dom";
 import {uid} from "react-uid";
 import axios from "axios";
-import {login} from "../../actions/authActions";
 
 
 class NewPost extends Component {
@@ -206,16 +205,14 @@ class NewPost extends Component {
     alert("Sure to submit?");
     // const post_id = uid(rand_string());
     // console.log(this.state.current_user);
+    const re_sort_attach = this.state.to_store.attachments.reverse();
     const a_post = {
       // id: post_id,
       author: this.props.current_user._id,
       title: this.state.to_store.title,
       category: this.state.to_store.category,
       body: this.state.to_store.content,
-      attachments: this.state.to_store.attachments
-      //   .map((attach) => {
-      //   return attach.id
-      // })
+      attachments: re_sort_attach
     };
     console.log("These are attachments:....", this.state.to_store.attachments);
 
@@ -226,27 +223,6 @@ class NewPost extends Component {
       .catch(err => {
         console.log(err);
       });
-
-    // now add this post to the database
-    // console.log(this.props.state.posts.length);
-    // console.log(this.props.state.posts);
-    // this.props.state.posts.push(a_post);
-    // console.log(this.props.state.posts.length);
-    // console.log(this.props.state.posts);
-
-    // console.log(this.props.state.attachments.length);
-    // console.log(this.props.state.attachments);
-    // this.state.to_store.attachments.forEach((attach) => {
-    //   this.props.state.attachments.push({
-    //     id: attach.id,
-    //     post_id: post_id,
-    //     type: attach.type,
-    //     content: attach.content
-    //   });
-    // });
-    // console.log(this.props.state.attachments.length);
-    // console.log(this.props.state.attachments);
-
     // redirect to home page
     this.props.history.push("/");
   };

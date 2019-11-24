@@ -25,18 +25,20 @@ router.get('/', (req, res) => {
 });
 
 router.get('/by-user/:user_id', isAuth, (req, res) => {
-  Post.find({ author: req.params.user_id })
+  Post.find({author: req.params.user_id})
     .then(posts => {
-      res.json({ posts });
+      res.json({posts});
     })
     .catch(error => {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({message: error.message});
     });
 });
+
 // get a post by id
-router.get('/:id', isAuth, (req, res) => {
+router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
     .then(post => {
+      // console.log("In serverside post.jsx: ", post);
       if (post) {
         return res.send(post);
       }
@@ -66,7 +68,6 @@ router.post('/', isAuth, async (req, res) => {
 
     make_post_helper(req.body.attachments, post)
       .then(attach_list => {
-        console.log('The attac__hment list is: ', attach_list);
         post.attachments = attach_list;
         post.save();
         res.json({
@@ -172,7 +173,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
             if (post.likes_users.includes(req.user.id)) {
               return res
                 .status(403)
-                .json({ message: 'You have liked the post' });
+                .json({message: 'You have liked the post'});
             }
           }
         }
@@ -182,7 +183,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
         post.likes_users.push(req.user.id);
         post.likes = post.likes + 1;
         post.save().then(new_post => {
-          return res.json({ post });
+          return res.json({post});
         });
       });
     })
@@ -193,8 +194,9 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
 
 // get attachments of given post
 router.get('/:post_id/attachments', (req, res) => {
-  Attachment.find({post_id: req.params.post_id})
+  Attachment.find({post_id: req.params.post_id}).sort({_id: -1})
     .then(attachments => {
+      // console.log("In the serverside post.js: ", attachments);
       res.json({attachments: attachments});
     })
     .catch(error => {

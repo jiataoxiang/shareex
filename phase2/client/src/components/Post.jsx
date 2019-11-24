@@ -101,7 +101,7 @@ class Post extends Component {
             to={{
               pathname: '/single_post',
               state: {
-                post_id: this.props.post.id
+                post_id: this.props.post._id
               }
             }}
             className="btn btn-primary"
