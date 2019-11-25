@@ -33,7 +33,7 @@ class SinglePost extends Component {
   getPostData = () => {
     axios.get("/api/posts/" + this.props.match.params.id, this.tokenConfig())
       .then(res => {
-        console.log("Get the Post data:", res.data);
+        // console.log("Get the Post data:", res.data);
         this.setState({post: res.data});
         this.getPostUser(res.data.author);
       })
@@ -45,7 +45,7 @@ class SinglePost extends Component {
   getAttachData = () => {
     axios.get("/api/posts/" + this.props.match.params.id + "/attachments", this.tokenConfig())
       .then(res => {
-        console.log("Get the Attach data:", res.data);
+        // console.log("Get the Attach data:", res.data);
         this.setState({attachments: res.data.attachments});
       })
       .catch(err => {
@@ -74,6 +74,8 @@ class SinglePost extends Component {
         console.log("Get the Comments data:", comments.data);
         let add_editMode = [];
         comments.data.comments.forEach(ele => {
+          // console.log("In the loop, the cur user id is: ", this.props.current_user._id);
+          // console.log("In the loop, the cur user id is: ", ele._id);
           ele['edit_mode'] = false;
           add_editMode.push(ele);
         });
@@ -142,12 +144,13 @@ class SinglePost extends Component {
     };
     // put the newly-added comment to our state
     const comments = this.state.comments;
-    const original_post_id = comments[0]._id;
+    const original_comment_id = comments[0]._id;
+    console.log("The commment submitted with id: ", original_comment_id);
     comments.splice(0, 1, {
-      _id: original_post_id,
+      _id: original_comment_id,
       author: this.props.current_user.username,
       body: comment_content,
-      edit_mode: true
+      edit_mode: false
     });
     this.setState({comments: comments});
 
@@ -166,6 +169,8 @@ class SinglePost extends Component {
   editComment = comment_id => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
+      console.log("I GET FOUND!!", comments[i]._id);
+      console.log("And the clicked comment id is: ", comment_id);
       if (comments[i]._id === comment_id) {
         comments[i].edit_mode = true;
       }
@@ -178,6 +183,7 @@ class SinglePost extends Component {
   addComment = () => {
     if (this.props.current_user._id) {
       const comments = this.state.comments;
+      const org_length = comments.length;
       comments.unshift({
         _id: uid(rand_string()),
         author: this.props.current_user.username,
@@ -185,6 +191,8 @@ class SinglePost extends Component {
         body: '',
         edit_mode: true
       });
+      // console.log("Comments list after added new stuff:  ", comments[0]);
+      // console.log("Comments list after added new stuff:  ", comments[1]);
       this.setState({comments: comments});
 
       document.getElementById("new-comment-button").setAttribute("hidden", true);
@@ -229,6 +237,8 @@ class SinglePost extends Component {
   };
 
   render() {
+    console.log("Comment list length", this.state.comments.length);
+    console.log("Comment list content", this.state.comments);
     console.log('Before render, we get all the data');
     console.log(this.state.post);
     console.log(this.state.attachments);
@@ -236,21 +246,22 @@ class SinglePost extends Component {
     let cur_user_id = '';
     if (this.props.current_user !== null) {
       cur_user_id = this.props.current_user._id;
-      // console.log("The current login user is:...........", this.props.current_user.username);
     }
     let username = '';
     let avatar = '';
     let post_id = '';
     if (this.state.post) {
       post_id = this.state.post._id;
-      console.log('THE POST ID IS: ', post_id);
     }
     if (this.state.post_user) {
       username = this.state.post_user.username;
       avatar = this.state.post_user.avatar;
-      console.log("The username is :....", username);
-      console.log('the avatar is: ....!!', avatar);
     }
+    let comment_list = [];
+    if (this.state.comments) {
+      comment_list = this.state.comments;
+    }
+    console.log("The comment_list is: ", comment_list);
 
     // const comments = this.state.comments ? this.state.comments : [];
     return (
@@ -289,7 +300,7 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
-                  {this.state.comments.map(comment => {
+                  {comment_list.map(comment => {
                     return (
                       <Comment
                         key={comment._id}

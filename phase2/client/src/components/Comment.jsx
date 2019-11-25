@@ -23,8 +23,10 @@ class Comment extends Component {
         </button>
       );
     }
+    console.log("We are in JSX file, ", this.props.current_user_id, this.props.comment_user_id);
     if (this.props.current_user_id === this.props.comment_user_id) {
       const {deleteComment, editComment, key} = this.props;
+      console.log("Edit get called!");
       return (
         <div>
           <button
