@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "../stylesheets/comment.scss";
+import {withRouter} from "react-router-dom";
+import {connect} from 'react-redux';
+import axios from "axios";
 
 class Comment extends Component {
   state = {};
 
-  submitComment = event => {
-    const comment_content =
-      event.target.previousElementSibling.firstElementChild.value;
-    // const { submitComment, secondary_key } = this.props;
-    this.props.submitComment(this.props.secondary_key, comment_content);
-    // submitComment.bind(this, secondary_key, comment_content);
+  submitComment = (event) => {
+    const comment_content = event.target.previousElementSibling.firstElementChild.value;
+    this.props.submitComment(comment_content, this.props.post_id);
   };
 
   getButtons = () => {
@@ -23,22 +23,22 @@ class Comment extends Component {
         </button>
       );
     }
-    if (this.props.current_user_id === this.props.user_id) {
-      const { deleteComment, editComment, secondary_key } = this.props;
+    if (this.props.current_user_id === this.props.comment_user_id) {
+      const {deleteComment, editComment, key} = this.props;
       return (
         <div>
           <button
             className="btn btn-outline-primary float-right"
-            onClick={editComment.bind(this, secondary_key)}
+            onClick={editComment.bind(this, key)}
           >
             Edit
           </button>
-          <button
-            className="btn btn-outline-danger float-right"
-            onClick={deleteComment.bind(this, secondary_key)}
-          >
-            Delete
-          </button>
+          {/*<button*/}
+          {/*  className="btn btn-outline-danger float-right"*/}
+          {/*  onClick={deleteComment.bind(this, key)}*/}
+          {/*>*/}
+          {/*  Delete*/}
+          {/*</button>*/}
         </div>
       );
     }
@@ -83,10 +83,18 @@ class Comment extends Component {
             {this.getButtons()}
           </div>
         </div>
-        <hr />
+        <hr/>
       </div>
     );
   }
 }
 
-export default Comment;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(withRouter(Comment));
