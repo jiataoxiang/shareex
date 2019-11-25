@@ -29,7 +29,8 @@ const UserSchema = new Schema({
   unbanned_date: { type: Date, default: null },
   avatar: {type: String, default: "./img/User_Avatar.png"},
   banner: {type: String, default: "./img/banner.jpg"},
-  motto: {type:String, default: "Welcome, new user"}
+  motto: {type:String, default: "Welcome, new user"},
+  messages: {type: Array, default: []}
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
