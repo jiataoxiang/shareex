@@ -6,13 +6,15 @@ import { uid } from 'react-uid';
 import Popup from './Popup';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from "./Follower"
+import Follower from "./Follower";
+import MessageBoard from "./MessageBoard";
 
 class UserProfile extends React.Component {
   state = {
     posts: [],
     showPop: false,
-    followers: []
+    followers: [],
+    messages: []
   };
 
   handlePopup = () => {
@@ -76,7 +78,8 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following.length,
         likes: currentUser.likes.length,
-        motto: currentUser.motto
+        motto: currentUser.motto,
+        messages: currentUser.messages
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -249,7 +252,9 @@ class UserProfile extends React.Component {
               <div className="message-board-container">
                 <h3>Message Board</h3>
                 <div>
-                  {/*{this.getMessages()}*/}
+                  {this.state.messages.map(message => {
+                    return <MessageBoard message = {message}/>
+                  })}
                 </div>
               </div>
               <div className="timeline">

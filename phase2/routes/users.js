@@ -229,4 +229,29 @@ router.post("/remove-following/:id", (req, res) => {
   })
 });
 
+//add messenger info to user
+router.post("/add-messenger/:id", (req, res) => {
+  const id = this.params.id;
+  if (!ObjectID.isValid(id)){
+    res.status(404).send("user id is invalid")
+  }
+
+  const message = {
+    "content": req.body.content,
+    "messenger_id": req.body.messenger_id
+  };
+
+  User.findByIdAndUpdate(id, {$push: {messages: message}}, {new:true})
+    .then((user) => {
+      if(!user){
+        res.status(404).send("user is not found")
+      }
+      res.send(user)
+    }).catch((error) => {
+      res.status(404).send(error)
+  })
+
+});
+
+
 module.exports = router;

@@ -6,11 +6,10 @@ import { rand_string } from "../../lib/util";
 import { uid } from "react-uid";
 import axios from "axios"
 import { connect } from 'react-redux';
+import MessageBoard from "./MessageBoard";
 
 class OtherProfile extends React.Component {
 
-  // TODO: NEED TO BE TESTED AFTER SINGLE POST FINISH.
-  // TODO: connect to server, get information
   state = {
     post_id: this.props.location.state.post_id,
     author: this.props.location.state.author,
@@ -19,11 +18,35 @@ class OtherProfile extends React.Component {
     avatar: "",
     followers: [],
     following: [],
+    messages: [],
     likes: [],
     numPosts: -1,
     motto: "",
+    current_message: ""
   };
 
+  handleMessageChange(event) {
+    this.setState({
+      current_message: event.target.value
+    })
+  }
+
+  sendMessage() {
+    const current_user_id = this.props.current_user._id;
+
+    axios.post(`/api/users/add-messenger/${this.state.author}`,
+      {
+        "messenger_id": current_user_id,
+        "content": this.state.current_message
+      },
+      this.props.tokenConfig())
+      .then((user) => {
+        console.log(user)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
   componentDidMount() {
     this.getUserInfo();
@@ -55,7 +78,8 @@ class OtherProfile extends React.Component {
           followers: user.followers,
           following: user.following,
           likes: user.likes.length,
-          motto: user.motto
+          motto: user.motto,
+          messages: user.messages
         })
       })
   };
@@ -217,6 +241,31 @@ class OtherProfile extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
+              <div className="message-board-container">
+                <h3>Message Board</h3>
+                <div>
+                  {this.state.messages.map(message => {
+                    return <MessageBoard message = {message}/>
+                  })}
+                </div>
+              </div>
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <button className="input-group-text" onClick={this.sendMessage.bind(this)}>
+                    Send
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="message"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                  name="message"
+                  value={this.state.current_message}
+                  onChange={this.handleMessageChange.bind(this)}
+                />
+              </div>
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
                 {/*{this.getPosts().map(post => {*/}
