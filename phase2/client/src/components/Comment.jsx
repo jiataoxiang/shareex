@@ -10,7 +10,7 @@ class Comment extends Component {
   submitComment = (event) => {
     const comment_content = event.target.previousElementSibling.firstElementChild.value;
     console.log("The current comment id is: ", this.props.secondary_key);
-    this.props.submitComment(comment_content, this.props.post_id, this.props.secondary_key);
+    this.props.submitComment(comment_content, this.props.post_id, this.props.secondary_key, this.props.new_comment);
   };
 
   getButtons = () => {
@@ -36,12 +36,12 @@ class Comment extends Component {
           >
             Edit
           </button>
-          {/*<button*/}
-          {/*  className="btn btn-outline-danger float-right"*/}
-          {/*  onClick={deleteComment.bind(this, key)}*/}
-          {/*>*/}
-          {/*  Delete*/}
-          {/*</button>*/}
+          <button
+            className="btn btn-outline-danger float-right"
+            onClick={deleteComment.bind(this, secondary_key)}
+          >
+            Delete
+          </button>
         </div>
       );
     }
