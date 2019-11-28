@@ -53,6 +53,18 @@ router.get('/search/:keyword', (req, res) => {
     });
 });
 
+router.get('/recommendations', (req, res) => {
+  Post.find({})
+    .sort({ created_at: -1, views: -1 })
+    .limit(10)
+    .then(posts => {
+      res.send(posts);
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
+    });
+});
+
 // get posts by user id
 router.get('/by-user/:user_id', isAuth, (req, res) => {
   Post.find({ author: req.params.user_id })

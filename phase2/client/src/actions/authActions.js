@@ -94,23 +94,26 @@ export const login = ({ username, password }) => dispatch => {
 
   // Request body
   const body = JSON.stringify({ username, password });
-
-  axios
-    .post('/api/users/login', body, config)
-    .then(res =>
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data
+  return new Promise((resolve, reject) => {
+    axios
+      .post('/api/users/login', body, config)
+      .then(res => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data
+        });
+        resolve(res.data);
       })
-    )
-    .catch(err => {
-      dispatch(
-        returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
-      );
-      dispatch({
-        type: LOGIN_FAIL
+      .catch(err => {
+        dispatch(
+          returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
+        );
+        dispatch({
+          type: LOGIN_FAIL
+        });
+        reject('Not signed in');
       });
-    });
+  });
 };
 
 // Logout

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { loadUser } from '../actions/authActions';
+import store from '../store';
 
 class Navbar extends React.Component {
   state = {};
@@ -14,10 +16,11 @@ class Navbar extends React.Component {
   };
 
   colorTransition = () => {
+    console.log('making color transition.');
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
       document.documentElement.classList.remove('transition');
-    }, 760);
+    }, 800);
   };
 
   getUserProfileButton = () => {
@@ -48,6 +51,14 @@ class Navbar extends React.Component {
       }
     });
   };
+
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  componentWillReceiveProps() {
+    console.log('componentWillReceiveProps');
+  }
 
   tokenConfig = () => {
     // Get token from localstorage
@@ -95,6 +106,7 @@ class Navbar extends React.Component {
         )
         .then(res => {
           console.log(res.data);
+          store.dispatch(loadUser());
         })
         .catch(err => {
           console.log(err);
@@ -103,19 +115,6 @@ class Navbar extends React.Component {
   };
 
   render() {
-    // if logged in, set color theme based on preference
-    if (this.props.isAuthenticated && this.props.current_user.color_theme) {
-      if (
-        document.documentElement.getAttribute('theme') !==
-        this.props.current_user.color_theme
-      ) {
-        this.colorTransition();
-        document.documentElement.setAttribute(
-          'theme',
-          this.props.current_user.color_theme
-        );
-      }
-    }
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <Link
