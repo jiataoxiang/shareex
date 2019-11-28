@@ -1,3 +1,11 @@
+/* 
+font-family: 'Lobster', cursive;
+font-family: 'Pacifico', cursive;
+font-family: 'Dancing Script', cursive;
+font-family: 'Acme', sans-serif;
+font-family: 'Assistant', sans-serif; 
+*/
+
 .App {
   text-align: center;
 }
@@ -27,7 +35,7 @@ html {
   --background-secondary: #efefef;
 }
 
-html[theme="dark"] {
+html[theme='dark'] {
   --background-primary: #222222;
   --text: #ffffff;
   --background-secondary: #333333;
@@ -58,4 +66,9 @@ h4,
 h5,
 p {
   color: var(--text);
+}
+
+h3 {
+  font-family: 'Acme', sans-serif;
+  /* font-family: 'Assistant', sans-serif;  */
 }

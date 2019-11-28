@@ -1,3 +1,12 @@
+/* 
+font-family: 'Lobster', cursive;
+font-family: 'Pacifico', cursive;
+font-family: 'Dancing Script', cursive;
+font-family: 'Acme', sans-serif;
+font-family: 'Assistant', sans-serif; 
+font-family: 'Francois One', sans-serif;
+*/
+
 .App {
   text-align: center;
 }
@@ -28,7 +37,7 @@ html {
   --hr-color: black;
 }
 
-html[theme="dark"] {
+html[theme='dark'] {
   --background-primary: #222222;
   --text: #ffffff;
   --background-secondary: #333333;
@@ -62,4 +71,25 @@ p,
 li,
 span {
   color: var(--text);
+}
+
+h2,
+h3 {
+  font-family: 'Acme', sans-serif;
+}
+
+h5 {
+  font-family: 'Francois One', sans-serif;
+}
+
+p {
+  // font-family: 'Lobster', cursive;
+  // font-family: 'Pacifico', cursive;
+  // font-family: 'Dancing Script', cursive;
+  // font-family: 'Acme', sans-serif;
+  font-family: 'Assistant', sans-serif;
+}
+
+button {
+  font-family: 'Francois One', sans-serif;
 }

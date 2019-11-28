@@ -120,7 +120,7 @@ class Navbar extends React.Component {
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
         <Link id="logo-btn" to="/">
           <img
-            src={process.env.PUBLIC_URL + './img/logo_S.png'}
+            src={process.env.PUBLIC_URL + '/img/logo_S.png'}
             alt=""
             width="50px"
           />
