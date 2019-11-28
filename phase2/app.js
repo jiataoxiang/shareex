@@ -9,6 +9,7 @@ const usersRouter = require("./routes/users");
 const testRouter = require("./routes/test");
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const notificationsRouter = require("./routes/notifications");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/posts", postsRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/test", testRouter);
+app.use("/api/notifications", notificationsRouter);
 
 // Connect to mongodb with mongoose, this require only runs the javascript file instead of importing it
 require("./util/mongoose_connection");
