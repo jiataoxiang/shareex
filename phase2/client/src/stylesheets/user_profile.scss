@@ -1,4 +1,9 @@
 .user-profile-page {
+  .alert {
+    margin: 0;
+    position: absolute;
+    width: 100%;
+  }
   .bannerPic {
     display: block;
     width: 100%;
@@ -22,11 +27,11 @@
     background-color: dimgrey;
     border-bottom-style: hidden;
     opacity: 0;
-    
-    -webkit-transition: opacity .3s;
-    -moz-transition: opacity .3s;
-    -o-transition: opacity .3s;
-    transition: opacity .3s;
+
+    -webkit-transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
   }
   /* Style the big profile picture circle here. */
   #bigProfilePicCircle {
@@ -98,7 +103,7 @@
     min-height: 100px;
     float: left;
   }
-    
+
   .card {
     width: 100%;
   }
@@ -131,7 +136,6 @@
     border-radius: 10px;
     color: black;
   }
-
 
   .popupHeader {
     color: black;

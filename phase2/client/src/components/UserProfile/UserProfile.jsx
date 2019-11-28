@@ -6,15 +6,18 @@ import { uid } from 'react-uid';
 import Popup from './Popup';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from "./Follower";
-import MessageBoard from "./MessageBoard";
+import Follower from './Follower';
+import MessageBoard from './MessageBoard';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 class UserProfile extends React.Component {
   state = {
     posts: [],
     showPop: false,
     followers: [],
-    messages: []
+    messages: [],
+    alert: null
   };
 
   handlePopup = () => {
@@ -106,23 +109,59 @@ class UserProfile extends React.Component {
   // TODO: change the following code in phase 2, so that we keep the file
   changeBanner = event => {
     const inputFile = event.target.files[0];
+    this.uploadImage('banner', inputFile);
+  };
 
+  uploadImage = (type, inputFile) => {
     if (inputFile != null) {
-      const isJPG = inputFile.type === 'image/jpeg';
-      const isPNG = inputFile.type === 'image/png';
+      // const isJPG = inputFile.type === 'image/jpeg';
+      // const isPNG = inputFile.type === 'image/png';
+      const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(
+        inputFile.type
+      );
 
-      if (!isJPG && !isPNG) {
+      if (!is_valid_image) {
         inputFile.status = 'error';
         console.log('You can only upload png or jpg files.');
-      } else {
-        const imgReader = new FileReader();
-        imgReader.addEventListener('load', () => {
-          this.setState({ banner: imgReader.result });
-          // save the new banner to mock data, change in phase 2
-          this.props.state.current_user.banner = imgReader.result;
-        });
-        imgReader.readAsDataURL(inputFile);
       }
+      const formData = new FormData();
+      formData.append('file', inputFile); // get first file chosen
+      formData.append('public_id', `${type}_${this.props.current_user._id}`);
+      console.log('Uploading ' + type);
+      this.setState({ alert: `Uploading ${type}` });
+      axios
+        .post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(res => {
+          console.log(res);
+          const public_id = res.data[0].public_id;
+          const url = res.data[0].url;
+          axios
+            .patch(
+              `/api/users/${this.props.current_user._id}`,
+              { [type]: url },
+              this.props.tokenConfig()
+            )
+            .then(res => {
+              console.log(res.data);
+              console.log('reload user');
+              store.dispatch(loadUser());
+              this.setState({ [type]: url });
+              this.setState({ alert: 'Image Modified' });
+              setTimeout(() => {
+                this.setState({ alert: null });
+              }, 2000);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   };
 
@@ -144,24 +183,7 @@ class UserProfile extends React.Component {
   // TODO: change the following code in phase 2, so that we keep the file
   changeAvatar = event => {
     const inputFile = event.target.files[0];
-
-    if (inputFile != null) {
-      const isJPG = inputFile.type === 'image/jpeg';
-      const isPNG = inputFile.type === 'image/png';
-
-      if (!isJPG && !isPNG) {
-        inputFile.status = 'error';
-        console.log('You can only upload png or jpg files.');
-      } else {
-        const imgReader = new FileReader();
-        imgReader.addEventListener('load', () => {
-          this.setState({ avatar: imgReader.result });
-          // save the new banner to mock data, change in phase 2
-          this.props.state.current_user.avatar = imgReader.result;
-        });
-        imgReader.readAsDataURL(inputFile);
-      }
-    }
+    this.uploadImage('avatar', inputFile);
   };
 
   render() {
@@ -172,6 +194,11 @@ class UserProfile extends React.Component {
     const followers = this.state.followers;
     return (
       <div className="user-profile-page">
+        {this.state.alert ? (
+          <div className="alert alert-primary" role="alert">
+            {this.state.alert}
+          </div>
+        ) : null}
         <div>
           {this.state.showPop ? (
             <Popup
@@ -217,7 +244,9 @@ class UserProfile extends React.Component {
             <li>
               Followers
               <br />
-              <span className="profileStatsNumber">{this.state.followers.length}</span>
+              <span className="profileStatsNumber">
+                {this.state.followers.length}
+              </span>
             </li>
             <li>
               Following
@@ -252,7 +281,9 @@ class UserProfile extends React.Component {
               <div className="my-3 p-3 rounded box-shadow overflow-auto fix-length">
                 <h6>Recent updates</h6>
                 {this.state.messages.map(message => {
-                  return <MessageBoard key={uid(Math.random())} message={message}/>
+                  return (
+                    <MessageBoard key={uid(Math.random())} message={message} />
+                  );
                 })}
                 {/*<small className="d-block text-right mt-3">*/}
                 {/*  <a href="#">All messages</a>*/}
@@ -273,11 +304,13 @@ class UserProfile extends React.Component {
                 })}
               </div>
             </div>
-            <div className= "col-md-12">
+            <div className="col-md-12">
               <div className="followers">
                 <h3> Followers</h3>
-                {followers.map((follower)=>{
-                  return <Follower key={uid(Math.random())} follower = {follower}/>
+                {followers.map(follower => {
+                  return (
+                    <Follower key={uid(Math.random())} follower={follower} />
+                  );
                 })}
               </div>
             </div>
