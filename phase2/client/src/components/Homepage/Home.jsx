@@ -15,27 +15,30 @@ class Home extends Component {
   };
 
   componentDidMount() {
+    console.log('Home did mount');
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
       return;
     }
-    if (
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.search_content
-    ) {
-      this.search(this.props.location.state.search_content);
+    if (this.props.location && this.props.location.state) {
+      if (this.props.location.state.search_content) {
+        this.search(this.props.location.state.search_content);
+      } else if (this.props.location.state.search_content === '') {
+        console.log('debug');
+        this.search();
+      }
     }
     this.updatePosts();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.location &&
-      nextProps.location.state &&
-      nextProps.location.state.search_content
-    ) {
-      this.search(nextProps.location.state.search_content);
+    if (nextProps.location && nextProps.location.state) {
+      if (nextProps.location.state.search_content) {
+        this.search(nextProps.location.state.search_content);
+      } else if (nextProps.location.state.search_content === '') {
+        console.log('componentWillReceiveProps debug');
+        this.search();
+      }
     }
   }
 

@@ -118,7 +118,15 @@ class Navbar extends React.Component {
     }
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link id="logo-btn" to="/">
+        <Link
+          id="logo-btn"
+          to={{
+            pathname: '/',
+            state: {
+              search_content: ''
+            }
+          }}
+        >
           <img
             src={process.env.PUBLIC_URL + '/img/logo_S.png'}
             alt=""

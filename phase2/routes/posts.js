@@ -36,7 +36,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/search/:keyword', (req, res) => {
-  Post.find({ title: { $regex: `${req.params.keyword}`, $options: 'i' } })
+  console.log('keyword: ' + req.params.keyword);
+  console.log('keyword: ', typeof req.params.keyword);
+  const filter =
+    req.params.keyword !== 'undefined'
+      ? { title: { $regex: `${req.params.keyword}`, $options: 'i' } }
+      : {};
+  console.log(filter);
+  Post.find(filter)
+    .sort({ created_at: -1 })
     .then(posts => {
       res.json({ posts });
     })
@@ -47,12 +55,12 @@ router.get('/search/:keyword', (req, res) => {
 
 // get posts by user id
 router.get('/by-user/:user_id', isAuth, (req, res) => {
-  Post.find({author: req.params.user_id})
+  Post.find({ author: req.params.user_id })
     .then(posts => {
-      res.json({posts});
+      res.json({ posts });
     })
     .catch(error => {
-      res.status(500).json({message: error.message});
+      res.status(500).json({ message: error.message });
     });
 });
 
@@ -73,33 +81,32 @@ router.get('/:id', (req, res) => {
 
 // make a new post
 router.post('/', isAuth, async (req, res) => {
-    try {
-      const post = await Post.create({
-        title: req.body.title,
-        author: req.body.author,
-        category: req.body.category,
-        body: req.body.body
+  try {
+    const post = await Post.create({
+      title: req.body.title,
+      author: req.body.author,
+      category: req.body.category,
+      body: req.body.body
+    });
+    console.log('post created, now attachments\n\n');
+    if (!req.body.attachments) {
+      return res.json({
+        message: 'Post Created, No Attachments.',
+        post
       });
-      console.log('post created, now attachments\n\n');
-      if (!req.body.attachments) {
-        return res.json({
-          message: 'Post Created, No Attachments.',
-          post
-        });
-      }
-
-      make_post_helper(req.body.attachments, post)
-        .then(attach_list => {
-          post.attachments = attach_list;
-          post.save();
-          res.json({
-            post,
-            message: 'Post created'
-          });
-        });
-    } catch (err) {
-      return res.status(400).send(err);
     }
+
+    make_post_helper(req.body.attachments, post).then(attach_list => {
+      post.attachments = attach_list;
+      post.save();
+      res.json({
+        post,
+        message: 'Post created'
+      });
+    });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
 });
 
 make_post_helper = (attachments, post) => {
@@ -195,7 +202,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
             if (post.likes_users.includes(req.user.id)) {
               return res
                 .status(403)
-                .json({message: 'You have liked the post'});
+                .json({ message: 'You have liked the post' });
             }
           }
         }
@@ -205,7 +212,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
         post.likes_users.push(req.user.id);
         post.likes = post.likes + 1;
         post.save().then(new_post => {
-          return res.json({post});
+          return res.json({ post });
         });
       });
     })
@@ -216,10 +223,11 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
 
 // get attachments of given post
 router.get('/:post_id/attachments', (req, res) => {
-  Attachment.find({post_id: req.params.post_id}).sort({_id: -1})
+  Attachment.find({ post_id: req.params.post_id })
+    .sort({ _id: -1 })
     .then(attachments => {
       // console.log("In the serverside post.js: ", attachments);
-      res.json({attachments: attachments});
+      res.json({ attachments: attachments });
     })
     .catch(error => {
       res.status(500).json({ message: error.message });
