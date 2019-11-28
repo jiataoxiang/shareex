@@ -71,14 +71,7 @@ class Post extends Component {
     return (
       <div className="post card">
         <div className="card-header">
-          <Link
-            to={{
-              pathname: '/single_post',
-              state: {
-                post_id: this.props.post.id
-              }
-            }}
-          >
+          <Link to={`/single_post/${this.props.post._id}`}>
             {/* style={{ display: 'inline-block' }} */}
             <span>
               <h5 className="post-title">{title}</h5>
@@ -136,12 +129,7 @@ class Post extends Component {
           </div>
           <hr />
           <Link
-            to={{
-              pathname: '/single_post',
-              state: {
-                post_id: this.props.post._id
-              }
-            }}
+            to={`/single_post/${this.props.post._id}`}
             className="btn btn-primary"
           >
             See Details
