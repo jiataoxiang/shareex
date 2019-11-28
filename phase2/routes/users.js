@@ -5,7 +5,7 @@ const Post = require('../models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { isAuth } = require('../middleware/auth');
+const { isAuth, isAuthorizedUser } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 
 /* GET users listing. */
@@ -104,8 +104,9 @@ router.post('/login', (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
-  User.findById(req.params.id, (err, user) => {
+// delete a user
+router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
+  User.findById(req.params.user_id, (err, user) => {
     if (err) {
       console.log('delete user: ', err);
       return res.status(500).json({ message: err.message });
@@ -135,7 +136,8 @@ router.get('/auth', isAuth, (req, res) => {
 });
 
 //get user by id without sending back password.
-router.get('/:user_id', (req, res) => {
+// getting user info, no password sent back, no need to check is authorized
+router.get('/:user_id', isAuth, (req, res) => {
   const user_id = req.params.user_id;
   if (!ObjectID.isValid(user_id)) {
     res.status(404).send();
@@ -250,39 +252,49 @@ router.post('/remove-following/:id', (req, res) => {
     });
 });
 
-router.patch('/:id/add-view-history', (req, res) => {
-  User.findById(req.params.id).then(user => {
-    if (!user) return res.status(404).send('User not found!');
-    user.view_history = user.view_history.filter(
-      post_id => post_id !== req.body.post_id
-    );
-    user.view_history.unshift(req.body.post_id);
-    user
-      .save()
+router.patch(
+  '/:user_id/add-view-history',
+  isAuth,
+  isAuthorizedUser,
+  (req, res) => {
+    User.findById(req.params.user_id).then(user => {
+      if (!user) return res.status(404).send('User not found!');
+      user.view_history = user.view_history.filter(
+        post_id => post_id !== req.body.post_id
+      );
+      user.view_history.unshift(req.body.post_id);
+      user
+        .save()
+        .then(user => {
+          res.send(`Successfully added ${req.body.post_id} to view history.`);
+        })
+        .catch(err => {
+          res.status(500).send(err);
+        });
+    });
+  }
+);
+
+router.patch(
+  '/:user_id/remove-view-history',
+  isAuth,
+  isAuthorizedUser,
+  (req, res) => {
+    User.findByIdAndUpdate(req.params.user_id, {
+      view_history: []
+    })
       .then(user => {
-        res.send(`Successfully added ${req.body.post_id} to view history.`);
+        if (!user) return res.status(404).send('User not found!');
+        res.send('Successfully Removed View History');
       })
       .catch(err => {
         res.status(500).send(err);
       });
-  });
-});
+  }
+);
 
-router.patch('/:id/remove-view-history', (req, res) => {
-  User.findByIdAndUpdate(req.params.id, {
-    view_history: []
-  })
-    .then(user => {
-      if (!user) return res.status(404).send('User not found!');
-      res.send('Successfully Removed View History');
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    });
-});
-
-router.patch('/:id', isAuth, (req, res) => {
-  User.findByIdAndUpdate(req.params.id, req.body)
+router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
+  User.findByIdAndUpdate(req.params.user_id, req.body)
     .then(user => {
       if (!user) {
         res.status(404).send('User not found');

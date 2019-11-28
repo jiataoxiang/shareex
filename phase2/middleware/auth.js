@@ -52,18 +52,31 @@ function isAuthorizedPost(req, res, next) {
 assume isAuth is called before this middleware since req.user is needed to check current user (token)
 assume :id in route url is user id, otherwise won't work
 login as admin user could bypass this check
+if is admin, req.user.admin will be set to true
 */
 function isAuthorizedUser(req, res, next) {
   User.findById(req.user.id).then(user => {
     if (!user) res.status(404).send('user not found');
+    if (user.admin) {
+      req.user.admin = true;
+    }
     if (!user.admin) {
       // if not admin, check if this action is made by same user
-      if (req.params.id !== req.user.id) {
+      if (req.params.user_id !== req.user.id) {
         res.status(401).send('Unauthorized action');
       }
     }
-    // if reached this line, current user is either admin or the same user as in params.id(authorized)
+    // if reached this line, current user is either admin or the same user as in params.user_id(authorized)
     next();
+  });
+}
+
+// check if current user is admin
+// assume isAuth is called before this middleware since req.user is needed to check current user (token)
+function isAdmin(req, res, next) {
+  User.findById(req.user.id).then(user => {
+    if (user.admin) return next();
+    else res.status(401).send('Unauthorized.');
   });
 }
 
