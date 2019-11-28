@@ -253,20 +253,6 @@ router.post('/remove-following/:id', (req, res) => {
 router.patch('/:id/add-view-history', (req, res) => {
   User.findById(req.params.id).then(user => {
     if (!user) return res.status(404).send('User not found!');
-    let view_history = user.view_history;
-    console.log(view_history);
-    // if (view_history.includes(req.body.post_id)) {
-    //   console.log('contained');
-    //   console.log(typeof view_history);
-    //   view_history = view_history.filter(
-    //     post_id => post_id !== req.body.post_id
-    //   );
-    // }
-    // console.log('here', view_history);
-
-    // view_history.unshift(req.body.post_id);
-    // console.log('there', view_history);
-    // user.view_history = view_history;
     user.view_history = user.view_history.filter(
       post_id => post_id !== req.body.post_id
     );
@@ -280,17 +266,6 @@ router.patch('/:id/add-view-history', (req, res) => {
         res.status(500).send(err);
       });
   });
-  // User.findByIdAndUpdate(req.params.id, {$pullAll: {view_history: [req.body.]}})
-  // User.findByIdAndUpdate(req.params.id, {
-  //   $addToSet: { view_history: req.body.post_id }
-  // })
-  //   .then(user => {
-  //     if (!user) return res.status(404).send('User not found!');
-  //     res.send('Successfully Added View History');
-  //   })
-  //   .catch(err => {
-  //     res.status(500).send(err);
-  //   });
 });
 
 router.patch('/:id/remove-view-history', (req, res) => {
