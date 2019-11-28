@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { isAuth } = require('../middleware/auth');
-const {ObjectID} = require("mongodb");
+const { ObjectID } = require('mongodb');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -134,99 +134,133 @@ router.get('/auth', isAuth, (req, res) => {
     });
 });
 
-//get user by id without password.
-router.get("/:user_id", (req, res) => {
+//get user by id without sending back password.
+router.get('/:user_id', (req, res) => {
   const user_id = req.params.user_id;
-  if(!ObjectID.isValid(user_id)) {
-    res.status(404).send()
+  if (!ObjectID.isValid(user_id)) {
+    res.status(404).send();
   }
 
   User.findById(user_id)
-    .select("-password")
-    .then((user)=> {
-      res.send(user)
-  }).catch((error) => {
-    res.status(400).send(error)
-  })
+    .select('-password')
+    .then(user => {
+      res.send(user);
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 //add following
-router.post("/add-following/:id", isAuth, (req, res) => {
+router.post('/add-following/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const following_id = req.body.following_id;
-  if (!ObjectID.isValid(id)){
-    res.status(404).send("user id is invalid")
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(id, {$push: {following: following_id}}, {new:true})
-    .then((user) => {
-    if (!user){
-      res.status(404).send("user not found when add following")
-    }
-    res.send(user)
-  }).catch((error) => {
-    res.status(400).send(error)
-  })
+  User.findByIdAndUpdate(
+    id,
+    { $push: { following: following_id } },
+    { new: true }
+  )
+    .then(user => {
+      if (!user) {
+        res.status(404).send('user not found when add following');
+      }
+      res.send(user);
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 //add follower
-router.post("/add-follower/:id",isAuth, (req, res) => {
+router.post('/add-follower/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const follower_id = req.body.follower_id;
 
-  if (!ObjectID.isValid(id)){
-    res.status(404).send("user id is invalid")
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(id, {$push: {followers: follower_id}}, {new: true})
-    .then((user) => {
+  User.findByIdAndUpdate(
+    id,
+    { $push: { followers: follower_id } },
+    { new: true }
+  )
+    .then(user => {
       if (!user) {
-        res.status(404).send("user is not found!")
+        res.status(404).send('user is not found!');
       }
       res.send(user);
-    }).catch((error) => {
-      res.status(400).send(error)
-  })
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 //remove follower
-router.post("/remove-follower/:id", (req, res) => {
-  const id =  req.params.id;
+router.post('/remove-follower/:id', (req, res) => {
+  const id = req.params.id;
   const follower_id = req.body.follower_id;
 
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid")
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(id, {$pull: {followers: follower_id}}, {new: true})
+  User.findByIdAndUpdate(
+    id,
+    { $pull: { followers: follower_id } },
+    { new: true }
+  )
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found!")
+        res.status(404).send('user is not found!');
       }
-      res.send(user)
-    }).catch((error) => {
-      res.status(400).send(error)
-  })
+      res.send(user);
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 //remove following
-router.post("/remove-following/:id", (req, res) => {
+router.post('/remove-following/:id', (req, res) => {
   const id = req.params.id;
-  const following_id =  req.body.following_id;
+  const following_id = req.body.following_id;
 
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid")
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(id, {$pull: {following: following_id}}, {new: true})
+  User.findByIdAndUpdate(
+    id,
+    { $pull: { following: following_id } },
+    { new: true }
+  )
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found")
+        res.status(404).send('user is not found');
       }
-      res.send(user)
-    }).catch((error) => {
-      res.status(400).send(error)
-  })
+      res.send(user);
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
+});
+
+router.patch('/:id', isAuth, (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(user => {
+      if (!user) {
+        res.status(404).send('User not found');
+      }
+      res.send('Successfully updated');
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
 });
 
 module.exports = router;

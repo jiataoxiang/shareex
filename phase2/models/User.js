@@ -24,12 +24,13 @@ const UserSchema = new Schema({
   created_at: { type: Date, default: Date.now },
   followers: { type: Array, default: [] },
   following: { type: Array, default: [] },
-  likes: {type: Array, default: []},
+  likes: { type: Array, default: [] },
   banned: { type: Boolean, default: false },
   unbanned_date: { type: Date, default: null },
-  avatar: {type: String, default: "./img/User_Avatar.png"},
-  banner: {type: String, default: "./img/banner.jpg"},
-  motto: {type:String, default: "Welcome, new user"}
+  avatar: { type: String, default: './img/User_Avatar.png' },
+  banner: { type: String, default: './img/banner.jpg' },
+  motto: { type: String, default: 'Welcome, new user' },
+  color_theme: { type: String, default: 'dark' }
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
