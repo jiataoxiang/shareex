@@ -249,14 +249,23 @@ class UserProfile extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
-              <div className="message-board-container">
-                <h3>Message Board</h3>
-                <div>
-                  {this.state.messages.map(message => {
-                    return <MessageBoard message = {message}/>
-                  })}
-                </div>
+              <div className="my-3 p-3 rounded box-shadow overflow-auto fix-length">
+                <h6>Recent updates</h6>
+                {this.state.messages.map(message => {
+                  return <MessageBoard key={uid(Math.random())} message={message}/>
+                })}
+                {/*<small className="d-block text-right mt-3">*/}
+                {/*  <a href="#">All messages</a>*/}
+                {/*</small>*/}
               </div>
+              {/*<div className="message-board-container">*/}
+              {/*  <h3>Message Board</h3>*/}
+              {/*  <div>*/}
+              {/*    {this.state.messages.map(message => {*/}
+              {/*      return <MessageBoard message = {message}/>*/}
+              {/*    })}*/}
+              {/*  </div>*/}
+              {/*</div>*/}
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
                 {posts.map(post => {

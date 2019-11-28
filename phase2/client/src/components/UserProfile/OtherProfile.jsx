@@ -33,6 +33,7 @@ class OtherProfile extends React.Component {
 
   sendMessage() {
     const current_user_id = this.props.current_user._id;
+    console.log(this.state.author);
 
     axios.post(`/api/users/add-messenger/${this.state.author}`,
       {
@@ -45,7 +46,9 @@ class OtherProfile extends React.Component {
       })
       .catch((error) => {
         console.log(error)
-      })
+      });
+
+    this.getUserInfo()
   }
 
   componentDidMount() {
@@ -85,7 +88,7 @@ class OtherProfile extends React.Component {
   };
 
   isUnfollowing = () => {
-    console.log(this.state.followers);
+    // console.log(this.state.followers);
     return this.state.followers.filter(follower => follower === this.props.current_user._id).length === 0
   };
 
@@ -241,13 +244,14 @@ class OtherProfile extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
-              <div className="message-board-container">
-                <h3>Message Board</h3>
-                <div>
-                  {this.state.messages.map(message => {
-                    return <MessageBoard message = {message}/>
-                  })}
-                </div>
+              <div className="my-3 p-3 rounded box-shadow overflow-auto fix-length ">
+                <h6>Recent updates</h6>
+                {this.state.messages.map(message => {
+                  return <MessageBoard key={uid(Math.random())} message={message}/>
+                })}
+                {/*<small className="d-block text-right mt-3">*/}
+                {/*  <a href="#">All messages</a>*/}
+                {/*</small>*/}
               </div>
               <div className="input-group mb-3">
                 <div className="input-group-prepend">

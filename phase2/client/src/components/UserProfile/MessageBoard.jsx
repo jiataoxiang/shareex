@@ -8,12 +8,14 @@ class MessageBoard extends React.Component {
 
   state = {
     message: this.props.message,
+    messenger_name: "",
+    messenger_avatar: ""
   };
 
   componentDidMount() {
     this._isMount = true;
     //get follower avatar and name
-    axios.get(`/api/users/${this.state.message._id}`, this.props.tokenConfig())
+    axios.get(`/api/users/${this.state.message.messenger_id}`, this.props.tokenConfig())
       .then((messenger) => {
         if(this._isMount){
           this.setState({
@@ -34,9 +36,14 @@ class MessageBoard extends React.Component {
   render() {
     return (
       <div className="message-board">
-        <img src={this.state.messenger_avatar} className="avatar-image" alt="avatar"/>
-        <span className="username-text">{this.state.messenger_name}</span>
-        <span>{this.state.message.content}</span>
+        <div className="media text-muted pt-3">
+          <img src={this.state.messenger_avatar} alt="" className="mr-2 rounded"
+               width="32" height="32"/>
+          <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <strong className="d-block text-gray-dark">{this.state.messenger_name}</strong>
+            {this.state.message.content}
+          </p>
+        </div>
       </div>
     );
   }
