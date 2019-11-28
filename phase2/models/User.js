@@ -45,12 +45,15 @@ UserSchema.pre('save', function(next) {
   console.log('\n\n-----pre save for user called-----\n\n');
   const user = this;
   if (user.isModified('password')) {
+    console.log('password modified, hashing new password');
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
         next();
       });
     });
+  } else {
+    next();
   }
 });
 
