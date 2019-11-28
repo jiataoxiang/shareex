@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import "../../Stylesheets/signIn&Up.scss";
 import Canvas from "./Canvas.jsx";
 
 let canvas_size = {
