@@ -250,6 +250,32 @@ router.post('/remove-following/:id', (req, res) => {
     });
 });
 
+router.patch('/:id/add-view-history', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    $addToSet: { view_history: req.body.post_id }
+  })
+    .then(user => {
+      if (!user) return res.status(404).send('User not found!');
+      res.send('Successfully Added View History');
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+router.patch('/:id/remove-view-history', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    view_history: []
+  })
+    .then(user => {
+      if (!user) return res.status(404).send('User not found!');
+      res.send('Successfully Removed View History');
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
 router.patch('/:id', isAuth, (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body)
     .then(user => {

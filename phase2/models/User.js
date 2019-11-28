@@ -30,7 +30,8 @@ const UserSchema = new Schema({
   avatar: { type: String, default: './img/User_Avatar.png' },
   banner: { type: String, default: './img/banner.jpg' },
   motto: { type: String, default: 'Welcome, new user' },
-  color_theme: { type: String, default: 'dark' }
+  color_theme: { type: String, default: 'dark' },
+  view_history: Array
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
