@@ -3,18 +3,19 @@ import '../../stylesheets/user_profile.scss';
 import Post from '../Post';
 import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
-import Popup from './Popup';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Follower from "./Follower";
 import MessageBoard from "./MessageBoard";
+import Animation from './Animation.jsx';
 
 class UserProfile extends React.Component {
   state = {
     posts: [],
     showPop: false,
     followers: [],
-    messages: []
+    messages: [],
+    following: []
   };
 
   handlePopup = () => {
@@ -22,15 +23,6 @@ class UserProfile extends React.Component {
     if (this.state.showPop === false) {
       this.setState({
         showPop: true
-      });
-    }
-  };
-
-  closePopup = () => {
-    // Close the pop up window.
-    if (this.state.showPop === true) {
-      this.setState({
-        showPop: false
       });
     }
   };
@@ -72,11 +64,11 @@ class UserProfile extends React.Component {
     const currentUser = this.props.current_user;
     if (currentUser) {
       this.setState({
-        nickname: currentUser.nickname,
+        nickname: currentUser.username,
         banner: currentUser.banner,
         avatar: currentUser.avatar,
         followers: currentUser.followers,
-        following: currentUser.following.length,
+        following: currentUser.following,
         likes: currentUser.likes.length,
         motto: currentUser.motto,
         messages: currentUser.messages
@@ -174,10 +166,9 @@ class UserProfile extends React.Component {
       <div className="user-profile-page">
         <div>
           {this.state.showPop ? (
-            <Popup
-              header="This is not BUG, It's feature ^v^"
-              closePopup={this.closePopup.bind(this)}
-            />
+            <div className="popupWindow">
+              <Animation />
+            </div>
           ) : (
             <img
               className="bannerPic"
@@ -206,40 +197,18 @@ class UserProfile extends React.Component {
             onChange={this.changeBanner}
           />
         </div>
-
-        <div id="profileStats">
-          <ul className="text-center">
-            <li>
-              Posts
-              <br />
-              <span className="profileStatsNumber">{this.state.numPosts}</span>
-            </li>
-            <li>
-              Followers
-              <br />
-              <span className="profileStatsNumber">{this.state.followers.length}</span>
-            </li>
-            <li>
-              Following
-              <br />
-              <span className="profileStatsNumber">{this.state.following}</span>
-            </li>
-            <li>
-              Likes
-              <br />
-              <span className="profileStatsNumber">{this.state.likes}</span>
-            </li>
-          </ul>
-        </div>
         <div className="container">
           <div className="row">
             <div className="col-md-4">
               <div className="sticky-top">
                 <div className="space"></div>
-                <div id="profileInfo">
+                <div className="profileInfo fix-height">
                   <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
-                  <p>{this.state.description}</p>
+                  <p>Posts: {this.state.numPosts}</p>
+                  <p>Followers: {this.state.followers.length}</p>
+                  <p>Following: {this.state.following.length}</p>
+                  <p>Likes: {this.state.likes}</p>
                   <Link to="/prof_setting" id="profile-setting-btn">
                     <button className="btn btn-light btn-block">
                       Profile Setting
@@ -249,23 +218,13 @@ class UserProfile extends React.Component {
               </div>
             </div>
             <div className="col-md-8">
-              <div className="my-3 p-3 rounded box-shadow overflow-auto fix-length">
-                <h6>Recent updates</h6>
+              <div className="space"></div>
+              <div className="profileInfo overflow-auto fix-height">
+                <h6>Comments Board</h6>
                 {this.state.messages.map(message => {
                   return <MessageBoard key={uid(Math.random())} message={message}/>
                 })}
-                {/*<small className="d-block text-right mt-3">*/}
-                {/*  <a href="#">All messages</a>*/}
-                {/*</small>*/}
               </div>
-              {/*<div className="message-board-container">*/}
-              {/*  <h3>Message Board</h3>*/}
-              {/*  <div>*/}
-              {/*    {this.state.messages.map(message => {*/}
-              {/*      return <MessageBoard message = {message}/>*/}
-              {/*    })}*/}
-              {/*  </div>*/}
-              {/*</div>*/}
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
                 {posts.map(post => {
