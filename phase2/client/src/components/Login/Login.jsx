@@ -34,6 +34,14 @@ class Login extends Component {
     }
   }
 
+  colorTransition = () => {
+    console.log('making color transition.');
+    document.documentElement.classList.add('transition');
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('transition');
+    }, 800);
+  };
+
   signin = e => {
     e.preventDefault();
 
@@ -44,7 +52,26 @@ class Login extends Component {
     };
     // Attempt to login
     this.props.clearErrors();
-    this.props.login(user);
+    this.props
+      .login(user)
+      .then(res => {
+        console.log(res);
+        if (res.user.color_theme) {
+          if (
+            document.documentElement.getAttribute('theme') !==
+            res.user.color_theme
+          ) {
+            this.colorTransition();
+            document.documentElement.setAttribute(
+              'theme',
+              res.user.color_theme
+            );
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   onChange = e => {
@@ -130,7 +157,8 @@ class Login extends Component {
 // getting from reducers (error and auth reducers)
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
+  error: state.error,
+  current_user: state.auth.user
 });
 
 export default connect(mapStateToProps, { login, clearErrors })(
