@@ -13,6 +13,21 @@ router.get('/', function(req, res, next) {
   res.send('users route');
 });
 
+// check isAuthenticated
+router.get('/check-auth', isAuth, (req, res) => {
+  res.send('Is Authenticated.');
+});
+
+// check isAuthorizedUser
+router.get(
+  '/:user_id/check-authorized',
+  isAuth,
+  isAuthorizedUser,
+  (req, res) => {
+    res.send('Is Authenticated and Authorized.');
+  }
+);
+
 // register
 router.post('/', (req, res) => {
   const { username, email, password } = req.body;

@@ -1,6 +1,7 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 // how to check how much time is left until expiration?
 // get expiration time, times it by 1000
@@ -55,20 +56,26 @@ login as admin user could bypass this check
 if is admin, req.user.admin will be set to true
 */
 function isAuthorizedUser(req, res, next) {
-  User.findById(req.user.id).then(user => {
-    if (!user) res.status(404).send('user not found');
-    if (user.admin) {
-      req.user.admin = true;
-    }
-    if (!user.admin) {
-      // if not admin, check if this action is made by same user
-      if (req.params.user_id !== req.user.id) {
-        res.status(401).send('Unauthorized action');
+  console.log(req.user.id);
+  User.findById(req.user.id)
+    .then(user => {
+      console.log(user);
+      if (!user) res.status(404).send('user not found');
+      if (user.admin) {
+        req.user.admin = true;
       }
-    }
-    // if reached this line, current user is either admin or the same user as in params.user_id(authorized)
-    next();
-  });
+      if (!user.admin) {
+        // if not admin, check if this action is made by same user
+        if (req.params.user_id !== req.user.id) {
+          res.status(401).send('Unauthorized action');
+        }
+      }
+      // if reached this line, current user is either admin or the same user as in params.id(authorized)
+      next();
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
 }
 
 // check if current user is admin
