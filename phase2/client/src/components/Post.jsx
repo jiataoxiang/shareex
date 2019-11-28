@@ -22,7 +22,7 @@ class Post extends Component {
         attachment =>
           attachment.type === 'image' || attachment.type === 'image_link'
       );
-      if(this._isMount){
+      if (this._isMount) {
         this.setState({ images: attachment_images.slice(0, 5) });
       }
     });
@@ -93,14 +93,44 @@ class Post extends Component {
           {/* <h5 className="card-title">Special title treatment</h5> */}
           <p className="card-text">{body}</p>
           <div className="row">
-            {images.map(image => {
+            {images.map((image, i) => {
+              const id = uid(Math.random());
               return (
-                <img
-                  key={uid(Math.random())}
-                  src={image.body}
-                  alt=""
-                  className="img-thumbnail"
-                />
+                <div key={id}>
+                  <img
+                    src={image.body}
+                    alt=""
+                    className="img-thumbnail"
+                    data-toggle="modal"
+                    data-target={'#example34' + this.props.post._id + i}
+                  />
+                  <div
+                    className="modal fade"
+                    id={'example34' + this.props.post._id + i}
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div
+                      className="modal-dialog modal-lg modal-dialog-centered"
+                      role="document"
+                    >
+                      <div className="modal-content">
+                        <div className="modal-body">
+                          {/* {image.body} */}
+                          <img
+                            src={image.body}
+                            alt=""
+                            // className="img-thumbnail"
+                            data-toggle="modal"
+                            data-target="#exampleModal"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>

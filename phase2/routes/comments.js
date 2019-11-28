@@ -27,11 +27,12 @@ router.get('/', (req, res) => {
 
 // create a comment
 router.post('/', (req, res) => {
-  Comment.create({
+  const a_comment = new Comment({
     author: req.body.author,
     post_id: req.body.post_id,
     body: req.body.body
-  })
+  });
+  a_comment.save()
     .then(comment => {
       res.send(comment);
     })

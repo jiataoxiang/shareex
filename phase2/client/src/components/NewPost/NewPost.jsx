@@ -83,7 +83,7 @@ class NewPost extends Component {
     const resultContent = this.alreadyExistedContents(secondary_key);
     const item = {
       id: secondary_key,
-      type: data_type,
+      type: 'show-'+data_type,
       body: content
     };
 

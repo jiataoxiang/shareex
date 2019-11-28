@@ -24,13 +24,15 @@ const UserSchema = new Schema({
   created_at: { type: Date, default: Date.now },
   followers: { type: Array, default: [] },
   following: { type: Array, default: [] },
-  likes: {type: Array, default: []},
+  likes: { type: Array, default: [] },
   banned: { type: Boolean, default: false },
   unbanned_date: { type: Date, default: null },
-  avatar: {type: String, default: "./img/User_Avatar.png"},
-  banner: {type: String, default: "./img/banner.jpg"},
-  motto: {type:String, default: "Welcome, new user"},
-  messages: {type: Array, default: []}
+  avatar: { type: String, default: './img/User_Avatar.png' },
+  banner: { type: String, default: './img/banner.jpg' },
+  motto: { type: String, default: 'Welcome, new user' },
+  color_theme: { type: String, default: 'dark' },
+  messages: {type: Array, default: []},
+  view_history: Array,
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
@@ -44,12 +46,15 @@ UserSchema.pre('save', function(next) {
   console.log('\n\n-----pre save for user called-----\n\n');
   const user = this;
   if (user.isModified('password')) {
+    console.log('password modified, hashing new password');
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
         next();
       });
     });
+  } else {
+    next();
   }
 });
 

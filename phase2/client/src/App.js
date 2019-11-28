@@ -14,13 +14,13 @@ import Navbar from './components/Navbar';
 // import Tmp from "./components/Tmp";
 // import { rand_string } from "./lib/util";
 // import { uid } from "react-uid";
-import {Route, Switch, BrowserRouter} from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import mock_data from './mock_data';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from './store';
-import {loadUser} from './actions/authActions';
+import { loadUser } from './actions/authActions';
 
 class App extends React.Component {
   constructor(props) {
@@ -42,65 +42,68 @@ class App extends React.Component {
   }
 
   setAppState = (key, value) => {
-    this.setState({[key]: value});
+    this.setState({ [key]: value });
   };
 
   render() {
     return (
       <Provider store={store}>
-        {/* <Hometest /> */}
         <BrowserRouter>
-          <Navbar state={this.state}/>
+          <Navbar state={this.state} />
           <Switch>
-            <Route exact path="/" component={() => <Home/>}/>
+            <Route exact path="/" component={() => <Home />} />
             <Route
               exact
               path="/index.html"
-              component={() => <Home state={this.state}/>}
+              component={() => <Home state={this.state} />}
             />
             <Route
               exact
               path="/userprofile"
-              component={() => <UserProfile state={this.state}/>}
+              component={() => <UserProfile state={this.state} />}
             />
             <Route
               exact
               path="/adminprofile"
-              component={() => <AdminProfile state={this.state}/>}
+              component={() => <AdminProfile state={this.state} />}
             />
             <Route
               exact
               path="/otherprofile"
-              component={() => <OtherProfile state={this.state}/>}
+              component={() => <OtherProfile state={this.state} />}
             />
             <Route
               exact
               path="/login"
-              component={() => <Login state={this.state}/>}
+              component={() => <Login state={this.state} />}
             />
             <Route
               exact
               path="/signup"
-              component={() => <SignUp state={this.state}/>}
+              component={() => <SignUp state={this.state} />}
             />
             <Route
               exact
               path="/new_post"
-              component={() => <NewPost state={this.state}/>}
+              component={() => <NewPost state={this.state} />}
             />
             {/*<Route*/}
             {/*  exact*/}
             {/*  path="/single_post/:id"*/}
             {/*  component={() => <SinglePost state={this.state}/>}*/}
             {/*/>*/}
-            <Route exact path="/single_post/:id" render={() => <SinglePost state={this.state}/>}/>
+            <Route
+              exact
+              path="/single_post/:id"
+              render={() => <SinglePost state={this.state} />}
+            />
             <Route
               exact
               path="/prof_setting"
-              component={() => <ProfSetting state={this.state}/>}
+              component={() => <ProfSetting state={this.state} />}
             />
             {/* <Route exact path="/tmp" component={Tmp} /> */}
-            <Route component={NotFound404}/>
+            <Route component={NotFound404} />
           </Switch>
         </BrowserRouter>
       </Provider>

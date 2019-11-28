@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import '../stylesheets/navbar.scss';
-import $ from 'jquery';
 import { connect } from 'react-redux';
 import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 class Navbar extends React.Component {
   state = {};
@@ -13,42 +13,12 @@ class Navbar extends React.Component {
     logout: PropTypes.func.isRequired
   };
 
-  componentDidMount() {
-    $(document).ready(function() {
-      // Get click event, assign button to var, and get values from that var
-      $('#theme-btn-group button').on('click', function() {
-        const btn_clicked = $(this);
-        btn_clicked
-          .addClass('active')
-          .siblings()
-          .removeClass('active');
-        var btnValue = btn_clicked.val();
-        // console.log("Color theme - ", btnValue);
-
-        if (btnValue === 'light') {
-          trans();
-          document.documentElement.setAttribute('theme', 'light');
-          $('.btn-light')
-            .removeClass('btn-light')
-            .addClass('btn-primary');
-        } else if (btnValue === 'dark') {
-          trans();
-          document.documentElement.setAttribute('theme', 'dark');
-          $('.btn-primary')
-            .removeClass('btn-primary')
-            .addClass('btn-light');
-        }
-      });
-      let trans = () => {
-        document.documentElement.classList.add('transition');
-        // $("*").addClass("transition");
-        window.setTimeout(() => {
-          document.documentElement.classList.remove('transition');
-          // $("*").removeClass("transition");
-        }, 760);
-      };
-    });
-  }
+  colorTransition = () => {
+    document.documentElement.classList.add('transition');
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('transition');
+    }, 760);
+  };
 
   getUserProfileButton = () => {
     if (!this.props.isAuthenticated) {
@@ -79,13 +49,86 @@ class Navbar extends React.Component {
     });
   };
 
+  tokenConfig = () => {
+    // Get token from localstorage
+    let token;
+    if (this.props.isAuthenticated) {
+      token = this.props.auth.token;
+    }
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    // If token, add to headers
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    } else {
+      window.location.href = '/';
+    }
+    return config;
+  };
+
+  handleThemeChange = e => {
+    const btn_clicked = e.target;
+    btn_clicked.classList.add('active');
+    const sibling_btn = btn_clicked.previousElementSibling
+      ? btn_clicked.previousElementSibling
+      : btn_clicked.nextElementSibling;
+    sibling_btn.classList.remove('active');
+    const btn_value = btn_clicked.value;
+    // define transition function
+
+    this.colorTransition();
+    document.documentElement.setAttribute('theme', btn_value);
+
+    // update theme in database
+    if (this.props.isAuthenticated) {
+      axios
+        .patch(
+          `/api/users/${this.props.current_user._id}`,
+          {
+            color_theme: btn_value
+          },
+          this.tokenConfig()
+        )
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
   render() {
-    // console.log(this.props.val);
+    // if logged in, set color theme based on preference
+    if (this.props.isAuthenticated && this.props.current_user.color_theme) {
+      if (
+        document.documentElement.getAttribute('theme') !==
+        this.props.current_user.color_theme
+      ) {
+        this.colorTransition();
+        document.documentElement.setAttribute(
+          'theme',
+          this.props.current_user.color_theme
+        );
+      }
+    }
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link id="logo-btn" to="/">
+        <Link
+          id="logo-btn"
+          to={{
+            pathname: '/',
+            state: {
+              search_content: ''
+            }
+          }}
+        >
           <img
-            src={process.env.PUBLIC_URL + './img/logo_S.png'}
+            src={process.env.PUBLIC_URL + '/img/logo_S.png'}
             alt=""
             width="50px"
           />
@@ -129,11 +172,21 @@ class Navbar extends React.Component {
             className="btn-group"
             role="group"
             aria-label="..."
+            onClick={this.handleThemeChange}
           >
-            <button className="btn btn-light btn-sm" value="light" checked>
+            <button
+              id="light-theme-btn"
+              className="btn btn-light btn-sm"
+              value="light"
+              checked
+            >
               Light
             </button>
-            <button className="btn btn-dark btn-sm" value="dark">
+            <button
+              id="dark-theme-btn"
+              className="btn btn-dark btn-sm"
+              value="dark"
+            >
               Dark
             </button>
           </div>
@@ -173,7 +226,8 @@ class Navbar extends React.Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
-  current_user: state.auth.user
+  current_user: state.auth.user,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { logout })(withRouter(Navbar));
