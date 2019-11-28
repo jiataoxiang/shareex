@@ -70,20 +70,6 @@ class SinglePost extends Component {
 
   /* get comments belonging to the post on this page */
   getComments = () => {
-    // Get comments from server
-    // code below requires server call
-    // const all_comments = this.props.state.comments;
-    // let comments = [];
-    // if (all_comments) {
-    //   comments = all_comments.filter(
-    //     comment => comment.post_id === this.state.post_id
-    //   );
-    //   comments.forEach(comment => {
-    //     comment.submitComment = this.submitComment;
-    //     comment.edit_mode = false;
-    //   });
-    // }
-    // return comments;
     axios
       .get('/api/comments/', {
         params: {post_id: this.props.match.params.id}
@@ -92,10 +78,9 @@ class SinglePost extends Component {
         console.log('Get the Comments data:', comments.data);
         let add_editMode = [];
         comments.data.comments.forEach(ele => {
-          // console.log("In the loop, the cur user id is: ", this.props.current_user._id);
-          // console.log("In the loop, the cur user id is: ", ele._id);
           ele['edit_mode'] = false;
           add_editMode.push(ele);
+          this.getCommentUsername(ele._id, ele.author);
         });
         this.setState({comments: add_editMode});
       })
@@ -104,18 +89,22 @@ class SinglePost extends Component {
       });
   };
 
-  // getPostUser = user_id => {
-  //   console.log("The current user is authenticated: ", this.props.isAuthenticated);
-  //   axios
-  //     .get('/api/users/' + user_id)
-  //     .then(user => {
-  //       console.log('The post user is:!!!!!!!!!!!!', user);
-  //       this.setState({ post_user: user.data });
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
+  getCommentUsername = (comment_id, id) => {
+    axios.get("/api/users/" + id, this.tokenConfig())
+      .then(user => {
+        const comments = this.state.comments;
+        for (let i = 0; i < comments.length; i++) {
+          if(comments[i]._id === comment_id){
+            comments[i].username = user.data.username;
+            console.log("username has been set: ", user.data.username);
+          }
+        }
+        this.setState({comments: comments});
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   /* callback passed to a Comment to delete a Comment on this page */
   // deleteComment = secondary_key => {
@@ -157,7 +146,7 @@ class SinglePost extends Component {
     // }
     // this.setState({comments: comments});
     // console.log("Submit button clicked!:  ", post_id);
-    if(!comment_id){  // if this is a new comment
+    if (!comment_id) {  // if this is a new comment
       const a_comment = {
         author: this.props.current_user._id,
         post_id: post_id,
@@ -198,7 +187,7 @@ class SinglePost extends Component {
       this.setState({comments: comments});
 
       axios
-        .patch('/api/comments/'+comment_id, modified)
+        .patch('/api/comments/' + comment_id, modified)
         .then(comments => {
           console.log('Modified the comment data:', comments.data);
         })
@@ -352,7 +341,7 @@ class SinglePost extends Component {
                         comment_user_id={comment.author}
                         post_user_id={this.state.post.author}
                         current_user_id={cur_user_id}
-                        username={comment.author}
+                        username={comment.username}
                         content={comment.body}
                         post_id={post_id}
                         // deleteComment={this.deleteComment}
