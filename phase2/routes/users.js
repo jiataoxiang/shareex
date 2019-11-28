@@ -323,7 +323,7 @@ router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 
 //add messenger info to user
 router.post("/add-messenger/:id", (req, res) => {
-  const id = this.params.id;
+  const id = req.params.id;
   if (!ObjectID.isValid(id)){
     res.status(404).send("user id is invalid")
   }
