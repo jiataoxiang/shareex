@@ -20,11 +20,9 @@ class UserProfile extends React.Component {
 
   handlePopup = () => {
     // Show the pop up window.
-    if (this.state.showPop === false) {
-      this.setState({
-        showPop: true
-      });
-    }
+    this.setState({
+      showPop: !this.state.showPop
+    });
   };
 
   getNumPosts = currentUser => {

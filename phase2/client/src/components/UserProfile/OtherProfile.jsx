@@ -88,7 +88,7 @@ class OtherProfile extends React.Component {
         user = user.data;
         console.log(user);
         this.setState({
-          nickname: user.nickname,
+          nickname: user.username,
           banner: user.banner,
           avatar: user.avatar,
           followers: user.followers,
