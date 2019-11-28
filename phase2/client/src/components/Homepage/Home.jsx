@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Post from '../Post';
 import '../../stylesheets/home.scss';
 // import { rand_string } from '../../lib/util';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { uid } from 'react-uid';
@@ -29,6 +29,7 @@ class Home extends Component {
       }
     }
     this.updatePosts();
+    this.updateRecommendations();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -94,21 +95,18 @@ class Home extends Component {
   /* Recommendations are selected as those posts with more than 10 likes
     Only at most 10 are selected randomly */
   // getRecommendations() returns the recommendations to be displayed on home page
-  getRecommendations = () => {
-    // Get posts from server
-    // code below requires server call
-    let posts = this.props.state.posts;
-    const recommendations = [];
-    let count = 0;
-    if (posts) {
-      posts = posts.filter(post => post.likes >= 10);
-      for (let i = 0; i < posts.length && count < 10; i++) {
-        if (posts[i].likes >= 10) {
-          recommendations.push(posts[i]);
-        }
-      }
-    }
-    return recommendations;
+  updateRecommendations = () => {
+    axios
+      .get('/api/posts/recommendations')
+      .then(res => {
+        const recommendations = res.data;
+        console.log('recommendation: ', recommendations);
+        this.setState({ recommendations: recommendations });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    console.log('getting recommendations');
   };
 
   applyFilters = () => {
@@ -167,22 +165,15 @@ class Home extends Component {
             <div className="sticky-top">
               <h3>Recommendations</h3>
               <ul className="list-group">
-                {/* {this.getRecommendations().map(recommendation => {
+                {this.state.recommendations.map(recommendation => {
                   return (
-                    <li key={uid(rand_string())} className="list-group-item">
-                      <Link
-                        to={{
-                          pathname: '/single_post',
-                          state: {
-                            post_id: recommendation.id
-                          }
-                        }}
-                      >
+                    <li key={uid(Math.random())} className="list-group-item">
+                      <Link to={'/single_post/' + recommendation._id}>
                         {recommendation.title}
                       </Link>
                     </li>
                   );
-                })} */}
+                })}
               </ul>
             </div>
           </div>

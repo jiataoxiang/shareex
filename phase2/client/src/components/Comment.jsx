@@ -9,10 +9,12 @@ class Comment extends Component {
 
   submitComment = (event) => {
     const comment_content = event.target.previousElementSibling.firstElementChild.value;
-    this.props.submitComment(comment_content, this.props.post_id);
+    console.log("The current comment id is: ", this.props.secondary_key);
+    this.props.submitComment(comment_content, this.props.post_id, this.props.secondary_key, this.props.new_comment);
   };
 
   getButtons = () => {
+    console.log("Current edit_mode: ", this.props.edit_mode);
     if (this.props.edit_mode) {
       return (
         <button
@@ -23,24 +25,23 @@ class Comment extends Component {
         </button>
       );
     }
-    console.log("We are in JSX file, ", this.props.current_user_id, this.props.comment_user_id);
     if (this.props.current_user_id === this.props.comment_user_id) {
-      const {deleteComment, editComment, key} = this.props;
-      console.log("Edit get called!");
+      const {deleteComment, editComment, secondary_key} = this.props;
+      console.log("This.props.key is: ", secondary_key);
       return (
         <div>
           <button
             className="btn btn-outline-primary float-right"
-            onClick={editComment.bind(this, key)}
+            onClick={editComment.bind(this, secondary_key)}
           >
             Edit
           </button>
-          {/*<button*/}
-          {/*  className="btn btn-outline-danger float-right"*/}
-          {/*  onClick={deleteComment.bind(this, key)}*/}
-          {/*>*/}
-          {/*  Delete*/}
-          {/*</button>*/}
+          <button
+            className="btn btn-outline-danger float-right"
+            onClick={deleteComment.bind(this, secondary_key)}
+          >
+            Delete
+          </button>
         </div>
       );
     }

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import '../../stylesheets/single_post.scss';
 import Comment from '../Comment';
 import Attachment from '../Attachment';
-import { connect } from 'react-redux';
-import { rand_string } from '../../lib/util';
-import { uid } from 'react-uid';
+import {connect} from 'react-redux';
+import {rand_string} from '../../lib/util';
+import {uid} from 'react-uid';
 import axios from 'axios';
+import {ObjectID} from "mongoose";
 
 class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
-  // TODO: connect to server, get comments and attachments with API
   state = {
     post: '',
     comments: [],
@@ -31,21 +31,29 @@ class SinglePost extends Component {
     // this.addToViewHistory();
   }
 
-  addToViewHistory = () => {
-    // axios.patch(`/api/users/${this.props.current_user._id}/view-history`, {post_id: }).then(res => {
-    //   console.log(res.data);
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+  // TODO: whatever this is.
+  addToViewHistory = (user_id, post_id) => {
+    console.log("The current user id is not null: ", user_id);
+    axios.patch(`/api/users/${user_id}/add-view-history`, {post_id: post_id}, this.tokenConfig()).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.current_user) {
+      this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+    }
+  }
 
   getPostData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
-        // console.log("Get the Post data:", res.data);
-        this.setState({ post: res.data });
-        this.getPostUser(res.data.author);
+        this.setState({post: res.data});
+        console.log("The post id we get is:", res.data._id);
+        // this.addToViewHistory(res.data._id);
       })
       .catch(err => {
         console.log(err);
@@ -60,7 +68,7 @@ class SinglePost extends Component {
       )
       .then(res => {
         // console.log("Get the Attach data:", res.data);
-        this.setState({ attachments: res.data.attachments });
+        this.setState({attachments: res.data.attachments});
       })
       .catch(err => {
         console.log(err);
@@ -69,46 +77,35 @@ class SinglePost extends Component {
 
   /* get comments belonging to the post on this page */
   getComments = () => {
-    // Get comments from server
-    // code below requires server call
-    // const all_comments = this.props.state.comments;
-    // let comments = [];
-    // if (all_comments) {
-    //   comments = all_comments.filter(
-    //     comment => comment.post_id === this.state.post_id
-    //   );
-    //   comments.forEach(comment => {
-    //     comment.submitComment = this.submitComment;
-    //     comment.edit_mode = false;
-    //   });
-    // }
-    // return comments;
     axios
       .get('/api/comments/', {
-        params: { post_id: this.props.match.params.id }
+        params: {post_id: this.props.match.params.id}
       })
       .then(comments => {
-        console.log('Get the Comments data:', comments.data);
         let add_editMode = [];
         comments.data.comments.forEach(ele => {
-          // console.log("In the loop, the cur user id is: ", this.props.current_user._id);
-          // console.log("In the loop, the cur user id is: ", ele._id);
           ele['edit_mode'] = false;
+          ele["new_comment"] = false;
           add_editMode.push(ele);
+          this.getCommentUsername(ele._id, ele.author);
         });
-        this.setState({ comments: add_editMode });
+        this.setState({comments: add_editMode});
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  getPostUser = user_id => {
-    axios
-      .get('/api/users/' + user_id)
+  getCommentUsername = (comment_id, id) => {
+    axios.get("/api/users/" + id, this.tokenConfig())
       .then(user => {
-        console.log('The post user is:!!!!!!!!!!!!', user);
-        this.setState({ post_user: user.data });
+        const comments = this.state.comments;
+        for (let i = 0; i < comments.length; i++) {
+          if (comments[i]._id === comment_id) {
+            comments[i].username = user.data.username;
+          }
+        }
+        this.setState({comments: comments});
       })
       .catch(err => {
         console.log(err);
@@ -116,27 +113,27 @@ class SinglePost extends Component {
   };
 
   /* callback passed to a Comment to delete a Comment on this page */
-  // deleteComment = secondary_key => {
-  //   const comments = this.state.comments;
-  //   for (let i = 0; i < comments.length; i++) {
-  //     if (comments[i].id === secondary_key) {
-  //       const all_comments = this.props.state.comments;
-  //       for (let j = 0; j < all_comments.length; j++) {
-  //         if (all_comments[j].id === comments[i].id) {
-  //           all_comments.splice(j, 1);
-  //           // server call to delete comment from database required here
-  //           this.props.state.setAppState("comments", all_comments);
-  //           break;
-  //         }
-  //       }
-  //       break;
-  //     }
-  //   }
-  //   this.setState({comments: comments});
-  // };
+  deleteComment = comment_id => {
+    const comments = this.state.comments;
+    const new_comments = [];
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].id !== comment_id) {
+        new_comments.push(comments[i]);
+      }
+    }
+    axios.delete("/api/comments/" + comment_id)
+      .then(deleted => {
+        console.log(deleted);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // this.setState({comments: new_comments});
+    this.getComments()
+  };
 
   /* callback passed to a Comment to submit a Comment on this page */
-  submitComment = (comment_content, post_id) => {
+  submitComment = (comment_content, post_id, comment_id, new_comment) => {
     // const comments = this.state.comments;
     // for (let i = 0; i < comments.length; i++) {
     //   if (comments[i].id === secondary_key) {
@@ -155,47 +152,65 @@ class SinglePost extends Component {
     // }
     // this.setState({comments: comments});
     // console.log("Submit button clicked!:  ", post_id);
-    const a_comment = {
-      author: this.props.current_user._id,
-      post_id: post_id,
-      body: comment_content
-    };
-    // put the newly-added comment to our state
-    const comments = this.state.comments;
-    const original_comment_id = comments[0]._id;
-    console.log('The commment submitted with id: ', original_comment_id);
-    comments.splice(0, 1, {
-      _id: original_comment_id,
-      author: this.props.current_user.username,
-      body: comment_content,
-      edit_mode: false
-    });
-    this.setState({ comments: comments });
-
-    console.log('HERE WE HAVE TO-ADD COMMENT', a_comment);
-    axios
-      .post('/api/comments/', a_comment)
-      .then(comments => {
-        console.log('Posted the comment data:', comments.data);
-      })
-      .catch(err => {
-        console.log(err);
+    if (new_comment) {  // if this is a new comment
+      const a_comment = {
+        author: this.props.current_user._id,
+        post_id: post_id,
+        body: comment_content
+      };
+      const comments = this.state.comments;
+      const original_comment_id = comments[0]._id;
+      comments.splice(0, 1, {
+        _id: original_comment_id,
+        author: this.props.current_user.username,
+        body: comment_content,
+        edit_mode: false,
+        new_comment:false
       });
-    document.getElementById('new-comment-button').removeAttribute('hidden');
+      // this.setState({comments: comments});
+      axios
+        .post('/api/comments/', a_comment)
+        .then(comments => {
+          console.log('Posted the comment data:', comments.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      document.getElementById('new-comment-button').removeAttribute('hidden');
+    } else {  // if this is a existed comment
+      const comments = this.state.comments;
+      let modified = {};
+      for (let i = 0; i < comments.length; i++) {
+        if (comments[i]._id === comment_id) {
+          comments[i].body = comment_content;
+          comments[i].edit_mode = false;
+          modified["body"] = comment_content;
+        }
+      }
+      // this.setState({comments: comments});
+
+      axios
+        .patch('/api/comments/' + comment_id, modified)
+        .then(comments => {
+          console.log('Modified the comment data:', comments.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      document.getElementById('new-comment-button').removeAttribute('hidden');
+    }
+    this.getComments();
   };
 
   /* callback passed to a Comment to edit a Comment on this page */
   editComment = comment_id => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
-      console.log('I GET FOUND!!', comments[i]._id);
-      console.log('And the clicked comment id is: ', comment_id);
       if (comments[i]._id === comment_id) {
         comments[i].edit_mode = true;
       }
     }
-    // server call to update comment to database required here
-    this.setState({ comments: comments });
+    this.setState({comments: comments});
   };
 
   /* display an empty comment which can be edited in comment list */
@@ -208,11 +223,10 @@ class SinglePost extends Component {
         author: this.props.current_user.username,
         // user_id: this.props.state.current_user.id,
         body: '',
-        edit_mode: true
+        edit_mode: true,
+        new_comment: true
       });
-      // console.log("Comments list after added new stuff:  ", comments[0]);
-      // console.log("Comments list after added new stuff:  ", comments[1]);
-      this.setState({ comments: comments });
+      this.setState({comments: comments});
 
       document
         .getElementById('new-comment-button')
@@ -229,7 +243,7 @@ class SinglePost extends Component {
     if (!user || !(user === author)) {
       this.props.history.push({
         pathname: '/otherprofile',
-        state: { post_id: this.state.post._id, author: this.state.post.author }
+        state: {post_id: this.state.post._id, author: this.state.post.author}
       });
     } else {
       this.props.history.push('/userprofile');
@@ -258,33 +272,23 @@ class SinglePost extends Component {
   };
 
   render() {
-    console.log('Comment list length', this.state.comments.length);
-    console.log('Comment list content', this.state.comments);
-    console.log('Before render, we get all the data');
-    console.log(this.state.post);
-    console.log(this.state.attachments);
-    console.log(this.props.current_user);
     let cur_user_id = '';
-    if (this.props.current_user !== null) {
-      cur_user_id = this.props.current_user._id;
-    }
     let username = '';
     let avatar = '';
     let post_id = '';
+    if (this.props.current_user !== null) {
+      cur_user_id = this.props.current_user._id;
+      username = this.props.current_user.username;
+      avatar = this.props.current_user.avatar;
+    }
     if (this.state.post) {
       post_id = this.state.post._id;
-    }
-    if (this.state.post_user) {
-      username = this.state.post_user.username;
-      avatar = this.state.post_user.avatar;
     }
     let comment_list = [];
     if (this.state.comments) {
       comment_list = this.state.comments;
     }
-    console.log('The comment_list is: ', comment_list);
 
-    // const comments = this.state.comments ? this.state.comments : [];
     return (
       <div className="single-post-2-page">
         <div className="container">
@@ -325,17 +329,18 @@ class SinglePost extends Component {
                     return (
                       <Comment
                         key={comment._id}
-                        // secondary_key={comment.id}
+                        secondary_key={comment._id}
                         comment_user_id={comment.author}
                         post_user_id={this.state.post.author}
                         current_user_id={cur_user_id}
-                        username={comment.author}
+                        username={comment.username}
                         content={comment.body}
                         post_id={post_id}
-                        // deleteComment={this.deleteComment}
+                        deleteComment={this.deleteComment}
                         submitComment={this.submitComment}
                         editComment={this.editComment}
                         edit_mode={comment.edit_mode}
+                        new_comment={comment.new_comment}
                       />
                     );
                   })}
@@ -348,7 +353,7 @@ class SinglePost extends Component {
                 <div className="user-info" onClick={this.redirectProf}>
                   <div className="row">
                     <div className="col-lg-3 col-3">
-                      <img className="avatar" src={avatar} alt="" />
+                      <img className="avatar" src={avatar} alt=""/>
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong>{username}</strong>

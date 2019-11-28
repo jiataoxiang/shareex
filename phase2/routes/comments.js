@@ -70,7 +70,7 @@ router.patch('/:id', (req, res) => {
           .status(404)
           .json({ message: 'Comment not found, and cannot update' });
       } else {
-        res.send(post);
+        res.send(comment);
       }
     })
     .catch(error => {
