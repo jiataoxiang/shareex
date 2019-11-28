@@ -37,7 +37,7 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    border: 2px solid gold;
+    border: 2px solid black;
   }
 
   #profileStats {
@@ -79,7 +79,7 @@
     }
   }
 
-  #profileInfo {
+  .profileInfo {
     background-color: var(--background-secondary);
     padding: 15px;
     border-radius: 10px;
@@ -200,6 +200,9 @@
   //message board
   .fix-length {
     width: 600px;
+    height: 400px;
+  }
+  .fix-height {
     height: 400px;
   }
 }
