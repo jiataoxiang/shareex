@@ -32,20 +32,28 @@ class SinglePost extends Component {
   }
 
   // TODO: whatever this is.
-  addToViewHistory = () => {
-    // axios.patch(`/api/users/${this.props.current_user._id}/view-history`, {post_id: }).then(res => {
-    //   console.log(res.data);
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+  addToViewHistory = (user_id, post_id) => {
+    console.log("The current user id is not null: ", user_id);
+    axios.patch(`/api/users/${user_id}/add-view-history`, {post_id: post_id}, this.tokenConfig()).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.current_user) {
+      this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+    }
+  }
 
   getPostData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.setState({post: res.data});
-        // this.getPostUser(res.data.author);
+        console.log("The post id we get is:", res.data._id);
+        // this.addToViewHistory(res.data._id);
       })
       .catch(err => {
         console.log(err);
@@ -104,7 +112,6 @@ class SinglePost extends Component {
       });
   };
 
-  // TODO:added delete comment.
   /* callback passed to a Comment to delete a Comment on this page */
   deleteComment = comment_id => {
     const comments = this.state.comments;
