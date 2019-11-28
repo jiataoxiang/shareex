@@ -22,23 +22,35 @@ class OtherProfile extends React.Component {
     likes: [],
     numPosts: -1,
     motto: "",
-    current_message: ""
+    current_message: "",
+    posts : []
   };
 
-  handleMessageChange(event) {
-    this.setState({
-      current_message: event.target.value
-    })
-  }
+  updatePosts = () => {
+    console.log('updating posts');
+    axios
+      .get(
+        '/api/posts/by-user/' + this.state.author,
+        this.props.tokenConfig()
+      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({ posts: res.data.posts });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-  sendMessage() {
+  sendMessage = () => {
+    const message = document.getElementById("message").value;
     const current_user_id = this.props.current_user._id;
     console.log(this.state.author);
 
     axios.post(`/api/users/add-messenger/${this.state.author}`,
       {
         "messenger_id": current_user_id,
-        "content": this.state.current_message
+        "content": message
       },
       this.props.tokenConfig())
       .then((user) => {
@@ -49,11 +61,12 @@ class OtherProfile extends React.Component {
       });
 
     this.getUserInfo()
-  }
+  };
 
   componentDidMount() {
     this.getUserInfo();
     this.getNumPosts(this.state.author);
+    this.updatePosts();
   }
 
 
@@ -75,7 +88,7 @@ class OtherProfile extends React.Component {
         user = user.data;
         console.log(user);
         this.setState({
-          nickname: user.nickname,
+          nickname: user.username,
           banner: user.banner,
           avatar: user.avatar,
           followers: user.followers,
@@ -146,47 +159,6 @@ class OtherProfile extends React.Component {
     });
   };
 
-  // getPosts = () => {
-  //   // TODO: connect to server, get posts from server
-  //   // find all posts belonging to current user
-  //   const users = this.props.state.users;
-  //   const posts = this.props.state.posts;
-  //   if (posts) {
-  //     const post = posts.filter(post => post.id === this.state.post_id)[0];
-  //     const current_user = users.filter(user => user.id === post.author_id)[0];
-  //     const posts_display = [];
-  //     if (this.props.state.posts) {
-  //       const posts = this.props.state.posts.filter(
-  //         post => post.author_id === current_user.id
-  //       );
-  //
-  //       if (posts) {
-  //         console.log(posts);
-  //         for (let i = 0; i < posts.length; i++) {
-  //           // find all attachments
-  //           const attachments = this.props.state.attachments.filter(
-  //             attachment => attachment.post_id === posts[i].id
-  //           );
-  //           posts_display.push(
-  //             <Post
-  //               key={uid(rand_string())}
-  //               post={posts[i]}
-  //               posts={posts}
-  //               users={this.props.state.users}
-  //               attachments={attachments}
-  //               current_user={this.props.state.current_user}
-  //               setAppState={this.props.state.setAppState}
-  //             />
-  //           );
-  //         }
-  //       }
-  //     }
-  //     return posts_display;
-  //   }else {
-  //     return [];
-  //   }
-  // };
-
   render() {
     if(!this.props.isAuthenticated){
       window.location.href = "/"
@@ -249,9 +221,6 @@ class OtherProfile extends React.Component {
                 {this.state.messages.map(message => {
                   return <MessageBoard key={uid(Math.random())} message={message}/>
                 })}
-                {/*<small className="d-block text-right mt-3">*/}
-                {/*  <a href="#">All messages</a>*/}
-                {/*</small>*/}
               </div>
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
@@ -266,15 +235,13 @@ class OtherProfile extends React.Component {
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-default"
                   name="message"
-                  value={this.state.current_message}
-                  onChange={this.handleMessageChange.bind(this)}
                 />
               </div>
               <div className="timeline">
                 <h3 className="timelineheader">Posts</h3>
-                {/*{this.getPosts().map(post => {*/}
-                {/*  return post;*/}
-                {/*})}*/}
+                {this.state.posts.map(post => {
+                  return <Post key={uid(Math.random())} post={post} />;
+                })}
               </div>
             </div>
           </div>

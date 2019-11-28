@@ -31,25 +31,41 @@ class SinglePost extends Component {
     // this.addToViewHistory();
   }
 
-  // TODO: whatever this is.
-  addToViewHistory = () => {
-    // axios.patch(`/api/users/${this.props.current_user._id}/view-history`, {post_id: }).then(res => {
-    //   console.log(res.data);
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+  addToViewHistory = (user_id, post_id) => {
+    console.log("The current user id is not null: ", user_id);
+    axios.patch(`/api/users/${user_id}/add-view-history`, {post_id: post_id}, this.tokenConfig()).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.current_user) {
+      this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+    }
+  }
 
   getPostData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.setState({post: res.data});
-        // this.getPostUser(res.data.author);
+        this.getPostAuthor(res.data.author);
+        console.log("The post id we get is:", res.data._id);
       })
       .catch(err => {
         console.log(err);
       });
+  };
+
+  getPostAuthor = (user_id) => {
+    axios.get("/api/users/" + user_id, this.tokenConfig())
+      .then(user => {
+        this.setState({post_author: user.data});
+      }).catch(err => {
+      console.log(err);
+    })
   };
 
   getAttachData = () => {
@@ -104,7 +120,6 @@ class SinglePost extends Component {
       });
   };
 
-  // TODO:added delete comment.
   /* callback passed to a Comment to delete a Comment on this page */
   deleteComment = comment_id => {
     const comments = this.state.comments;
@@ -158,7 +173,7 @@ class SinglePost extends Component {
         author: this.props.current_user.username,
         body: comment_content,
         edit_mode: false,
-        new_comment:false
+        new_comment: false
       });
       // this.setState({comments: comments});
       axios
@@ -271,8 +286,10 @@ class SinglePost extends Component {
     let post_id = '';
     if (this.props.current_user !== null) {
       cur_user_id = this.props.current_user._id;
-      username = this.props.current_user.username;
-      avatar = this.props.current_user.avatar;
+    }
+    if (this.state.post_author) {
+      username = this.state.post_author.username;
+      avatar = this.state.post_author.avatar;
     }
     if (this.state.post) {
       post_id = this.state.post._id;
