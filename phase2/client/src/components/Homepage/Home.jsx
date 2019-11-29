@@ -55,12 +55,15 @@ class Home extends Component {
   };
 
   updatePosts = (category, sort_by) => {
+    const search_content = document.getElementById('search-bar').value;
+    console.log('search: ', search_content);
     if (!sort_by) sort_by = 'created_at';
     axios
       .get('/api/posts', {
         params: {
           sort_by,
-          category
+          category,
+          search_content
         }
       })
       .then(res => {
@@ -157,6 +160,17 @@ class Home extends Component {
                 </span>
               </div>
             </div>
+            {(function() {
+              if (posts.length === 0) {
+                return (
+                  <React.Fragment>
+                    <br />
+                    <br />
+                    <h3 className="text-center">No Post Found</h3>
+                  </React.Fragment>
+                );
+              }
+            })()}
             {posts.map(post => {
               return <Post key={uid(Math.random())} post={post} />;
             })}

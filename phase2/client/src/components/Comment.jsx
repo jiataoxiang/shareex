@@ -1,20 +1,26 @@
-import React, {Component} from "react";
-import "../stylesheets/comment.scss";
-import {withRouter} from "react-router-dom";
-import {connect} from 'react-redux';
-import axios from "axios";
+import React, { Component } from 'react';
+import '../stylesheets/comment.scss';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
 class Comment extends Component {
   state = {};
 
-  submitComment = (event) => {
-    const comment_content = event.target.previousElementSibling.firstElementChild.value;
-    console.log("The current comment id is: ", this.props.secondary_key);
-    this.props.submitComment(comment_content, this.props.post_id, this.props.secondary_key, this.props.new_comment);
+  submitComment = event => {
+    const comment_content =
+      event.target.previousElementSibling.firstElementChild.value;
+    console.log('The current comment id is: ', this.props.secondary_key);
+    this.props.submitComment(
+      comment_content,
+      this.props.post_id,
+      this.props.secondary_key,
+      this.props.new_comment
+    );
   };
 
   getButtons = () => {
-    console.log("Current edit_mode: ", this.props.edit_mode);
+    console.log('Current edit_mode: ', this.props.edit_mode);
     if (this.props.edit_mode) {
       return (
         <button
@@ -26,8 +32,8 @@ class Comment extends Component {
       );
     }
     if (this.props.current_user_id === this.props.comment_user_id) {
-      const {deleteComment, editComment, secondary_key} = this.props;
-      console.log("This.props.key is: ", secondary_key);
+      const { deleteComment, editComment, secondary_key } = this.props;
+      console.log('This.props.key is: ', secondary_key);
       return (
         <div>
           <button
@@ -81,12 +87,12 @@ class Comment extends Component {
               <h5>{this.props.username}</h5>
             </div>
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm-9 content">
             {this.getContentDisplay()}
             {this.getButtons()}
           </div>
         </div>
-        <hr/>
+        <hr />
       </div>
     );
   }
