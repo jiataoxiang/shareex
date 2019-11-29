@@ -1,4 +1,6 @@
 import React from 'react';
+import { uid } from 'react-uid';
+import NotificationCard from "../NotificationCard";
 
 class AdminProfileNotification extends React.Component {
     state = {
@@ -16,8 +18,8 @@ class AdminProfileNotification extends React.Component {
     }
     
     componentDidMount() {
-        this.setState({readMsg: this.props.readMsg, 
-                       unreadMsg: this.props.unreadMsg});
+        this.setState({readMsg: this.props.state.readMsg, 
+                       unreadMsg: this.props.state.unreadMsg});
     }
 
     render() {
@@ -36,6 +38,16 @@ class AdminProfileNotification extends React.Component {
                     />
                     <button type="button" 
                         className="btn">Search</button>
+                </div>
+                <div id="display-notification">
+                    <h4>---- New ----</h4>
+                    {this.state.unreadMsg.map(msg => {
+                        return <NotificationCard key={uid(Math.random())} msg={msg} />
+                    })}
+                    <h4>---- Old ----</h4>
+                    {this.state.readMsg.map(msg => {
+                        return <NotificationCard key={uid(Math.random())} msg={msg} />
+                    })}
                 </div>
             </div>
         );
