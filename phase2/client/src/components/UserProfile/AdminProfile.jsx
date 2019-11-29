@@ -37,15 +37,23 @@ class AdminProfile extends Component {
         this.setState({tabState: num});
         
         if (num === 3) {
-            const msg_badge = document.getElementById("unread-notifications");
-            msg_badge.setAttribute("hidden", true);
+            this.hideBadge();
             this.readNotifications();
         }
     }
-  
-    getNotifications = () => {
+    
+    hideBadge = () => {
         const msg_badge = document.getElementById("unread-notifications");
         msg_badge.setAttribute("hidden", true);
+    }
+    
+    showBadge = () => {
+        const msg_badge = document.getElementById("unread-notifications");
+        msg_badge.removeAttribute("hidden");
+    }
+  
+    getNotifications = () => {
+        this.hideBadge();
         
         axios.get(
             `/api/notifications/receiver/${this.props.auth.user._id}`
@@ -54,15 +62,10 @@ class AdminProfile extends Component {
                 if (msg.read) {
                     this.state.msg.readMsg.push(msg);
                 } else {
+                    this.showBadge();
                     this.state.msg.unreadMsg.push(msg);
                 }
             })
-        }).then(() => {
-            if (this.state.msg.unreadMsg.length) {
-                msg_badge.removeAttribute("hidden");
-            } else {
-                msg_badge.setAttribute("hidden", true);
-            }
         }).catch(error => {
             console.log(error);
         });
@@ -75,9 +78,8 @@ class AdminProfile extends Component {
             if (!result) {
                 console.log("Notifications count not be read.");
             } else {
+                this.hideBadge();
                 console.log(result.data.nModified + " new notifications read.");
-                const msg_badge = document.getElementById("unread-notifications");
-                msg_badge.setAttribute("hidden", true);
             }
         }).catch(error => {
             console.log(error);

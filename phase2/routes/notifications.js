@@ -41,7 +41,7 @@ router.get('/receiver/:id', (req, res) => {
                     })
                 }
                 
-                if (msg === msgs[msgs.length - 1]) {
+                if (toReturn.length === msgs.length) {
                     res.send(toReturn);
                 } 
             })
