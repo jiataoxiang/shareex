@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const {ObjectID} = require("mongodb");
 
-// return all notifications that one user received
+// return all notifications that one user received.
 router.get('/receiver/:id', (req, res) => {
     Notification.find({to: req.params.id}).then(msgs => {
         let toReturn = [];
@@ -47,6 +47,16 @@ router.get('/receiver/:id', (req, res) => {
             })
         })
         
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+// check off all unread notifications of one user.
+router.post('/read/:id', (req, res) => {
+    Notification.updateMany({to: req.params.id, read: false}, 
+                            {"$set":{"read": true}}).then(result => {
+        res.send(result);
     }).catch(err => {
         res.status(500).send(err);
     });

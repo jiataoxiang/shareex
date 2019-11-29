@@ -37,8 +37,7 @@ class AdminProfile extends Component {
         this.setState({tabState: num});
         
         if (num === 3) {
-            const msg_badge = document.getElementById("unread-notifications");
-            msg_badge.setAttribute("hidden", true);
+            this.readNotifications();
         }
     }
   
@@ -61,14 +60,30 @@ class AdminProfile extends Component {
                 msg_badge.setAttribute("hidden", true);
             }
         }).catch(error => {
-            const msg_badge = document.getElementById("unread-notifications");
-            msg_badge.setAttribute("hidden", true);
+            console.log(error);
+        });
+    }
+    
+    readNotifications = () => {
+        axios.post(
+            `/api/notifications/read/${this.props.auth.user._id}`
+        ).then(result => {
+            if (!result) {
+                console.log("Notifications count not be read.");
+            } else {
+                console.log(result.data.nModified + " new notifications read.");
+                const msg_badge = document.getElementById("unread-notifications");
+                msg_badge.setAttribute("hidden", true);
+            }
+        }).catch(error => {
             console.log(error);
         });
     }
 
     componentDidMount() {
         this.getTabButtons();
+        const msg_badge = document.getElementById("unread-notifications");
+        msg_badge.setAttribute("hidden", true);
         
         const currentUser = this.props.auth.user;
         if (currentUser) {
