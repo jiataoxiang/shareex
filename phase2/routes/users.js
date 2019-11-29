@@ -313,17 +313,34 @@ router.patch(
   }
 );
 
+//router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
+//  User.findByIdAndUpdate(req.params.user_id, req.body)
+//    .then(user => {
+//      if (!user) {
+//        res.status(404).send('User not found');
+//      }
+//      res.send('Successfully updated');
+//    })
+//    .catch(err => {
+//      res.status(500).send(err);
+//    });
+//});
+
 router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
-  User.findByIdAndUpdate(req.params.user_id, req.body)
-    .then(user => {
-      if (!user) {
-        res.status(404).send('User not found');
-      }
-      res.send('Successfully updated');
+    User.findById(req.params.user_id).then(user => {
+        if (!user) {
+            res.status(404).send('User not found');
+        } else {
+            Object.keys(req.body).forEach(ele => {
+                user[ele] = req.body[ele]
+            });
+            user.save().then(result => {
+                res.send(result);
+            })
+        }
+    }).catch(err => {
+        res.status(500).send(err);
     })
-    .catch(err => {
-      res.status(500).send(err);
-    });
 });
 
 //add messenger info to user
