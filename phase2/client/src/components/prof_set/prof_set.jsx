@@ -87,6 +87,8 @@ class ProfSet extends Component {
         }).catch(err => {
           console.log(err);
         });
+      } else {
+          document.getElementById("button-cancel").click();
       }
   }
 
