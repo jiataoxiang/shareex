@@ -153,8 +153,6 @@ class ProfSet extends Component {
     const correctPassword = this.checkPassword();
 
     if (correctEmail && correctPassword) {
-      // send new profile to server
-      // TODO: change the following code in phase 2, to download data from server
       let toPatch;
       if (this.state.profPassword.length === 0) {
           toPatch = {
@@ -169,16 +167,22 @@ class ProfSet extends Component {
           };
       }
     
+      // send new profile to server
       axios.patch(
           `/api/users/${this.props.current_user._id}`, toPatch, this.tokenConfig()
       ).then(result => {
-          console.log(result);
+          if (result.status === 200) {
+              this.props.current_user.email = toPatch.email;
+              this.props.current_user.motto = toPatch.motto;
+              console.log(this.props);
+              alert("Profile saved.");
+              document.getElementById("button-cancel").click();
+          } else {
+              alert("Profile failed to save.");
+          }
       }).catch(err => {
           console.log(err);
       })
-      
-      // alert("Profile saved.");
-      // document.getElementById("button-cancel").click();
     }
   }
 
