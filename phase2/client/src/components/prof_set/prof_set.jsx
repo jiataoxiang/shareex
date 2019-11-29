@@ -35,8 +35,7 @@ class ProfSet extends Component {
     this.setState({[name]: value});
   }
 
-  // This funtion only gets the temp url of the uploaded img now
-  // TODO: this img saving method may need to change
+  // Change the displaying avatar.
   changeAvatar = (event) => {
     const inputFile = event.target.files[0]
 
@@ -61,6 +60,8 @@ class ProfSet extends Component {
     }
   }
   
+  // Save the avatar to server.
+  // TODO: this img saving method may need to change.
   saveAvatar = () => {
       if (this.state.profAvatarFile) {
           const formData = new FormData();
@@ -72,7 +73,6 @@ class ProfSet extends Component {
               'Content-Type': 'multipart/form-data'
             }
           }).then(res => {
-            console.log(res);
             // const public_id = res.data[0].public_id;
             const url = res.data[0].url;
             axios.patch(
@@ -80,12 +80,9 @@ class ProfSet extends Component {
               { avatar: url },
               this.tokenConfig()
             ).then(res => {
-              console.log(res.data);
-              console.log('reload user');
-              store.dispatch(loadUser());
-              setTimeout(() => {
-                this.setState({ alert: null });
-              }, 2000);
+              this.props.current_user.avatar = this.state.profAvatarUrl;
+              alert("Avatar saved.")
+              document.getElementById("button-cancel").click();
             })
         }).catch(err => {
           console.log(err);
@@ -193,7 +190,6 @@ class ProfSet extends Component {
     const correctPassword = this.checkPassword();
 
     if (correctEmail && correctPassword) {
-      this.saveAvatar();
       let toPatch;
       if (this.state.profPassword.length === 0) {
           toPatch = {
@@ -215,12 +211,14 @@ class ProfSet extends Component {
           if (result.status === 200) {
               this.props.current_user.email = toPatch.email;
               this.props.current_user.motto = toPatch.motto;
-              console.log(this.props);
               alert("Profile saved.");
-              document.getElementById("button-cancel").click();
+              return true;
           } else {
               alert("Profile failed to save.");
+              return false;
           }
+      }).then(result => {
+          this.saveAvatar();
       }).catch(err => {
           console.log(err);
       })
