@@ -220,7 +220,9 @@ class ProfSet extends Component {
               return false;
           }
       }).then(result => {
-          this.saveAvatar();
+          if (result) {
+              this.saveAvatar();
+          }
       }).catch(err => {
           console.log(err);
       })
