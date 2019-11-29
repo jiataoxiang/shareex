@@ -11,7 +11,9 @@ class Post extends Component {
   // code below requires server call
   state = {
     post: this.props.post,
-    images: []
+    images: [],
+    has_liked: false,
+    msg: null
   };
 
   componentDidMount() {
@@ -26,6 +28,9 @@ class Post extends Component {
         this.setState({ images: attachment_images.slice(0, 5) });
       }
     });
+    if (this.state.post.likes_users.includes(this.props.current_user._id)) {
+      this.setState({ has_liked: true });
+    }
   }
 
   componentWillUnmount() {
@@ -53,16 +58,50 @@ class Post extends Component {
     return config;
   };
 
-  thumbClicked = () => {
+  thumbup = () => {
+    console.log('thumbup');
     axios
       .patch('/api/posts/like/' + this.state.post._id, {}, this.tokenConfig())
       .then(res => {
         console.log(res.data);
-        this.setState({ post: res.data.post });
+        this.setState({ post: res.data.post, has_liked: true });
       })
       .catch(err => {
-        console.log(err.message);
+        console.log(err.response);
       });
+  };
+
+  thumbdown = () => {
+    console.log('thumbdown');
+    axios
+      .patch('/api/posts/unlike/' + this.state.post._id, {}, this.tokenConfig())
+      .then(res => {
+        console.log(res.data);
+        this.setState({ post: res.data.post, has_liked: false });
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
+
+  getThumbDisplay = () => {
+    return this.state.has_liked ? (
+      <img
+        src={'/icon/thumb_down-24px.svg'}
+        alt=""
+        width="40px"
+        className="float-right thumb-btn"
+        onClick={this.thumbClicked}
+      />
+    ) : (
+      <img
+        src={'/icon/thumb_up-24px.svg'}
+        alt=""
+        width="40px"
+        className="float-right thumb-btn"
+        onClick={this.thumbClicked}
+      />
+    );
   };
 
   render() {
@@ -81,8 +120,13 @@ class Post extends Component {
             <span className="float-right">Post id: {this.props.post._id}</span>
           ) : null}
         </div>
-
         <div className="card-body">
+          {this.state.msg ? (
+            <div className="alert alert-danger" role="alert">
+              {this.state.msg}
+            </div>
+          ) : null}
+
           {/* <h5 className="card-title">Special title treatment</h5> */}
           <p className="card-text">{body}</p>
           <div className="row">
@@ -111,7 +155,6 @@ class Post extends Component {
                     >
                       <div className="modal-content">
                         <div className="modal-body">
-                          {/* {image.body} */}
                           <img
                             src={image.body}
                             alt=""
@@ -136,14 +179,25 @@ class Post extends Component {
           </Link>
 
           <span className="likes float-right">Likes: {likes}</span>
-          {/* Thumb up button */}
-          <img
-            src={'./img/thumb_up.png'}
-            alt=""
-            width="40px"
-            className="float-right thumb-up-btn"
-            onClick={this.thumbClicked}
-          />
+          {/* {this.getThumbDisplay()} */}
+          {this.props.current_user.admin || this.state.has_liked ? (
+            <img
+              src={'/icon/thumb_down-24px.svg'}
+              alt=""
+              width="40px"
+              className="float-right thumb-btn"
+              onClick={this.thumbdown}
+            />
+          ) : null}
+          {this.props.current_user.admin || !this.state.has_liked ? (
+            <img
+              src={'/icon/thumb_up-24px.svg'}
+              alt=""
+              width="40px"
+              className="float-right thumb-btn"
+              onClick={this.thumbup}
+            />
+          ) : null}
           {/* The code below is also a thumb up button, it's from font awesome */}
           {/* <i class="fas fa-thumbs-up float-right"></i> */}
         </div>

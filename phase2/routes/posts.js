@@ -204,6 +204,7 @@ router.get('/user-posts/:user_id', isAuth, (req, res) => {
 
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
+  console.log('Liking post');
   if (!ObjectID.isValid(req.params.post_id)) {
     return res.status(404).json({ message: 'post id not valid' });
   }
@@ -226,11 +227,19 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
             }
           }
         }
-        if (!user.likes_users) {
-          user.likes_users = [];
+        // in case user doesn't have the array in earlier schema design
+
+        if (!post.likes_users) {
+          post.likes_users = [];
         }
-        post.likes_users.push(req.user.id);
-        post.likes = post.likes + 1;
+
+        // in case admin got pushed many times into array
+        if (!post.likes_users.includes(req.user.id)) {
+          post.likes_users.push(req.user.id);
+        }
+
+        post.likes++;
+
         post.save().then(new_post => {
           return res.json({ post });
         });
@@ -239,6 +248,47 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
     .catch(error => {
       res.status(400).json({ message: 'Post not updated, bad request' }); // bad request for changing the post.
     });
+});
+
+// unlike a post
+router.patch('/unlike/:post_id', isAuth, (req, res) => {
+  console.log('Unliking post');
+  if (!ObjectID.isValid(req.params.post_id)) {
+    return res.status(404).json({ message: 'post id not valid' });
+  }
+  Post.findById(req.params.post_id).then(post => {
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: 'Post not found, and cannot update' });
+    }
+    // check if user has liked this post
+    User.findById(req.user.id).then(user => {
+      if (!user.admin) {
+        // if user is admin, can skip and
+        if (post.likes_users) {
+          if (!post.likes_users.includes(req.user.id)) {
+            return res
+              .status(403)
+              .json({ message: 'You have not liked the post' });
+          }
+        }
+      }
+      // in case user doesn't have the array in earlier schema design
+      if (!post.likes_users) {
+        post.likes_users = [];
+      }
+      // remove the user from the likes_users array
+      post.likes_users = post.likes_users.filter(
+        user_id => user_id !== req.user.id
+      );
+
+      post.likes--;
+      post.save().then(new_post => {
+        return res.json({ post });
+      });
+    });
+  });
 });
 
 // get attachments of given post
