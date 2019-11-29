@@ -76,6 +76,8 @@ class AdminProfile extends Component {
                 console.log("Notifications count not be read.");
             } else {
                 console.log(result.data.nModified + " new notifications read.");
+                const msg_badge = document.getElementById("unread-notifications");
+                msg_badge.setAttribute("hidden", true);
             }
         }).catch(error => {
             console.log(error);
