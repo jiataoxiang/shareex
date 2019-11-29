@@ -5,11 +5,14 @@ import "../../stylesheets/animation.scss";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import axios from 'axios';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 const validator = require('validator');
 
 class ProfSet extends Component {
   state = {
+    alert: null,
     profAvatarUrl: process.env.PUBLIC_URL + "./img/User_Avatar.png",
     profEmail: "place@holder.com",
     profMotto: "",
@@ -33,23 +36,56 @@ class ProfSet extends Component {
   }
 
   // This funtion only gets the temp url of the uploaded img now
-  // TODO: change the following code in phase 2, so that we keep the file
+  // TODO: this img saving method may need to change
   changeAvatar = (event) => {
     const inputFile = event.target.files[0]
 
     if (inputFile != null) {
-      const isJPG = inputFile.type === 'image/jpeg';
-      const isPNG = inputFile.type === 'image/png';
+      const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(
+        inputFile.type
+      );
 
-      if (!isJPG && !isPNG) {
+      if (!is_valid_image) {
         inputFile.status = 'error';
         console.log("You can only upload png or jpg files.");
       } else {
-        const imgReader = new FileReader();
-        imgReader.addEventListener('load', () => {
-          this.setState({profAvatarUrl: imgReader.result});
-        })
-        imgReader.readAsDataURL(inputFile);
+        const formData = new FormData();
+        formData.append('file', inputFile); // get first file chosen
+        formData.append('public_id', `${'avatar'}_${this.props.current_user._id}`);
+        console.log('Uploading ' + 'avatar');
+        this.setState({ alert: `Uploading ${'avatar'}` });
+        axios.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
+          console.log(res);
+          const public_id = res.data[0].public_id;
+          const url = res.data[0].url;
+          axios.patch(
+              `/api/users/${this.props.current_user._id}`,
+              { avatar: url },
+              this.tokenConfig()
+            )
+            .then(res => {
+              console.log(res.data);
+              console.log('reload user');
+              store.dispatch(loadUser());
+              this.setState({ profAvatarUrl: url });
+              this.setState({ alert: 'Image Modified' });
+              setTimeout(() => {
+                this.setState({ alert: null });
+              }, 2000);
+            })
+        }).catch(err => {
+          console.log(err);
+        });
+        
+//        const imgReader = new FileReader();
+//        imgReader.addEventListener('load', () => {
+//          this.setState({profAvatarUrl: imgReader.result});
+//        })
+//        imgReader.readAsDataURL(inputFile);
       }
     }
   }
@@ -126,7 +162,7 @@ class ProfSet extends Component {
     const currentUser = this.props.current_user;
     if (! currentUser) {
         window.location.href = '/';
-    } else if (currentUser.type === "admin") {
+    } else if (currentUser.admin) {
         window.location.href = '/';
     } else {
         this.setState({
@@ -209,6 +245,11 @@ class ProfSet extends Component {
     
     return (
       <div className="container profset-page">
+        {this.state.alert ? (
+          <div className="alert alert-primary" role="alert">
+            {this.state.alert}
+          </div>
+        ) : null}
         <h1 className="prof-set-title">Edit Profile</h1>
 
         <div className="avatar-container">
