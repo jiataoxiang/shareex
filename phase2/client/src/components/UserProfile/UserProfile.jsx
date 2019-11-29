@@ -257,10 +257,10 @@ class UserProfile extends React.Component {
               <div className="sticky-top">
                 <div className="space"></div>
                 <div className="profileInfo card">
-                  <div class="card-header">
+                  <div className="card-header">
                     <h2>Name: {this.state.nickname}</h2>
                   </div>
-                  <div class="card-body">
+                  <div className="card-body">
                     <p>
                       <strong>Motto:</strong> {this.state.motto}
                     </p>

@@ -79,7 +79,13 @@ class ProfSet extends Component {
 
   // Check if email is valid.
   checkEmail = () => {
-    return validator.isEmail(this.state.profEmail);
+    const validEmail = validator.isEmail(this.state.profEmail);
+    if (validEmail) {
+        this.clearError(this.inputGroups.inputEmail);
+    } else {
+        this.setError(this.inputGroups.inputEmail);
+    }
+    return validEmail;
   }
 
   // Check if password is valid.
@@ -98,20 +104,17 @@ class ProfSet extends Component {
     // to make sure the animation works properly
     this.clearAllError();
 
-    // this is some fake data that we get from server,
-    // TODO: change the following code in phase 2, to upload changed data to server
     const currentUser = this.props.current_user;
     console.log(currentUser)
     if (! currentUser) {
-        alert("You need to log in first");
+        window.location.href = '/';
     } else if (currentUser.type === "admin") {
-        alert("admin accounts cannot change profile");
-    } else {
+        window.location.href = '/';
+    } else if (this._isMounted) {
         this.setState({
           profAvatarUrl: currentUser.avatar,
           profEmail: currentUser.email,
-          profMotto: currentUser.motto,
-          profGender: currentUser.gender
+          profMotto: currentUser.motto
         });     
     }
 
@@ -123,11 +126,10 @@ class ProfSet extends Component {
     // to make sure the animation works properly
     this.clearAllError();
 
-    const correctNickname = this.checkNickname();
     const correctEmail = this.checkEmail();
     const correctPassword = this.checkPassword();
 
-    if (correctNickname && correctEmail && correctPassword) {
+    if (correctEmail && correctPassword) {
       // send new profile to server
       // TODO: change the following code in phase 2, to download data from server
       const currentUser = this.props.state.current_user;
@@ -152,10 +154,19 @@ class ProfSet extends Component {
     }
 
     // Read data from server.
+    this._isMounted = true;
     this.getProf();
   }
 
+  componentWillUnmount(){
+    this._isMounted = false;
+  }
+
   render() {
+    if (!this.props.isAuthenticated) {
+      window.location.href = '/';
+    }
+    
     return (
       <div className="container profset-page">
         <h1 className="prof-set-title">Edit Profile</h1>
