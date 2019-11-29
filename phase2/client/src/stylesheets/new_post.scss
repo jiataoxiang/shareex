@@ -1,4 +1,5 @@
 .new-post2-page {
+  padding-top: 70px;
   .container {
     margin-top: 1em;
     padding: 0em 10em 0em 10em;
@@ -15,7 +16,7 @@
     }
   }
   .add-content-component {
-    .input-link-button{
+    .input-link-button {
       margin-left: 1em;
     }
     min-height: 3em;
@@ -57,7 +58,7 @@
       font-weight: bold;
     }
 
-    .upload-btn-wrapper input[type="file"] {
+    .upload-btn-wrapper input[type='file'] {
       font-size: 100px;
       position: absolute;
       left: 0;

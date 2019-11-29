@@ -116,7 +116,7 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <Link
           id="logo-btn"
           to={{

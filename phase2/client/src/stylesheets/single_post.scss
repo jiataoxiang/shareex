@@ -1,4 +1,6 @@
 .single-post-2-page {
+  padding-top: 70px;
+
   .container {
     margin-top: 2em;
     .single-post-container {
@@ -17,15 +19,16 @@
             width: 100%;
           }
         }
-        h3 {
+        h2 {
           padding-left: 1rem;
         }
       }
       .comment-container {
         margin-top: 1em;
         margin-bottom: 2em;
-        h2 {
+        h3 {
           display: inline-block;
+          margin-left: 15px;
         }
         .comments {
           background-color: var(--background-secondary);

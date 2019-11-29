@@ -255,7 +255,7 @@ class UserProfile extends React.Component {
           <div className="row mt-3">
             <div className="col-md-4">
               <div className="sticky-top">
-                <div className="space"></div>
+                {/* <div className="space"></div> */}
                 <div className="profileInfo card">
                   <div className="card-header">
                     <h2>Name: {this.state.nickname}</h2>

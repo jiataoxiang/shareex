@@ -1,9 +1,10 @@
 .admin-profile-page {
+  padding-top: 100px;
   #left-tab {
     width: 15em;
     margin-top: 3.5em;
   }
-    
+
   #AdminProfileCircle {
     display: block;
     margin-left: auto;
@@ -14,162 +15,162 @@
     width: 15em;
     margin-top: 2em;
   }
-  
+
   #option-tab {
-    margin-top: 2.5em;  
+    margin-top: 2.5em;
   }
 
   .btn-group-vertical {
     width: 15em;
     .btn {
-        color: gray;
-        border-color: grey;
-        background-color: var(--background-secondary);
+      color: gray;
+      border-color: grey;
+      background-color: var(--background-secondary);
     }
     .btn-selected {
-        border-left-width: 0.2em;
-        border-left-color: forestgreen;
+      border-left-width: 0.2em;
+      border-left-color: forestgreen;
     }
   }
 
   .dashboard {
     margin-top: 10em;
     .card {
-        background-color: var(--background-secondary);
-        margin: 1em;
+      background-color: var(--background-secondary);
+      margin: 1em;
     }
 
     .card-body {
-        background-color: var(--background-secondary);
+      background-color: var(--background-secondary);
     }
   }
-    
+
   #finduser {
     margin-top: 10em;
     #search-user {
+      margin-left: 1em;
+      #user-id-input {
+        width: 15em;
+        float: left;
+      }
+      .btn {
+        color: gray;
+        border-color: grey;
         margin-left: 1em;
-        #user-id-input {
-            width: 15em;
-            float: left;
-        }
-        .btn {
-            color: gray;
-            border-color: grey;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+        background-color: var(--background-secondary);
+      }
     }
-    
+
     #display-user {
-        #user-avatar {
-            width: 5em;
-            height: 5em;
-            margin-top: 2.5em;
-            border-radius: 50%;
-        }
-      
-        #text-block {
-            margin-left: 2em;
-            margin-top: 3em;
-        }
-    
-        #ban-warning {
-            margin-top: 1em;
-            color: red;
-        }
-        
-        .btn {
-            color: gray;
-            border-color: grey;
-            width: 150px;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+      #user-avatar {
+        width: 5em;
+        height: 5em;
+        margin-top: 2.5em;
+        border-radius: 50%;
+      }
+
+      #text-block {
+        margin-left: 2em;
+        margin-top: 3em;
+      }
+
+      #ban-warning {
+        margin-top: 1em;
+        color: red;
+      }
+
+      .btn {
+        color: gray;
+        border-color: grey;
+        width: 150px;
+        margin-left: 1em;
+        background-color: var(--background-secondary);
+      }
     }
   }
-    
+
   #findpost {
     margin-top: 10em;
     #search-post {
+      margin-left: 1em;
+      #post-id-input {
+        width: 15em;
+        float: left;
+      }
+      .btn {
+        color: gray;
+        border-color: grey;
         margin-left: 1em;
-        #post-id-input {
-            width: 15em;
-            float: left;
-        }
-        .btn {
-            color: gray;
-            border-color: grey;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+        background-color: var(--background-secondary);
+      }
     }
-    
+
     #display-post {
-        #text-block {
-            margin-left: 2em;
-            margin-top: 3em;
-            margin-bottom: 0.5em;
-        }
-        .post-info {
-            display: block;
-        }
-    
-        #delete-warning {
-            margin-top: 1em;
-            color: red;
-        }
-        
-        .btn {
-            color: gray;
-            border-color: grey;
-            width: 150px;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+      #text-block {
+        margin-left: 2em;
+        margin-top: 3em;
+        margin-bottom: 0.5em;
+      }
+      .post-info {
+        display: block;
+      }
+
+      #delete-warning {
+        margin-top: 1em;
+        color: red;
+      }
+
+      .btn {
+        color: gray;
+        border-color: grey;
+        width: 150px;
+        margin-left: 1em;
+        background-color: var(--background-secondary);
+      }
     }
   }
 
   #notification-tab {
     margin-top: 4em;
     #search-notification {
-        margin-bottom: 1em;
-        #search-input {
-            width: 20em;
-            float: left;
-        }
-        .btn {
-            color: gray;
-            border-color: grey;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+      margin-bottom: 1em;
+      #search-input {
+        width: 20em;
+        float: left;
+      }
+      .btn {
+        color: gray;
+        border-color: grey;
+        margin-left: 1em;
+        background-color: var(--background-secondary);
+      }
     }
-    
+
     #display-user {
-        #user-avatar {
-            width: 5em;
-            height: 5em;
-            margin-top: 2.5em;
-            border-radius: 50%;
-        }
-      
-        #text-block {
-            margin-left: 2em;
-            margin-top: 3em;
-        }
-    
-        #ban-warning {
-            margin-top: 1em;
-            color: red;
-        }
-        
-        .btn {
-            color: gray;
-            border-color: grey;
-            width: 150px;
-            margin-left: 1em;
-            background-color: var(--background-secondary);
-        }
+      #user-avatar {
+        width: 5em;
+        height: 5em;
+        margin-top: 2.5em;
+        border-radius: 50%;
+      }
+
+      #text-block {
+        margin-left: 2em;
+        margin-top: 3em;
+      }
+
+      #ban-warning {
+        margin-top: 1em;
+        color: red;
+      }
+
+      .btn {
+        color: gray;
+        border-color: grey;
+        width: 150px;
+        margin-left: 1em;
+        background-color: var(--background-secondary);
+      }
     }
   }
 }

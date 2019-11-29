@@ -178,7 +178,7 @@ class Home extends Component {
             })}
           </div>
           <div className="recommendations col-12 col-6 col-md-4">
-            <div className="sticky-top">
+            <div className="sticky-top" style={{ top: '5em' }}>
               <h3>Recommendations</h3>
               <ul className="list-group recommendation-list">
                 {this.state.recommendations.map(recommendation => {

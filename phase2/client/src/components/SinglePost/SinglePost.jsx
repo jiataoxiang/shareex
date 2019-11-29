@@ -321,7 +321,7 @@ class SinglePost extends Component {
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
-                <h3>{this.state.post.title}</h3>
+                <h2>{this.state.post.title}</h2>
                 <div className="post-content">
                   <Attachment
                     key={uid(rand_string())}
@@ -341,7 +341,7 @@ class SinglePost extends Component {
               </div>
               <div className="comment-container">
                 <div>
-                  <h2>Comments</h2>
+                  <h3>Comments</h3>
                   <button
                     className="btn btn-outline-success float-right"
                     id="new-comment-button"
