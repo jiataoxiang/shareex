@@ -79,7 +79,13 @@ class SignUp extends Component {
         ) : null}
         <div className="form-container">
           <form action="" onSubmit={this.signup}>
-            <h2 id="signup-title">Sign Up</h2>
+            <img
+              src={'./img/logo_S.png'}
+              width="100px"
+              className="lock mx-auto"
+              alt=""
+            />
+            <h3 id="signup-title">Sign Up</h3>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span

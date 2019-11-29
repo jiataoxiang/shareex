@@ -102,8 +102,8 @@ class Login extends Component {
           <form action="" onSubmit={this.signin}>
             <div className="lock-container">
               <img
-                src={'./img/lock.png'}
-                width="40px"
+                src={'./img/logo_S.png'}
+                width="100px"
                 className="lock mx-auto"
                 alt=""
               />
