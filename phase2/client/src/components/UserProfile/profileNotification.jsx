@@ -26,27 +26,36 @@ class AdminProfileNotification extends React.Component {
         return (
             <div id="notification-tab">
                 <div id="search-notification">
-                    <input
-                        type="text"
-                        id="search-input" 
-                        className="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-default"
-                        name="inputid" 
-                        value={this.state.inputsearch} 
-                        onChange={this.handleInputChange}
-                    />
-                    <button type="button" 
-                        className="btn">Search</button>
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text" >Search</span>
+                        </div>
+                        <input
+                            type="text"
+                            id="search-input" 
+                            className="form-control"
+                            aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-default"
+                            name="inputsearch" 
+                            value={this.state.inputsearch} 
+                            onChange={this.handleInputChange}
+                        />
+                    </div>
                 </div>
                 <div id="display-notification">
                     <h4>---- New ----</h4>
                     {this.state.unreadMsg.map(msg => {
-                        return <NotificationCard key={uid(Math.random())} msg={msg} />
+                        if (this.state.inputsearch === "" || 
+                            msg.body.includes(this.state.inputsearch)) {
+                            return <NotificationCard key={uid(Math.random())} msg={msg} />
+                        }
                     })}
                     <h4>---- Old ----</h4>
                     {this.state.readMsg.map(msg => {
-                        return <NotificationCard key={uid(Math.random())} msg={msg} />
+                        if (this.state.inputsearch === "" || 
+                            msg.body.includes(this.state.inputsearch)) {
+                            return <NotificationCard key={uid(Math.random())} msg={msg} />
+                        }
                     })}
                 </div>
             </div>
