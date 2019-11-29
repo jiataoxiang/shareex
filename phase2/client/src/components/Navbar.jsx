@@ -214,6 +214,12 @@ class Navbar extends React.Component {
               </Link>
             </div>
           )}
+          {this.props.isAuthenticated ? (
+            <span id="welcome-msg">
+              Welcome, <em>{this.props.current_user.username}</em>
+            </span>
+          ) : null}
+
           {this.getUserProfileButton()}
         </div>
       </nav>

@@ -36,6 +36,11 @@ router.post('/', (req, res) => {
   if (!username || !email || !password) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
+  if (password.length < 4) {
+    return res
+      .status(400)
+      .json({ message: 'Password must be longer than 4 characters' });
+  }
   User.findOne({ username }).then(user => {
     if (user) return res.status(400).json({ message: 'User already exists' });
   });
@@ -322,28 +327,27 @@ router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 });
 
 //add messenger info to user
-router.post("/add-messenger/:id", (req, res) => {
+router.post('/add-messenger/:id', (req, res) => {
   const id = req.params.id;
-  if (!ObjectID.isValid(id)){
-    res.status(404).send("user id is invalid")
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send('user id is invalid');
   }
 
   const message = {
-    "content": req.body.content,
-    "messenger_id": req.body.messenger_id
+    content: req.body.content,
+    messenger_id: req.body.messenger_id
   };
 
-  User.findByIdAndUpdate(id, {$push: {messages: message}}, {new:true})
-    .then((user) => {
-      if(!user){
-        res.status(404).send("user is not found")
+  User.findByIdAndUpdate(id, { $push: { messages: message } }, { new: true })
+    .then(user => {
+      if (!user) {
+        res.status(404).send('user is not found');
       }
-      res.send(user)
-    }).catch((error) => {
-      res.status(404).send(error)
-  })
-
+      res.send(user);
+    })
+    .catch(error => {
+      res.status(404).send(error);
+    });
 });
-
 
 module.exports = router;
