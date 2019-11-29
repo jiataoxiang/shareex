@@ -135,6 +135,7 @@ class Home extends Component {
               <div className="col-10">
                 <span className="float-right">
                   <span className="ml-3">Category:</span>
+                  {/* <div className="input-group"> */}
                   <select id="category-selection" name="category">
                     <option value="All">All</option>
                     <option value="CS">CS</option>
@@ -143,6 +144,7 @@ class Home extends Component {
                     <option value="Technology">Technology</option>
                     <option value="Following">Following</option>
                   </select>
+                  {/* </div> */}
 
                   <span className="ml-3">Sort By:</span>
                   <select id="sort-selection" name="sort_by">
@@ -178,7 +180,7 @@ class Home extends Component {
           <div className="recommendations col-12 col-6 col-md-4">
             <div className="sticky-top">
               <h3>Recommendations</h3>
-              <ul className="list-group">
+              <ul className="list-group recommendation-list">
                 {this.state.recommendations.map(recommendation => {
                   return (
                     <li key={uid(Math.random())} className="list-group-item">
