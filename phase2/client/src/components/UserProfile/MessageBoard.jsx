@@ -1,4 +1,4 @@
-import Message from "./Message";
+import Message from './Message';
 import React from 'react';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
@@ -11,63 +11,68 @@ class MessageBoard extends React.Component {
   };
 
   checkUserProfile = () => {
-    console.log("current user is : " + this.props.current_user._id);
-    console.log("post user is : " + this.state.author);
+    console.log('current user is : ' + this.props.current_user._id);
+    console.log('post user is : ' + this.state.author);
     return this.props.current_user._id === this.state.author;
   };
 
   componentDidMount() {
-    this.getUserInfo()
+    this.getUserInfo();
   }
 
   sendMessage = () => {
-    const message = document.getElementById("message").value;
+    const message = document.getElementById('message').value;
     const current_user_id = this.props.current_user._id;
     console.log(this.state.author);
 
-    axios.post(`/api/users/add-messenger/${this.state.author}`,
-      {
-        "messenger_id": current_user_id,
-        "content": message
-      },
-      this.props.tokenConfig())
-      .then((user) => {
-        console.log(user)
+    axios
+      .post(
+        `/api/users/add-messenger/${this.state.author}`,
+        {
+          messenger_id: current_user_id,
+          content: message
+        },
+        this.props.tokenConfig()
+      )
+      .then(user => {
+        console.log(user);
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(error => {
+        console.log(error);
       });
 
-    this.getUserInfo()
+    this.getUserInfo();
   };
 
-  getUserInfo = ()=>{
-    axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig())
-      .then((user) => {
+  getUserInfo = () => {
+    axios
+      .get(`/api/users/${this.state.author}`, this.props.tokenConfig())
+      .then(user => {
         user = user.data;
         console.log(user);
         this.setState({
           messages: user.messages
-        })
-      })
+        });
+      });
   };
 
   render() {
     return (
       <div>
-        <div className="space"/>
+        {/* <div className="space"/> */}
         <div className="overflow-auto">
-          <h6>Message Board</h6>
+          <h3>Message Board</h3>
           {this.state.messages.map(message => {
-            return <Message key={uid(Math.random())} message={message}/>
+            return <Message key={uid(Math.random())} message={message} />;
           })}
         </div>
-        {this.checkUserProfile() ? (
-          null
-        ):(
+        {this.checkUserProfile() ? null : (
           <div className="input-group mb-3">
             <div className="input-group-prepend">
-              <button className="input-group-text" onClick={this.sendMessage.bind(this)}>
+              <button
+                className="input-group-text"
+                onClick={this.sendMessage.bind(this)}
+              >
                 Send
               </button>
             </div>

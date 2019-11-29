@@ -4,9 +4,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from "./Follower";
-import MessageBoard from "./MessageBoard";
-import PostsBoard from "./PostsBoard";
+import Follower from './Follower';
+import MessageBoard from './MessageBoard';
+import PostsBoard from './PostsBoard';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 import Animation from './Animation.jsx';
@@ -19,8 +19,8 @@ class UserProfile extends React.Component {
     messages: [],
     alert: null,
     following: [],
-    curState: "",
-    author: "",
+    curState: '',
+    author: '',
     functions: []
   };
 
@@ -69,24 +69,25 @@ class UserProfile extends React.Component {
       });
   };
   setFunctions = () => {
-    if (this.state.curState === ""){
+    if (this.state.curState === '') {
       this.setState({
-        curState: <PostsBoard author={this.props.current_user._id}/>
-      })
+        curState: <PostsBoard author={this.props.current_user._id} />
+      });
     }
     this.setState({
       functions: [
         {
           id: 1,
-          title: "message_board",
-          model: <MessageBoard author={this.props.current_user._id}/>
-        }, {
+          title: 'message_board',
+          model: <MessageBoard author={this.props.current_user._id} />
+        },
+        {
           id: 2,
-          title: "posts",
-          model: <PostsBoard author={this.props.current_user._id}/>
+          title: 'posts',
+          model: <PostsBoard author={this.props.current_user._id} />
         }
       ]
-    })
+    });
   };
 
   componentDidMount() {
@@ -100,7 +101,7 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following,
         likes: currentUser.likes.length,
-        motto: currentUser.motto,
+        motto: currentUser.motto
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -251,21 +252,36 @@ class UserProfile extends React.Component {
           />
         </div>
         <div className="container">
-          <div className="row">
+          <div className="row mt-3">
             <div className="col-md-4">
+              <div className="sticky-top">
                 <div className="space"></div>
-                <div className="profileInfo">
-                  <h2>Name: {this.state.nickname}</h2>
-                  <p>Motto: {this.state.motto}</p>
-                  <p>Posts: {this.state.numPosts}</p>
-                  <p>Followers: {this.state.followers.length}</p>
-                  <p>Following: {this.state.following.length}</p>
-                  <p>Likes: {this.state.likes}</p>
-                  <Link to="/prof_setting" id="profile-setting-btn">
-                    <button className="btn btn-light btn-block">
-                      Profile Setting
-                    </button>
-                  </Link>
+                <div className="profileInfo card">
+                  <div class="card-header">
+                    <h2>Name: {this.state.nickname}</h2>
+                  </div>
+                  <div class="card-body">
+                    <p>
+                      <strong>Motto:</strong> {this.state.motto}
+                    </p>
+                    <p>
+                      <strong>Posts:</strong> {this.state.numPosts}
+                    </p>
+                    <p>
+                      <strong>Followers:</strong> {this.state.followers.length}
+                    </p>
+                    <p>
+                      <strong>Following:</strong> {this.state.following.length}
+                    </p>
+                    <p>
+                      <strong>Likes:</strong> {this.state.likes}
+                    </p>
+                    <Link to="/prof_setting" id="profile-setting-btn">
+                      <button className="btn btn-light btn-block">
+                        Profile Setting
+                      </button>
+                    </Link>
+                  </div>
                 </div>
                 <h2>Options</h2>
                 <div className="list-group options">
@@ -280,19 +296,18 @@ class UserProfile extends React.Component {
                     </button>
                   ))}
                 </div>
-              <br/>
-              <div className="followers">
-                <h3> Followers</h3>
-                {followers.map(follower => {
-                  return (
-                    <Follower key={uid(Math.random())} follower={follower} />
-                  );
-                })}
+                <br />
+                <div className="followers">
+                  <h3> Followers</h3>
+                  {followers.map(follower => {
+                    return (
+                      <Follower key={uid(Math.random())} follower={follower} />
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <div className="col-md-8">
-              {this.state.curState}
-            </div>
+            <div className="col-md-8">{this.state.curState}</div>
           </div>
           <div id="profileImgContainer">
             <img

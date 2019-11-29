@@ -77,19 +77,27 @@
   /*** Profile info box styles below ***/
   .container {
     .space {
-      height: 4em;
+      height: 53px;
     }
     .timeline {
       margin-top: 1em;
     }
   }
+  .options {
+    border-radius: 10px;
+    .list-group-item.list-group-item-action {
+      background-color: var(--background-secondary);
+      color: var(--text);
+    }
+  }
 
   .profileInfo {
     background-color: var(--background-secondary);
-    padding: 15px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-bottom: 1em;
-
+    button {
+      border: 1px solid rgba(0, 0, 0, 0.125);
+    }
     #profile-setting-btn,
     button {
       margin-bottom: 1em;
@@ -202,6 +210,7 @@
     margin-top: 1px;
   }
   //message board
+
   .fix-length {
     width: 600px;
     height: 400px;
@@ -210,7 +219,7 @@
     height: 400px;
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .user-profile-page {
     .container {
       .space {
@@ -220,5 +229,8 @@
     #bigProfilePicCircle {
       left: 2em;
     }
+  }
+  .col-md-8 {
+    margin-top: 2em;
   }
 }
