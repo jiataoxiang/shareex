@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import '../../stylesheets/single_post.scss';
 import Comment from '../Comment';
 import Attachment from '../Attachment';
-import {connect} from 'react-redux';
-import {rand_string} from '../../lib/util';
-import {uid} from 'react-uid';
+import { connect } from 'react-redux';
+import { rand_string } from '../../lib/util';
+import { uid } from 'react-uid';
 import axios from 'axios';
-import {ObjectID} from "mongoose";
+import { ObjectID } from 'mongoose';
 
 class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
@@ -32,17 +32,27 @@ class SinglePost extends Component {
   }
 
   addToViewHistory = (user_id, post_id) => {
-    console.log("The current user id is not null: ", user_id);
-    axios.patch(`/api/users/${user_id}/add-view-history`, {post_id: post_id}, this.tokenConfig()).then(res => {
-      console.log(res.data);
-    }).catch(err => {
-      console.log(err);
-    });
+    console.log('The current user id is not null: ', user_id);
+    axios
+      .patch(
+        `/api/users/${user_id}/add-view-history`,
+        { post_id: post_id },
+        this.tokenConfig()
+      )
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.current_user) {
-      this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+      this.addToViewHistory(
+        nextProps.current_user._id,
+        this.props.match.params.id
+      );
     }
   }
 
@@ -50,22 +60,24 @@ class SinglePost extends Component {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
-        this.setState({post: res.data});
+        this.setState({ post: res.data });
         this.getPostAuthor(res.data.author);
-        console.log("The post id we get is:", res.data._id);
+        console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  getPostAuthor = (user_id) => {
-    axios.get("/api/users/" + user_id, this.tokenConfig())
+  getPostAuthor = user_id => {
+    axios
+      .get('/api/users/' + user_id, this.tokenConfig())
       .then(user => {
-        this.setState({post_author: user.data});
-      }).catch(err => {
-      console.log(err);
-    })
+        this.setState({ post_author: user.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   getAttachData = () => {
@@ -76,7 +88,7 @@ class SinglePost extends Component {
       )
       .then(res => {
         // console.log("Get the Attach data:", res.data);
-        this.setState({attachments: res.data.attachments});
+        this.setState({ attachments: res.data.attachments });
       })
       .catch(err => {
         console.log(err);
@@ -87,17 +99,17 @@ class SinglePost extends Component {
   getComments = () => {
     axios
       .get('/api/comments/', {
-        params: {post_id: this.props.match.params.id}
+        params: { post_id: this.props.match.params.id }
       })
       .then(comments => {
         let add_editMode = [];
         comments.data.comments.forEach(ele => {
           ele['edit_mode'] = false;
-          ele["new_comment"] = false;
+          ele['new_comment'] = false;
           add_editMode.push(ele);
           this.getCommentUsername(ele._id, ele.author);
         });
-        this.setState({comments: add_editMode});
+        this.setState({ comments: add_editMode });
       })
       .catch(err => {
         console.log(err);
@@ -105,7 +117,8 @@ class SinglePost extends Component {
   };
 
   getCommentUsername = (comment_id, id) => {
-    axios.get("/api/users/" + id, this.tokenConfig())
+    axios
+      .get('/api/users/' + id, this.tokenConfig())
       .then(user => {
         const comments = this.state.comments;
         for (let i = 0; i < comments.length; i++) {
@@ -113,7 +126,7 @@ class SinglePost extends Component {
             comments[i].username = user.data.username;
           }
         }
-        this.setState({comments: comments});
+        this.setState({ comments: comments });
       })
       .catch(err => {
         console.log(err);
@@ -129,7 +142,8 @@ class SinglePost extends Component {
         new_comments.push(comments[i]);
       }
     }
-    axios.delete("/api/comments/" + comment_id)
+    axios
+      .delete('/api/comments/' + comment_id)
       .then(deleted => {
         console.log(deleted);
       })
@@ -137,7 +151,7 @@ class SinglePost extends Component {
         console.log(err);
       });
     // this.setState({comments: new_comments});
-    this.getComments()
+    this.getComments();
   };
 
   /* callback passed to a Comment to submit a Comment on this page */
@@ -160,7 +174,8 @@ class SinglePost extends Component {
     // }
     // this.setState({comments: comments});
     // console.log("Submit button clicked!:  ", post_id);
-    if (new_comment) {  // if this is a new comment
+    if (new_comment) {
+      // if this is a new comment
       const a_comment = {
         author: this.props.current_user._id,
         post_id: post_id,
@@ -185,14 +200,15 @@ class SinglePost extends Component {
           console.log(err);
         });
       document.getElementById('new-comment-button').removeAttribute('hidden');
-    } else {  // if this is a existed comment
+    } else {
+      // if this is a existed comment
       const comments = this.state.comments;
       let modified = {};
       for (let i = 0; i < comments.length; i++) {
         if (comments[i]._id === comment_id) {
           comments[i].body = comment_content;
           comments[i].edit_mode = false;
-          modified["body"] = comment_content;
+          modified['body'] = comment_content;
         }
       }
       // this.setState({comments: comments});
@@ -218,7 +234,7 @@ class SinglePost extends Component {
         comments[i].edit_mode = true;
       }
     }
-    this.setState({comments: comments});
+    this.setState({ comments: comments });
   };
 
   /* display an empty comment which can be edited in comment list */
@@ -234,7 +250,7 @@ class SinglePost extends Component {
         edit_mode: true,
         new_comment: true
       });
-      this.setState({comments: comments});
+      this.setState({ comments: comments });
 
       document
         .getElementById('new-comment-button')
@@ -251,7 +267,7 @@ class SinglePost extends Component {
     if (!user || !(user === author)) {
       this.props.history.push({
         pathname: '/otherprofile',
-        state: {post_id: this.state.post._id, author: this.state.post.author}
+        state: { post_id: this.state.post._id, author: this.state.post.author }
       });
     } else {
       this.props.history.push('/userprofile');
@@ -335,6 +351,15 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
+                  {(function() {
+                    if (comment_list.length === 0) {
+                      return (
+                        <React.Fragment>
+                          <h5 className="text-center">No Comments So Far</h5>
+                        </React.Fragment>
+                      );
+                    }
+                  })()}
                   {comment_list.map(comment => {
                     return (
                       <Comment
@@ -363,7 +388,7 @@ class SinglePost extends Component {
                 <div className="user-info" onClick={this.redirectProf}>
                   <div className="row">
                     <div className="col-lg-3 col-3">
-                      <img className="avatar" src={avatar} alt=""/>
+                      <img className="avatar" src={avatar} alt="" />
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong>{username}</strong>
