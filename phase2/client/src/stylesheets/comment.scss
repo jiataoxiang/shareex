@@ -2,6 +2,13 @@
   hr {
     background-color: var(--hr-color);
   }
+  .user {
+    word-wrap: break-word;
+  }
+
+  .content {
+    word-wrap: break-word;
+  }
 
   button {
     margin-left: 10px;
