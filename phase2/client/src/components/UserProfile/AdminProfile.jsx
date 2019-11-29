@@ -37,11 +37,16 @@ class AdminProfile extends Component {
         this.setState({tabState: num});
         
         if (num === 3) {
+            const msg_badge = document.getElementById("unread-notifications");
+            msg_badge.setAttribute("hidden", true);
             this.readNotifications();
         }
     }
   
     getNotifications = () => {
+        const msg_badge = document.getElementById("unread-notifications");
+        msg_badge.setAttribute("hidden", true);
+        
         axios.get(
             `/api/notifications/receiver/${this.props.auth.user._id}`
         ).then(msgs => {
@@ -53,7 +58,6 @@ class AdminProfile extends Component {
                 }
             })
         }).then(() => {
-            const msg_badge = document.getElementById("unread-notifications");
             if (this.state.msg.unreadMsg.length) {
                 msg_badge.removeAttribute("hidden");
             } else {
@@ -72,8 +76,6 @@ class AdminProfile extends Component {
                 console.log("Notifications count not be read.");
             } else {
                 console.log(result.data.nModified + " new notifications read.");
-                const msg_badge = document.getElementById("unread-notifications");
-                msg_badge.setAttribute("hidden", true);
             }
         }).catch(error => {
             console.log(error);
@@ -82,8 +84,6 @@ class AdminProfile extends Component {
 
     componentDidMount() {
         this.getTabButtons();
-        const msg_badge = document.getElementById("unread-notifications");
-        msg_badge.setAttribute("hidden", true);
         
         const currentUser = this.props.auth.user;
         if (currentUser) {
@@ -112,7 +112,7 @@ class AdminProfile extends Component {
                   <img id="AdminProfileCircle" src={this.state.avatar} alt="" />
                     <div id="user-info">
                       <p>Nickname: {this.state.nickname} </p>
-                      <p>Email: {this.state.mail} </p>
+                      <p>Email: {this.state.email} </p>
                     </div>
                     <div id="option-tab">
                       <div className="btn-group-vertical">
