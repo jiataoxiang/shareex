@@ -12,7 +12,7 @@ const validator = require('validator');
 
 class ProfSet extends Component {
   state = {
-    alert: null,
+    profAvatarFile: null,
     profAvatarUrl: process.env.PUBLIC_URL + "./img/User_Avatar.png",
     profEmail: "place@holder.com",
     profMotto: "",
@@ -48,31 +48,41 @@ class ProfSet extends Component {
       if (!is_valid_image) {
         inputFile.status = 'error';
         console.log("You can only upload png or jpg files.");
-      } else {
-        const formData = new FormData();
-        formData.append('file', inputFile); // get first file chosen
-        formData.append('public_id', `${'avatar'}_${this.props.current_user._id}`);
-        console.log('Uploading ' + 'avatar');
-        this.setState({ alert: `Uploading ${'avatar'}` });
-        axios.post('/api/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(res => {
-          console.log(res);
-          const public_id = res.data[0].public_id;
-          const url = res.data[0].url;
-          axios.patch(
+      } else {   
+        const imgReader = new FileReader();
+        imgReader.addEventListener('load', () => {
+          this.setState({
+              profAvatarFile: inputFile,
+              profAvatarUrl: imgReader.result
+          });
+        })
+        imgReader.readAsDataURL(inputFile);
+      }
+    }
+  }
+  
+  saveAvatar = () => {
+      if (this.state.profAvatarFile) {
+          const formData = new FormData();
+          formData.append('file', this.state.profAvatarFile);
+          formData.append('public_id', `${'avatar'}_${this.props.current_user._id}`);
+          console.log('Uploading avatar');
+          axios.post('/api/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }).then(res => {
+            console.log(res);
+            // const public_id = res.data[0].public_id;
+            const url = res.data[0].url;
+            axios.patch(
               `/api/users/${this.props.current_user._id}`,
               { avatar: url },
               this.tokenConfig()
-            )
-            .then(res => {
+            ).then(res => {
               console.log(res.data);
               console.log('reload user');
               store.dispatch(loadUser());
-              this.setState({ profAvatarUrl: url });
-              this.setState({ alert: 'Image Modified' });
               setTimeout(() => {
                 this.setState({ alert: null });
               }, 2000);
@@ -80,14 +90,7 @@ class ProfSet extends Component {
         }).catch(err => {
           console.log(err);
         });
-        
-//        const imgReader = new FileReader();
-//        imgReader.addEventListener('load', () => {
-//          this.setState({profAvatarUrl: imgReader.result});
-//        })
-//        imgReader.readAsDataURL(inputFile);
       }
-    }
   }
 
   // Clear content in the password text box.
@@ -166,6 +169,7 @@ class ProfSet extends Component {
         window.location.href = '/';
     } else {
         this.setState({
+          profAvatarFile: null,
           profAvatarUrl: currentUser.avatar,
           profEmail: currentUser.email,
           profMotto: currentUser.motto
@@ -189,6 +193,7 @@ class ProfSet extends Component {
     const correctPassword = this.checkPassword();
 
     if (correctEmail && correctPassword) {
+      this.saveAvatar();
       let toPatch;
       if (this.state.profPassword.length === 0) {
           toPatch = {
