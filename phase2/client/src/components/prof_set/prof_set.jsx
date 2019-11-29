@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../stylesheets/prof_set.scss";
 import "../../stylesheets/animation.scss";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 const validator = require('validator');
 
@@ -90,7 +91,7 @@ class ProfSet extends Component {
 
   // Check if password is valid.
   checkPassword = () => {
-    if (this.state.profPassword.length < 4) {
+    if (this.state.profPassword.length < 4 && this.state.profPassword.length != 0) {
       this.setError(this.inputGroups.inputPassword);
       return false;
     } else {
@@ -98,25 +99,47 @@ class ProfSet extends Component {
       return true;
     }
   }
+  
+  tokenConfig = () => {
+    // Get token from localstorage
+    const token = this.props.auth.token;
+
+    // Headers
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+
+    // If token, add to headers
+    if (token) {
+      config.headers['x-auth-token'] = token;
+    } else {
+      window.location.href = '/';
+    }
+
+    return config;
+  };
 
   // get profile from server
   getProf = () => {
-    // to make sure the animation works properly
-    this.clearAllError();
-
     const currentUser = this.props.current_user;
-    console.log(currentUser)
     if (! currentUser) {
         window.location.href = '/';
     } else if (currentUser.type === "admin") {
         window.location.href = '/';
-    } else if (this._isMounted) {
+    } else {
         this.setState({
           profAvatarUrl: currentUser.avatar,
           profEmail: currentUser.email,
           profMotto: currentUser.motto
         });     
     }
+    
+    this.clearPassword();
+    
+    // to make sure the animation works properly
+    this.clearAllError();
 
     console.log("Profile loaded from server.");
   }
@@ -132,29 +155,42 @@ class ProfSet extends Component {
     if (correctEmail && correctPassword) {
       // send new profile to server
       // TODO: change the following code in phase 2, to download data from server
-      const currentUser = this.props.state.current_user;
-        
-      currentUser.avatar = this.state.profAvatarUrl;
-        
-      currentUser.nickname = this.state.profNickname;
-      currentUser.email = this.state.profEmail;
-      currentUser.tel = this.state.profTelephone;
-      currentUser.password = this.state.profPassword;
-      currentUser.motto = this.state.profMotto;
-
-      alert("Profile saved.");
-      this.props.history.push("/userprofile");
+      let toPatch;
+      if (this.state.profPassword.length === 0) {
+          toPatch = {
+              email: this.state.profEmail,
+              motto: this.state.profMotto
+          };
+      } else {
+          toPatch = {
+              email: this.state.profEmail,
+              motto: this.state.profMotto,
+              password: this.state.profPassword
+          };
+      }
+    
+      axios.patch(
+          `/api/users/${this.props.current_user._id}`, toPatch, this.tokenConfig()
+      ).then(result => {
+          console.log(result);
+      }).catch(err => {
+          console.log(err);
+      })
+      
+      // alert("Profile saved.");
+      // document.getElementById("button-cancel").click();
     }
   }
 
   componentDidMount() {
+    this._isMounted = true;
+    
     // Get the text boxes.
     for (let i in this.inputGroups) {
         this.inputGroups[i] = document.getElementById(i)
     }
 
     // Read data from server.
-    this._isMounted = true;
     this.getProf();
   }
 
@@ -246,6 +282,7 @@ class ProfSet extends Component {
           </button>
           <Link to="/userprofile">
             <button type="submit"
+                    id="button-cancel"
                   className="btn btn-light btn-md btn-block">
                 Cancel
             </button>
