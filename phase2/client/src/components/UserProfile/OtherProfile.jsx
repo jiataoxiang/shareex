@@ -70,27 +70,6 @@ class OtherProfile extends React.Component {
       });
   };
 
-  sendMessage = () => {
-    const message = document.getElementById("message").value;
-    const current_user_id = this.props.current_user._id;
-    console.log(this.state.author);
-
-    axios.post(`/api/users/add-messenger/${this.state.author}`,
-      {
-        "messenger_id": current_user_id,
-        "content": message
-      },
-      this.props.tokenConfig())
-      .then((user) => {
-        console.log(user)
-      })
-      .catch((error) => {
-        console.log(error)
-      });
-
-    this.getUserInfo()
-  };
-
   componentDidMount() {
     this.getUserInfo();
     this.getNumPosts(this.state.author);
@@ -140,9 +119,6 @@ class OtherProfile extends React.Component {
       {"following_id": this.state.author},
       this.props.tokenConfig())
       .then((following) => {
-        // this.setState({
-        //   following: following.data.following
-        // })
         console.log(following)
       }).catch((error) => {
         console.log(error)
@@ -167,9 +143,6 @@ class OtherProfile extends React.Component {
       {"following_id": this.state.author},
       this.props.tokenConfig())
       .then((following) => {
-        // this.setState({
-        //   following: following.data.following
-        // });
       console.log(following)
     }).catch((error) => {
       console.log(error);
