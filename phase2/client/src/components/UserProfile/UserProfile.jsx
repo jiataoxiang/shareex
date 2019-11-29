@@ -1,12 +1,12 @@
 import React from 'react';
 import '../../stylesheets/user_profile.scss';
-import Post from '../Post';
 import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Follower from "./Follower";
 import MessageBoard from "./MessageBoard";
+import PostsBoard from "./PostsBoard";
 import Animation from './Animation.jsx';
 
 class UserProfile extends React.Component {
@@ -15,7 +15,16 @@ class UserProfile extends React.Component {
     showPop: false,
     followers: [],
     messages: [],
-    following: []
+    following: [],
+    curState: "",
+    author: "",
+    functions: []
+  };
+
+  showComponent = component => {
+    this.setState({
+      curState: component
+    });
   };
 
   handlePopup = () => {
@@ -56,6 +65,26 @@ class UserProfile extends React.Component {
         console.log(error);
       });
   };
+  setFunctions = () => {
+    if (this.state.curState === ""){
+      this.setState({
+        curState: <PostsBoard author={this.props.current_user._id}/>
+      })
+    }
+    this.setState({
+      functions: [
+        {
+          id: 1,
+          title: "message_board",
+          model: <MessageBoard author={this.props.current_user._id}/>
+        }, {
+          id: 2,
+          title: "posts",
+          model: <PostsBoard author={this.props.current_user._id}/>
+        }
+      ]
+    })
+  };
 
   componentDidMount() {
     // Current user info
@@ -69,10 +98,10 @@ class UserProfile extends React.Component {
         following: currentUser.following,
         likes: currentUser.likes.length,
         motto: currentUser.motto,
-        messages: currentUser.messages
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
+      this.setFunctions();
     }
   }
 
@@ -158,7 +187,6 @@ class UserProfile extends React.Component {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
-    const posts = this.state.posts;
     const followers = this.state.followers;
     return (
       <div className="user-profile-page">
@@ -198,9 +226,8 @@ class UserProfile extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col-md-4">
-              <div className="sticky-top">
                 <div className="space"></div>
-                <div className="profileInfo fix-height">
+                <div className="profileInfo">
                   <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>Posts: {this.state.numPosts}</p>
@@ -213,30 +240,29 @@ class UserProfile extends React.Component {
                     </button>
                   </Link>
                 </div>
-              </div>
-            </div>
-            <div className="col-md-8">
-              <div className="space"></div>
-              <div className="profileInfo overflow-auto fix-height">
-                <h6>Comments Board</h6>
-                {this.state.messages.map(message => {
-                  return <MessageBoard key={uid(Math.random())} message={message}/>
-                })}
-              </div>
-              <div className="timeline">
-                <h3 className="timelineheader">Posts</h3>
-                {posts.map(post => {
-                  return <Post key={uid(Math.random())} post={post} />;
-                })}
-              </div>
-            </div>
-            <div className= "col-md-12">
+                <h2>Options</h2>
+                <div className="list-group options">
+                  {this.state.functions.map(fun => (
+                    <button
+                      key={uid(Math.random())}
+                      type="button"
+                      className="list-group-item list-group-item-action"
+                      onClick={this.showComponent.bind(this, fun.model)}
+                    >
+                      {fun.title}
+                    </button>
+                  ))}
+                </div>
+              <br/>
               <div className="followers">
                 <h3> Followers</h3>
                 {followers.map((follower)=>{
                   return <Follower key={uid(Math.random())} follower = {follower}/>
                 })}
               </div>
+            </div>
+            <div className="col-md-8 content-display">
+              {this.state.curState}
             </div>
           </div>
           <div id="profileImgContainer">

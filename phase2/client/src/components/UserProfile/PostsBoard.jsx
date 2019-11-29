@@ -1,41 +1,43 @@
-import Message from "./Message";
+import Post from "../Post";
 import React from 'react';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-class MessageBoard extends React.Component {
+class PostsBoard extends React.Component {
   state = {
     author: this.props.author,
-    messages: []
+    posts: []
   };
 
   componentDidMount() {
-    this.getUserInfo()
+    this.updatePosts()
   }
 
-  getUserInfo = ()=>{
-    axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig())
-      .then((user) => {
-        user = user.data;
-        console.log(user);
-        this.setState({
-          messages: user.messages
-        })
+  updatePosts = () => {
+    console.log('updating posts');
+    axios
+      .get(
+        '/api/posts/by-user/' + this.state.author,
+        this.props.tokenConfig()
+      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({ posts: res.data.posts });
       })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   render() {
     return (
       <div>
-        <div className="space"/>
-        <div className="overflow-auto">
-          <h6>Message Board</h6>
-          {this.state.messages.map(message => {
-            return <Message key={uid(Math.random())} message={message}/>
+          <h3>Posts</h3>
+          {this.state.posts.map(post => {
+            return <Post key={uid(Math.random())} post={post} />;
           })}
         </div>
-      </div>
     );
   }
 }
@@ -58,4 +60,4 @@ const mapStateToProps = state => ({
   }
 });
 
-export default connect(mapStateToProps)(MessageBoard);
+export default connect(mapStateToProps)(PostsBoard);
