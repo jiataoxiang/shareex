@@ -261,7 +261,7 @@ class UserProfile extends React.Component {
                 })}
               </div>
             </div>
-            <div className="col-md-8 content-display">
+            <div className="col-md-8">
               {this.state.curState}
             </div>
           </div>

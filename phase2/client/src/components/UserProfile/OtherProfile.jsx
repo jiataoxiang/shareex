@@ -1,18 +1,18 @@
 import React from "react";
 import "../../stylesheets/user_profile.scss";
 import { withRouter} from "react-router-dom";
-import Post from "../Post";
-import { rand_string } from "../../lib/util";
+import MessageBoard from "./MessageBoard";
+import PostsBoard from "./PostsBoard";
 import { uid } from "react-uid";
 import axios from "axios"
 import { connect } from 'react-redux';
-import MessageBoard from "./MessageBoard";
 
 class OtherProfile extends React.Component {
 
   state = {
     post_id: this.props.location.state.post_id,
     author: this.props.location.state.author,
+    curState: "",
     nickname: "",
     banner: "",
     avatar: "",
@@ -23,7 +23,35 @@ class OtherProfile extends React.Component {
     numPosts: -1,
     motto: "",
     current_message: "",
-    posts : []
+    posts : [],
+    functions: []
+  };
+
+  showComponent = component => {
+    this.setState({
+      curState: component
+    });
+  };
+
+  setFunctions = () => {
+    if (this.state.curState === ""){
+      this.setState({
+        curState: <PostsBoard author={this.state.author}/>
+      })
+    }
+    this.setState({
+      functions: [
+        {
+          id: 1,
+          title: "message_board",
+          model: <MessageBoard author={this.state.author}/>
+        }, {
+          id: 2,
+          title: "posts",
+          model: <PostsBoard author={this.state.author}/>
+        }
+      ]
+    })
   };
 
   updatePosts = () => {
@@ -67,6 +95,7 @@ class OtherProfile extends React.Component {
     this.getUserInfo();
     this.getNumPosts(this.state.author);
     this.updatePosts();
+    this.setFunctions();
   }
 
 
@@ -211,38 +240,25 @@ class OtherProfile extends React.Component {
                       <strong>Unfollow</strong>
                     </button>
                   }
-
                 </div>
+                <h2>Options</h2>
+                <div className="list-group options">
+                  {this.state.functions.map(fun => (
+                    <button
+                      key={uid(Math.random())}
+                      type="button"
+                      className="list-group-item list-group-item-action"
+                      onClick={this.showComponent.bind(this, fun.model)}
+                    >
+                      {fun.title}
+                    </button>
+                  ))}
+                </div>
+                <br/>
               </div>
             </div>
             <div className="col-md-8">
-              <div className="my-3 p-3 rounded box-shadow overflow-auto fix-length ">
-                <h6>Recent updates</h6>
-                {this.state.messages.map(message => {
-                  return <MessageBoard key={uid(Math.random())} message={message}/>
-                })}
-              </div>
-              <div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <button className="input-group-text" onClick={this.sendMessage.bind(this)}>
-                    Send
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="message"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                  name="message"
-                />
-              </div>
-              <div className="timeline">
-                <h3 className="timelineheader">Posts</h3>
-                {this.state.posts.map(post => {
-                  return <Post key={uid(Math.random())} post={post} />;
-                })}
-              </div>
+              {this.state.curState}
             </div>
           </div>
           <div id="profileImgContainer">

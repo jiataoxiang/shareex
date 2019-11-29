@@ -10,9 +10,36 @@ class MessageBoard extends React.Component {
     messages: []
   };
 
+  checkUserProfile = () => {
+    console.log("current user is : " + this.props.current_user._id);
+    console.log("post user is : " + this.state.author);
+    return this.props.current_user._id === this.state.author;
+  };
+
   componentDidMount() {
     this.getUserInfo()
   }
+
+  sendMessage = () => {
+    const message = document.getElementById("message").value;
+    const current_user_id = this.props.current_user._id;
+    console.log(this.state.author);
+
+    axios.post(`/api/users/add-messenger/${this.state.author}`,
+      {
+        "messenger_id": current_user_id,
+        "content": message
+      },
+      this.props.tokenConfig())
+      .then((user) => {
+        console.log(user)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+
+    this.getUserInfo()
+  };
 
   getUserInfo = ()=>{
     axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig())
@@ -35,6 +62,25 @@ class MessageBoard extends React.Component {
             return <Message key={uid(Math.random())} message={message}/>
           })}
         </div>
+        {this.checkUserProfile() ? (
+          null
+        ):(
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <button className="input-group-text" onClick={this.sendMessage.bind(this)}>
+                Send
+              </button>
+            </div>
+            <input
+              type="text"
+              className="form-control"
+              id="message"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+              name="message"
+            />
+          </div>
+        )}
       </div>
     );
   }
