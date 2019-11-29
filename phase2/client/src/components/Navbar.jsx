@@ -29,11 +29,11 @@ class Navbar extends React.Component {
     } else {
       return this.props.current_user.admin ? (
         <Link to="/adminprofile">
-          <img id="user-avatar" src={'/img/user_profile_icon.png'} alt="" />
+          <img id="user-avatar" src={this.props.current_user.avatar} alt="" />
         </Link>
       ) : (
         <Link to="/userprofile">
-          <img id="user-avatar" src={'/img/user_profile_icon.png'} alt="" />
+          <img id="user-avatar" src={this.props.current_user.avatar} alt="" />
         </Link>
       );
     }

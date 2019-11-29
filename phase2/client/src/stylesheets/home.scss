@@ -23,6 +23,9 @@
   .post.card {
     background-color: var(--background-secondary);
     color: var(--text);
+    p {
+      font-family: 'Tomorrow', sans-serif;
+    }
   }
 
   /* Recommendation Part */
@@ -42,6 +45,7 @@
   .recommendations ul li {
     background-color: var(--background-secondary);
     a {
+      font-family: 'Roboto Slab', serif;
       color: var(--text);
     }
   }
