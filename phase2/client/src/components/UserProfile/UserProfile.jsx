@@ -17,7 +17,7 @@ class UserProfile extends React.Component {
     showPop: false,
     followers: [],
     messages: [],
-    alert: null
+    alert: null,
     following: []
   };
 

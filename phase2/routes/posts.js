@@ -16,10 +16,18 @@ router.get('/', (req, res) => {
     req.query.category,
     '\n\n\n\n'
   );
+
   let filter = {};
   if (req.query.category) {
     filter.category = req.query.category;
   }
+  const { search_content } = req.query;
+  console.log('\n\nsearch content: ', search_content);
+  if (search_content) {
+    console.log('search content: ', search_content);
+    filter.title = { $regex: `${search_content}`, $options: 'i' };
+  }
+  console.log(filter);
 
   Post.find(filter)
     .sort({ [req.query.sort_by]: -1 })
