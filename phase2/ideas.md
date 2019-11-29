@@ -20,6 +20,7 @@ phase 1 feedback 说我们 library 用的多，功能太少了。phase1 我们�
 16. single post 中显示 google map 功能
 17. single post 中添加上传图片，pdf 功能
 18. let user remember which theme they've chosen
+19. like stats in user profile does not work properly right now
 
 ## TODOs：
 
