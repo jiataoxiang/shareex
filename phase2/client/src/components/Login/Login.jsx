@@ -92,6 +92,7 @@ class Login extends Component {
     }
     return (
       <div className="login-page">
+        <img className="background-img" src="/img/code1.jpg" alt="" />
         {this.state.message ? (
           <div className="alert alert-danger" role="alert">
             {this.state.message}

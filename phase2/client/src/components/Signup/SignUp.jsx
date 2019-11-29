@@ -70,6 +70,8 @@ class SignUp extends Component {
     }
     return (
       <div className="signup-page">
+        <img className="background-img" src="/img/code1.jpg" alt="" />
+
         {this.state.message ? (
           <div className="alert alert-danger" role="alert">
             {this.state.message}

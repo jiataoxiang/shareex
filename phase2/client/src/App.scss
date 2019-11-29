@@ -35,6 +35,7 @@ html {
   --text: #000000;
   --background-secondary: #efefef;
   --hr-color: black;
+  --background-image-opacity: 1;
 }
 
 html[theme='dark'] {
@@ -42,6 +43,7 @@ html[theme='dark'] {
   --text: #ffffff;
   --background-secondary: #333333;
   --hr-color: white;
+  --background-image-opacity: 0.3;
 }
 
 html.transition,

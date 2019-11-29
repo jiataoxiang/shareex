@@ -1,9 +1,26 @@
 .login-page {
+  padding-top: 100px;
+  position: relative;
+  // overflow: hidden;
+  .background-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    opacity: var(--background-image-opacity);
+  }
+  // background: url(sweettexture.jpg) blue;
   .form-container {
     margin: auto;
     margin-top: 10em;
     width: 20em;
     text-align: center;
+    z-index: 2;
+    position: relative;
+    h3 {
+      color: white;
+    }
   }
 
   .lock-container {
@@ -16,7 +33,10 @@
       margin-bottom: 15px;
     }
     h3 {
-      font-family: "Lobster", cursive;
+      font-family: 'Lobster', cursive;
+    }
+    .lock {
+      filter: invert(1);
     }
   }
 
