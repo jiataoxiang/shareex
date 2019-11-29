@@ -2,25 +2,24 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../../stylesheets/prof_set.scss";
 import "../../stylesheets/animation.scss";
+import { Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
+
+const validator = require('validator');
 
 class ProfSet extends Component {
   state = {
-    profAvatarUrl: "",
-    
-    profNickname: "",
-    profEmail: "",
-    profTelephone: "",
-    profPassword: "",
-    profMotto: ""
+    profAvatarUrl: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+    profEmail: "place@holder.com",
+    profMotto: "",
+    profPassword: ""
   };
 
   // The text boxes for input.
   inputGroups = {
-    inputNickname: null,
     inputEmail: null,
-    inputTelephone: null,
-    inputPassword: null,
-    inputMotto: null
+    inputMotto: null,
+    inputPassword: null
   };
 
   // Text box input handler.
@@ -78,38 +77,14 @@ class ProfSet extends Component {
     object.parentElement.classList.add("errorShake");
   }
 
-  // Check if nickname is valid.
-  checkNickname = () => {
-    const emptyString = this.state.profNickname.length === 0;
-
-    if (emptyString) {
-      this.setError(this.inputGroups.inputNickname);
-      return false;
-    } else {
-      this.clearError(this.inputGroups.inputNickname);
-      return true;
-    }
-  }
-
   // Check if email is valid.
   checkEmail = () => {
-    const emailFrag = this.state.profEmail.split('@');
-    const worngFormat = emailFrag.length < 2 || emailFrag.length > 2 || emailFrag[0].length === 0 || emailFrag[1].length === 0;
-
-    if (worngFormat) {
-      this.setError(this.inputGroups.inputEmail);
-      return false;
-    } else {
-      this.clearError(this.inputGroups.inputEmail);
-      return true;
-    }
+    return validator.isEmail(this.state.profEmail);
   }
 
   // Check if password is valid.
   checkPassword = () => {
-    const emptyString = this.state.profPassword.length === 0;
-
-    if (emptyString) {
+    if (this.state.profPassword.length < 4) {
       this.setError(this.inputGroups.inputPassword);
       return false;
     } else {
@@ -125,21 +100,18 @@ class ProfSet extends Component {
 
     // this is some fake data that we get from server,
     // TODO: change the following code in phase 2, to upload changed data to server
-    const currentUser = this.props.state.current_user;
+    const currentUser = this.props.current_user;
+    console.log(currentUser)
     if (! currentUser) {
         alert("You need to log in first");
-        this.props.history.push("/");
     } else if (currentUser.type === "admin") {
         alert("admin accounts cannot change profile");
-        this.props.history.push("/");
     } else {
         this.setState({
           profAvatarUrl: currentUser.avatar,
-          profNickname: currentUser.nickname,
           profEmail: currentUser.email,
-          profTelephone: currentUser.tel,
-          profPassword: currentUser.password,
-          profMotto: currentUser.motto
+          profMotto: currentUser.motto,
+          profGender: currentUser.gender
         });     
     }
 
@@ -204,23 +176,6 @@ class ProfSet extends Component {
           <div className="input-group mb-3">
             <div className="input-group-prepend">
                 <span className="input-group-text">
-                  Nickname
-                </span>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              id="inputNickname"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-default"
-              name="profNickname"
-              value={this.state.profNickname}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">
                   Email
                 </span>
             </div>
@@ -238,17 +193,17 @@ class ProfSet extends Component {
           <div className="input-group mb-3">
             <div className="input-group-prepend">
                 <span className="input-group-text">
-                  Telephone
+                  Motto
                 </span>
             </div>
             <input
               type="text"
               className="form-control"
-              id="inputTelephone"
+              id="inputMotto"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-default"
-              name="profTelephone"
-              value={this.state.profTelephone}
+              name="profMotto"
+              value={this.state.profMotto}
               onChange={this.handleInputChange}
             />
           </div>
@@ -268,23 +223,6 @@ class ProfSet extends Component {
               value={this.state.profPassword}
               onChange={this.handleInputChange}
               onClick={this.clearPassword}
-            />
-          </div>
-          <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">
-                  Motto
-                </span>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              id="inputMotto"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-default"
-              name="profMotto"
-              value={this.state.profMotto}
-              onChange={this.handleInputChange}
             />
           </div>
         </div>
@@ -312,4 +250,12 @@ class ProfSet extends Component {
   }
 }
 
-export default withRouter(ProfSet);
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(ProfSet);
