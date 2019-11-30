@@ -62,6 +62,10 @@
     }
 
     #display-user {
+      .avatar-container {
+        text-align: center;
+      }
+    
       #user-avatar {
         width: 5em;
         height: 5em;

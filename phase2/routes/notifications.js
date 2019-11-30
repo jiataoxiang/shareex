@@ -5,10 +5,11 @@ const Notification = require('../models/Notification');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const { isAuth } = require('../middleware/auth');
 const {ObjectID} = require("mongodb");
 
 // return all notifications that one user received.
-router.get('/receiver/:id', (req, res) => {
+router.get('/receiver/:id', isAuth, (req, res) => {
     Notification.find({to: req.params.id}).then(msgs => {
         let toReturn = [];
         msgs.forEach(msg => {
@@ -55,7 +56,7 @@ router.get('/receiver/:id', (req, res) => {
 });
 
 // check off all unread notifications of one user.
-router.post('/read/:id', (req, res) => {
+router.post('/read/:id', isAuth, (req, res) => {
     Notification.updateMany({to: req.params.id, read: false}, 
                             {"$set":{"read": true}}).then(result => {
         res.send(result);
@@ -63,5 +64,24 @@ router.post('/read/:id', (req, res) => {
         res.status(500).send(err);
     });
 });
+
+// create a notification.
+// required: from, to, body
+router.post('/create', isAuth, (req, res) => {
+    if (!req.body.from || !req.body.to || !req.body.body) {
+        return res.status(400).send();
+    } else if (!ObjectID.isValid(req.body.from) || !ObjectID.isValid(req.body.to)) {
+        return res.status(400).send();
+    } else {
+        Notification.create(req.body).then(msg => {
+            console.log("notification create: ", msg);
+            msg.save().then(msg => {
+                res.send(msg);
+            })
+        }).catch(err => {
+            res.status(500).send(err);
+        })
+    }
+})
 
 module.exports = router;

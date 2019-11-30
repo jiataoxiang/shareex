@@ -4,6 +4,7 @@ import axios from 'axios';
 
 class AdminProfileFindUser extends React.Component {
     state = {
+        id: "",
         avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
         username: "",
         email: "",
@@ -54,7 +55,8 @@ class AdminProfileFindUser extends React.Component {
                 if (!user || user.data.length === 0 || user.data[0].admin) {
                     this.hideUser();
                 } else {
-                    this.setState({avatar: user.data[0].avatar, 
+                    this.setState({id: user.data[0]._id,
+                                   avatar: user.data[0].avatar,
                                    username: user.data[0].username, 
                                    email: user.data[0].email, 
                                    motto: user.data[0].motto, 
@@ -66,6 +68,10 @@ class AdminProfileFindUser extends React.Component {
                 console.log(error);
             })
         }
+    }
+    
+    resetMotto = () => {
+        
     }
     
     changeBan = () => {
@@ -85,14 +91,30 @@ class AdminProfileFindUser extends React.Component {
     }
     
     sendMsg = () => {
-        const newMsg = {
-            from: "System",
-            to: this.state.username,
-            body: this.state.inputmsg,
-            link: null,
+        if (this.state.inputmsg.length === 0) {
+            alert("A message must have some contant.");
+        } else {
+            const newMsg = {
+                from: this.props.current_user._id,
+                to: this.state.id,
+                body: this.state.inputmsg
+            }
+            this.sendMsgToServer(newMsg, "Message sent.", "Message failed to send.");
         }
-        
-        //
+    }
+    
+    sendMsgToServer = (msg, success, fail) => {
+        axios.post(
+            `/api/notifications/create`, msg, this.tokenConfig()
+        ).then(msg => {
+            if (!msg) {
+                alert(fail);
+            } else {
+                alert(success);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
     }
     
     tokenConfig = () => {
@@ -150,9 +172,9 @@ class AdminProfileFindUser extends React.Component {
                     <div className="row row-info">
                         <div className="col-md-8">
                           <div className="row">
-                            <div className="col-md-4>">
+                            <div className="avatar-container">
                               <img id="user-avatar" src={this.state.avatar} alt="" />
-                              <h5>{this.state.username}</h5>
+                              <h6>{this.state.username}</h6>
                             </div>
                             <div id="text-block" className="col-md-8">
                               <p>Email:  {this.state.email}</p>

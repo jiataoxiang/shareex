@@ -56,7 +56,7 @@ class AdminProfile extends Component {
         this.hideBadge();
         
         axios.get(
-            `/api/notifications/receiver/${this.props.auth.user._id}`
+            `/api/notifications/receiver/${this.props.auth.user._id}`, this.tokenConfig()
         ).then(msgs => {
             msgs.data.forEach((msg) => {
                 if (msg.read) {
@@ -73,7 +73,7 @@ class AdminProfile extends Component {
     
     readNotifications = () => {
         axios.post(
-            `/api/notifications/read/${this.props.auth.user._id}`
+            `/api/notifications/read/${this.props.auth.user._id}`, {}, this.tokenConfig()
         ).then(result => {
             if (!result) {
                 console.log("Notifications count not be read.");
@@ -85,6 +85,27 @@ class AdminProfile extends Component {
             console.log(error);
         });
     }
+    
+    tokenConfig = () => {
+        // Get token from localstorage
+        const token = this.props.auth.token;
+
+        // Headers
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        };
+
+        // If token, add to headers
+        if (token) {
+            config.headers['x-auth-token'] = token;
+        } else {
+            window.location.href = '/';
+        }
+
+        return config;
+    };
 
     componentDidMount() {
         this.getTabButtons();
