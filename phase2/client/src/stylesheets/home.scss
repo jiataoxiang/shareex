@@ -7,6 +7,10 @@
   //   height: 100vh;
   //   opacity: var(--background-image-opacity);
   // }
+  h3, span {
+    color: white;
+  }
+
   background-image: url("/img/login_background3.jpg");
   // min-height: 500px;
   background-attachment: fixed;
