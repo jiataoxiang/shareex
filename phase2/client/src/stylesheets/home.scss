@@ -84,6 +84,21 @@
     
     }
   }
+  @media screen and (max-width: 970px) { 
+    .confirm-btn {
+      float: right;
+      margin: 0;
+      margin-top: 10px;
+    }
+  }
+  @media screen and (max-width: 825px) { 
+    .category {
+      display: block;
+    }
+    .sort {
+      display: block;
+    }
+  }
 
 
   @media screen and (max-width: 800px) {
@@ -95,5 +110,5 @@
       width: 100%;
     }
   }
-  /* Testing */
+
 }

@@ -130,30 +130,31 @@ class Home extends Component {
         <div className="container-fluid row">
           <div className="posts col-12 col-md-8">
             <div className="row">
-              <div className="col-2">
+              <div className="col-sm-2">
                 <h3>Posts</h3>
               </div>
-              <div className="col-10">
-                <span className="float-right">
-                  <span className="ml-3">Category:</span>
-                  {/* <div className="input-group"> */}
-                  <select id="category-selection" name="category">
-                    <option value="All">All</option>
-                    <option value="CS">CS</option>
-                    <option value="Education">Education</option>
-                    <option value="Travel">Travel</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Following">Following</option>
-                  </select>
-                  {/* </div> */}
-
-                  <span className="ml-3">Sort By:</span>
-                  <select id="sort-selection" name="sort_by">
-                    <option value="created_at">Time</option>
-                    <option value="views">Views</option>
-                    <option value="likes">Likes</option>
-                    <option value="favs"># of Favourite</option>
-                  </select>
+              <div className="col-sm-10">
+                <span className="float-right selections">
+                  <span className='categroy'>
+                    <span className="ml-3">Category:</span>
+                    <select id="category-selection" name="category">
+                      <option value="All">All</option>
+                      <option value="CS">CS</option>
+                      <option value="Education">Education</option>
+                      <option value="Travel">Travel</option>
+                      <option value="Technology">Technology</option>
+                      <option value="Following">Following</option>
+                    </select>
+                  </span>
+                  <span className='sort'>
+                    <span className="ml-3">Sort By:</span>
+                    <select id="sort-selection" name="sort_by">
+                      <option value="created_at">Time</option>
+                      <option value="views">Views</option>
+                      <option value="likes">Likes</option>
+                      <option value="favs"># of Favourite</option>
+                    </select>
+                  </span>
                   <button
                     className="ml-3 btn btn-sm btn-outline-success confirm-btn"
                     onClick={this.applyFilters}
