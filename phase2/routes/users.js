@@ -5,7 +5,7 @@ const Post = require('../models/Post');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { isAuth, isAuthorizedUser } = require('../middleware/auth');
+const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 
 /* GET users listing. */
@@ -339,6 +339,23 @@ router.patch(
 //});
 
 router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
+    User.findById(req.params.user_id).then(user => {
+        if (!user) {
+            res.status(404).send('User not found');
+        } else {
+            Object.keys(req.body).forEach(ele => {
+                user[ele] = req.body[ele]
+            });
+            user.save().then(result => {
+                res.send(result);
+            })
+        }
+    }).catch(err => {
+        res.status(500).send(err);
+    })
+});
+
+router.patch('/ban/:user_id', isAuth, isAdmin, (req, res) => {
     User.findById(req.params.user_id).then(user => {
         if (!user) {
             res.status(404).send('User not found');

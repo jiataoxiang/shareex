@@ -94,24 +94,41 @@ class AdminProfileFindUser extends React.Component {
               this.sendMsgToServer(msgBody, success, fail);
           }
         }).catch(err => {
+          alert("Motto failed to reset.");
           console.log(err);
         })
     }
     
     changeBan = () => {
         if (this.state.banned) {
-            //
-            
             this.setState({ banned: false });
             this.tempElements.display_banned.setAttribute("hidden", true);
             this.tempElements.button_ban.innerHTML = "Ban";
         } else {
-            //
-            
             this.setState({ banned: true });
             this.tempElements.display_banned.removeAttribute("hidden");
             this.tempElements.button_ban.innerHTML = "Unban";
         }
+    }
+    
+    changeBanToServer = () => {
+        let now = 
+        axios.patch(
+          `/api/users/ban/${this.state.id}`, {
+              banned: !this.state.banned, 
+              unbanned_date: Date.now() + 1000*60*60*24*5
+          }, this.tokenConfig()
+        ).then(result => {
+          if (result.status === 200) {
+              this.setState({unbanned_date: Date.now() + 1000*60*60*24*5});
+              this.changeBan();
+          } else {
+              alert("Failed to ban the user.");
+          }
+        }).catch(err => {
+          alert("Failed to ban the user.");
+          console.log(err);
+        })
     }
     
     sendMsg = () => {
@@ -140,6 +157,7 @@ class AdminProfileFindUser extends React.Component {
                 alert(success);
             }
         }).catch(err => {
+            alert(fail);
             console.log(err);
         })
     }
@@ -222,14 +240,14 @@ class AdminProfileFindUser extends React.Component {
                     <div className="row row-ban">
                         <div className="col-md-8">
                              <div id="ban-warning">
-                                <h6>Will be unbanned on {this.state.username}</h6>
+                                <h6>Will be unbanned on {this.state.unbanned_date}</h6>
                              </div>
                         </div>
                         <div className="col-md-4">
                             <button type="button"
                                 id="button-ban" 
                                 className="btn"
-                                onClick={this.changeBan}>
+                                onClick={this.changeBanToServer}>
                                 Ban
                             </button>
                         </div>
