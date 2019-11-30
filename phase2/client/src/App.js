@@ -21,6 +21,7 @@ import './App.scss';
 import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/authActions';
+import ImageUploader from './components/ImageUploader';
 
 class App extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class App extends React.Component {
       attachments: mock_data.attachments,
       current_user: mock_data.current_user,
       current_post: mock_data.current_post,
-      setAppState: this.setAppState
+      setAppState: this.setAppState,
     });
     store.dispatch(loadUser());
   }
@@ -52,16 +53,8 @@ class App extends React.Component {
           <Navbar state={this.state} />
           <Switch>
             <Route exact path="/" component={() => <Home />} />
-            <Route
-              exact
-              path="/index.html"
-              component={() => <Home state={this.state} />}
-            />
-            <Route
-              exact
-              path="/userprofile"
-              component={() => <UserProfile state={this.state} />}
-            />
+            <Route exact path="/index.html" component={() => <Home state={this.state} />} />
+            <Route exact path="/userprofile" component={() => <UserProfile state={this.state} />} />
             <Route
               exact
               path="/adminprofile"
@@ -72,37 +65,23 @@ class App extends React.Component {
               path="/otherprofile"
               component={() => <OtherProfile state={this.state} />}
             />
-            <Route
-              exact
-              path="/login"
-              component={() => <Login state={this.state} />}
-            />
-            <Route
-              exact
-              path="/signup"
-              component={() => <SignUp state={this.state} />}
-            />
-            <Route
-              exact
-              path="/new_post"
-              component={() => <NewPost state={this.state} />}
-            />
+            <Route exact path="/login" component={() => <Login state={this.state} />} />
+            <Route exact path="/signup" component={() => <SignUp state={this.state} />} />
+            <Route exact path="/new_post" component={() => <NewPost state={this.state} />} />
             {/*<Route*/}
             {/*  exact*/}
             {/*  path="/single_post/:id"*/}
             {/*  component={() => <SinglePost state={this.state}/>}*/}
             {/*/>*/}
-            <Route
-              exact
-              path="/single_post/:id"
-              render={() => <SinglePost state={this.state} />}
-            />
+            <Route exact path="/single_post/:id" render={() => <SinglePost state={this.state} />} />
             <Route
               exact
               path="/prof_setting"
               component={() => <ProfSetting state={this.state} />}
             />
+            <Route exact path="/image_uploader" component={() => <ImageUploader />} />
             {/* <Route exact path="/tmp" component={Tmp} /> */}
+
             <Route component={NotFound404} />
           </Switch>
         </BrowserRouter>

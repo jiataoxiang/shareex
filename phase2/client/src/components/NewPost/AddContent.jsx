@@ -1,13 +1,13 @@
-import React, {Component} from "react";
-import Editor from "react-simple-code-editor";
-import {highlight, languages} from "prismjs";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import Attachment from "../Attachment";
-import {uid} from "react-uid";
-import {rand_string} from "../../lib/util";
-import ImageUploader from "../ImageUploader";
-import SingleImageUpload from "../SingleImageUpload";
+import React, { Component } from 'react';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import Attachment from '../Attachment';
+import { uid } from 'react-uid';
+import { rand_string } from '../../lib/util';
+import ImageUploader from '../ImageUploader';
+import SingleImageUpload from '../SingleImageUpload';
 
 const code = `function add(a, b) {
   return a + b;
@@ -17,44 +17,44 @@ const code = `function add(a, b) {
 class AddContent extends Component {
   state = {
     code_data: code,
-    image_url: ''
+    image_url: '',
   };
 
   // handle the input link
-  handleInputLink = (event) => {
-    this.setState({input_link: event.target.value});
+  handleInputLink = event => {
+    this.setState({ input_link: event.target.value });
   };
 
   // send the input link to the NewPost component
-  sendLinkBack = (event) => {
-    const {addedAttachmentLink} = this.props;
+  sendLinkBack = event => {
+    const { addedAttachmentLink } = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
     addedAttachmentLink(this.state.input_link, type);
   };
 
   // send the input text to the NewPost component
-  sendTextBack = (event) => {
-    const {addedAttachmentWords, secondary_key} = this.props;
+  sendTextBack = event => {
+    const { addedAttachmentWords, secondary_key } = this.props;
     // console.log(event.target.value);
     // this.state.text = event.target.value;
-    this.setState({text: event.target.value});
+    this.setState({ text: event.target.value });
     addedAttachmentWords(event.target.value, 'text', secondary_key);
   };
 
   // send the input code to the NewPost component
-  sendCodeBack = (event) => {
-    const {addedAttachmentWords, secondary_key} = this.props;
+  sendCodeBack = event => {
+    const { addedAttachmentWords, secondary_key } = this.props;
     // console.log('the code is: '+event);
-    this.setState({code_data: event});
+    this.setState({ code_data: event });
     addedAttachmentWords(event, 'code', secondary_key);
   };
 
   //set the state of the uploaded image/file url.
   setImageState = (key, value) => {
-    console.log("setPdfState get called!!!");
+    console.log('setPdfState get called!!!');
     this.setState({ [key]: value });
     console.log(this.state.image_url);
-    this.props.addedAttachmentFile('image', this.state.image_url);
+    this.props.addedAttachmentFile('image', this.state.image_url, this.props.secondary_key);
   };
 
   setPdfState = (key, value) => {
@@ -66,8 +66,8 @@ class AddContent extends Component {
   // generate and return the required attachment
   getContentInput = () => {
     // const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
-    const {addedAttachmentFile, title} = this.props;
-    if (this.props.type === "text") {
+    const { addedAttachmentFile, title } = this.props;
+    if (this.props.type === 'text') {
       return (
         <div className="form-group">
           <h4 htmlFor="content">Text</h4>
@@ -81,7 +81,7 @@ class AddContent extends Component {
           />
         </div>
       );
-    } else if (this.props.type === "code") {
+    } else if (this.props.type === 'code') {
       // let content = `# write your JS code here`;
       // if (title !== ``) { content = '`' + title + '`'; }
       return (
@@ -97,13 +97,13 @@ class AddContent extends Component {
               padding={10}
               style={{
                 fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12
+                fontSize: 12,
               }}
             />
           </div>
         </div>
       );
-    } else if (this.props.type === "youtube") {
+    } else if (this.props.type === 'youtube') {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
@@ -112,42 +112,51 @@ class AddContent extends Component {
           {/*  <input type="submit" id='input-link' name="Confirm"/>*/}
           {/*</form>*/}
 
-          <input type="text" className="form-control" id="youtube-link" onChange={this.handleInputLink}/>
-          <button type="submit" className='btn btn-primary btn-lg float-right input-link-button' id="youtube"
-                  onClick={this.sendLinkBack}>Confirm
+          <input
+            type="text"
+            className="form-control"
+            id="youtube-link"
+            onChange={this.handleInputLink}
+          />
+          <button
+            type="submit"
+            className="btn btn-primary btn-lg float-right input-link-button"
+            id="youtube"
+            onClick={this.sendLinkBack}
+          >
+            Confirm
           </button>
         </div>
       );
-    } else if (this.props.type === "image") {
+    } else if (this.props.type === 'image') {
       return (
         <div className="upload-btn-wrapper">
           {/*<button className="submit-file-btn">Upload a Image</button>*/}
           {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
-          <ImageUploader
-            setParentState={this.setImageState}
-            public_id={''}
-          />
+          <ImageUploader setParentState={this.setImageState} public_id={''} />
         </div>
       );
-    } else if (this.props.type === "image_link") {
+    } else if (this.props.type === 'image_link') {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control" onChange={this.handleInputLink}/>
-          <button type="submit" className='btn btn-primary btn-lg float-right input-link-button' id="image-link"
-                  onClick={this.sendLinkBack}>Confirm
+          <input type="text" className="form-control" onChange={this.handleInputLink} />
+          <button
+            type="submit"
+            className="btn btn-primary btn-lg float-right input-link-button"
+            id="image-link"
+            onClick={this.sendLinkBack}
+          >
+            Confirm
           </button>
         </div>
       );
-    } else if (this.props.type === "pdf") {
+    } else if (this.props.type === 'pdf') {
       return (
         <div className="upload-btn-wrapper">
           {/*<button className="submit-file-btn">Upload a PDF</button>*/}
           {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
-          <ImageUploader
-            setParentState={this.setPdfState}
-            public_id={''}
-          />
+          <ImageUploader setParentState={this.setPdfState} public_id={''} />
         </div>
       );
     } else if (this.props.type === 'pdf_attach') {
@@ -155,7 +164,7 @@ class AddContent extends Component {
         <Attachment
           key={uid(rand_string())}
           type={'pdf'}
-          content={process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf"}
+          content={process.env.PUBLIC_URL + '/files/AWS_Deploy_web_app_with_SSL.pdf'}
         />
       );
     } else if (this.props.type === 'image_attach') {
@@ -168,21 +177,9 @@ class AddContent extends Component {
         />
       );
     } else if (this.props.type === 'youtube_attach') {
-      return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'youtube'}
-          content={title}
-        />
-      );
+      return <Attachment key={uid(rand_string())} type={'youtube'} content={title} />;
     } else if (this.props.type === 'image_link_attach') {
-      return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'image_link'}
-          content={title}
-        />
-      );
+      return <Attachment key={uid(rand_string())} type={'image_link'} content={title} />;
     } else if (this.props.type === 'text_attach') {
       return (
         <Attachment
@@ -205,7 +202,7 @@ class AddContent extends Component {
   };
 
   render() {
-    const {addInput, secondary_key} = this.props;
+    const { addInput, secondary_key } = this.props;
     return (
       <div className="add-content-component">
         <div className="content-input">{this.getContentInput()}</div>
@@ -226,7 +223,7 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="text"
-                onClick={addInput.bind(this, "text", secondary_key)}
+                onClick={addInput.bind(this, 'text', secondary_key)}
               >
                 Text
               </button>
@@ -242,7 +239,7 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="youtube"
-                onClick={addInput.bind(this, "youtube", secondary_key)}
+                onClick={addInput.bind(this, 'youtube', secondary_key)}
               >
                 YouTube Link
               </button>
@@ -250,7 +247,7 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="image"
-                onClick={addInput.bind(this, "image", secondary_key)}
+                onClick={addInput.bind(this, 'image', secondary_key)}
               >
                 Image
               </button>
@@ -258,7 +255,7 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="image_link"
-                onClick={addInput.bind(this, "image_link", secondary_key)}
+                onClick={addInput.bind(this, 'image_link', secondary_key)}
               >
                 Image Link
               </button>
@@ -266,15 +263,15 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="pdf"
-                onClick={addInput.bind(this, "pdf", secondary_key)}
+                onClick={addInput.bind(this, 'pdf', secondary_key)}
               >
                 PDF
               </button>
             </div>
           </div>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
       </div>
     );
   }

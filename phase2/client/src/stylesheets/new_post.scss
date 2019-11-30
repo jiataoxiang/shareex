@@ -1,4 +1,4 @@
-.new-post2-page {
+.new-post-page {
   padding-top: 70px;
   .container {
     margin-top: 1em;
@@ -31,9 +31,10 @@
       margin-bottom: 10px;
     }
     .upload-btn-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
+      // position: relative;
+      // overflow: hidden;
+      // display: inline-block;
+      width: 100%;
     }
 
     .npm__react-simple-code-editor__textarea,
@@ -58,13 +59,13 @@
       font-weight: bold;
     }
 
-    .upload-btn-wrapper input[type='file'] {
-      font-size: 100px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-    }
+    // .upload-btn-wrapper input[type='file'] {
+    //   font-size: 100px;
+    //   position: absolute;
+    //   left: 0;
+    //   top: 0;
+    //   opacity: 0;
+    // }
   }
   @media screen and (max-width: 900px) {
     .container {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import '../stylesheets/image_uploader.scss';
 
 class ImageUploader extends Component {
   state = {
@@ -10,7 +11,7 @@ class ImageUploader extends Component {
     file_type: '',
     msg: '',
     public_id: '',
-    isUploading: false
+    isUploading: false,
   };
 
   removeFile = () => {
@@ -30,31 +31,27 @@ class ImageUploader extends Component {
     if (!this.props.public_id) {
       this.removeFile();
     }
-    console.log("BEFORE RETURN ");
+    console.log('BEFORE RETURN ');
     if (!e.target.files[0]) return;
-    console.log("AFTER RETURN");
+    console.log('AFTER RETURN');
     this.setState({
       filename: e.target.files[0].name,
-      file_type: e.target.files[0].type
+      file_type: e.target.files[0].type,
     });
     console.log(e.target.files);
     // const input_element = document.getElementById('file-input');
     const input_element = e.target;
     if (!input_element.files || !input_element.files[0]) {
       this.setMessage('No file chosen');
-      console.log("FAILED HALFWAY!!!!");
+      console.log('FAILED HALFWAY!!!!');
       console.log(input_element.files);
       return;
     }
     const file = input_element.files[0];
     const file_type = file.type;
     this.setState({ isUploading: true });
-    if (
-      !file_type.includes('png') &&
-      !file_type.includes('jpg') &&
-      !file_type.includes('jpeg')
-    ) {
-      this.setMessage('File must be jpg or png');
+    if (!file_type.includes('png') && !file_type.includes('jpg') && !file_type.includes('jpeg')) {
+      this.setMessage('File must be jpg, png or jpeg');
       return;
     }
     const formData = new FormData();
@@ -66,25 +63,23 @@ class ImageUploader extends Component {
     try {
       const res = await axios.post('/api/upload', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
         },
         onUploadProgress: progressEvent => {
           setUploadPercentage(
-            parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            )
+            parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total)),
           );
 
           // Clear percentage
           setTimeout(() => setUploadPercentage(0), 10000);
-        }
+        },
       });
 
       this.setMessage('File Uploaded');
       console.log(res.data[0]);
       this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
       this.props.setParentState('image_url', this.state.url);
-      console.log("setParent called in image Uploader: ", this.state.url);
+      // console.log('setParent called in image Uploader: ', this.state.url);
       this.setState({ isUploading: false });
     } catch (err) {
       if (err.response.status === 500) {
@@ -114,12 +109,15 @@ class ImageUploader extends Component {
     }
     if (this.state.url) {
       return (
-        <img
-          src={this.state.url}
-          className="rounded mx-auto d-block"
-          alt="..."
-          style={{ width: '100%' }}
-        />
+        <React.Fragment>
+          <br />
+          <img
+            src={this.state.url}
+            className="rounded mx-auto d-block"
+            alt="..."
+            style={{ width: '100%' }}
+          />
+        </React.Fragment>
       );
     } else {
       return null;
@@ -136,7 +134,8 @@ class ImageUploader extends Component {
   render() {
     // const buttonCSS = { padding: 0, border: 'none', background: 'none' };
     return (
-      <div className="container">
+      <div className="image-uploader-component">
+        <h2>Upload your image</h2>
         {this.state.msg ? (
           <div className="alert alert-info" role="alert">
             {this.state.msg}
@@ -155,7 +154,7 @@ class ImageUploader extends Component {
             </label>
           </div>
         </div>
-        <div className="progress">
+        <div className="progress mb-2">
           <div
             className="progress-bar"
             role="progressbar"
@@ -167,7 +166,6 @@ class ImageUploader extends Component {
             {this.state.progress}%
           </div>
         </div>
-        <br />
         {this.getDisplay()}
       </div>
     );

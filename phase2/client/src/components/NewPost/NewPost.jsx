@@ -19,7 +19,7 @@ class NewPost extends Component {
   };
 
   // handle incoming image and pdf file, and store them in state
-  addedAttachmentFile = (type, data_url) => {
+  addedAttachmentFile = (type, data_url, secondary_key) => {
     const id = uid(rand_string());
     const type_to_show = type === 'image' ? 'image_attach' : 'pdf_attach';
     const content = {
@@ -29,13 +29,13 @@ class NewPost extends Component {
     };
     const contents = this.state.contents;
     contents.push(content);
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
     this.state.to_store.attachments.push({
       id: id,
       type: type,
-      body: data_url
+      body: data_url,
     });
-    console.log("Now attachments have: ", this.state.to_store.attachments);
+    console.log('Now attachments have: ', this.state.to_store.attachments);
   };
 
   // handle incoming video/image links and store them in state
@@ -65,7 +65,7 @@ class NewPost extends Component {
     const item = {
       id: secondary_key,
       type: 'show-' + data_type,
-      body: content
+      body: content,
     };
 
     if (result === -1) {
@@ -181,7 +181,7 @@ class NewPost extends Component {
   };
 
   // store the data in this.state.to_store to the database
-  addToDatabase = (event) => {
+  addToDatabase = event => {
     // generate a post id when the 'submit' button is clicked
     alert('Sure to submit?');
     // const post_id = uid(rand_string());
@@ -211,7 +211,7 @@ class NewPost extends Component {
 
   render() {
     return (
-      <div className="new-post2-page">
+      <div className="new-post-page">
         <div className="container">
           <h1>New Post</h1>
           <div className="secondary-container">
