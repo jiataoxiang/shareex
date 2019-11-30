@@ -114,6 +114,14 @@ class Navbar extends React.Component {
     }
   };
 
+  searchTypeChange = e => {
+    if (e.target.value === 'post') {
+      document.getElementById('post-filters').classList.remove('hide');
+    } else if (e.target.value === 'user') {
+      document.getElementById('post-filters').classList.add('hide');
+    }
+  };
+
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -153,7 +161,11 @@ class Navbar extends React.Component {
                     placeholder="Search"
                     aria-label="Search"
                   />
-                  <select className="custom-select mr-sm-1" id="search-type-select">
+                  <select
+                    className="custom-select mr-sm-1"
+                    id="search-type-select"
+                    onChange={this.searchTypeChange}
+                  >
                     <option value="post">Post</option>
                     <option value="user">User</option>
                   </select>

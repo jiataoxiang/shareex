@@ -1,63 +1,65 @@
-import React, {Component} from "react";
-import "../../stylesheets/new_post.scss";
-import AddContent from "./AddContent";
-import {rand_string} from "../../lib/util";
-import {connect} from 'react-redux';
-import {withRouter} from "react-router-dom";
-import {uid} from "react-uid";
-import axios from "axios";
-
+import React, { Component } from 'react';
+import '../../stylesheets/new_post.scss';
+import AddContent from './AddContent';
+import { rand_string } from '../../lib/util';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { uid } from 'react-uid';
+import axios from 'axios';
 
 class NewPost extends Component {
   // TODO: connect to server, and fetch the data we need. Then, store them in the state.
   state = {
-    contents: [{key: "tmp", type: undefined, title: ""}],
+    contents: [{ key: 'tmp', type: undefined, title: '' }],
     to_store: {
-      title: "",
-      category: "",
-      content: "",
-      attachments: []
-    }
+      title: '',
+      category: '',
+      content: '',
+      attachments: [],
+    },
   };
 
   // handle incoming image and pdf file, and store them in state
   addedAttachmentFile = (event, secondary_key) => {
     const inputFile = event.target.files[0];
-    const isJPG = inputFile.type === "image/jpeg";
-    const isPNG = inputFile.type === "image/png";
-    const isPDF = inputFile.type === "application/pdf";
+    const isJPG = inputFile.type === 'image/jpeg';
+    const isPNG = inputFile.type === 'image/png';
+    const isPDF = inputFile.type === 'application/pdf';
     const attach_id = uid(rand_string());
     const file_type = isJPG || isPNG ? 'image' : 'pdf';
 
     if (isPDF) {
       const content = {
         key: attach_id,
-        type: "pdf_attach",
-        title: inputFile.name
+        type: 'pdf_attach',
+        title: inputFile.name,
       };
       const contents = this.state.contents;
       contents.push(content);
-      this.setState({contents: contents});
+      this.setState({ contents: contents });
     } else if (isPNG || isJPG) {
       const content = {
         key: attach_id,
-        type: "image_attach",
-        title: inputFile.name
+        type: 'image_attach',
+        title: inputFile.name,
       };
       const contents = this.state.contents;
       contents.push(content);
-      this.setState({contents: contents});
+      this.setState({ contents: contents });
     }
     this.state.to_store.attachments.push({
       id: attach_id,
       type: file_type,
-      body: file_type === 'pdf' ? process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf" : process.env.PUBLIC_URL + "/img/logo192.png"
+      body:
+        file_type === 'pdf'
+          ? process.env.PUBLIC_URL + '/files/AWS_Deploy_web_app_with_SSL.pdf'
+          : process.env.PUBLIC_URL + '/img/logo192.png',
     });
   };
 
   // handle incoming video/image links and store them in state
   addedAttachmentLink = (input_link, type) => {
-    let link = type === 'youtube' ? input_link.replace("watch?v=", "embed/") : input_link;
+    let link = type === 'youtube' ? input_link.replace('watch?v=', 'embed/') : input_link;
     const id = uid(rand_string());
     const type_to_show = type === 'youtube' ? 'youtube_attach' : 'image_link_attach';
     const content = {
@@ -67,11 +69,11 @@ class NewPost extends Component {
     };
     const contents = this.state.contents;
     contents.push(content);
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
     this.state.to_store.attachments.push({
       id: id,
       type: type,
-      body: link
+      body: link,
     });
     // console.log(this.state.contents);
     // console.log(this.state.to_store.attachments);
@@ -83,11 +85,12 @@ class NewPost extends Component {
     const resultContent = this.alreadyExistedContents(secondary_key);
     const item = {
       id: secondary_key,
-      type: 'show-'+data_type,
-      body: content
+      type: 'show-' + data_type,
+      body: content,
     };
 
-    if (result === -1) {    // not yet existed in state
+    if (result === -1) {
+      // not yet existed in state
       this.state.to_store.attachments.push(item);
     }
     if (resultContent === -1) {
@@ -95,7 +98,7 @@ class NewPost extends Component {
         key: secondary_key,
         // TODO: changed
         type: data_type,
-        title: content
+        title: content,
       });
     } else {
       this.state.to_store.attachments.splice(result, 1, item);
@@ -103,7 +106,7 @@ class NewPost extends Component {
         key: secondary_key,
         // TODO: changed
         type: data_type,
-        title: content
+        title: content,
       });
     }
     // console.log('length of attach is: ' + this.state.to_store.attachments.length);
@@ -113,7 +116,7 @@ class NewPost extends Component {
   };
 
   // check if a element already in this.state.to_store.attachments
-  alreadyExisted = (secondary_key) => {
+  alreadyExisted = secondary_key => {
     for (let i = 0; i < this.state.to_store.attachments.length; i++) {
       if (this.state.to_store.attachments[i].id === secondary_key) {
         return i;
@@ -123,7 +126,7 @@ class NewPost extends Component {
   };
 
   // check if a element already in this.state.contents
-  alreadyExistedContents = (secondary_key) => {
+  alreadyExistedContents = secondary_key => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
         return i;
@@ -136,11 +139,11 @@ class NewPost extends Component {
   addInput = (type, secondary_key) => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
-        const content = {key: uid(rand_string()), type: type, title: '' ? type !== 'code' : ``};
+        const content = { key: uid(rand_string()), type: type, title: '' ? type !== 'code' : `` };
         const content_list = this.state.contents;
         content_list.splice(i + 1, 0, content);
         this.setState({
-          contents: content_list
+          contents: content_list,
         });
         break;
       }
@@ -148,30 +151,30 @@ class NewPost extends Component {
   };
 
   // Update the title whenever user changes their title.
-  inputTitle = (event) => {
+  inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({property});
+    this.setState({ property });
 
     // this.state.to_store.title = event.target.value;
     // console.log(this.state.to_store.title);
   };
 
   // Update the category whenever user changes their title.
-  inputCategory = (event) => {
+  inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({property});
+    this.setState({ property });
 
     // this.state.to_store.category = event.target.value;
     // console.log(this.state.to_store.category);
   };
 
   // Update the content whenever user changes their title.
-  inputContent = (event) => {
+  inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({property});
+    this.setState({ property });
 
     // this.state.to_store.content = event.target.value;
     // console.log(this.state.to_store.content);
@@ -184,8 +187,8 @@ class NewPost extends Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
 
     // If token, add to headers
@@ -199,10 +202,10 @@ class NewPost extends Component {
   };
 
   // store the data in this.state.to_store to the database
-  addToDatabase = (event) => {
+  addToDatabase = event => {
     // TODO: connect server here. Then we will send data in state to the server.
     // generate a post id when the 'submit' button is clicked
-    alert("Sure to submit?");
+    alert('Sure to submit?');
     // const post_id = uid(rand_string());
     // console.log(this.state.current_user);
     const re_sort_attach = this.state.to_store.attachments.reverse();
@@ -212,11 +215,12 @@ class NewPost extends Component {
       title: this.state.to_store.title,
       category: this.state.to_store.category,
       body: this.state.to_store.content,
-      attachments: re_sort_attach
+      attachments: re_sort_attach,
     };
-    console.log("These are attachments:....", this.state.to_store.attachments);
+    console.log('These are attachments:....', this.state.to_store.attachments);
 
-    axios.post('/api/posts', a_post, this.tokenConfig())
+    axios
+      .post('/api/posts', a_post, this.tokenConfig())
       .then(res => {
         console.log(res);
       })
@@ -224,7 +228,7 @@ class NewPost extends Component {
         console.log(err);
       });
     // redirect to home page
-    this.props.history.push("/");
+    this.props.history.push('/');
   };
 
   // check if the user has signed in
@@ -243,7 +247,7 @@ class NewPost extends Component {
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
-              <input type="text" className="form-control" id="tile" onChange={this.inputTitle}/>
+              <input type="text" className="form-control" id="tile" onChange={this.inputTitle} />
             </div>
             <div id="contents">
               <div className="form-group">
@@ -282,7 +286,11 @@ class NewPost extends Component {
               })}
             </div>
           </div>
-          <button type="submit" className="btn btn-primary btn-lg float-right" onClick={this.addToDatabase}>
+          <button
+            type="submit"
+            className="btn btn-primary btn-lg float-right"
+            onClick={this.addToDatabase}
+          >
             Submit
           </button>
         </div>
@@ -296,7 +304,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(NewPost));

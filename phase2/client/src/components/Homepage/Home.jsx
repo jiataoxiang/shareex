@@ -142,6 +142,7 @@ class Home extends Component {
     const display_post = document.getElementById('search-type-select').value === 'post';
     const posts = this.state.posts;
     const users = this.state.users;
+    const show_filter = document.getElementById('search-type-select').value === 'post';
     return (
       <div className="home-page">
         {/* <img className="background-img" src="/img/login_background3.jpg" alt="" /> */}
@@ -152,34 +153,36 @@ class Home extends Component {
                 <h3>Posts</h3>
               </div>
               <div className="col-sm-10">
-                <span className="float-right selections">
-                  <span className="categroy">
-                    <span className="ml-3">Category:</span>
-                    <select id="category-selection" name="category">
-                      <option value="All">All</option>
-                      <option value="CS">CS</option>
-                      <option value="Education">Education</option>
-                      <option value="Travel">Travel</option>
-                      <option value="Technology">Technology</option>
-                      <option value="Following">Following</option>
-                    </select>
+                {show_filter ? (
+                  <span className="float-right selections" id="post-filters">
+                    <span className="categroy">
+                      <span className="ml-3">Category:</span>
+                      <select id="category-selection" name="category">
+                        <option value="All">All</option>
+                        <option value="CS">CS</option>
+                        <option value="Education">Education</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Following">Following</option>
+                      </select>
+                    </span>
+                    <span className="sort">
+                      <span className="ml-3">Sort By:</span>
+                      <select id="sort-selection" name="sort_by">
+                        <option value="created_at">Time</option>
+                        <option value="views">Views</option>
+                        <option value="likes">Likes</option>
+                        <option value="favs"># of Favourite</option>
+                      </select>
+                    </span>
+                    <button
+                      className="ml-3 btn btn-sm btn-outline-success confirm-btn"
+                      onClick={this.applyFilters}
+                    >
+                      Confirm
+                    </button>
                   </span>
-                  <span className="sort">
-                    <span className="ml-3">Sort By:</span>
-                    <select id="sort-selection" name="sort_by">
-                      <option value="created_at">Time</option>
-                      <option value="views">Views</option>
-                      <option value="likes">Likes</option>
-                      <option value="favs"># of Favourite</option>
-                    </select>
-                  </span>
-                  <button
-                    className="ml-3 btn btn-sm btn-outline-success confirm-btn"
-                    onClick={this.applyFilters}
-                  >
-                    Confirm
-                  </button>
-                </span>
+                ) : null}
               </div>
             </div>
 
