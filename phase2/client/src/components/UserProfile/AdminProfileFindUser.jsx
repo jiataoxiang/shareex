@@ -10,7 +10,7 @@ class AdminProfileFindUser extends React.Component {
         email: "",
         motto: "132456789132456789123456789 131356aw1d4a56w1fda51fa35 1f3a1d5aw31fd35a1wf351aw35f1wa35f1",
         banned: false, 
-        unbanned_date: null,
+        unbanned_date: -1,
         
         inputuser: "", 
         inputmsg: ""
@@ -55,13 +55,14 @@ class AdminProfileFindUser extends React.Component {
                 if (!user || user.data.length === 0 || user.data[0].admin) {
                     this.hideUser();
                 } else {
-                    this.setState({id: user.data[0]._id,
-                                   avatar: user.data[0].avatar,
-                                   username: user.data[0].username, 
-                                   email: user.data[0].email, 
-                                   motto: user.data[0].motto, 
-                                   banned: user.data[0].banned, 
-                                   unbanned_date: user.data[0].unbanned_date});
+                    const curUser = user.data[0];
+                    this.setState({id: curUser._id,
+                                   avatar: curUser.avatar,
+                                   username: curUser.username, 
+                                   email: curUser.email, 
+                                   motto: curUser.motto, 
+                                   banned: curUser.banned, 
+                                   unbanned_date: Date.parse(curUser.unbanned_date)});
                     this.showUser();
                 }
             }).catch(error => {
@@ -112,15 +113,15 @@ class AdminProfileFindUser extends React.Component {
     }
     
     changeBanToServer = () => {
-        let now = 
+        const unbanDate = Date.now() + 1000*60*60*24*5;
         axios.patch(
           `/api/users/ban/${this.state.id}`, {
               banned: !this.state.banned, 
-              unbanned_date: Date.now() + 1000*60*60*24*5
+              unbanned_date: unbanDate
           }, this.tokenConfig()
         ).then(result => {
           if (result.status === 200) {
-              this.setState({unbanned_date: Date.now() + 1000*60*60*24*5});
+              this.setState({unbanned_date: unbanDate});
               this.changeBan();
           } else {
               alert("Failed to ban the user.");
@@ -240,7 +241,10 @@ class AdminProfileFindUser extends React.Component {
                     <div className="row row-ban">
                         <div className="col-md-8">
                              <div id="ban-warning">
-                                <h6>Will be unbanned on {this.state.unbanned_date}</h6>
+                                <h6>Will be unbanned in {
+                                        Math.ceil((this.state.unbanned_date - Date.now()) 
+                                        / (1000*60*60*24))               
+                                    } days.</h6>
                              </div>
                         </div>
                         <div className="col-md-4">

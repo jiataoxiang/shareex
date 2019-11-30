@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "../../stylesheets/prof_set.scss";
 import "../../stylesheets/animation.scss";
-import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import axios from 'axios';
-import store from '../../store';
-import { loadUser } from '../../actions/authActions';
 
 const validator = require('validator');
 
@@ -129,7 +126,7 @@ class ProfSet extends Component {
 
   // Check if password is valid.
   checkPassword = () => {
-    if (this.state.profPassword.length < 4 && this.state.profPassword.length != 0) {
+    if (this.state.profPassword.length < 4 && this.state.profPassword.length !== 0) {
       this.setError(this.inputGroups.inputPassword);
       return false;
     } else {
