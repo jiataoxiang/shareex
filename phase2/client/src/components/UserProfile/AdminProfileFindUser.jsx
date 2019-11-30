@@ -75,7 +75,7 @@ class AdminProfileFindUser extends React.Component {
         
         const msgBody = "Your motto is reset due to containing inappropriate language";
         const success = "Notified " + this.state.username;
-        const fail = "Could not notifiy the user.";
+        const fail = "Could not notify the user.";
         
         axios.patch(
           `/api/users/${this.state.id}`, {motto: newMotto}, this.tokenConfig()
