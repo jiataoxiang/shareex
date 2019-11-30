@@ -7,18 +7,21 @@
   //   height: 100vh;
   //   opacity: var(--background-image-opacity);
   // }
-  h3, span {
+  h3,
+  span {
     color: white;
   }
 
-  background-image: url("/img/login_background3.jpg");
+  min-height: 100vh;
+
+  background-image: url('/img/login_background3.jpg');
   // min-height: 500px;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 90px;
- 
+
   .container-fluid {
     padding: 0 20em 0 20em;
   }
@@ -70,6 +73,31 @@
     }
   }
 
+  .user-component {
+    margin-top: 10px;
+    .row {
+      background-color: var(--background-secondary);
+      // min-height: 8em;
+      padding: 15px;
+      border-radius: 5px;
+
+      .info-container {
+        h3 {
+          color: var(--text);
+          padding: 0;
+        }
+      }
+      .avatar-container {
+        border-right: 1px solid grey;
+        .user-avatar {
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+  }
+
   @media screen and (max-width: 1800px) {
     .container-fluid {
       padding: 0 10em 0 10em;
@@ -85,17 +113,16 @@
   @media screen and (max-width: 1100px) {
     .container-fluid {
       padding: 0 2em 0 2em;
-    
     }
   }
-  @media screen and (max-width: 970px) { 
+  @media screen and (max-width: 970px) {
     .confirm-btn {
       float: right;
       margin: 0;
       margin-top: 10px;
     }
   }
-  @media screen and (max-width: 825px) { 
+  @media screen and (max-width: 825px) {
     .category {
       display: block;
     }
@@ -103,7 +130,6 @@
       display: block;
     }
   }
-
 
   @media screen and (max-width: 800px) {
     .recommendations {
@@ -114,5 +140,4 @@
       width: 100%;
     }
   }
-
 }

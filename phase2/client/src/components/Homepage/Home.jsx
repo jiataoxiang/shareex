@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Post from '../Post';
+import User from './User';
 import '../../stylesheets/home.scss';
 // import { rand_string } from '../../lib/util';
 import { Redirect, Link } from 'react-router-dom';
@@ -11,7 +12,8 @@ import axios from 'axios';
 class Home extends Component {
   state = {
     posts: [],
-    recommendations: []
+    users: [],
+    recommendations: [],
   };
 
   componentDidMount() {
@@ -44,14 +46,28 @@ class Home extends Component {
   }
 
   search = search_content => {
-    axios
-      .get(`/api/posts/search/${search_content}`)
-      .then(res => {
-        this.setState({ posts: res.data.posts });
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
+    const display_post = document.getElementById('search-type-select').value === 'post';
+    if (display_post) {
+      axios
+        .get(`/api/posts/search/${search_content}`)
+        .then(res => {
+          this.setState({ posts: res.data.posts });
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+    } else {
+      console.log(`Search for user: ${search_content}`);
+      axios
+        .get(`/api/users/search/${search_content}`)
+        .then(res => {
+          this.setState({ users: res.data.users });
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   };
 
   updatePosts = (category, sort_by) => {
@@ -63,8 +79,8 @@ class Home extends Component {
         params: {
           sort_by,
           category,
-          search_content
-        }
+          search_content,
+        },
       })
       .then(res => {
         this.setState({ posts: res.data.posts });
@@ -81,8 +97,8 @@ class Home extends Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
 
     // If token, add to headers
@@ -123,7 +139,9 @@ class Home extends Component {
     if (!this.props.isAuthenticated) {
       return <Redirect to="/login" />;
     }
+    const display_post = document.getElementById('search-type-select').value === 'post';
     const posts = this.state.posts;
+    const users = this.state.users;
     return (
       <div className="home-page">
         {/* <img className="background-img" src="/img/login_background3.jpg" alt="" /> */}
@@ -135,7 +153,7 @@ class Home extends Component {
               </div>
               <div className="col-sm-10">
                 <span className="float-right selections">
-                  <span className='categroy'>
+                  <span className="categroy">
                     <span className="ml-3">Category:</span>
                     <select id="category-selection" name="category">
                       <option value="All">All</option>
@@ -146,7 +164,7 @@ class Home extends Component {
                       <option value="Following">Following</option>
                     </select>
                   </span>
-                  <span className='sort'>
+                  <span className="sort">
                     <span className="ml-3">Sort By:</span>
                     <select id="sort-selection" name="sort_by">
                       <option value="created_at">Time</option>
@@ -164,7 +182,7 @@ class Home extends Component {
                 </span>
               </div>
             </div>
-            {(function () {
+            {(function() {
               if (posts.length === 0) {
                 return (
                   <React.Fragment>
@@ -175,9 +193,21 @@ class Home extends Component {
                 );
               }
             })()}
-            {posts.map(post => {
-              return <Post key={uid(Math.random())} post={post} />;
-            })}
+            {display_post
+              ? posts.map(post => {
+                  return <Post key={uid(Math.random())} post={post} />;
+                })
+              : users.map(user => {
+                  return (
+                    <User
+                      key={uid(Math.random())}
+                      username={user.username}
+                      avatar={user.avatar}
+                      email={user.email}
+                      id={user._id}
+                    />
+                  );
+                })}
           </div>
           <div className="recommendations col-12 col-6 col-md-4">
             <div className="sticky-top" style={{ top: '5em' }}>
@@ -186,9 +216,7 @@ class Home extends Component {
                 {this.state.recommendations.map(recommendation => {
                   return (
                     <li key={uid(Math.random())} className="list-group-item">
-                      <Link to={'/single_post/' + recommendation._id}>
-                        {recommendation.title}
-                      </Link>
+                      <Link to={'/single_post/' + recommendation._id}>{recommendation.title}</Link>
                     </li>
                   );
                 })}
@@ -206,7 +234,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(Home));

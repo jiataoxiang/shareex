@@ -28,6 +28,15 @@
     margin-left: 20px;
   }
 
+  #search-bar {
+    margin-right: 0;
+    width: 15em;
+  }
+
+  #search-type-select {
+    width: 5em;
+  }
+
   .navbar-buttons-container {
     display: flex;
   }
@@ -54,27 +63,27 @@
     #search-bar {
       width: 100%;
       margin: 0;
-      margin-bottom: 10px; 
+      margin-bottom: 10px;
     }
     #theme-btn-group {
       margin-bottom: 10px;
       button {
-        border-radius: 5px
+        border-radius: 5px;
       }
     }
-   .btn, .btn-group {
-     display: block;
-     width: 100%;
-     padding-top: 10px;
-   }
+    .btn,
+    .btn-group {
+      display: block;
+      width: 100%;
+      padding-top: 10px;
+    }
 
-   .logout-btn {
-     margin-top: 10px;
-   }
+    .logout-btn {
+      margin-top: 10px;
+    }
 
-   .nav-link {
-     padding: 0px;
-   }
-
+    .nav-link {
+      padding: 0px;
+    }
   }
 }
