@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
 class AdminProfileFindUser extends React.Component {
     state = {
         avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
         username: "",
-        nickname: "",
+        email: "",
+        motto: "132456789132456789123456789 131356aw1d4a56w1fda51fa35 1f3a1d5aw31fd35a1wf351aw35f1wa35f1",
         banned: false, 
         unbanned_date: null,
         
@@ -25,22 +28,43 @@ class AdminProfileFindUser extends React.Component {
         this.setState({[name]: value});
     }
     
-    getUserInfo = () => {
-        //
-        
-        if (true) {
-            this.setState({ inputmsg: "" });
-            this.tempElements.display_user.removeAttribute("hidden");
-            if (this.state.banned) {
-                this.tempElements.display_banned.removeAttribute("hidden");
-                this.tempElements.button_ban.innerHTML = "Unban";
-            } else {
-                this.tempElements.display_banned.setAttribute("hidden", true);
-                this.tempElements.button_ban.innerHTML = "Ban";
-            }
+    showUser = () => {
+        this.setState({ inputmsg: "" });
+        this.tempElements.display_user.removeAttribute("hidden");
+        if (this.state.banned) {
+            this.tempElements.display_banned.removeAttribute("hidden");
+            this.tempElements.button_ban.innerHTML = "Unban";
         } else {
-            this.tempElements.display_user.setAttribute("hidden", true);
-            alert("The user does not exist.");
+            this.tempElements.display_banned.setAttribute("hidden", true);
+            this.tempElements.button_ban.innerHTML = "Ban";
+        }
+    }
+    hideUser = () => {
+        this.tempElements.display_user.setAttribute("hidden", true);
+        alert("The user does not exist.");
+    }
+    
+    getUserInfo = () => {
+        if (this.state.inputuser.length < 4) {
+            alert("Invalid username.")
+        } else {
+            axios.get(
+                `/api/users/username/${this.state.inputuser}`, this.tokenConfig()
+            ).then(user => {
+                if (!user || user.data.length === 0 || user.data[0].admin) {
+                    this.hideUser();
+                } else {
+                    this.setState({avatar: user.data[0].avatar, 
+                                   username: user.data[0].username, 
+                                   email: user.data[0].email, 
+                                   motto: user.data[0].motto, 
+                                   banned: user.data[0].banned, 
+                                   unbanned_date: user.data[0].unbanned_date});
+                    this.showUser();
+                }
+            }).catch(error => {
+                console.log(error);
+            })
         }
     }
     
@@ -70,6 +94,27 @@ class AdminProfileFindUser extends React.Component {
         
         //
     }
+    
+    tokenConfig = () => {
+        // Get token from localstorage
+        const token = this.props.auth.token;
+
+        // Headers
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        };
+
+        // If token, add to headers
+        if (token) {
+            config.headers['x-auth-token'] = token;
+        } else {
+            window.location.href = '/';
+        }
+
+        return config;
+    };
     
     componentDidMount() {
         this.tempElements.display_user = document.getElementById("display-user");
@@ -102,17 +147,30 @@ class AdminProfileFindUser extends React.Component {
                 </div>
                 
                 <div id="display-user">
-                    <div className="row">
-                        <div className="col-md-4>">
-                            <img id="user-avatar" src={this.state.avatar} alt="" />
+                    <div className="row row-info">
+                        <div className="col-md-8">
+                          <div className="row">
+                            <div className="col-md-4>">
+                              <img id="user-avatar" src={this.state.avatar} alt="" />
+                              <h5>{this.state.username}</h5>
+                            </div>
+                            <div id="text-block" className="col-md-8">
+                              <p>Email:  {this.state.email}</p>
+                              <p>Motto:  {this.state.motto}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div id="text-block" className="col-md-6">
-                            <h5>Nickname:  {this.state.nickname}</h5>
-                            <p>Username:  {this.state.username}</p>
+                        <div className="col-md-4">
+                            <button type="button"
+                                id="button-reset" 
+                                className="btn"
+                                onClick={this.changeBan}>
+                                Reset Motto
+                            </button>
                         </div>
                     </div>
                     
-                    <div className="row">
+                    <div className="row row-ban">
                         <div className="col-md-8">
                              <div id="ban-warning">
                                 <h6>Will be unbanned on {this.state.username}</h6>
@@ -126,10 +184,9 @@ class AdminProfileFindUser extends React.Component {
                                 Ban
                             </button>
                         </div>
-                    
                     </div>
                     
-                     <div className="row">
+                     <div className="row row-msg">
                         <div className="col-md-8">
                             <input
                                 type="text"
@@ -148,7 +205,6 @@ class AdminProfileFindUser extends React.Component {
                                 Send Message
                             </button>
                         </div>
-                    
                     </div>
                 </div>
             </div>
@@ -156,4 +212,12 @@ class AdminProfileFindUser extends React.Component {
     }
 }
 
-export default AdminProfileFindUser;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(AdminProfileFindUser);

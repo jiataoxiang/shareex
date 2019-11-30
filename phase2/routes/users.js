@@ -173,6 +173,18 @@ router.get('/:user_id', isAuth, (req, res) => {
     });
 });
 
+//get user by username without sending back password.
+// getting user info, no password sent back, no need to check is authorized
+router.get('/username/:username', isAuth, (req, res) => {
+  const username = req.params.username;
+
+  User.find({username: username}).select('-password').then(user => {
+      res.send(user); 
+    }).catch(error => {
+      res.status(400).send(error);
+    });
+});
+
 //add following
 router.post('/add-following/:id', isAuth, (req, res) => {
   const id = req.params.id;

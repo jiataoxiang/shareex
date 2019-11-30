@@ -73,9 +73,14 @@
         margin-left: 2em;
         margin-top: 3em;
       }
+        
+      #button-reset {
+        position: absolute;
+        bottom: 5px;
+      }
 
       #ban-warning {
-        margin-top: 1em;
+        margin-top: 10px;
         color: red;
       }
 
@@ -85,6 +90,10 @@
         width: 150px;
         margin-left: 1em;
         background-color: var(--background-secondary);
+      }
+        
+      .row-msg {
+        margin-top: 5px;
       }
     }
   }
