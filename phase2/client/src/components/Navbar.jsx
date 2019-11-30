@@ -12,7 +12,7 @@ class Navbar extends React.Component {
   state = {};
 
   static propTypes = {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
   };
 
   colorTransition = () => {
@@ -47,8 +47,8 @@ class Navbar extends React.Component {
     this.props.history.push({
       pathname: '/',
       state: {
-        search_content
-      }
+        search_content,
+      },
     });
   };
 
@@ -69,8 +69,8 @@ class Navbar extends React.Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
     // If token, add to headers
     if (token) {
@@ -100,9 +100,9 @@ class Navbar extends React.Component {
         .patch(
           `/api/users/${this.props.current_user._id}`,
           {
-            color_theme: btn_value
+            color_theme: btn_value,
           },
-          this.tokenConfig()
+          this.tokenConfig(),
         )
         .then(res => {
           console.log(res.data);
@@ -114,6 +114,14 @@ class Navbar extends React.Component {
     }
   };
 
+  searchTypeChange = e => {
+    if (e.target.value === 'post') {
+      document.getElementById('post-filters').classList.remove('hide');
+    } else if (e.target.value === 'user') {
+      document.getElementById('post-filters').classList.add('hide');
+    }
+  };
+
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -122,15 +130,11 @@ class Navbar extends React.Component {
           to={{
             pathname: '/',
             state: {
-              search_content: ''
-            }
+              search_content: '',
+            },
           }}
         >
-          <img
-            src={process.env.PUBLIC_URL + '/img/logo_S.png'}
-            alt=""
-            width="50px"
-          />
+          <img src={process.env.PUBLIC_URL + '/img/logo_S.png'} alt="" width="50px" />
           <span id="shareEx-logo-text">ShareEx</span>
         </Link>
 
@@ -149,19 +153,28 @@ class Navbar extends React.Component {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
               <form className="form-inline my-2 my-lg-0" onSubmit={this.search}>
-                <input
-                  className="form-control mr-sm-2"
-                  type="search"
-                  id="search-bar"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button
-                  className="btn btn-outline-success my-2 my-sm-0"
-                  type="submit"
-                >
-                  Search
-                </button>
+                <div className="input-group">
+                  <input
+                    className="form-control input-group-prepend"
+                    type="search"
+                    id="search-bar"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <select
+                    className="custom-select mr-sm-1"
+                    id="search-type-select"
+                    onChange={this.searchTypeChange}
+                  >
+                    <option value="post">Post</option>
+                    <option value="user">User</option>
+                  </select>
+                  <div className="input-group-append">
+                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
+                      Search
+                    </button>
+                  </div>
+                </div>
               </form>
             </li>
           </ul>
@@ -173,28 +186,17 @@ class Navbar extends React.Component {
             aria-label="..."
             onClick={this.handleThemeChange}
           >
-            <button
-              id="light-theme-btn"
-              className="btn btn-light btn-sm"
-              value="light"
-              checked
-            >
+            <button id="light-theme-btn" className="btn btn-light btn-sm" value="light" checked>
               Light
             </button>
-            <button
-              id="dark-theme-btn"
-              className="btn btn-dark btn-sm"
-              value="dark"
-            >
+            <button id="dark-theme-btn" className="btn btn-dark btn-sm" value="dark">
               Dark
             </button>
           </div>
 
           {this.props.isAuthenticated ? (
             <Link className="nav-link nav-item" to="new_post">
-              <button className="btn btn-outline-primary btn-sm">
-                New Post
-              </button>
+              <button className="btn btn-outline-primary btn-sm">New Post</button>
             </Link>
           ) : null}
           {this.props.isAuthenticated ? (
@@ -232,7 +234,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { logout })(withRouter(Navbar));

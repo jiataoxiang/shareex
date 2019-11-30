@@ -36,7 +36,7 @@ class NotificationCard extends React.Component {
             <div className="notification-card media border rounded">
                 <div className="mr-3">
                     <img className="avatar" src={this.state.avatar} alt="" />
-                    <p>{this.state.username}</p>
+                    <h6>{this.state.username}</h6>
                 </div>
                 <div className="media-body">
                     {this.state.body}

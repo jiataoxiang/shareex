@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Post from '../Post';
+import User from './User';
 import '../../stylesheets/home.scss';
 // import { rand_string } from '../../lib/util';
 import { Redirect, Link } from 'react-router-dom';
@@ -11,7 +12,8 @@ import axios from 'axios';
 class Home extends Component {
   state = {
     posts: [],
-    recommendations: []
+    users: [],
+    recommendations: [],
   };
 
   componentDidMount() {
@@ -44,14 +46,28 @@ class Home extends Component {
   }
 
   search = search_content => {
-    axios
-      .get(`/api/posts/search/${search_content}`)
-      .then(res => {
-        this.setState({ posts: res.data.posts });
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
+    const display_post = document.getElementById('search-type-select').value === 'post';
+    if (display_post) {
+      axios
+        .get(`/api/posts/search/${search_content}`)
+        .then(res => {
+          this.setState({ posts: res.data.posts });
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+    } else {
+      console.log(`Search for user: ${search_content}`);
+      axios
+        .get(`/api/users/search/${search_content}`)
+        .then(res => {
+          this.setState({ users: res.data.users });
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   };
 
   updatePosts = (category, sort_by) => {
@@ -63,8 +79,8 @@ class Home extends Component {
         params: {
           sort_by,
           category,
-          search_content
-        }
+          search_content,
+        },
       })
       .then(res => {
         this.setState({ posts: res.data.posts });
@@ -81,8 +97,8 @@ class Home extends Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
 
     // If token, add to headers
@@ -123,59 +139,82 @@ class Home extends Component {
     if (!this.props.isAuthenticated) {
       return <Redirect to="/login" />;
     }
+    const display_post = document.getElementById('search-type-select').value === 'post';
     const posts = this.state.posts;
+    const users = this.state.users;
+    const show_filter = document.getElementById('search-type-select').value === 'post';
     return (
       <div className="home-page">
-        <div className="container row">
+        {/* <img className="background-img" src="/img/login_background3.jpg" alt="" /> */}
+        <div className="container-fluid row">
           <div className="posts col-12 col-md-8">
             <div className="row">
-              <div className="col-2">
+              <div className="col-sm-2">
                 <h3>Posts</h3>
               </div>
-              <div className="col-10">
-                <span className="float-right">
-                  <span className="ml-3">Category:</span>
-                  {/* <div className="input-group"> */}
-                  <select id="category-selection" name="category">
-                    <option value="All">All</option>
-                    <option value="CS">CS</option>
-                    <option value="Education">Education</option>
-                    <option value="Travel">Travel</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Following">Following</option>
-                  </select>
-                  {/* </div> */}
-
-                  <span className="ml-3">Sort By:</span>
-                  <select id="sort-selection" name="sort_by">
-                    <option value="created_at">Time</option>
-                    <option value="views">Views</option>
-                    <option value="likes">Likes</option>
-                    <option value="favs"># of Favourite</option>
-                  </select>
-                  <button
-                    className="ml-3 btn btn-sm btn-outline-success"
-                    onClick={this.applyFilters}
-                  >
-                    Confirm
-                  </button>
-                </span>
+              <div className="col-sm-10">
+                {show_filter ? (
+                  <span className="float-right selections" id="post-filters">
+                    <span className="categroy">
+                      <span className="ml-3">Category:</span>
+                      <select id="category-selection" name="category">
+                        <option value="All">All</option>
+                        <option value="CS">CS</option>
+                        <option value="Education">Education</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Following">Following</option>
+                      </select>
+                    </span>
+                    <span className="sort">
+                      <span className="ml-3">Sort By:</span>
+                      <select id="sort-selection" name="sort_by">
+                        <option value="created_at">Time</option>
+                        <option value="views">Views</option>
+                        <option value="likes">Likes</option>
+                        <option value="favs"># of Favourite</option>
+                      </select>
+                    </span>
+                    <button
+                      className="ml-3 btn btn-sm btn-outline-success confirm-btn"
+                      onClick={this.applyFilters}
+                    >
+                      Confirm
+                    </button>
+                  </span>
+                ) : null}
               </div>
             </div>
-            {(function() {
-              if (posts.length === 0) {
-                return (
-                  <React.Fragment>
-                    <br />
-                    <br />
-                    <h3 className="text-center">No Post Found</h3>
-                  </React.Fragment>
-                );
-              }
-            })()}
-            {posts.map(post => {
-              return <Post key={uid(Math.random())} post={post} />;
-            })}
+
+            {display_post && posts.length === 0 ? (
+              <React.Fragment>
+                <br />
+                <br />
+                <h3 className="text-center">No Post Found</h3>
+              </React.Fragment>
+            ) : null}
+            {!display_post && users.length === 0 ? (
+              <React.Fragment>
+                <br />
+                <br />
+                <h3 className="text-center">No User Found</h3>
+              </React.Fragment>
+            ) : null}
+            {display_post
+              ? posts.map(post => {
+                  return <Post key={uid(Math.random())} post={post} />;
+                })
+              : users.map(user => {
+                  return (
+                    <User
+                      key={uid(Math.random())}
+                      username={user.username}
+                      avatar={user.avatar}
+                      email={user.email}
+                      id={user._id}
+                    />
+                  );
+                })}
           </div>
           <div className="recommendations col-12 col-6 col-md-4">
             <div className="sticky-top" style={{ top: '5em' }}>
@@ -184,9 +223,7 @@ class Home extends Component {
                 {this.state.recommendations.map(recommendation => {
                   return (
                     <li key={uid(Math.random())} className="list-group-item">
-                      <Link to={'/single_post/' + recommendation._id}>
-                        {recommendation.title}
-                      </Link>
+                      <Link to={'/single_post/' + recommendation._id}>{recommendation.title}</Link>
                     </li>
                   );
                 })}
@@ -204,7 +241,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(Home));

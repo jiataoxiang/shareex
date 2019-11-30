@@ -46,3 +46,8 @@
     margin-bottom: 1em;
   }
 }
+@media screen and (max-height: 800px) {
+  .signup-page {
+    padding-top: 5px;
+  }
+}

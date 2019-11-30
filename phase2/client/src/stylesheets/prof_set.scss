@@ -1,5 +1,6 @@
 @media screen and (min-width:1000px) {
     .profset-page {
+        padding-top: 70px;
         position: absolute;
         left: 40%;
         transform: translate(-50%);
@@ -47,6 +48,7 @@
 
 @media screen and (max-width:999px) {
     .profset-page {
+        padding-top: 70px;
         width: 100%;
 
         .prof-set-title {

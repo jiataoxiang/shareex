@@ -90,5 +90,6 @@ function isAdmin(req, res, next) {
 module.exports = {
   isAuth: isAuth,
   isAuthorizedPost: isAuthorizedPost,
-  isAuthorizedUser: isAuthorizedUser
+  isAuthorizedUser: isAuthorizedUser,
+  isAdmin: isAdmin
 };

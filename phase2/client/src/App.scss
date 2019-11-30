@@ -43,7 +43,7 @@ html[theme='dark'] {
   --text: #ffffff;
   --background-secondary: #333333;
   --hr-color: white;
-  --background-image-opacity: 0.3;
+  --background-image-opacity: 0.5;
 }
 
 html.transition,
@@ -96,4 +96,8 @@ button {
 
 span {
   font-family: 'Alatsi', sans-serif;
+}
+
+.hide {
+  display: none;
 }

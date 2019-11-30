@@ -6,11 +6,19 @@
     cursor: pointer;
   }
 
+  span.likes {
+    color: var(--text);
+  }
+
   .thumb-btn {
     /* border: 1px black solid; */
     border-radius: 30%;
     padding: 5px;
     cursor: pointer;
+  }
+
+  .thumb-btn-invert {
+    filter: invert(1);
   }
 
   .likes {
