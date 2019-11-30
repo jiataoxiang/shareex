@@ -126,7 +126,8 @@ class Home extends Component {
     const posts = this.state.posts;
     return (
       <div className="home-page">
-        <div className="container row">
+        {/* <img className="background-img" src="/img/login_background3.jpg" alt="" /> */}
+        <div className="container-fluid row">
           <div className="posts col-12 col-md-8">
             <div className="row">
               <div className="col-2">
@@ -154,7 +155,7 @@ class Home extends Component {
                     <option value="favs"># of Favourite</option>
                   </select>
                   <button
-                    className="ml-3 btn btn-sm btn-outline-success"
+                    className="ml-3 btn btn-sm btn-outline-success confirm-btn"
                     onClick={this.applyFilters}
                   >
                     Confirm
@@ -162,7 +163,7 @@ class Home extends Component {
                 </span>
               </div>
             </div>
-            {(function() {
+            {(function () {
               if (posts.length === 0) {
                 return (
                   <React.Fragment>
