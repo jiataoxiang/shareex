@@ -71,7 +71,31 @@ class AdminProfileFindUser extends React.Component {
     }
     
     resetMotto = () => {
+        const newMotto = "Welcome, new user";
         
+        const msgBody = "Your motto is reset due to containing inappropriate language";
+        const success = "Notified " + this.state.username;
+        const fail = "Could not notifiy the user.";
+        
+        axios.patch(
+          `/api/users/${this.state.id}`, {motto: newMotto}, this.tokenConfig()
+        ).then(result => {
+          if (result.status === 200) {
+              this.props.current_user.motto = newMotto;
+              this.setState({motto: newMotto});
+              alert("Motto reset.");
+              return true;
+          } else {
+              alert("Motto failed to reset.");
+              return false;
+          }
+        }).then(result => {
+          if (result) {
+              this.sendMsgToServer(msgBody, success, fail);
+          }
+        }).catch(err => {
+          console.log(err);
+        })
     }
     
     changeBan = () => {
@@ -94,18 +118,21 @@ class AdminProfileFindUser extends React.Component {
         if (this.state.inputmsg.length === 0) {
             alert("A message must have some contant.");
         } else {
-            const newMsg = {
-                from: this.props.current_user._id,
-                to: this.state.id,
-                body: this.state.inputmsg
-            }
-            this.sendMsgToServer(newMsg, "Message sent.", "Message failed to send.");
+            this.sendMsgToServer(this.state.inputmsg, 
+                                 "Message sent.", 
+                                 "Message failed to send.");
         }
     }
     
-    sendMsgToServer = (msg, success, fail) => {
+    sendMsgToServer = (msgBody, success, fail) => {
+        const newMsg = {
+            from: this.props.current_user._id,
+            to: this.state.id,
+            body: msgBody
+        } 
+        
         axios.post(
-            `/api/notifications/create`, msg, this.tokenConfig()
+            `/api/notifications/create`, newMsg, this.tokenConfig()
         ).then(msg => {
             if (!msg) {
                 alert(fail);
@@ -186,7 +213,7 @@ class AdminProfileFindUser extends React.Component {
                             <button type="button"
                                 id="button-reset" 
                                 className="btn"
-                                onClick={this.changeBan}>
+                                onClick={this.resetMotto}>
                                 Reset Motto
                             </button>
                         </div>
