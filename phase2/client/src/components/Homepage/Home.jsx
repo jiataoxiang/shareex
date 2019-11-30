@@ -182,17 +182,21 @@ class Home extends Component {
                 </span>
               </div>
             </div>
-            {(function() {
-              if (posts.length === 0) {
-                return (
-                  <React.Fragment>
-                    <br />
-                    <br />
-                    <h3 className="text-center">No Post Found</h3>
-                  </React.Fragment>
-                );
-              }
-            })()}
+
+            {display_post && posts.length === 0 ? (
+              <React.Fragment>
+                <br />
+                <br />
+                <h3 className="text-center">No Post Found</h3>
+              </React.Fragment>
+            ) : null}
+            {!display_post && users.length === 0 ? (
+              <React.Fragment>
+                <br />
+                <br />
+                <h3 className="text-center">No User Found</h3>
+              </React.Fragment>
+            ) : null}
             {display_post
               ? posts.map(post => {
                   return <Post key={uid(Math.random())} post={post} />;

@@ -13,7 +13,7 @@ class Post extends Component {
     post: this.props.post,
     images: [],
     has_liked: false,
-    msg: null
+    msg: null,
   };
 
   componentDidMount() {
@@ -21,8 +21,7 @@ class Post extends Component {
     axios.get(`/api/posts/${this.state.post._id}/attachments`).then(res => {
       const attachments = res.data.attachments;
       const attachment_images = attachments.filter(
-        attachment =>
-          attachment.type === 'image' || attachment.type === 'image_link'
+        attachment => attachment.type === 'image' || attachment.type === 'image_link',
       );
       if (this._isMount) {
         this.setState({ images: attachment_images.slice(0, 5) });
@@ -44,8 +43,8 @@ class Post extends Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
 
     // If token, add to headers
@@ -107,6 +106,8 @@ class Post extends Component {
   render() {
     const { title, body, likes } = this.state.post;
     const { images } = this.state;
+    const thumb_btn_invert_class =
+      document.documentElement.getAttribute('theme') === 'dark' ? 'thumb-btn-invert' : '';
     return (
       <div className="post card">
         <div className="card-header">
@@ -149,10 +150,7 @@ class Post extends Component {
                     aria-labelledby="exampleModalLabel"
                     aria-hidden="true"
                   >
-                    <div
-                      className="modal-dialog modal-lg modal-dialog-centered"
-                      role="document"
-                    >
+                    <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
                       <div className="modal-content">
                         <div className="modal-body">
                           <img
@@ -171,10 +169,7 @@ class Post extends Component {
             })}
           </div>
           <hr />
-          <Link
-            to={`/single_post/${this.props.post._id}`}
-            className="btn btn-primary"
-          >
+          <Link to={`/single_post/${this.props.post._id}`} className="btn btn-primary">
             See Details
           </Link>
 
@@ -185,7 +180,7 @@ class Post extends Component {
               src={'/icon/thumb_down-24px.svg'}
               alt=""
               width="40px"
-              className="float-right thumb-btn"
+              className={`float-right thumb-btn ${thumb_btn_invert_class}`}
               onClick={this.thumbdown}
             />
           ) : null}
@@ -194,7 +189,7 @@ class Post extends Component {
               src={'/icon/thumb_up-24px.svg'}
               alt=""
               width="40px"
-              className="float-right thumb-btn"
+              className={`float-right thumb-btn ${thumb_btn_invert_class}`}
               onClick={this.thumbup}
             />
           ) : null}
@@ -211,7 +206,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(Post);
