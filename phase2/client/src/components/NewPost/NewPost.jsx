@@ -9,7 +9,6 @@ import axios from "axios";
 
 
 class NewPost extends Component {
-  // TODO: connect to server, and fetch the data we need. Then, store them in the state.
   state = {
     contents: [{key: "tmp", type: undefined, title: ""}],
     to_store: {
@@ -21,38 +20,23 @@ class NewPost extends Component {
   };
 
   // handle incoming image and pdf file, and store them in state
-  addedAttachmentFile = (event, secondary_key) => {
-    const inputFile = event.target.files[0];
-    const isJPG = inputFile.type === "image/jpeg";
-    const isPNG = inputFile.type === "image/png";
-    const isPDF = inputFile.type === "application/pdf";
-    const attach_id = uid(rand_string());
-    const file_type = isJPG || isPNG ? 'image' : 'pdf';
-
-    if (isPDF) {
-      const content = {
-        key: attach_id,
-        type: "pdf_attach",
-        title: inputFile.name
-      };
-      const contents = this.state.contents;
-      contents.push(content);
-      this.setState({contents: contents});
-    } else if (isPNG || isJPG) {
-      const content = {
-        key: attach_id,
-        type: "image_attach",
-        title: inputFile.name
-      };
-      const contents = this.state.contents;
-      contents.push(content);
-      this.setState({contents: contents});
-    }
+  addedAttachmentFile = (type, data_url) => {
+    const id = uid(rand_string());
+    const type_to_show = type === 'image' ? 'image_attach' : 'pdf_attach';
+    const content = {
+      key: id,
+      type: type_to_show,
+      title: data_url,
+    };
+    const contents = this.state.contents;
+    contents.push(content);
+    this.setState({contents: contents});
     this.state.to_store.attachments.push({
-      id: attach_id,
-      type: file_type,
-      body: file_type === 'pdf' ? process.env.PUBLIC_URL + "/files/AWS_Deploy_web_app_with_SSL.pdf" : process.env.PUBLIC_URL + "/img/logo192.png"
+      id: id,
+      type: type,
+      body: data_url
     });
+    console.log("Now attachments have: ", this.state.to_store.attachments);
   };
 
   // handle incoming video/image links and store them in state
@@ -73,8 +57,6 @@ class NewPost extends Component {
       type: type,
       body: link
     });
-    // console.log(this.state.contents);
-    // console.log(this.state.to_store.attachments);
   };
 
   // handle incoming text/code and store them in state
@@ -83,7 +65,7 @@ class NewPost extends Component {
     const resultContent = this.alreadyExistedContents(secondary_key);
     const item = {
       id: secondary_key,
-      type: 'show-'+data_type,
+      type: 'show-' + data_type,
       body: content
     };
 
@@ -200,7 +182,6 @@ class NewPost extends Component {
 
   // store the data in this.state.to_store to the database
   addToDatabase = (event) => {
-    // TODO: connect server here. Then we will send data in state to the server.
     // generate a post id when the 'submit' button is clicked
     alert("Sure to submit?");
     // const post_id = uid(rand_string());
@@ -226,14 +207,6 @@ class NewPost extends Component {
     // redirect to home page
     this.props.history.push("/");
   };
-
-  // check if the user has signed in
-  // componentDidMount() {
-  //   if (!this.props.state.current_user) {
-  //     alert("Please sign in first !");
-  //     this.props.history.push("/");
-  //   }
-  // }
 
   render() {
     return (
@@ -265,7 +238,6 @@ class NewPost extends Component {
                   onChange={this.inputContent}
                 />
               </div>
-
               {this.state.contents.map(content => {
                 return (
                   <AddContent

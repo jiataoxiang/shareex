@@ -6,6 +6,8 @@ import "prismjs/components/prism-javascript";
 import Attachment from "../Attachment";
 import {uid} from "react-uid";
 import {rand_string} from "../../lib/util";
+import ImageUploader from "../ImageUploader";
+import SingleImageUpload from "../SingleImageUpload";
 
 const code = `function add(a, b) {
   return a + b;
@@ -14,7 +16,8 @@ const code = `function add(a, b) {
 
 class AddContent extends Component {
   state = {
-    code_data: code
+    code_data: code,
+    image_url: ''
   };
 
   // handle the input link
@@ -44,6 +47,20 @@ class AddContent extends Component {
     // console.log('the code is: '+event);
     this.setState({code_data: event});
     addedAttachmentWords(event, 'code', secondary_key);
+  };
+
+  //set the state of the uploaded image/file url.
+  setImageState = (key, value) => {
+    console.log("setPdfState get called!!!");
+    this.setState({ [key]: value });
+    console.log(this.state.image_url);
+    this.props.addedAttachmentFile('image', this.state.image_url);
+  };
+
+  setPdfState = (key, value) => {
+    this.setState({ [key]: value });
+    console.log(this.state.image_url);
+    this.props.addedAttachmentFile('pdf', this.state.image_url);
   };
 
   // generate and return the required attachment
@@ -104,8 +121,12 @@ class AddContent extends Component {
     } else if (this.props.type === "image") {
       return (
         <div className="upload-btn-wrapper">
-          <button className="submit-file-btn">Upload a Image</button>
-          <input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>
+          {/*<button className="submit-file-btn">Upload a Image</button>*/}
+          {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
+          <ImageUploader
+            setParentState={this.setImageState}
+            public_id={''}
+          />
         </div>
       );
     } else if (this.props.type === "image_link") {
@@ -121,8 +142,12 @@ class AddContent extends Component {
     } else if (this.props.type === "pdf") {
       return (
         <div className="upload-btn-wrapper">
-          <button className="submit-file-btn">Upload a PDF</button>
-          <input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>
+          {/*<button className="submit-file-btn">Upload a PDF</button>*/}
+          {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
+          <ImageUploader
+            setParentState={this.setPdfState}
+            public_id={''}
+          />
         </div>
       );
     } else if (this.props.type === 'pdf_attach') {
@@ -138,7 +163,8 @@ class AddContent extends Component {
         <Attachment
           key={uid(rand_string())}
           type={'image'}
-          content={process.env.PUBLIC_URL + "/img/SSL.png"}
+          // content={process.env.PUBLIC_URL + "/img/SSL.png"}
+          content={title}
         />
       );
     } else if (this.props.type === 'youtube_attach') {

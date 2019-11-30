@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 
-class ImageUploader extends Component {
+class SingleImageUpload extends Component {
   state = {
     filename: '',
     progress: 0,
@@ -27,23 +26,16 @@ class ImageUploader extends Component {
   };
 
   onChange = async e => {
-    if (!this.props.public_id) {
-      this.removeFile();
-    }
-    console.log("BEFORE RETURN ");
+    // this.removeFile();
     if (!e.target.files[0]) return;
-    console.log("AFTER RETURN");
     this.setState({
       filename: e.target.files[0].name,
       file_type: e.target.files[0].type
     });
     console.log(e.target.files);
-    // const input_element = document.getElementById('file-input');
-    const input_element = e.target;
+    const input_element = document.getElementById('file-input');
     if (!input_element.files || !input_element.files[0]) {
       this.setMessage('No file chosen');
-      console.log("FAILED HALFWAY!!!!");
-      console.log(input_element.files);
       return;
     }
     const file = input_element.files[0];
@@ -52,19 +44,17 @@ class ImageUploader extends Component {
     if (
       !file_type.includes('png') &&
       !file_type.includes('jpg') &&
-      !file_type.includes('jpeg')
+      !file_type.includes('pdf')
     ) {
-      this.setMessage('File must be jpg or png');
+      this.setMessage('File must be jpg, png or pdf file');
       return;
     }
     const formData = new FormData();
     formData.append('file', file); // get first file chosen
-    if (this.props.public_id) {
-      formData.append('public_id', this.props.public_id);
-    }
+    formData.append('public_id', 'huakunshentimetable');
     const setUploadPercentage = this.setUploadPercentage;
     try {
-      const res = await axios.post('/api/upload', formData, {
+      const res = await axios.post('/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -83,8 +73,6 @@ class ImageUploader extends Component {
       this.setMessage('File Uploaded');
       console.log(res.data[0]);
       this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
-      this.props.setParentState('image_url', this.state.url);
-      console.log("setParent called in image Uploader: ", this.state.url);
       this.setState({ isUploading: false });
     } catch (err) {
       if (err.response.status === 500) {
@@ -95,11 +83,7 @@ class ImageUploader extends Component {
       console.log(err);
     }
   };
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return;
-    };
-  }
+
   setUploadPercentage = progress => {
     this.setState({ progress });
   };
@@ -113,14 +97,26 @@ class ImageUploader extends Component {
       return <h3>Uploading</h3>;
     }
     if (this.state.url) {
-      return (
-        <img
-          src={this.state.url}
-          className="rounded mx-auto d-block"
-          alt="..."
-          style={{ width: '100%' }}
-        />
-      );
+      if (this.state.file_type.includes('pdf')) {
+        console.log('is a pdf');
+        return (
+          <embed
+            className="center"
+            src={this.state.url}
+            width="100%"
+            height="1000px"
+          />
+        );
+      } else {
+        return (
+          <img
+            src={this.state.url}
+            className="rounded mx-auto d-block"
+            alt="..."
+            style={{ width: '50%' }}
+          />
+        );
+      }
     } else {
       return null;
     }
@@ -130,13 +126,13 @@ class ImageUploader extends Component {
     this.setState({ msg });
     setTimeout(() => {
       this.setState({ msg: '' });
-    }, 5000);
+    }, 2000);
   };
 
   render() {
     // const buttonCSS = { padding: 0, border: 'none', background: 'none' };
     return (
-      <div className="container">
+      <div className="container mt-5">
         {this.state.msg ? (
           <div className="alert alert-info" role="alert">
             {this.state.msg}
@@ -154,6 +150,15 @@ class ImageUploader extends Component {
               {this.state.filename ? this.state.filename : 'Choose file'}
             </label>
           </div>
+          {/* <button
+            style={buttonCSS}
+            className="input-group-append"
+            onClick={this.onSubmit}
+          >
+            <span className="input-group-text" id="">
+              Upload
+            </span>
+          </button> */}
         </div>
         <div className="progress">
           <div
@@ -174,4 +179,4 @@ class ImageUploader extends Component {
   }
 }
 
-export default withRouter(ImageUploader);
+export default SingleImageUpload;

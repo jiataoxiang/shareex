@@ -156,24 +156,6 @@ class SinglePost extends Component {
 
   /* callback passed to a Comment to submit a Comment on this page */
   submitComment = (comment_content, post_id, comment_id, new_comment) => {
-    // const comments = this.state.comments;
-    // for (let i = 0; i < comments.length; i++) {
-    //   if (comments[i].id === secondary_key) {
-    //     const all_comments = this.props.state.comments;
-    //     all_comments.unshift({
-    //       id: uid(rand_string()),
-    //       username: this.props.state.current_user.username,
-    //       user_id: this.props.state.current_user.id,
-    //       post_id: this.state.post_id,
-    //       content: comment_content,
-    //       edit_mode: false
-    //     });
-    //     // server call to update comment to database required here
-    //     this.props.state.setAppState("comments", all_comments);
-    //   }
-    // }
-    // this.setState({comments: comments});
-    // console.log("Submit button clicked!:  ", post_id);
     if (new_comment) {
       // if this is a new comment
       const a_comment = {
@@ -190,7 +172,6 @@ class SinglePost extends Component {
         edit_mode: false,
         new_comment: false
       });
-      // this.setState({comments: comments});
       axios
         .post('/api/comments/', a_comment)
         .then(comments => {
@@ -211,7 +192,6 @@ class SinglePost extends Component {
           modified['body'] = comment_content;
         }
       }
-      // this.setState({comments: comments});
 
       axios
         .patch('/api/comments/' + comment_id, modified)
@@ -241,11 +221,9 @@ class SinglePost extends Component {
   addComment = () => {
     if (this.props.current_user._id) {
       const comments = this.state.comments;
-      const org_length = comments.length;
       comments.unshift({
         _id: uid(rand_string()),
         author: this.props.current_user.username,
-        // user_id: this.props.state.current_user.id,
         body: '',
         edit_mode: true,
         new_comment: true
