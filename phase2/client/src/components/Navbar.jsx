@@ -115,6 +115,7 @@ class Navbar extends React.Component {
   };
 
   searchTypeChange = e => {
+    if (!document.getElementById('post-filters')) return;
     if (e.target.value === 'post') {
       document.getElementById('post-filters').classList.remove('hide');
     } else if (e.target.value === 'user') {
