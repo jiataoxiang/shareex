@@ -300,7 +300,9 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
+        console.log('faved the post');
         console.log(res.data);
+        store.dispatch(loadUser());
       })
       .catch(err => {
         console.log(err);
