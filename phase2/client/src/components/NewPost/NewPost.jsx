@@ -1,25 +1,25 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import {rand_string} from '../../lib/util';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {uid} from 'react-uid';
+import { rand_string } from '../../lib/util';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { uid } from 'react-uid';
 import axios from 'axios';
 
 class NewPost extends Component {
   state = {
-    contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
+    contents: [{ key: uid(rand_string()), parent_key: '', type: undefined, title: '' }],
     to_store: {
       title: '',
       category: 'Computer Science',
-      content: ''
+      content: '',
     },
     attachments: [],
   };
 
   // find the correct position to insert new item
-  findInsertPosContent = (key) => {
+  findInsertPosContent = key => {
     const list = this.state.contents;
     for (let i = 0; i < list.length; i++) {
       if (list[i].key === key) {
@@ -49,8 +49,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
-
+    this.setState({ contents: contents });
   };
 
   // handle incoming video/image links and store them in state
@@ -61,10 +60,10 @@ class NewPost extends Component {
     const pos_content = this.findInsertPosContent(secondary_key);
 
     // insert the item into the content list.
-    console.log("The content list is: ", this.state.contents);
-    console.log("The attach list is: ", this.state.attachments);
-    console.log("The sec key is: ", secondary_key);
-    console.log("The index found is: ", pos_content);
+    console.log('The content list is: ', this.state.contents);
+    console.log('The attach list is: ', this.state.attachments);
+    console.log('The sec key is: ', secondary_key);
+    console.log('The index found is: ', pos_content);
     const content = {
       key: uid(rand_string()),
       parent_key: secondary_key,
@@ -77,7 +76,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
   };
 
   // handle incoming text/code and store them in state
@@ -110,7 +109,7 @@ class NewPost extends Component {
           key: uid(rand_string()),
           parent_key: secondary_key,
           type: type,
-          title: '' ? type !== 'code' : ``
+          title: '' ? type !== 'code' : ``,
         };
         const content_list = this.state.contents;
         content_list.splice(i + 1, 0, content);
@@ -123,12 +122,12 @@ class NewPost extends Component {
   };
 
   // delete an specified item from current post
-  deleteItem = (secondary_key) => {
+  deleteItem = secondary_key => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
         const contents = this.state.contents;
         contents.splice(i, 1);
-        this.setState({contents: contents});
+        this.setState({ contents: contents });
       }
     }
   };
@@ -137,21 +136,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // configure the token used for authentication
@@ -179,9 +178,9 @@ class NewPost extends Component {
   // store the data in this.state.to_store to the database
   addToDatabase = () => {
     // generate a post id when the 'submit' button is clicked
-    if(this.state.to_store.title === '' || this.state.to_store.content === ''){
-      alert("Please fill in blank (Title/Content) field.");
-    } else{
+    if (this.state.to_store.title === '' || this.state.to_store.content === '') {
+      alert('Please fill in blank (Title/Content) field.');
+    } else {
       alert('Sure to submit?');
       // const re_sort_attach = this.state.attachments.reverse();
       const re_sort_attach = [];
@@ -222,14 +221,16 @@ class NewPost extends Component {
   };
 
   render() {
+    if (!this.props.isAuthenticated) this.props.history.push('/');
+
     return (
       <div className="new-post-page">
-        <div className="container">
+        <div className="container-fluid">
           <h1>New Post</h1>
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
-              <input type="text" className="form-control" id="tile" onChange={this.inputTitle}/>
+              <input type="text" className="form-control" id="tile" onChange={this.inputTitle} />
             </div>
             <div id="contents">
               <div className="form-group">

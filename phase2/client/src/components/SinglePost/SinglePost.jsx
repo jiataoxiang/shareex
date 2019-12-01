@@ -33,14 +33,6 @@ class SinglePost extends Component {
     this.addToViewHistory();
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('receive props');
-  //   if (!prevProps.isAuthenticated && this.props.isAuthenticated) {
-  //     console.log('updated');
-  //     this.addToViewHistory();
-  //   }
-  // }
-
   addToViewHistory = () => {
     let user_id;
     if (this.props.location.state) {
@@ -315,6 +307,8 @@ class SinglePost extends Component {
     let username = '';
     let avatar = '';
     let post_id = '';
+    if (!this.props.isAuthenticated) this.props.history.push('/');
+
     if (this.props.current_user !== null) {
       cur_user_id = this.props.current_user._id;
     }
@@ -339,7 +333,7 @@ class SinglePost extends Component {
 
     return (
       <div className="single-post-2-page">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
@@ -365,7 +359,7 @@ class SinglePost extends Component {
                 <div>
                   <h3>Comments</h3>
                   <button
-                    className="btn btn-outline-success float-right"
+                    className="btn btn-light float-right"
                     id="new-comment-button"
                     onClick={this.addComment}
                   >
