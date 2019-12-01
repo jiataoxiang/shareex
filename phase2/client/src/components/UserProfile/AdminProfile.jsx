@@ -6,7 +6,7 @@ import axios from 'axios';
 import Dashboard from "./AdminProfileDashboard";
 import FindUser from "./AdminProfileFindUser";
 import FindPost from "./AdminProfileFindPost";
-import Notification from "./profileNotification";
+import Notification from "./ProfileNotification";
 
 class AdminProfile extends Component {
     // TODO: connect to server, get info from API
@@ -15,7 +15,8 @@ class AdminProfile extends Component {
         nickname: "Admin",
         email: "place@holder.com",
         tabState: 0,
-        msg: {readMsg: [], unreadMsg: []}
+        msg: {readMsg: [], unreadMsg: []},
+        msgServer: false
     };
 
     tabLeft = [];
@@ -29,16 +30,23 @@ class AdminProfile extends Component {
     tabRight = [<Dashboard />, <FindUser />, <FindPost />, 
               <Notification state={this.state.msg} />];
     changeTabRight = (num) => {
-        this.tabLeft.forEach((button) => {
-            button.classList.remove("btn-selected");
-        });
-        
-        this.tabLeft[num].classList.add("btn-selected");
-        this.setState({tabState: num});
-        
-        if (num === 3) {
+        if (num === 3 && !this.state.msgServer) {
+            alert("Please be patient, notifications are still loading");
+        } else if (num === 3) {
+            this.tabLeft.forEach((button) => {
+                button.classList.remove("btn-selected");
+            });
+            this.tabLeft[num].classList.add("btn-selected");
+            this.setState({tabState: num});
+            
             this.hideBadge();
             this.readNotifications();
+        } else {
+            this.tabLeft.forEach((button) => {
+                button.classList.remove("btn-selected");
+            });
+            this.tabLeft[num].classList.add("btn-selected");
+            this.setState({tabState: num});
         }
     }
     
@@ -66,6 +74,7 @@ class AdminProfile extends Component {
                     this.state.msg.unreadMsg.push(msg);
                 }
             })
+            this.setState({ msgServer: true });
         }).catch(error => {
             console.log(error);
         });
