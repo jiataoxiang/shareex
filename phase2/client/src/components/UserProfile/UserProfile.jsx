@@ -287,9 +287,9 @@ class UserProfile extends React.Component {
           </div>
           <input type="file" id="change-banner" hidden="hidden" onChange={this.changeBanner} />
         </div>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row mt-3">
-            <div className="col-md-4">
+            <div className="col-lg-4">
               <div className="sticky-top">
                 {/* <div className="space"></div> */}
                 <div className="profileInfo card">
@@ -354,7 +354,7 @@ class UserProfile extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col-md-8">{this.state.curState}</div>
+            <div className="col-lg-8">{this.state.curState}</div>
           </div>
           <div id="profileImgContainer">
             <img

@@ -1,4 +1,12 @@
 .user-profile-page {
+  // setup background
+  background-image: url('/img/login_background3.jpg');
+  // min-height: 500px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   padding-top: 70px;
   .alert {
     margin: 0;
@@ -76,7 +84,8 @@
   }
 
   /*** Profile info box styles below ***/
-  .container {
+  .container-fluid {
+    padding: 0 10% 0 10%;
     .space {
       height: 53px;
     }
@@ -232,13 +241,25 @@
       margin-top: 5px;
     }
   }
+  .post-board {
+    h3 {
+      color: white;
+    }
+  }
+  .message-board {
+    h3,
+    h4 {
+      color: white;
+    }
+  }
 }
 @media screen and (max-width: 800px) {
   .user-profile-page {
-    .container {
+    .container-fluid {
       .space {
         height: 20px;
       }
+      padding: 0 5% 0 5%;
     }
     #bigProfilePicCircle {
       left: 2em;
@@ -248,3 +269,9 @@
     margin-top: 2em;
   }
 }
+
+// @media screen and (max-width: 2000px) {
+//   .container-fluid {
+//     padding: 0 10em 0 10em;
+//   }
+// }

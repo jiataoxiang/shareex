@@ -30,7 +30,7 @@ class PostsBoard extends React.Component {
   render() {
     const posts = this.state.posts;
     return (
-      <div>
+      <div className="post-board">
         <h3>Posts</h3>
         {posts.length === 0 ? (
           <h4 className="text-center">You have no post.</h4>
