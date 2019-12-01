@@ -57,7 +57,7 @@ class MessageBoard extends React.Component {
   render() {
     const messages = this.state.messages;
     return (
-      <div>
+      <div className="message-board">
         {/* <div className="space"/> */}
         <div className="overflow-auto">
           <h3>Message Board</h3>

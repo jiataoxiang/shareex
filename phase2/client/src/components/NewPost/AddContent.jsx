@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs';
+import {highlight, languages} from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import Attachment from '../Attachment';
-import { uid } from 'react-uid';
-import { rand_string } from '../../lib/util';
+import {uid} from 'react-uid';
+import {rand_string} from '../../lib/util';
 import ImageUploader from '../ImageUploader';
 import SingleImageUpload from '../SingleImageUpload';
 
@@ -22,61 +22,75 @@ class AddContent extends Component {
 
   // handle the input link
   handleInputLink = event => {
-    this.setState({ input_link: event.target.value });
+    this.setState({input_link: event.target.value});
   };
 
   // send the input link to the NewPost component
   sendLinkBack = event => {
-    const { addedAttachmentLink, secondary_key, parent_key} = this.props;
+    const {addedAttachmentLink, secondary_key, parent_key} = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
     addedAttachmentLink(this.state.input_link, type, parent_key, secondary_key);
   };
 
   // send the input text to the NewPost component
   sendTextBack = event => {
-    const { addedAttachmentWords, parent_key, secondary_key } = this.props;
-    this.setState({ text: event.target.value });
+    const {addedAttachmentWords, parent_key, secondary_key} = this.props;
+    this.setState({text: event.target.value});
     addedAttachmentWords(event.target.value, 'text', parent_key, secondary_key);
   };
 
   // send the input code to the NewPost component
   sendCodeBack = event => {
-    const { addedAttachmentWords, parent_key } = this.props;
+    const {addedAttachmentWords, parent_key} = this.props;
     // console.log('the code is: '+event);
-    this.setState({ code_data: event });
+    this.setState({code_data: event});
     addedAttachmentWords(event, 'code', parent_key);
   };
 
   //set the state of the uploaded image/file url.
-  setImageState = (key, value) => {
-    console.log('setPdfState get called!!!');
-    this.setState({ [key]: value });
-    console.log(this.state.image_url);
-    this.props.addedAttachmentFile('image', this.state.image_url, this.props.parent_key);
+  setFileState = (key, value, file_type) => {
+    const type_of_file = file_type.includes('pdf') ? 'pdf' : 'image';
+    const url_type = file_type.includes('pdf') ? 'pdf_url' : 'image_url';
+    this.setState({[url_type]: value});
+    const url = file_type.includes('pdf') ? this.state.pdf_url : this.state.image_url;
+    this.props.addedAttachmentFile(type_of_file, url, this.props.secondary_key);
   };
 
-  setPdfState = (key, value) => {
-    this.setState({ [key]: value });
-    console.log(this.state.image_url);
-    this.props.addedAttachmentFile('pdf', this.state.image_url, this.props.parent_key);
-  };
+  // setPdfState = (key, value) => {
+  //   this.setState({['pdf_url']: value});
+  //   console.log(this.state.image_url);
+  //   this.props.addedAttachmentFile('pdf', this.state.pdf_url, this.props.secondary_key);
+  // };
 
   // generate and return the required attachment
   getContentInput = () => {
-    const { addedAttachmentFile, title } = this.props;
+    const {title, deleteItem, secondary_key} = this.props;
     if (this.props.type === 'text') {
       return (
-        <div className="form-group">
-          <h4 htmlFor="content">Text</h4>
-          <textarea
-            className="form-control"
-            rows="5"
-            id="content"
-            placeholder="What's in your mind right now?"
-            onChange={this.sendTextBack}
-            defaultValue={this.props.title}
-          />
+        <div>
+          <div className="form-group">
+            <h4 htmlFor="content">Text</h4>
+            <textarea
+              className="form-control"
+              rows="5"
+              id="content"
+              placeholder="What's in your mind right now?"
+              onChange={this.sendTextBack}
+              defaultValue={this.props.title}
+            />
+          </div>
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
+
       );
     } else if (this.props.type === 'code') {
       // let content = `# write your JS code here`;
@@ -104,11 +118,6 @@ class AddContent extends Component {
       return (
         <div className="form-group">
           <h4>YouTube Link</h4>
-          {/*<form onSubmit={addedAttachmentLink.bind($("input[name='Confirm']"))}>*/}
-          {/*  <input type="text" className="form-control"/>*/}
-          {/*  <input type="submit" id='input-link' name="Confirm"/>*/}
-          {/*</form>*/}
-
           <input
             type="text"
             className="form-control"
@@ -125,19 +134,19 @@ class AddContent extends Component {
           </button>
         </div>
       );
-    } else if (this.props.type === 'image') {
+    } else if (this.props.type === 'file') {
       return (
         <div className="upload-btn-wrapper">
           {/*<button className="submit-file-btn">Upload a Image</button>*/}
           {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
-          <ImageUploader setParentState={this.setImageState} public_id={''} />
+          <ImageUploader setParentState={this.setFileState} public_id={''}/>
         </div>
       );
     } else if (this.props.type === 'image_link') {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control" onChange={this.handleInputLink} />
+          <input type="text" className="form-control" onChange={this.handleInputLink}/>
           <button
             type="submit"
             className="btn btn-primary btn-lg float-right input-link-button"
@@ -153,53 +162,131 @@ class AddContent extends Component {
         <div className="upload-btn-wrapper">
           {/*<button className="submit-file-btn">Upload a PDF</button>*/}
           {/*<input type="file" name="myfile" onChange={addedAttachmentFile.bind(this)}/>*/}
-          <ImageUploader setParentState={this.setPdfState} public_id={''} />
+          <ImageUploader setParentState={this.setFileState} public_id={''}/>
         </div>
       );
     } else if (this.props.type === 'pdf_attach') {
       return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'pdf'}
-          content={process.env.PUBLIC_URL + '/files/AWS_Deploy_web_app_with_SSL.pdf'}
-        />
+        <div>
+          <Attachment
+            key={uid(rand_string())}
+            type={'pdf'}
+            content={title}
+          />
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       );
     } else if (this.props.type === 'image_attach') {
       return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'image'}
-          // content={process.env.PUBLIC_URL + "/img/SSL.png"}
-          content={title}
-        />
+        <div>
+          <Attachment
+            key={uid(rand_string())}
+            type={'image'}
+            // content={process.env.PUBLIC_URL + "/img/SSL.png"}
+            content={title}
+          />
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       );
     } else if (this.props.type === 'youtube_attach') {
-      return <Attachment key={uid(rand_string())} type={'youtube'} content={title} />;
-    } else if (this.props.type === 'image_link_attach') {
-      return <Attachment key={uid(rand_string())} type={'image_link'} content={title} />;
-    } else if (this.props.type === 'text_attach') {
       return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'text'}
-          content={title}
-          sendTextBack={this.sendTextBack}
-        />
+        <div>
+          <Attachment key={uid(rand_string())} type={'youtube'} content={title}/>
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       );
-    } else if (this.props.type === 'code_attach') {
+    } else if (this.props.type === 'image_link_attach') {
       return (
-        <Attachment
-          key={uid(rand_string())}
-          type={'code'}
-          content={title}
-          sendCodeBack={this.sendCodeBack}
-        />
+        <div>
+          <Attachment key={uid(rand_string())} type={'image_link'} content={title}/>
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+        );
+    }
+    // else if (this.props.type === 'text_attach') {
+    //   return (
+    //     <div>
+    //       <Attachment
+    //         key={uid(rand_string())}
+    //         type={'text'}
+    //         content={title}
+    //         sendTextBack={this.sendTextBack}
+    //       />
+    //       <div className="delete-button">
+    //         <button
+    //           className="btn btn-outline-success"
+    //           type="button"
+    //           id="DeleteButton"
+    //           onClick={deleteItem.bind(this, secondary_key)}
+    //         >
+    //           Delete
+    //         </button>
+    //       </div>
+    //     </div>
+    //   );
+    // }
+    else if (this.props.type === 'code_attach') {
+      return (
+        <div>
+          <Attachment
+            key={uid(rand_string())}
+            type={'code'}
+            content={title}
+            sendCodeBack={this.sendCodeBack}
+          />
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       );
     }
   };
 
   render() {
-    const { addInput, secondary_key } = this.props;
+    const {addInput, secondary_key} = this.props;
     return (
       <div className="add-content-component">
         <div className="content-input">{this.getContentInput()}</div>
@@ -244,9 +331,9 @@ class AddContent extends Component {
                 className="dropdown-item"
                 href="new_post2"
                 value="image"
-                onClick={addInput.bind(this, 'image', secondary_key)}
+                onClick={addInput.bind(this, 'file', secondary_key)}
               >
-                Image
+                Image/PDF
               </button>
               <button
                 className="dropdown-item"
@@ -256,19 +343,19 @@ class AddContent extends Component {
               >
                 Image Link
               </button>
-              <button
-                className="dropdown-item"
-                href="new_post2"
-                value="pdf"
-                onClick={addInput.bind(this, 'pdf', secondary_key)}
-              >
-                PDF
-              </button>
+              {/*<button*/}
+              {/*  className="dropdown-item"*/}
+              {/*  href="new_post2"*/}
+              {/*  value="pdf"*/}
+              {/*  onClick={addInput.bind(this, 'pdf', secondary_key)}*/}
+              {/*>*/}
+              {/*  PDF*/}
+              {/*</button>*/}
             </div>
           </div>
         </div>
-        <br />
-        <br />
+        <br/>
+        <br/>
       </div>
     );
   }
