@@ -14,7 +14,7 @@ class Message extends React.Component {
 
   componentDidMount() {
     this._isMount = true;
-    //get follower avatar and name
+    //get follow avatar and name
     axios.get(`/api/users/${this.state.message.messenger_id}`, this.props.tokenConfig())
       .then((messenger) => {
         if(this._isMount){

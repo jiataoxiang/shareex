@@ -127,7 +127,9 @@ class OtherProfile extends React.Component {
         console.log(error);
       });
 
-    //remove follower in current user
+    //remove follow in current user
+    console.log("author is "+this.state.author);
+    console.log("cur user is "+this.props.current_user._id);
     axios
       .post(
         `/api/users/remove-follower/${this.state.author}`,
@@ -158,7 +160,7 @@ class OtherProfile extends React.Component {
       .catch(error => {
         console.log(error);
       });
-    //add follower in post user
+    //add follow in post user
     axios
       .post(
         `/api/users/add-follower/${this.state.author}`,

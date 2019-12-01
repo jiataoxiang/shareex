@@ -9,13 +9,13 @@ class Follower extends React.Component {
 
 
   state = {
-    follower: this.props.follower
+    follow: this.props.follow
   };
 
   componentDidMount() {
     this._isMount = true;
-    //get follower avatar and name
-    axios.get(`/api/users/${this.state.follower}`, this.props.tokenConfig())
+    //get follow avatar and name
+    axios.get(`/api/users/${this.state.follow}`, this.props.tokenConfig())
       .then((follower) => {
         if(this._isMount){
           this.setState({
@@ -36,7 +36,7 @@ class Follower extends React.Component {
   redirectProfile = () => {
     this.props.history.push({
       pathname: '/otherprofile',
-      state: {post_id: null, author: this.state.follower},
+      state: {post_id: null, author: this.state.follow},
     });
   };
 
