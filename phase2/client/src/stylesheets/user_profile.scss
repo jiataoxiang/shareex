@@ -85,7 +85,7 @@
 
   /*** Profile info box styles below ***/
   .container-fluid {
-    padding: 0 10% 0 10%;
+    padding: 0 10% 20px 10%;
     .space {
       height: 53px;
     }
@@ -252,6 +252,9 @@
       color: white;
     }
   }
+  .other-profile-content {
+    // margin-top: ;
+  }
 }
 @media screen and (max-width: 800px) {
   .user-profile-page {
@@ -275,3 +278,10 @@
 //     padding: 0 10em 0 10em;
 //   }
 // }
+
+.other-profile-page {
+  .container-fluid {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}

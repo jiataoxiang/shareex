@@ -315,6 +315,8 @@ class SinglePost extends Component {
     let username = '';
     let avatar = '';
     let post_id = '';
+    if (!this.props.isAuthenticated) this.props.history.push('/');
+
     if (this.props.current_user !== null) {
       cur_user_id = this.props.current_user._id;
     }
