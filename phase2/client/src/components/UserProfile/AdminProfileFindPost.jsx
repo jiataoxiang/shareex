@@ -1,13 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
 class AdminProfileFindPost extends React.Component {
     state = {
-        title: "",
+        avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png", 
+        username: "",
+        id: "",
         author: "",
+        title: "",
         category: "",
-        numlikes: -1,
-        numcomments: -1,
         deleted: false, 
+        delete_date: null, 
         
         inputid: ""
     };
@@ -25,22 +29,71 @@ class AdminProfileFindPost extends React.Component {
         this.setState({[name]: value});
     }
     
-    getPostInfo = () => {
-        //
-        
-        if (true) {
-            this.tempElements.display_post.removeAttribute("hidden");
-            if (this.state.deleted) {
-                this.tempElements.display_delete.removeAttribute("hidden");
-                this.tempElements.button_delete.innerHTML = "Recover";
-            } else {
-                this.tempElements.display_delete.setAttribute("hidden", true);
-                this.tempElements.button_delete.innerHTML = "Delete";
-            }
+    showPost = () => {
+        this.tempElements.display_post.removeAttribute("hidden");
+        if (this.state.deleted) {
+            this.tempElements.display_delete.removeAttribute("hidden");
+            this.tempElements.button_delete.innerHTML = "Recover";
         } else {
-            this.tempElements.display_post.setAttribute("hidden", true);
-            alert("The post does not exist.");
+            this.tempElements.display_delete.setAttribute("hidden", true);
+            this.tempElements.button_delete.innerHTML = "Delete";
         }
+    }
+    
+    hidePost = () => {
+        this.tempElements.display_post.setAttribute("hidden", true);
+    }
+    
+    getPostInfo = () => {
+        if (this.state.inputid.length === 0) {
+            alert("Must input a id.")
+        } else {
+            axios.get(
+                `/api/posts/${this.state.inputid}`, this.tokenConfig()
+            ).then(post => {
+                if (!post) {
+                    this.hidePost();
+                    alert("This post does not exist.");
+                } else {
+                    const curPost = post.data;
+                    this.setState({
+                        id: curPost._id,
+                        author: curPost.author,
+                        title: curPost.title,
+                        category: curPost.category,
+                        deleted: curPost.hidden, 
+                        delete_date: Date.parse(curPost.delete_date)
+                    });
+                    this.getAuthorInfo();
+                }
+            }).catch(error => {
+                this.hidePost();
+                alert("Failed to get post.");
+                console.log(error);
+            })
+        }
+    }
+    
+    getAuthorInfo = () => {
+        axios.get(
+            `/api/users/${this.state.author}`, this.tokenConfig()
+        ).then(user => {
+            if (!user) {
+                this.hidePost();
+                alert("The author of this post no longer exists.");
+            } else {
+                const curUser = user.data;
+                this.setState({
+                    avatar: curUser.avatar,
+                    username: curUser.username,
+                });
+                    this.showPost();
+                }
+            }).catch(error => {
+                this.hidePost();
+                alert("Failed to get user.");
+                console.log(error);
+            })
     }
     
     changeDelete = () => {
@@ -58,6 +111,27 @@ class AdminProfileFindPost extends React.Component {
             this.tempElements.button_delete.innerHTML = "Recover";
         }
     }
+    
+    tokenConfig = () => {
+        // Get token from localstorage
+        const token = this.props.auth.token;
+
+        // Headers
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        };
+
+        // If token, add to headers
+        if (token) {
+            config.headers['x-auth-token'] = token;
+        } else {
+            window.location.href = '/';
+        }
+
+        return config;
+    };
     
     componentDidMount() {
         this.tempElements.display_post = document.getElementById("display-post");
@@ -120,4 +194,12 @@ class AdminProfileFindPost extends React.Component {
     }
 }
 
-export default AdminProfileFindPost;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(AdminProfileFindPost);
