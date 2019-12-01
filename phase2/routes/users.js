@@ -221,8 +221,8 @@ router.post('/add-following/:id', isAuth, (req, res) => {
     });
 });
 
-//add follower
-router.post('/add-follower/:id', isAuth, (req, res) => {
+//add follow
+router.post('/add-follow/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const follower_id = req.body.follower_id;
 
