@@ -33,14 +33,6 @@ class SinglePost extends Component {
     this.addToViewHistory();
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('receive props');
-  //   if (!prevProps.isAuthenticated && this.props.isAuthenticated) {
-  //     console.log('updated');
-  //     this.addToViewHistory();
-  //   }
-  // }
-
   addToViewHistory = () => {
     let user_id;
     if (this.props.location.state) {
