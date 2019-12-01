@@ -49,9 +49,10 @@ class SinglePost extends Component {
         ? this.props.location.state.current_user_id
         : user_id;
     }
-    if (user_id) {
+    if (!user_id) {
       return;
     }
+    console.log('calling to add view history');
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
@@ -59,6 +60,7 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
+        console.log('added to view history');
         console.log(res.data);
         store.dispatch(loadUser());
       })

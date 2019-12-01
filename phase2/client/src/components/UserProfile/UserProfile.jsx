@@ -106,6 +106,32 @@ class UserProfile extends React.Component {
     });
   };
 
+  showOption = option => {
+    if (option === 'Message Board') {
+      this.setState({ curState: <MessageBoard author={this.props.current_user._id} /> });
+    } else if (option === 'Posts') {
+      this.setState({ curState: <PostsBoard author={this.props.current_user._id} /> });
+    } else if (option === 'Favorites') {
+      this.setState({
+        curState: (
+          <FavoritesBoard
+            author={this.props.current_user._id}
+            posts={this.props.current_user.favs}
+          />
+        ),
+      });
+    } else if (option === 'View History') {
+      this.setState({
+        curState: (
+          <ViewHistoryboard
+            author={this.props.current_user._id}
+            posts={this.props.current_user.view_history}
+          />
+        ),
+      });
+    }
+  };
+
   componentDidMount() {
     // Current user info
     const currentUser = this.props.current_user;
@@ -224,6 +250,7 @@ class UserProfile extends React.Component {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
+    const options = ['Message Board', 'Posts', 'Favorites', 'View History'];
     const followers = this.state.followers;
     return (
       <div className="user-profile-page">
@@ -292,7 +319,18 @@ class UserProfile extends React.Component {
                 </div>
                 <h2>Options</h2>
                 <div className="list-group options">
-                  {this.state.functions.map(fun => (
+                  {options.map(option => {
+                    return (
+                      <button
+                        key={uid(Math.random())}
+                        className="list-group-item list-group-item-action"
+                        onClick={this.showOption.bind(this, option)}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                  {/* {this.state.functions.map(fun => (
                     <button
                       key={uid(Math.random())}
                       type="button"
@@ -301,7 +339,7 @@ class UserProfile extends React.Component {
                     >
                       {fun.title}
                     </button>
-                  ))}
+                  ))} */}
                 </div>
                 <br />
                 <div className="followers">

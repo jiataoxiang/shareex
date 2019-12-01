@@ -38,9 +38,8 @@ class ViewHistoryBoard extends Component {
       .then(res => {
         console.log(res.data.message);
         console.log(res.data.user_view_history);
-        store.dispatch(loadUser()).then(() => {
-          this.setState({ post_ids: [], posts: [] });
-        });
+        store.dispatch(loadUser());
+        this.setState({ post_ids: [], posts: [] });
       })
       .catch(err => {
         console.log(err);
@@ -56,12 +55,14 @@ class ViewHistoryBoard extends Component {
             <h3>Your View History</h3>
           </div>
           <div className="col">
-            <button
-              className="btn btn-danger btn-sm float-right btn-remove"
-              onClick={this.removeHistory}
-            >
-              Remove All View History
-            </button>
+            {posts.length === 0 ? null : (
+              <button
+                className="btn btn-danger btn-sm float-right btn-remove"
+                onClick={this.removeHistory}
+              >
+                Remove All View History
+              </button>
+            )}
           </div>
         </div>
 
