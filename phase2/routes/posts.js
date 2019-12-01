@@ -88,6 +88,7 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
 router.get('/post-array', (req, res) => {
   console.log('\n\n\n\npost array');
   console.log(req.query.posts);
+  req.query.posts = req.query.posts.filter(post => post && post !== 'null');
   Post.find({
     _id: { $in: req.query.posts },
   })
@@ -148,14 +149,18 @@ make_post_helper = (attachments, post) => {
   return new Promise((resolve, reject) => {
     const ans = [];
     attachments.forEach(async attachment => {
-      console.log("Before create()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>");
+      console.log(
+        'Before create()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>',
+      );
       const new_attachment = new Attachment({
         type: attachment.type,
         body: attachment.body,
         post_id: post._id,
       });
       new_attachment.save();
-      console.log("After save()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>");
+      console.log(
+        'After save()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>',
+      );
       ans.push(new_attachment._id);
     });
     resolve(ans);
@@ -283,6 +288,9 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
 // add favorite
 router.patch('/add-fav', isAuth, (req, res) => {
   console.log(req.body);
+  if (!req.body.post_id || req.body.post_id) {
+    return res.status(400).send('Post Id cannot be null');
+  }
   User.findById(req.body.user_id).then(user => {
     if (!user) return res.status(404).send('User not found');
     if (user.favs.includes(req.body.post_id))
