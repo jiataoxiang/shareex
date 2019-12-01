@@ -40,21 +40,9 @@ class NewPost extends Component {
     const list = this.state.contents;
     for (let i = 0; i < list.length; i++) {
       if (list[i].key === key) {
-        // let j;
-        // for (j = i + 1; j < list.length; j++) {
-        //   if (list[j].parent_key !== key) {
-        //     return j;
-        //   }
-        // }
         return i;
-        // means this is a sec_key that should be appended to the end of the array.
-        // need to check if this the length
-        // return j;
       }
     }
-    // means this is a new sec_key, and need to append to the end of the array.
-    // just push to the end of the array
-    // return -1;
   };
 
   // handle incoming image and pdf file, and store them in state
