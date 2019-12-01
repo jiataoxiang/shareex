@@ -14,8 +14,19 @@ class NotificationCard extends React.Component {
         type: "",
         day: "",
         time: "",
-        read: true
+        read: true,
+        
+        highlight: ""
     };
+
+    highlightBody = () => {
+        const keyArray = this.state.highlight.split(' ');
+        const highlightText = this.state.body.replace(
+            new RegExp(keyArray.join("|"), "ig"),
+            str => `<Fragment class="text-highlight">${str}</Fragment>`
+        );
+        return (<div dangerouslySetInnerHTML={{ __html: highlightText }} />);
+    }
 
     componentDidMount() {
         const msg = this.props.msg;
@@ -36,7 +47,8 @@ class NotificationCard extends React.Component {
                 type: msg.type,
                 day: day,
                 time: time,
-                read: msg.read
+                read: msg.read, 
+                highlight: this.props.search
             });
         } else {
             this.setState({ 
@@ -50,7 +62,8 @@ class NotificationCard extends React.Component {
                 type: msg.type,
                 day: day,
                 time: time,
-                read: msg.read
+                read: msg.read, 
+                highlight: this.props.search
             });
         }
     }
@@ -63,7 +76,7 @@ class NotificationCard extends React.Component {
                     <h6>{ this.state.username }</h6>
                 </div>
                 <div className="contant-container col">
-                    <div>{ this.state.body }</div>
+                    { this.highlightBody() }
                     <span className="msg-status">
                         <span className="msg-time">
                             { this.state.day }

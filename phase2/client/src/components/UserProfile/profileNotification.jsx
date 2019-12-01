@@ -17,6 +17,16 @@ class AdminProfileNotification extends React.Component {
         this.setState({[name]: value});
     }
     
+    checkSearch = (msgBody) => {
+        let toReturn = false;
+        this.state.inputsearch.split(' ').forEach(key => {
+            if (key.length !== 0 && msgBody.includes(key)) {
+                toReturn = true;
+            }
+        })
+        return toReturn;
+    }
+    
     componentDidMount() {
         const readMsg = this.props.state.readMsg;
         const unreadMsg = this.props.state.unreadMsg;
@@ -56,15 +66,21 @@ class AdminProfileNotification extends React.Component {
                     <h4>---- New ----</h4>
                     {this.state.unreadMsg.map(msg => {
                         if (this.state.inputsearch === "" || 
-                            msg.body.includes(this.state.inputsearch)) {
-                            return <NotificationCard key={uid(Math.random())} msg={msg} />
+                            this.checkSearch(msg.body)) {
+                            return <NotificationCard 
+                                       key={uid(Math.random())} 
+                                       msg={msg} 
+                                       search={this.state.inputsearch} />
                         }
                     })}
                     <h4>---- Old ----</h4>
                     {this.state.readMsg.map(msg => {
                         if (this.state.inputsearch === "" || 
-                            msg.body.includes(this.state.inputsearch)) {
-                            return <NotificationCard key={uid(Math.random())} msg={msg} />
+                            this.checkSearch(msg.body)) {
+                            return <NotificationCard 
+                                       key={uid(Math.random())} 
+                                       msg={msg} 
+                                       search={this.state.inputsearch} />
                         }
                     })}
                 </div>
