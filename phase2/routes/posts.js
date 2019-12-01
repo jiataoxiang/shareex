@@ -84,6 +84,22 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
     });
 });
 
+// get user's favourite posts
+router.get('/post-array', (req, res) => {
+  console.log('\n\n\n\npost array');
+  console.log(req.query.posts);
+  Post.find({
+    _id: { $in: req.query.posts },
+  })
+    .then(posts => {
+      console.log(posts);
+      res.send(posts);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
 // get a post by id
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
@@ -287,6 +303,24 @@ router.patch('/add-fav', isAuth, (req, res) => {
         res.status(500).send(err);
       });
   });
+});
+
+router.patch('/remove-fav/:post_id', isAuth, (req, res) => {
+  User.findByIdAndUpdate(req.body.user_id, { $pull: { favs: req.params.post_id } })
+    .then(user => {
+      Post.findByIdAndUpdate(req.params.post_id, { $inc: { favs: -1 } })
+        .then(post => {
+          res.send('updated, removed favs');
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).send(err);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send(err);
+    });
 });
 
 router.patch('/:id', (req, res) => {

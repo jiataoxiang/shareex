@@ -73,7 +73,7 @@ router.post('/', (req, res) => {
         { id: user._id },
         config.get('jwtSecret'),
         {
-          expiresIn: 1 * hour,
+          expiresIn: 12 * hour,
         },
         (err, token) => {
           if (err) throw err;
@@ -113,7 +113,7 @@ router.post('/login', (req, res) => {
             { id: user._id },
             config.get('jwtSecret'),
             {
-              expiresIn: hour * 1,
+              expiresIn: hour * 12,
             },
             (err, token) => {
               if (err) throw err;
