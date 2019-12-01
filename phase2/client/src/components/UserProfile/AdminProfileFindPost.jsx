@@ -110,6 +110,17 @@ class AdminProfileFindPost extends React.Component {
                     alert("Failed to update post.");
                 } else {
                     alert("Post saved.");
+                    
+                    const msgBody = "Your post " + 
+                          this.state.title + 
+                          " is edited by an administrator";
+                    const newMsg = {
+                        from: this.props.current_user._id,
+                        to: this.state.author,
+                        body: msgBody,
+                        link: "/single_post/" + this.state.id
+                    }
+                    this.sendMsg(newMsg);
                 }
             }).catch(error => {
                 alert("Failed to update post.");
@@ -123,10 +134,31 @@ class AdminProfileFindPost extends React.Component {
             this.setState({ deleted: false });
             this.tempElements.display_delete.setAttribute("hidden", true);
             this.tempElements.button_delete.innerHTML = "Delete";
+            
+            const msgBody = "Your post " + 
+                            this.state.title + 
+                            " is recovered by an administrator";
+            const newMsg = {
+                from: this.props.current_user._id,
+                to: this.state.author,
+                body: msgBody,
+                link: "/single_post/" + this.state.id
+            }
+            this.sendMsg(newMsg);
         } else {
             this.setState({ deleted: true });
             this.tempElements.display_delete.removeAttribute("hidden");
             this.tempElements.button_delete.innerHTML = "Recover";
+            
+            const msgBody = "Your post " + 
+                            this.state.title + 
+                            " is deleted by an administrator";
+            const newMsg = {
+                from: this.props.current_user._id,
+                to: this.state.author,
+                body: msgBody
+            }
+            this.sendMsg(newMsg);
         }
     }
     
@@ -149,23 +181,17 @@ class AdminProfileFindPost extends React.Component {
         })
     }
     
-    sendMsg = (msgBody, success, fail) => {
-        const newMsg = {
-            from: this.props.current_user._id,
-            to: this.state.id,
-            body: msgBody
-        } 
-        
+    sendMsg = (msg) => {
         axios.post(
-            `/api/notifications/create`, newMsg, this.tokenConfig()
+            `/api/notifications/create`, msg, this.tokenConfig()
         ).then(msg => {
             if (!msg) {
-                alert(fail);
+                alert("Failed to notify the user.");
             } else {
-                alert(success);
+                alert("Notified the user.");
             }
         }).catch(err => {
-            alert(fail);
+            alert("Failed to notify the user.");
             console.log(err);
         })
     }
