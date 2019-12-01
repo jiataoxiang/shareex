@@ -86,9 +86,7 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
 
 // get user's favourite posts
 router.get('/post-array', (req, res) => {
-  console.log('\n\n\n\npost array');
-  console.log(req.query.posts);
-  req.query.posts = req.query.posts.filter(post => ObjectID.isValid(post));
+  if (!req.query.posts) return res.send([]);
   Post.find({
     _id: { $in: req.query.posts },
   })
@@ -98,6 +96,7 @@ router.get('/post-array', (req, res) => {
       res.send(posts);
     })
     .catch(err => {
+      console.log('debug: ', err.message);
       res.status(500).send(err);
     });
 });
