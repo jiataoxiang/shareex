@@ -1,10 +1,12 @@
 import React from 'react';
 import axios from "axios";
 import '../../stylesheets/follower.scss';
+import {withRouter} from 'react-router-dom'
 import { connect } from 'react-redux';
 
 class Follower extends React.Component {
   _isMount = false;
+
 
   state = {
     follower: this.props.follower
@@ -31,8 +33,11 @@ class Follower extends React.Component {
     this._isMount = false;
   };
 
-  redirectProfile = () =>{
-
+  redirectProfile = () => {
+    this.props.history.push({
+      pathname: '/otherprofile',
+      state: {post_id: null, author: this.state.follower},
+    });
   };
 
   render() {
@@ -63,4 +68,4 @@ const mapStateToProps = state => ({
   }
 });
 
-export default connect(mapStateToProps)(Follower);
+export default connect(mapStateToProps)(withRouter(Follower));

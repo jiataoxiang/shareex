@@ -5,12 +5,15 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class PostsBoard extends React.Component {
+
+  _isMount = false;
   state = {
     author: this.props.author,
     posts: [],
   };
 
   componentDidMount() {
+    this._isMount = true;
     this.updatePosts();
   }
 
@@ -20,12 +23,18 @@ class PostsBoard extends React.Component {
       .get('/api/posts/by-user/' + this.state.author, this.props.tokenConfig())
       .then(res => {
         console.log(res.data);
-        this.setState({ posts: res.data.posts });
+        if(this._isMount){
+          this.setState({ posts: res.data.posts });
+        }
       })
       .catch(error => {
         console.log(error);
       });
   };
+
+  componentWillUnmount() {
+    this._isMount = false;
+  }
 
   render() {
     const posts = this.state.posts;

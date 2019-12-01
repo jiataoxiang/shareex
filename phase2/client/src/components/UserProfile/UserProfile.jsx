@@ -26,12 +26,6 @@ class UserProfile extends React.Component {
     functions: [],
   };
 
-  showComponent = component => {
-    this.setState({
-      curState: component,
-    });
-  };
-
   handlePopup = () => {
     // Show the pop up window.
     this.setState({
@@ -290,7 +284,6 @@ class UserProfile extends React.Component {
         <div className="container-fluid">
           <div className="row mt-3">
             <div className="col-lg-4">
-              <div className="sticky-top">
                 {/* <div className="space"></div> */}
                 <div className="profileInfo card">
                   <div className="card-header">
@@ -352,7 +345,6 @@ class UserProfile extends React.Component {
                     <h4 className="text-center">No Follower</h4>
                   )}
                 </div>
-              </div>
             </div>
             <div className="col-lg-8">{this.state.curState}</div>
           </div>
