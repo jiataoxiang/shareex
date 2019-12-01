@@ -43,15 +43,13 @@ class ImageUploader extends Component {
     const input_element = e.target;
     if (!input_element.files || !input_element.files[0]) {
       this.setMessage('No file chosen');
-      console.log('FAILED HALFWAY!!!!');
-      console.log(input_element.files);
       return;
     }
     const file = input_element.files[0];
     const file_type = file.type;
     this.setState({ isUploading: true });
-    if (!file_type.includes('png') && !file_type.includes('jpg') && !file_type.includes('jpeg')) {
-      this.setMessage('File must be jpg, png or jpeg');
+    if (!file_type.includes('png') && !file_type.includes('jpg') && !file_type.includes('pdf')) {
+      this.setMessage('File must be jpg, png or pdf file');
       return;
     }
     const formData = new FormData();
@@ -78,8 +76,7 @@ class ImageUploader extends Component {
       this.setMessage('File Uploaded');
       console.log(res.data[0]);
       this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
-      this.props.setParentState('image_url', this.state.url);
-      // console.log('setParent called in image Uploader: ', this.state.url);
+      this.props.setParentState('file_url', this.state.url, file_type);
       this.setState({ isUploading: false });
     } catch (err) {
       if (err.response.status === 500) {
@@ -108,17 +105,29 @@ class ImageUploader extends Component {
       return <h3>Uploading</h3>;
     }
     if (this.state.url) {
-      return (
-        <React.Fragment>
-          <br />
-          <img
+      if (this.state.file_type.includes('pdf')) {
+        console.log('is a pdf');
+        return (
+          <embed
+            className="center"
             src={this.state.url}
-            className="rounded mx-auto d-block"
-            alt="..."
-            style={{ width: '100%' }}
+            width="100%"
+            height="1000px"
           />
-        </React.Fragment>
-      );
+        );
+      } else {
+        return (
+          <React.Fragment>
+            <br />
+            <img
+              src={this.state.url}
+              className="rounded mx-auto d-block"
+              alt="..."
+              style={{ width: '100%' }}
+            />
+          </React.Fragment>
+        );
+      }
     } else {
       return null;
     }
@@ -135,7 +144,7 @@ class ImageUploader extends Component {
     // const buttonCSS = { padding: 0, border: 'none', background: 'none' };
     return (
       <div className="image-uploader-component">
-        <h2>Upload your image</h2>
+        <h2>Upload your Image/PDF</h2>
         {this.state.msg ? (
           <div className="alert alert-info" role="alert">
             {this.state.msg}
