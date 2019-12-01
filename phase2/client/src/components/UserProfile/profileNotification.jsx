@@ -18,8 +18,18 @@ class AdminProfileNotification extends React.Component {
     }
     
     componentDidMount() {
-        this.setState({readMsg: this.props.state.readMsg, 
-                       unreadMsg: this.props.state.unreadMsg});
+        const readMsg = this.props.state.readMsg;
+        const unreadMsg = this.props.state.unreadMsg;
+        
+        readMsg.sort(function(a, b){
+            return Date.parse(b.time) - Date.parse(a.time);
+        });
+        unreadMsg.sort(function(a, b){
+            return Date.parse(b.time) - Date.parse(a.time);
+        });
+        
+        this.setState({readMsg: readMsg, 
+                       unreadMsg: unreadMsg});
     }
 
     render() {
