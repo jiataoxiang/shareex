@@ -9,8 +9,6 @@ const validator = require('validator');
 
 class ProfSet extends Component {
   state = {
-    profAvatarFile: null,
-    profAvatarUrl: process.env.PUBLIC_URL + "./img/User_Avatar.png",
     profEmail: "place@holder.com",
     profMotto: "",
     profPassword: ""
@@ -30,63 +28,6 @@ class ProfSet extends Component {
     const value = target.value;
 
     this.setState({[name]: value});
-  }
-
-  // Change the displaying avatar.
-  changeAvatar = (event) => {
-    const inputFile = event.target.files[0]
-
-    if (inputFile != null) {
-      const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(
-        inputFile.type
-      );
-
-      if (!is_valid_image) {
-        inputFile.status = 'error';
-        console.log("You can only upload png or jpg files.");
-      } else {   
-        const imgReader = new FileReader();
-        imgReader.addEventListener('load', () => {
-          this.setState({
-              profAvatarFile: inputFile,
-              profAvatarUrl: imgReader.result
-          });
-        })
-        imgReader.readAsDataURL(inputFile);
-      }
-    }
-  }
-  
-  // Save the avatar to server.
-  // TODO: this img saving method may need to change.
-  saveAvatar = () => {
-      if (this.state.profAvatarFile) {
-          const formData = new FormData();
-          formData.append('file', this.state.profAvatarFile);
-          formData.append('public_id', `${'avatar'}_${this.props.current_user._id}`);
-          console.log('Uploading avatar');
-          axios.post('/api/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }).then(res => {
-            // const public_id = res.data[0].public_id;
-            const url = res.data[0].url;
-            axios.patch(
-              `/api/users/${this.props.current_user._id}`,
-              { avatar: url },
-              this.tokenConfig()
-            ).then(res => {
-              this.props.current_user.avatar = this.state.profAvatarUrl;
-              alert("Avatar saved.")
-              document.getElementById("button-cancel").click();
-            })
-        }).catch(err => {
-          console.log(err);
-        });
-      } else {
-          document.getElementById("button-cancel").click();
-      }
   }
 
   // Clear content in the password text box.
@@ -165,8 +106,6 @@ class ProfSet extends Component {
         window.location.href = '/';
     } else {
         this.setState({
-          profAvatarFile: null,
-          profAvatarUrl: currentUser.avatar,
           profEmail: currentUser.email,
           profMotto: currentUser.motto
         });     
@@ -211,14 +150,8 @@ class ProfSet extends Component {
               this.props.current_user.email = toPatch.email;
               this.props.current_user.motto = toPatch.motto;
               alert("Profile saved.");
-              return true;
           } else {
               alert("Profile failed to save.");
-              return false;
-          }
-      }).then(result => {
-          if (result) {
-              this.saveAvatar();
           }
       }).catch(err => {
           console.log(err);
@@ -249,25 +182,7 @@ class ProfSet extends Component {
     
     return (
       <div className="container profset-page">
-        {this.state.alert ? (
-          <div className="alert alert-primary" role="alert">
-            {this.state.alert}
-          </div>
-        ) : null}
         <h1 className="prof-set-title">Edit Profile</h1>
-
-        <div className="avatar-container">
-          <img src={this.state.profAvatarUrl}
-               className="avatar-img"
-               alt=""/>
-          <div className="input-file">
-            <h6>Change Avatar</h6>
-            <input type="file"
-                   id="import-file-avatar"
-                   onChange={this.changeAvatar}/>
-          </div>
-        </div>
-
         <div className="prof-set-cont">
           <div className="input-group mb-3">
             <div className="input-group-prepend">

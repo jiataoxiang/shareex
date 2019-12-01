@@ -1,100 +1,30 @@
-@media screen and (min-width:1000px) {
-    .profset-page {
-        padding-top: 70px;
-        position: absolute;
-        left: 40%;
-        transform: translate(-50%);
+.profset-page {
+    padding-top: 70px;
 
-        .prof-set-title {
-            margin-left: 25%;
-            margin-top: 1em;
-        }
-        .avatar-container {
-            margin-left: 5em;
-            float: right;
-        }
-        .avatar-img {
-            margin-left: 1em;
-            margin-bottom: 1em;
-            height: 110px;
-            width: 110px;
-            border-radius: 50%;
-        }
-        .prof-set-cont {
-            margin-left: 5em;
-            margin-top: 2em;
-            width: 25em;
-            text-align: center;
-            float: right;
-        }
-        .input-group-text {
-            width: 6em;
-        }
-        .btn-toolbar {
-            margin-top: 2.5em;
-            margin-right: 10em;
-            margin-bottom: 2.5em;
-            width: fit-content;
-            clear: right;
-            float: right;
-        }
-        .btn {
-            width: 5em;
-            margin-top: auto;
-            margin-left: 1em;
-        }
+    .prof-set-title {
+        margin-left: 10%;
+        margin-top: 1em;
     }
-}
+    .prof-set-cont {
+        margin-left: 12%;
+        margin-right: 12%;
+        margin-top: 2em;
+        text-align: center;
+    }
+    .input-group-text {
+        width: 6em;
+    }
+    .btn-toolbar {
+        margin-top: 1.5em;
+        margin-bottom: 2.5em;
+        width: fit-content;
+        float: right;
 
-@media screen and (max-width:999px) {
-    .profset-page {
-        padding-top: 70px;
-        width: 100%;
-
-        .prof-set-title {
-            margin-left: 10%;
-            margin-top: 1em;
-        }
-        .avatar-img {
-            margin-top: 3em;
-            margin-bottom: 1em;
-            height: 110px;
-            width: 110px;
-            border-radius: 50%;
-
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .input-file {
-            margin-left: 15%;
-            margin-right: 15%;
-            text-align: center;
-        }
-        #import-file-avatar {
-            width: 100%;
-        }
-        .prof-set-cont {
-            margin-left: 12%;
-            margin-right: 12%;
-            margin-top: 2em;
-            text-align: center;
-        }
-        .input-group-text {
-            width: 6em;
-        }
-        .btn-toolbar {
-            margin-top: 1.5em;
-            margin-bottom: 2.5em;
-            width: fit-content;
-            float: right;
-
-            margin-right: 15%;
-        }
-        .btn {
-            width: 5em;
-            margin-top: auto;
-            margin-right: 1em;
-        }
+        margin-right: 15%;
+    }
+    .btn {
+        width: 5em;
+        margin-top: auto;
+        margin-right: 1em;
     }
 }
