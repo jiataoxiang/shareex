@@ -225,7 +225,7 @@ class NewPost extends Component {
 
     return (
       <div className="new-post-page">
-        <div className="container">
+        <div className="container-fluid">
           <h1>New Post</h1>
           <div className="secondary-container">
             <div className="form-group">

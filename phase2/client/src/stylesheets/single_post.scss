@@ -1,7 +1,14 @@
 .single-post-2-page {
   padding-top: 70px;
-
-  .container {
+  background-image: url('/img/login_background3.jpg');
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  .container-fluid {
+    padding-left: 10%;
+    padding-right: 10%;
     margin-top: 2em;
     .single-post-container {
       .single-post {
@@ -64,6 +71,10 @@
   @media screen and (max-width: 600px) {
     div.example {
       display: none;
+    }
+    .container-fluid {
+      padding-left: 5%;
+      padding-right: 5%;
     }
     // .single-post-container {
     //   width: 100%;
