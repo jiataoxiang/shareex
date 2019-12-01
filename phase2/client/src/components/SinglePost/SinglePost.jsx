@@ -404,9 +404,9 @@ class SinglePost extends Component {
                 </div>
               </div>
             </div>
-            <div className="user-info-container col-12 col-6 col-md-3">
-              <div className="sticky-top">
-                <div className="space"></div>
+            <div className="col-12 col-6 col-md-3">
+              <div className="sticky-top user-info-container">
+                {/* <div className="space"></div> */}
                 <div className="user-info">
                   <div className="row" onClick={this.redirectProf}>
                     <div className="col-lg-3 col-3">
