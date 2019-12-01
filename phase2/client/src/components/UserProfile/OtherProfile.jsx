@@ -6,6 +6,8 @@ import PostsBoard from './PostsBoard';
 import { uid } from 'react-uid';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import store from "../../store";
+import {loadUser} from "../../actions/authActions";
 
 class OtherProfile extends React.Component {
   state = {
@@ -98,7 +100,7 @@ class OtherProfile extends React.Component {
         avatar: user.avatar,
         followers: user.followers,
         following: user.following,
-        likes: user.likes.length,
+        likes: user.likes,
         motto: user.motto,
         messages: user.messages,
       });
@@ -144,6 +146,7 @@ class OtherProfile extends React.Component {
       .catch(error => {
         console.log(error);
       });
+    store.dispatch(loadUser());
   };
 
   followRequest = () => {
@@ -176,6 +179,7 @@ class OtherProfile extends React.Component {
       .catch(error => {
         console.log(error);
       });
+    store.dispatch(loadUser());
   };
 
   render() {

@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from './Follower';
 import MessageBoard from './MessageBoard';
 import PostsBoard from './PostsBoard';
 import store from '../../store';
@@ -154,7 +153,7 @@ class UserProfile extends React.Component {
         avatar: currentUser.avatar,
         followers: currentUser.followers,
         following: currentUser.following,
-        likes: currentUser.likes.length,
+        likes: currentUser.likes,
         motto: currentUser.motto,
       });
       this.getNumPosts(currentUser);
