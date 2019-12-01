@@ -61,7 +61,7 @@ class MessageBoard extends React.Component {
         {/* <div className="space"/> */}
         <div className="overflow-auto">
           <h3>Message Board</h3>
-          {!messages ? (
+          {messages.length === 0 ? (
             <h4 className="text-center">No Message Yet</h4>
           ) : (
             messages.map(message => {
