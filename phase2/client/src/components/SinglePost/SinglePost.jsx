@@ -16,6 +16,7 @@ class SinglePost extends Component {
     post: '',
     comments: [],
     attachments: [],
+    history_added: false,
   };
 
   // constructor initialize the post_id of this post
@@ -29,26 +30,49 @@ class SinglePost extends Component {
     this.getPostData();
     this.getAttachData();
     this.getComments();
-    // this.addToViewHistory();
+    this.addToViewHistory();
   }
 
-  addToViewHistory = (user_id, post_id) => {
-    console.log('The current user id is not null: ', user_id);
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('receive props');
+  //   if (!prevProps.isAuthenticated && this.props.isAuthenticated) {
+  //     console.log('updated');
+  //     this.addToViewHistory();
+  //   }
+  // }
+
+  addToViewHistory = () => {
+    let user_id;
+    if (this.props.location.state) {
+      console.log('The current user id is not null: ', this.props.location.state.current_user_id);
+      user_id = this.props.location.state.current_user_id
+        ? this.props.location.state.current_user_id
+        : user_id;
+    }
+    if (user_id) {
+      return;
+    }
     axios
-      .patch(`/api/users/${user_id}/add-view-history`, { post_id: post_id }, this.tokenConfig())
+      .patch(
+        `/api/users/${user_id}/add-view-history`,
+        { post_id: this.props.match.params.id },
+        this.tokenConfig(),
+      )
       .then(res => {
         console.log(res.data);
+        store.dispatch(loadUser());
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.current_user) {
-      this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('received props');
+  //   if (nextProps.current_user) {
+  //     this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+  //   }
+  // }
 
   getPostData = () => {
     axios
@@ -275,7 +299,6 @@ class SinglePost extends Component {
       )
       .then(res => {
         console.log(res.data);
-        store.dispatch(loadUser());
       })
       .catch(err => {
         console.log(err);

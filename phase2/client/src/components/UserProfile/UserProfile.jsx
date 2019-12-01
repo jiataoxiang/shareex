@@ -11,6 +11,7 @@ import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 import Animation from './Animation.jsx';
 import FavoritesBoard from './FavoritesBoard';
+import ViewHistoryboard from './ViewHistoryBoard';
 
 class UserProfile extends React.Component {
   state = {
@@ -88,6 +89,16 @@ class UserProfile extends React.Component {
             <FavoritesBoard
               author={this.props.current_user._id}
               posts={this.props.current_user.favs}
+            />
+          ),
+        },
+        {
+          id: 4,
+          title: 'View History',
+          model: (
+            <ViewHistoryboard
+              author={this.props.current_user._id}
+              posts={this.props.current_user.view_history}
             />
           ),
         },
@@ -295,9 +306,13 @@ class UserProfile extends React.Component {
                 <br />
                 <div className="followers">
                   <h3> Followers</h3>
-                  {followers.map(follower => {
-                    return <Follower key={uid(Math.random())} follower={follower} />;
-                  })}
+                  {followers.length !== 0 ? (
+                    followers.map(follower => {
+                      return <Follower key={uid(Math.random())} follower={follower} />;
+                    })
+                  ) : (
+                    <h4 className="text-center">No Follower</h4>
+                  )}
                 </div>
               </div>
             </div>

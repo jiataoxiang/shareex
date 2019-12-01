@@ -287,6 +287,9 @@ router.post('/remove-following/:id', (req, res) => {
 });
 
 router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) => {
+  if (!req.body.post_id) {
+    return res.status(400).send('post id DNE');
+  }
   User.findById(req.params.user_id).then(user => {
     if (!user) return res.status(404).send('User not found!');
     user.view_history = user.view_history.filter(post_id => post_id !== req.body.post_id);
@@ -303,12 +306,13 @@ router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) 
 });
 
 router.patch('/:user_id/remove-view-history', isAuth, isAuthorizedUser, (req, res) => {
+  console.log('removing view history');
   User.findByIdAndUpdate(req.params.user_id, {
     view_history: [],
   })
     .then(user => {
       if (!user) return res.status(404).send('User not found!');
-      res.send('Successfully Removed View History');
+      res.json({ message: 'Successfully Removed View History', user_view_history: [] });
     })
     .catch(err => {
       res.status(500).send(err);

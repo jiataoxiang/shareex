@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { uid } from 'react-uid';
 import Post from '../Post';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 
-class FavoritesBoard extends Component {
-  state = { post_ids: this.props.posts, posts: [] };
+class ViewHistoryBoard extends Component {
+  state = { post_ids: this.props.posts ? this.props.posts : [], posts: [] };
+
   componentDidMount() {
+    store.dispatch(loadUser());
     this.updatePosts();
   }
 
@@ -27,24 +28,19 @@ class FavoritesBoard extends Component {
       });
   };
 
-  removeFav = to_be_removed_post_id => {
-    console.log(to_be_removed_post_id);
-
+  removeHistory = () => {
     axios
       .patch(
-        `/api/posts/remove-fav/${to_be_removed_post_id}`,
-        {
-          user_id: this.props.current_user._id,
-        },
+        `/api/users/${this.props.current_user._id}/remove-view-history`,
+        {},
         this.props.tokenConfig(),
       )
       .then(res => {
-        console.log(res.data);
-        store.dispatch(loadUser()); // update current user, since updatePosts will read favs
-        const posts = this.state.posts.filter(post => post._id !== to_be_removed_post_id);
-        console.log(posts);
-        const post_ids = this.state.post_ids.filter(id => id !== to_be_removed_post_id);
-        this.setState({ post_ids, posts });
+        console.log(res.data.message);
+        console.log(res.data.user_view_history);
+        store.dispatch(loadUser()).then(() => {
+          this.setState({ post_ids: [], posts: [] });
+        });
       })
       .catch(err => {
         console.log(err);
@@ -54,22 +50,28 @@ class FavoritesBoard extends Component {
   render() {
     const { posts } = this.state;
     return (
-      <div className="favorite-board">
-        <h3>Your Favorites</h3>
+      <div className="view-history-board">
+        <div className="row">
+          <div className="col">
+            <h3>Your View History</h3>
+          </div>
+          <div className="col">
+            <button
+              className="btn btn-danger btn-sm float-right btn-remove"
+              onClick={this.removeHistory}
+            >
+              Remove All View History
+            </button>
+          </div>
+        </div>
+
         {posts.length === 0 ? (
-          <h4 className="text-center">You Don't Have Any Favorite</h4>
+          <h4 className="text-center">You Don't Have Any View History</h4>
         ) : (
           posts.map((post, i) => {
             return (
               <div key={post._id}>
                 <Post post={post} />
-                <button
-                  className="btn btn-danger float-right mt-2"
-                  value={i}
-                  onClick={this.removeFav.bind(this, post._id)}
-                >
-                  Remove
-                </button>
               </div>
             );
           })
@@ -78,7 +80,6 @@ class FavoritesBoard extends Component {
     );
   }
 }
-
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
@@ -97,4 +98,4 @@ const mapStateToProps = state => ({
   },
 });
 
-export default connect(mapStateToProps)(withRouter(FavoritesBoard));
+export default connect(mapStateToProps)(ViewHistoryBoard);
