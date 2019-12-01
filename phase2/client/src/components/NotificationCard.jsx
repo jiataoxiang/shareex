@@ -12,16 +12,18 @@ class NotificationCard extends React.Component {
         body: "",
         link: "",
         type: "",
-        time: null,
+        day: "",
+        time: "",
         read: true
     };
 
-    checkDetail = () => {
-        alert("wtf")
-    }
-
     componentDidMount() {
         const msg = this.props.msg;
+        
+        const timeArray = msg.time.split('T');
+        const day = timeArray[0];
+        const time = timeArray[1].split('.')[0];
+        
         if (msg.admin) {
             this.setState({ 
                 _user_id: msg._user_id,
@@ -32,7 +34,8 @@ class NotificationCard extends React.Component {
                 body: msg.body,
                 link: msg.link,
                 type: msg.type,
-                time: msg.time,
+                day: day,
+                time: time,
                 read: msg.read
             });
         } else {
@@ -45,7 +48,8 @@ class NotificationCard extends React.Component {
                 body: msg.body,
                 link: msg.link,
                 type: msg.type,
-                time: msg.time,
+                day: day,
+                time: time,
                 read: msg.read
             });
         }
@@ -53,14 +57,28 @@ class NotificationCard extends React.Component {
 
     render() {
         return (
-            <div className="notification-card media border rounded">
-                <div className="mr-3">
-                    <img className="avatar" src={this.state.avatar} alt="" />
-                    <h6>{this.state.username}</h6>
+            <div className="notification-card row border rounded">
+                <div className="author-container">
+                    <img className="avatar" src={ this.state.avatar } alt="" />
+                    <h6>{ this.state.username }</h6>
                 </div>
-                <div className="media-body">
-                    {this.state.body}
-                    <Link to={this.state.link}>wtf</Link>
+                <div className="contant-container col">
+                    <div>{ this.state.body }</div>
+                    <span className="msg-status">
+                        <span className="msg-time">
+                            { this.state.day }
+                            { '  ' }
+                            { this.state.time }
+                        </span>
+                        {
+                            this.state.link ? 
+                            <Link className="msg-link" 
+                                to={this.state.link}>
+                                Detail
+                            </Link> : 
+                            <span></span>
+                        }
+                    </span>
                 </div>
             </div>
         );

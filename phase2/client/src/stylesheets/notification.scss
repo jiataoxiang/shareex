@@ -7,7 +7,30 @@
         height: 60px;
         border-radius: 50%;
     }
-    .mr-3{
+    
+    .notification-card {
+        background-color:antiquewhite;
+    }
+    
+    .author-container {
         text-align: center;
+        width: 75px;
+    }
+    
+    .msg-status {
+        margin-top: 10px;
+        display: block;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+    }
+    
+    .msg-time {
+        color: darkviolet;
+    }
+    
+    .msg-link {
+        position: absolute;
+        right: 30px;
     }
 }
