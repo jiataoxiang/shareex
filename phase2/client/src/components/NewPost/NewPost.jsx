@@ -1,103 +1,167 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import { rand_string } from '../../lib/util';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { uid } from 'react-uid';
+import {rand_string} from '../../lib/util';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {uid} from 'react-uid';
 import axios from 'axios';
 
 class NewPost extends Component {
   state = {
-    contents: [{ key: 'tmp', type: undefined, title: '' }],
+    contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
     to_store: {
       title: '',
       category: '',
-      content: '',
-      attachments: [],
+      content: 'a'
     },
+    attachments: [],
+  };
+
+  findInsertPosAttach = (sec_key) => {
+    const list = this.state.attachments;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].key === sec_key) {
+        let j;
+        for (j = i + 1; j < list.length; j++) {
+          if (list[j].parent_key !== sec_key) {
+            return j;
+          }
+        }
+        // means this is a sec_key that should be appended to the end of the array.
+        return j;
+      }
+    }
+    // means this is a new sec_key, and need to append to the end of the array.
+    return -1;
+  };
+
+  findInsertPosContent = (key) => {
+    const list = this.state.contents;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].key === key) {
+        // let j;
+        // for (j = i + 1; j < list.length; j++) {
+        //   if (list[j].parent_key !== key) {
+        //     return j;
+        //   }
+        // }
+        return i;
+        // means this is a sec_key that should be appended to the end of the array.
+        // need to check if this the length
+        // return j;
+      }
+    }
+    // means this is a new sec_key, and need to append to the end of the array.
+    // just push to the end of the array
+    // return -1;
   };
 
   // handle incoming image and pdf file, and store them in state
   addedAttachmentFile = (type, data_url, secondary_key) => {
-    const id = uid(rand_string());
     const type_to_show = type === 'image' ? 'image_attach' : 'pdf_attach';
+    // find the correct position in content to insert
+    const pos_content = this.findInsertPos('content', secondary_key);
+    const pos_attach = this.findInsertPos('attach', secondary_key);
+
+    // insert the item into the content list.
     const content = {
-      key: id,
+      key: secondary_key,
       type: type_to_show,
       title: data_url,
     };
     const contents = this.state.contents;
-    contents.push(content);
-    this.setState({ contents: contents });
-    this.state.to_store.attachments.push({
-      id: id,
-      type: type,
-      body: data_url,
-    });
-    console.log('Now attachments have: ', this.state.to_store.attachments);
+    if (pos_content === -1) {
+      contents.push(content);
+    } else {
+      contents.splice(pos_content, 0, content);
+    }
+    this.setState({contents: contents});
+
+    // insert the item into the attach list.
+    const attach = {key: secondary_key, type: type, body: data_url};
+    const attachments = this.state.attachments;
+    if (pos_attach === -1) {
+      attachments.push(attach);
+    } else {
+      attachments.splice(pos_attach, 0, attach);
+    }
+    this.setState({attachments: attachments});
+    // console.log('Now attachments have: ', this.state.to_store.attachments);
   };
 
   // handle incoming video/image links and store them in state
-  addedAttachmentLink = (input_link, type) => {
+  addedAttachmentLink = (input_link, type, parent_key, secondary_key) => {
     let link = type === 'youtube' ? input_link.replace('watch?v=', 'embed/') : input_link;
-    const id = uid(rand_string());
     const type_to_show = type === 'youtube' ? 'youtube_attach' : 'image_link_attach';
+    // find the correct position in content to insert
+    const pos_content = this.findInsertPosContent(secondary_key);
+    const pos_attach = this.findInsertPosAttach(secondary_key);
+
+    // insert the item into the content list.
+    console.log("The content list is: ", this.state.contents);
+    console.log("The attach list is: ", this.state.attachments);
+    console.log("The sec key is: ", secondary_key);
+    console.log("The index found is: ", pos_content);
     const content = {
-      key: id,
+      key: uid(rand_string()),
+      parent_key: secondary_key,
       type: type_to_show,
       title: link,
     };
     const contents = this.state.contents;
-    contents.push(content);
-    this.setState({ contents: contents });
-    this.state.to_store.attachments.push({
-      id: id,
+    if (pos_content === this.state.contents.length - 1) {
+      contents.push(content);
+    } else {
+      contents.splice(pos_content + 1, 0, content);
+    }
+    this.setState({contents: contents});
+
+    // insert the item into the attach list.
+    const attach = {
+      key: uid(rand_string()),
+      parent_key: secondary_key,
       type: type,
       body: link,
-    });
+    };
+    const attachments = this.state.attachments;
+    if (pos_attach === -1 || pos_attach === this.state.attachments.length - 1) {
+      attachments.push(attach);
+    } else {
+      attachments.splice(pos_attach, 0, attach);
+    }
+    this.setState({attachments: attachments});
   };
 
   // handle incoming text/code and store them in state
-  addedAttachmentWords = (content, data_type, secondary_key) => {
-    const result = this.alreadyExisted(secondary_key);
-    const resultContent = this.alreadyExistedContents(secondary_key);
+  addedAttachmentWords = (content, data_type, parent_key, secondary_key) => {
+    // attach
     const item = {
-      id: secondary_key,
+      key: parent_key,
       type: 'show-' + data_type,
       body: content,
     };
-
+    const result = this.alreadyExisted(parent_key);
     if (result === -1) {
-      // not yet existed in state
-      this.state.to_store.attachments.push(item);
-    }
-    if (resultContent === -1) {
-      this.state.contents.push({
-        key: secondary_key,
-        // TODO: changed
-        type: data_type,
-        title: content,
-      });
+      this.state.attachments.push(item);
     } else {
-      this.state.to_store.attachments.splice(result, 1, item);
-      this.state.contents.splice(resultContent, 1, {
-        key: secondary_key,
-        // TODO: changed
-        type: data_type,
-        title: content,
-      });
+      this.state.attachments.splice(result, 1, item);
     }
-    // console.log('length of attach is: ' + this.state.to_store.attachments.length);
-    // console.log(this.state.to_store.attachments);
-    // console.log('length of contents is: ' + this.state.contents.length);
-    // console.log(this.state.contents);
+
+    // content
+    const resultContent = this.alreadyExistedContents(secondary_key);
+    this.state.contents.splice(resultContent, 1, {
+      key: secondary_key,
+      parent_key: parent_key,
+      type: data_type,
+      title: content,
+    });
   };
 
   // check if a element already in this.state.to_store.attachments
   alreadyExisted = secondary_key => {
-    for (let i = 0; i < this.state.to_store.attachments.length; i++) {
-      if (this.state.to_store.attachments[i].id === secondary_key) {
+    for (let i = 0; i < this.state.attachments.length; i++) {
+      if (this.state.attachments[i].key === secondary_key) {
         return i;
       }
     }
@@ -118,7 +182,12 @@ class NewPost extends Component {
   addInput = (type, secondary_key) => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
-        const content = { key: uid(rand_string()), type: type, title: '' ? type !== 'code' : `` };
+        const content = {
+          key: uid(rand_string()),
+          parent_key: secondary_key,
+          type: type,
+          title: '' ? type !== 'code' : ``
+        };
         const content_list = this.state.contents;
         content_list.splice(i + 1, 0, content);
         this.setState({
@@ -133,30 +202,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({ property });
-
-    // this.state.to_store.title = event.target.value;
-    // console.log(this.state.to_store.title);
+    this.setState({property});
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({ property });
-
-    // this.state.to_store.category = event.target.value;
-    // console.log(this.state.to_store.category);
+    this.setState({property});
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({ property });
-
-    // this.state.to_store.content = event.target.value;
-    // console.log(this.state.to_store.content);
+    this.setState({property});
   };
 
   tokenConfig = () => {
@@ -184,19 +244,32 @@ class NewPost extends Component {
   addToDatabase = event => {
     // generate a post id when the 'submit' button is clicked
     alert('Sure to submit?');
-    // const post_id = uid(rand_string());
-    // console.log(this.state.current_user);
-    const re_sort_attach = this.state.to_store.attachments.reverse();
+    // const re_sort_attach = this.state.attachments.reverse();
+    const re_sort_attach = [];
+    this.state.contents.slice(1,this.state.contents.length).forEach(item => {
+      if (item.type === 'text') {
+        item.type = 'show-text';
+        item.body = item.title;
+        re_sort_attach.push(item);
+      }
+      const array = item.type.split('_');
+      if (array[array.length - 1] === 'attach') {
+        // youtube_attach, image_link_attach, pdf_attach, image_attach, text
+        const sliced = array.slice(0, array.length - 1);
+        item.type = sliced.join('_');
+        item.body = item.title;
+        re_sort_attach.push(item);
+      }
+    });
+
     const a_post = {
-      // id: post_id,
       author: this.props.current_user._id,
       title: this.state.to_store.title,
       category: this.state.to_store.category,
       body: this.state.to_store.content,
-      attachments: re_sort_attach,
+      attachments: re_sort_attach.reverse(),
     };
-    console.log('These are attachments:....', this.state.to_store.attachments);
-
+    // console.log('These are attachments:....', this.state.to_store.attachments);
     axios
       .post('/api/posts', a_post, this.tokenConfig())
       .then(res => {
@@ -217,7 +290,7 @@ class NewPost extends Component {
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
-              <input type="text" className="form-control" id="tile" onChange={this.inputTitle} />
+              <input type="text" className="form-control" id="tile" onChange={this.inputTitle}/>
             </div>
             <div id="contents">
               <div className="form-group">
@@ -246,6 +319,7 @@ class NewPost extends Component {
                   <AddContent
                     key={uid(rand_string())}
                     secondary_key={content.key}
+                    parent_key={content.parent_key}
                     title={content.title}
                     type={content.type}
                     addInput={this.addInput}

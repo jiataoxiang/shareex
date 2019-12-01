@@ -27,26 +27,24 @@ class AddContent extends Component {
 
   // send the input link to the NewPost component
   sendLinkBack = event => {
-    const { addedAttachmentLink } = this.props;
+    const { addedAttachmentLink, secondary_key, parent_key} = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
-    addedAttachmentLink(this.state.input_link, type);
+    addedAttachmentLink(this.state.input_link, type, parent_key, secondary_key);
   };
 
   // send the input text to the NewPost component
   sendTextBack = event => {
-    const { addedAttachmentWords, secondary_key } = this.props;
-    // console.log(event.target.value);
-    // this.state.text = event.target.value;
+    const { addedAttachmentWords, parent_key, secondary_key } = this.props;
     this.setState({ text: event.target.value });
-    addedAttachmentWords(event.target.value, 'text', secondary_key);
+    addedAttachmentWords(event.target.value, 'text', parent_key, secondary_key);
   };
 
   // send the input code to the NewPost component
   sendCodeBack = event => {
-    const { addedAttachmentWords, secondary_key } = this.props;
+    const { addedAttachmentWords, parent_key } = this.props;
     // console.log('the code is: '+event);
     this.setState({ code_data: event });
-    addedAttachmentWords(event, 'code', secondary_key);
+    addedAttachmentWords(event, 'code', parent_key);
   };
 
   //set the state of the uploaded image/file url.
@@ -54,18 +52,17 @@ class AddContent extends Component {
     console.log('setPdfState get called!!!');
     this.setState({ [key]: value });
     console.log(this.state.image_url);
-    this.props.addedAttachmentFile('image', this.state.image_url, this.props.secondary_key);
+    this.props.addedAttachmentFile('image', this.state.image_url, this.props.parent_key);
   };
 
   setPdfState = (key, value) => {
     this.setState({ [key]: value });
     console.log(this.state.image_url);
-    this.props.addedAttachmentFile('pdf', this.state.image_url);
+    this.props.addedAttachmentFile('pdf', this.state.image_url, this.props.parent_key);
   };
 
   // generate and return the required attachment
   getContentInput = () => {
-    // const {addedAttachmentFile, addedAttachmentLink, title} = this.props;
     const { addedAttachmentFile, title } = this.props;
     if (this.props.type === 'text') {
       return (

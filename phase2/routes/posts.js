@@ -124,7 +124,6 @@ router.post('/', isAuth, async (req, res) => {
       category: req.body.category,
       body: req.body.body,
     });
-    console.log('post created, now attachments\n\n');
     if (!req.body.attachments) {
       return res.json({
         message: 'Post Created, No Attachments.',
@@ -149,12 +148,14 @@ make_post_helper = (attachments, post) => {
   return new Promise((resolve, reject) => {
     const ans = [];
     attachments.forEach(async attachment => {
+      console.log("Before create()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>");
       const new_attachment = new Attachment({
         type: attachment.type,
         body: attachment.body,
         post_id: post._id,
       });
       new_attachment.save();
+      console.log("After save()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>");
       ans.push(new_attachment._id);
     });
     resolve(ans);
