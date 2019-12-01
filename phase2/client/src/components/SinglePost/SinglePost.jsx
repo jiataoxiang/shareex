@@ -193,6 +193,7 @@ class SinglePost extends Component {
         .post('/api/comments/', a_comment)
         .then(comments => {
           console.log('Posted the comment data:', comments.data);
+          this.getComments();
         })
         .catch(err => {
           console.log(err);
@@ -214,13 +215,13 @@ class SinglePost extends Component {
         .patch('/api/comments/' + comment_id, modified)
         .then(comments => {
           console.log('Modified the comment data:', comments.data);
+          this.getComments();
         })
         .catch(err => {
           console.log(err);
         });
       document.getElementById('new-comment-button').removeAttribute('hidden');
     }
-    this.getComments();
   };
 
   /* callback passed to a Comment to edit a Comment on this page */

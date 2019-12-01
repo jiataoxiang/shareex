@@ -88,10 +88,11 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
 router.get('/post-array', (req, res) => {
   console.log('\n\n\n\npost array');
   console.log(req.query.posts);
-  req.query.posts = req.query.posts.filter(post => post && post !== 'null');
+  req.query.posts = req.query.posts.filter(post => ObjectID.isValid(post));
   Post.find({
     _id: { $in: req.query.posts },
   })
+    .sort({ created_at: -1 })
     .then(posts => {
       console.log(posts);
       res.send(posts);
@@ -288,8 +289,8 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
 // add favorite
 router.patch('/add-fav', isAuth, (req, res) => {
   console.log(req.body);
-  if (!req.body.post_id || req.body.post_id) {
-    return res.status(400).send('Post Id cannot be null');
+  if (!ObjectID.isValid(req.body.post_id)) {
+    return res.status(400).send('Post Id Not valid');
   }
   User.findById(req.body.user_id).then(user => {
     if (!user) return res.status(404).send('User not found');

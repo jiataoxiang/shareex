@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Post = require('../models/Post');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
@@ -290,6 +288,8 @@ router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) 
   if (!req.body.post_id) {
     return res.status(400).send('post id DNE');
   }
+  if (!ObjectID.isValid(req.body.post_id)) return res.status(400).send('post id not valid');
+
   User.findById(req.params.user_id).then(user => {
     if (!user) return res.status(404).send('User not found!');
     user.view_history = user.view_history.filter(post_id => post_id !== req.body.post_id);
