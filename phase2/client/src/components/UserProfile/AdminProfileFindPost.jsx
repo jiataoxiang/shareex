@@ -96,6 +96,10 @@ class AdminProfileFindPost extends React.Component {
             })
     }
     
+    saveChange = () => {
+        
+    }
+    
     changeDelete = () => {
         if (this.state.deleted) {
             //
@@ -167,20 +171,40 @@ class AdminProfileFindPost extends React.Component {
                 
                 
                 <div id="display-post">
-                    <div id="text-block">
-                        <h5>Title:  {this.state.title}</h5>
-                        <span className="post-info">Author:  {this.state.author}</span>
-                        <span className="post-info">Category:  {this.state.category}</span>
+                    <div className="row row-info">
+                        <div className="col-md-8">
+                          <div className="row">
+                            <div className="avatar-container">
+                              <img id="user-avatar" src={this.state.avatar} alt="" />
+                              <h6>{this.state.username}</h6>
+                            </div>
+                            <div id="text-block" className="col-md-8">
+                              <p>Title:  {this.state.title}</p>
+                              <p>Category:  {this.state.category}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-4">
+                            <button type="button"
+                                id="button-change" 
+                                className="btn"
+                                onClick={this.saveChange}>
+                                Save Changes
+                            </button>
+                        </div>
                     </div>
                     
-                    <div className="row">
+                    <div className="row row-delete">
                         <div className="col-md-8">
                              <div id="delete-warning">
-                                <h6>Deleted on {this.state.username}</h6>
+                                <h6>Deleted {
+                                        Math.ceil((Date.now() - this.state.delete_date) 
+                                        / (1000*60*60*24))               
+                                    } days ago.</h6>
                              </div>
                         </div>
                         <div className="col-md-4">
-                            <button type="button" 
+                            <button type="button"
                                 id="button-delete" 
                                 className="btn"
                                 onClick={this.changeDelete}>
