@@ -223,10 +223,12 @@ class NewPost extends Component {
               <div className="form-group">
                 <h4>Category:</h4>
                 <select className="form-control" id="category" onChange={this.inputCategory}>
+                  <option>Computer Science</option>
                   <option>Travel</option>
                   <option>Education</option>
-                  <option>Computer Science</option>
                   <option>Technology</option>
+                  <option>Cooking</option>
+                  <option>Other</option>
                 </select>
               </div>
               <div className="form-group">
