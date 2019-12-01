@@ -39,9 +39,7 @@
     }
     .user-info-container {
       cursor: pointer;
-      .space {
-        height: 5em;
-      }
+      top: 155px;
       button {
         margin: 10px 20px 0px 20px;
       }
@@ -50,7 +48,7 @@
       margin-top: 0em;
       background-color: var(--background-secondary);
       padding: 10px;
-      border-radius: 5px;
+      border-radius: 10px;
 
       .avatar {
         width: 60px;
