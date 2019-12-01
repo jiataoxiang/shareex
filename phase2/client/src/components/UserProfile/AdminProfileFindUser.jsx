@@ -229,12 +229,12 @@ class AdminProfileFindUser extends React.Component {
         <div id="display-user">
           <div className="row row-info">
             <div className="col-md-8">
-              <div className="row">
-                <div className="avatar-container">
+              <div className="row row-info">
+                <div className="col-md avatar-container">
                   <img id="user-avatar" src={this.state.avatar} alt="" />
                   <h6>{this.state.username}</h6>
                 </div>
-                <div id="text-block" className="col-md-8">
+                <div id="col-md text-block" className="col-md-8">
                   <p>Email: {this.state.email}</p>
                   <p>Motto: {this.state.motto}</p>
                 </div>

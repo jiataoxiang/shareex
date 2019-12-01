@@ -68,6 +68,10 @@
     }
 
     #display-user {
+      .row-info {
+        margin-top: 2.5em;
+      }
+    
       .avatar-container {
         text-align: center;
       }
@@ -75,7 +79,6 @@
       #user-avatar {
         width: 5em;
         height: 5em;
-        margin-top: 2.5em;
         border-radius: 50%;
       }
 
