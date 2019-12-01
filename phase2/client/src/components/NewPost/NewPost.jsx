@@ -49,12 +49,15 @@ class NewPost extends Component {
   addedAttachmentFile = (type, data_url, secondary_key) => {
     const type_to_show = type === 'image' ? 'image_attach' : 'pdf_attach';
     // find the correct position in content to insert
-    const pos_content = this.findInsertPos('content', secondary_key);
-    const pos_attach = this.findInsertPos('attach', secondary_key);
+    const pos_content = this.findInsertPosContent(secondary_key);
+    // const pos_attach = this.findInsertPosAttach(secondary_key);
+    console.log('pdf link is: ', data_url);
 
     // insert the item into the content list.
     const content = {
-      key: secondary_key,
+      // key: secondary_key,
+      key: uid(rand_string()),
+      parent_key: secondary_key,
       type: type_to_show,
       title: data_url,
     };
@@ -62,19 +65,19 @@ class NewPost extends Component {
     if (pos_content === -1) {
       contents.push(content);
     } else {
-      contents.splice(pos_content, 0, content);
+      contents.splice(pos_content + 1, 0, content);
     }
     this.setState({contents: contents});
 
     // insert the item into the attach list.
-    const attach = {key: secondary_key, type: type, body: data_url};
-    const attachments = this.state.attachments;
-    if (pos_attach === -1) {
-      attachments.push(attach);
-    } else {
-      attachments.splice(pos_attach, 0, attach);
-    }
-    this.setState({attachments: attachments});
+    // const attach = {key: secondary_key, type: type, body: data_url};
+    // const attachments = this.state.attachments;
+    // if (pos_attach === -1) {
+    //   attachments.push(attach);
+    // } else {
+    //   attachments.splice(pos_attach, 0, attach);
+    // }
+    // this.setState({attachments: attachments});
     // console.log('Now attachments have: ', this.state.to_store.attachments);
   };
 
@@ -186,6 +189,19 @@ class NewPost extends Component {
     }
   };
 
+  deleteItem = (secondary_key) => {
+    for (let i = 0; i < this.state.contents.length; i++) {
+      if (this.state.contents[i].key === secondary_key) {
+        const contents = this.state.contents;
+        console.log("Item deleted!", contents[i]);
+        console.log("length of content list: before ", contents.length);
+        contents.splice(i, 1);
+        console.log("length of content list: after ", contents.length);
+        this.setState({contents: contents});
+      }
+    }
+  };
+
   // Update the title whenever user changes their title.
   inputTitle = event => {
     const property = this.state.to_store;
@@ -234,7 +250,7 @@ class NewPost extends Component {
     alert('Sure to submit?');
     // const re_sort_attach = this.state.attachments.reverse();
     const re_sort_attach = [];
-    this.state.contents.slice(1,this.state.contents.length).forEach(item => {
+    this.state.contents.slice(1, this.state.contents.length).forEach(item => {
       if (item.type === 'text') {
         item.type = 'show-text';
         item.body = item.title;
@@ -311,6 +327,7 @@ class NewPost extends Component {
                     title={content.title}
                     type={content.type}
                     addInput={this.addInput}
+                    deleteItem={this.deleteItem}
                     addedAttachmentFile={this.addedAttachmentFile}
                     addedAttachmentLink={this.addedAttachmentLink}
                     addedAttachmentWords={this.addedAttachmentWords}
