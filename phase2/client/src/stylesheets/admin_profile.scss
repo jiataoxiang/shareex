@@ -8,11 +8,11 @@
   #left-tab {
     width: 15em;
     margin-top: 3.5em;
-    position: fixed;
+    // position: fixed;
   }
 
   #AdminProfileCircle {
-    display: block;
+    // display: block;
     margin-left: auto;
     margin-right: auto;
   }
@@ -60,7 +60,7 @@
         float: left;
       }
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         margin-left: 1em;
         background-color: var(--background-secondary);
@@ -85,8 +85,9 @@
       }
 
       #button-reset {
-        position: absolute;
-        bottom: 5px;
+        // position: absolute;
+        // bottom: 5px;
+        margin-top: 30%;
       }
 
       #ban-warning {
@@ -94,8 +95,17 @@
         color: red;
       }
 
+      #banned-msg {
+        color: rgb(221, 13, 13);
+      }
+
+      #not-banned-msg {
+        color: rgb(201, 22, 22);
+        margin-bottom: 0;
+      }
+
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         width: 150px;
         margin-left: 1em;
@@ -180,6 +190,11 @@
         margin-left: 1em;
         background-color: var(--background-secondary);
       }
+    }
+  }
+  @media screen and (max-width: 991px) {
+    #finduser {
+      margin-top: 3em;
     }
   }
 }

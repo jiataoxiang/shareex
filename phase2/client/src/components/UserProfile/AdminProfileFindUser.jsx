@@ -230,13 +230,17 @@ class AdminProfileFindUser extends React.Component {
           <div className="row row-info">
             <div className="col-md-8">
               <div className="row">
-                <div className="avatar-container">
-                  <img id="user-avatar" src={this.state.avatar} alt="" />
-                  <h6>{this.state.username}</h6>
+                <div className="col-2">
+                  <div className="avatar-container">
+                    <img id="user-avatar" src={this.state.avatar} alt="" />
+                    <h6>{this.state.username}</h6>
+                  </div>
                 </div>
-                <div id="text-block" className="col-md-8">
-                  <p>Email: {this.state.email}</p>
-                  <p>Motto: {this.state.motto}</p>
+                <div className="col-10">
+                  <div id="text-block" className="col-md-8">
+                    <p>Email: {this.state.email}</p>
+                    <p>Motto: {this.state.motto}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,14 +251,22 @@ class AdminProfileFindUser extends React.Component {
             </div>
           </div>
 
-          <div className="row row-ban">
+          <div className="row row-ban mb-5">
             <div className="col-md-8">
               <div id="ban-warning">
-                <h6>
-                  Will be unbanned in{' '}
+                {/* <h6>
+                  Will be unbanned in
+                  {Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))} days.
+                </h6> */}
+              </div>
+              {this.state.banned ? (
+                <h6 id="banned-msg">
+                  Will be unbanned in
                   {Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))} days.
                 </h6>
-              </div>
+              ) : (
+                <h5 id="not-banned-msg">Click Ban to Ban User</h5>
+              )}
             </div>
             <div className="col-md-4">
               <button

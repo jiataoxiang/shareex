@@ -143,7 +143,7 @@ class AdminProfile extends Component {
       <div className="user-profile-page admin-profile-page">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-5">
+            <div className="col-lg-5">
               <div id="left-tab">
                 <img id="AdminProfileCircle" src={this.state.avatar} alt="" />
                 <div id="user-info">
@@ -191,7 +191,7 @@ class AdminProfile extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-md-7">
+            <div className="col-lg-7">
               <div id="display-tab">{this.tabRight[this.state.tabState]}</div>
             </div>
           </div>
