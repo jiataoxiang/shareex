@@ -1,8 +1,10 @@
 .admin-profile-page {
   padding-top: 100px;
+  padding-bottom: 100px;
   #left-tab {
     width: 15em;
     margin-top: 3.5em;
+    position: fixed;
   }
 
   #AdminProfileCircle {
@@ -119,13 +121,30 @@
     }
 
     #display-post {
+      .avatar-container {
+        text-align: center;
+      }
+    
+      #user-avatar {
+        width: 5em;
+        height: 5em;
+        margin-top: 2.5em;
+        border-radius: 50%;
+      }
+
       #text-block {
         margin-left: 2em;
         margin-top: 3em;
-        margin-bottom: 0.5em;
       }
-      .post-info {
-        display: block;
+        
+      .prop-pre {
+        display: inline-block;
+        margin-right: 10px;
+      }
+        
+      #button-change {
+        position: absolute;
+        bottom: 5px;
       }
 
       #delete-warning {
@@ -154,33 +173,6 @@
       .btn {
         color: gray;
         border-color: grey;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
-    }
-
-    #display-user {
-      #user-avatar {
-        width: 5em;
-        height: 5em;
-        margin-top: 2.5em;
-        border-radius: 50%;
-      }
-
-      #text-block {
-        margin-left: 2em;
-        margin-top: 3em;
-      }
-
-      #ban-warning {
-        margin-top: 1em;
-        color: red;
-      }
-
-      .btn {
-        color: gray;
-        border-color: grey;
-        width: 150px;
         margin-left: 1em;
         background-color: var(--background-secondary);
       }

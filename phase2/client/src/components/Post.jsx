@@ -111,7 +111,15 @@ class Post extends Component {
     return (
       <div className="post card">
         <div className="card-header">
-          <Link to={`/single_post/${this.props.post._id}`}>
+          <Link
+            to={{
+              pathname: `/single_post/${this.props.post._id}`,
+              state: {
+                current_user_id: this.props.current_user._id,
+              },
+            }}
+          >
+            {/* <Link to={`/single_post/${this.props.post._id}`}> */}
             {/* style={{ display: 'inline-block' }} */}
             <span>
               <h5 className="post-title">{title}</h5>

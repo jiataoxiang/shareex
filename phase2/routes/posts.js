@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
-const { isAuth, isAuthorizedPost } = require('../middleware/auth');
+const { isAuth, isAuthorizedPost, isAdmin } = require('../middleware/auth');
 
 // call with query to add a filter, see post_test for an example
 router.get('/', (req, res) => {
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     req.query.sort_by,
     '\nCategory: ',
     req.query.category,
-    '\n\n\n\n'
+    '\n\n\n\n',
   );
 
   let filter = {};
@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
       },
       error => {
         res.status(500).send(error); // server error
-      }
+      },
     );
 });
 
@@ -84,6 +84,22 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
     });
 });
 
+// get user's favourite posts
+router.get('/post-array', (req, res) => {
+  console.log('\n\n\n\npost array');
+  console.log(req.query.posts);
+  Post.find({
+    _id: { $in: req.query.posts },
+  })
+    .then(posts => {
+      console.log(posts);
+      res.send(posts);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
 // get a post by id
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
@@ -106,12 +122,12 @@ router.post('/', isAuth, async (req, res) => {
       title: req.body.title,
       author: req.body.author,
       category: req.body.category,
-      body: req.body.body
+      body: req.body.body,
     });
     if (!req.body.attachments) {
       return res.json({
         message: 'Post Created, No Attachments.',
-        post
+        post,
       });
     }
 
@@ -120,7 +136,7 @@ router.post('/', isAuth, async (req, res) => {
       post.save();
       res.json({
         post,
-        message: 'Post created'
+        message: 'Post created',
       });
     });
   } catch (err) {
@@ -136,7 +152,7 @@ make_post_helper = (attachments, post) => {
       const new_attachment = new Attachment({
         type: attachment.type,
         body: attachment.body,
-        post_id: post._id
+        post_id: post._id,
       });
       new_attachment.save();
       console.log("After save()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>");
@@ -162,24 +178,6 @@ router.delete('/:id', isAuth, isAuthorizedPost, (req, res) => {
     .catch(err => {
       console.log(err);
       res.stats(500).send('post not deleted');
-    });
-});
-
-router.patch('/:id', (req, res) => {
-  if (!ObjectID.isValid(req.params.id)) {
-    res.status(404).send('post id not valid');
-  }
-
-  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-    .then(post => {
-      if (!post) {
-        return res.status(404).send('Post not found, and cannot update');
-      } else {
-        return res.send(post);
-      }
-    })
-    .catch(error => {
-      res.status(400).send('Post not updated, bad request'); // bad request for changing the post.
     });
 });
 
@@ -212,9 +210,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
   Post.findById(req.params.post_id)
     .then(post => {
       if (!post) {
-        return res
-          .status(404)
-          .json({ message: 'Post not found, and cannot update' });
+        return res.status(404).json({ message: 'Post not found, and cannot update' });
       }
       // check if user has liked this post
       User.findById(req.user.id).then(user => {
@@ -222,9 +218,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
           // if user is admin, can skip and
           if (post.likes_users) {
             if (post.likes_users.includes(req.user.id)) {
-              return res
-                .status(403)
-                .json({ message: 'You have liked the post' });
+              return res.status(403).json({ message: 'You have liked the post' });
             }
           }
         }
@@ -259,9 +253,7 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
   }
   Post.findById(req.params.post_id).then(post => {
     if (!post) {
-      return res
-        .status(404)
-        .json({ message: 'Post not found, and cannot update' });
+      return res.status(404).json({ message: 'Post not found, and cannot update' });
     }
     // check if user has liked this post
     User.findById(req.user.id).then(user => {
@@ -269,9 +261,7 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
         // if user is admin, can skip and
         if (post.likes_users) {
           if (!post.likes_users.includes(req.user.id)) {
-            return res
-              .status(403)
-              .json({ message: 'You have not liked the post' });
+            return res.status(403).json({ message: 'You have not liked the post' });
           }
         }
       }
@@ -280,9 +270,7 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
         post.likes_users = [];
       }
       // remove the user from the likes_users array
-      post.likes_users = post.likes_users.filter(
-        user_id => user_id !== req.user.id
-      );
+      post.likes_users = post.likes_users.filter(user_id => user_id !== req.user.id);
 
       post.likes--;
       post.save().then(new_post => {
@@ -290,6 +278,86 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
       });
     });
   });
+});
+
+// add favorite
+router.patch('/add-fav', isAuth, (req, res) => {
+  console.log(req.body);
+  User.findById(req.body.user_id).then(user => {
+    if (!user) return res.status(404).send('User not found');
+    if (user.favs.includes(req.body.post_id))
+      return res.status(403).send('Already favored this post');
+    user.favs.push(req.body.post_id);
+    user
+      .save()
+      .then(user => {
+        Post.findByIdAndUpdate(req.body.post_id, { $inc: { favs: 1 } })
+          .then(post => {
+            res.send('Added to favs of user and increment favs of post');
+          })
+          .catch(err => {
+            res.stats(500).send(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).send(err);
+      });
+  });
+});
+
+router.patch('/remove-fav/:post_id', isAuth, (req, res) => {
+  User.findByIdAndUpdate(req.body.user_id, { $pull: { favs: req.params.post_id } })
+    .then(user => {
+      Post.findByIdAndUpdate(req.params.post_id, { $inc: { favs: -1 } })
+        .then(post => {
+          res.send('updated, removed favs');
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).send(err);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send(err);
+    });
+});
+
+router.patch('/:id', isAuth, (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+    res.status(404).send('post id not valid');
+  }
+
+  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    .then(post => {
+      if (!post) {
+        return res.status(404).send('Post not found, and cannot update');
+      } else {
+        return res.send(post);
+      }
+    })
+    .catch(error => {
+      res.status(400).send('Post not updated, bad request'); // bad request for changing the post.
+    });
+});
+
+router.patch('/delete/:id', isAuth, isAdmin, (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+    res.status(404).send('post id not valid');
+  }
+
+  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    .then(post => {
+      if (!post) {
+        return res.status(404).send('Post not found, and cannot update');
+      } else {
+        return res.send(post);
+      }
+    })
+    .catch(error => {
+      res.status(400).send('Post not updated, bad request'); // bad request for changing the post.
+    });
 });
 
 // get attachments of given post

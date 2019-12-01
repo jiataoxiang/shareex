@@ -7,14 +7,16 @@ import { connect } from 'react-redux';
 import { rand_string } from '../../lib/util';
 import { uid } from 'react-uid';
 import axios from 'axios';
-import { ObjectID } from 'mongoose';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
   state = {
     post: '',
     comments: [],
-    attachments: []
+    attachments: [],
+    history_added: false,
   };
 
   // constructor initialize the post_id of this post
@@ -28,33 +30,51 @@ class SinglePost extends Component {
     this.getPostData();
     this.getAttachData();
     this.getComments();
-    // this.addToViewHistory();
+    this.addToViewHistory();
   }
 
-  addToViewHistory = (user_id, post_id) => {
-    console.log('The current user id is not null: ', user_id);
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('receive props');
+  //   if (!prevProps.isAuthenticated && this.props.isAuthenticated) {
+  //     console.log('updated');
+  //     this.addToViewHistory();
+  //   }
+  // }
+
+  addToViewHistory = () => {
+    let user_id;
+    if (this.props.location.state) {
+      console.log('The current user id is not null: ', this.props.location.state.current_user_id);
+      user_id = this.props.location.state.current_user_id
+        ? this.props.location.state.current_user_id
+        : user_id;
+    }
+    if (!user_id) {
+      return;
+    }
+    console.log('calling to add view history');
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
-        { post_id: post_id },
-        this.tokenConfig()
+        { post_id: this.props.match.params.id },
+        this.tokenConfig(),
       )
       .then(res => {
+        console.log('added to view history');
         console.log(res.data);
+        store.dispatch(loadUser());
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.current_user) {
-      this.addToViewHistory(
-        nextProps.current_user._id,
-        this.props.match.params.id
-      );
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('received props');
+  //   if (nextProps.current_user) {
+  //     this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+  //   }
+  // }
 
   getPostData = () => {
     axios
@@ -82,10 +102,7 @@ class SinglePost extends Component {
 
   getAttachData = () => {
     axios
-      .get(
-        '/api/posts/' + this.props.match.params.id + '/attachments',
-        this.tokenConfig()
-      )
+      .get('/api/posts/' + this.props.match.params.id + '/attachments', this.tokenConfig())
       .then(res => {
         // console.log("Get the Attach data:", res.data);
         this.setState({ attachments: res.data.attachments });
@@ -99,7 +116,7 @@ class SinglePost extends Component {
   getComments = () => {
     axios
       .get('/api/comments/', {
-        params: { post_id: this.props.match.params.id }
+        params: { post_id: this.props.match.params.id },
       })
       .then(comments => {
         let add_editMode = [];
@@ -161,7 +178,7 @@ class SinglePost extends Component {
       const a_comment = {
         author: this.props.current_user._id,
         post_id: post_id,
-        body: comment_content
+        body: comment_content,
       };
       const comments = this.state.comments;
       const original_comment_id = comments[0]._id;
@@ -170,7 +187,7 @@ class SinglePost extends Component {
         author: this.props.current_user.username,
         body: comment_content,
         edit_mode: false,
-        new_comment: false
+        new_comment: false,
       });
       axios
         .post('/api/comments/', a_comment)
@@ -226,13 +243,11 @@ class SinglePost extends Component {
         author: this.props.current_user.username,
         body: '',
         edit_mode: true,
-        new_comment: true
+        new_comment: true,
       });
       this.setState({ comments: comments });
 
-      document
-        .getElementById('new-comment-button')
-        .setAttribute('hidden', true);
+      document.getElementById('new-comment-button').setAttribute('hidden', true);
     } else {
       alert('Please Sign in first, then you can create a comment.');
     }
@@ -245,7 +260,7 @@ class SinglePost extends Component {
     if (!user || !(user === author)) {
       this.props.history.push({
         pathname: '/otherprofile',
-        state: { post_id: this.state.post._id, author: this.state.post.author }
+        state: { post_id: this.state.post._id, author: this.state.post.author },
       });
     } else {
       this.props.history.push('/userprofile');
@@ -259,8 +274,8 @@ class SinglePost extends Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
 
     // If token, add to headers
@@ -271,6 +286,27 @@ class SinglePost extends Component {
     }
 
     return config;
+  };
+
+  favPost = () => {
+    console.log('adding to fav');
+    axios
+      .patch(
+        '/api/posts/add-fav',
+        {
+          post_id: this.state.post._id,
+          user_id: this.props.current_user._id,
+        },
+        this.tokenConfig(),
+      )
+      .then(res => {
+        console.log('faved the post');
+        console.log(res.data);
+        store.dispatch(loadUser());
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -285,9 +321,16 @@ class SinglePost extends Component {
       username = this.state.post_author.username;
       avatar = this.state.post_author.avatar;
     }
+    let fav_disabled = false;
     if (this.state.post) {
       post_id = this.state.post._id;
+      if (this.props.isAuthenticated) {
+        if (this.props.current_user.favs) {
+          fav_disabled = this.props.current_user.favs.includes(post_id);
+        }
+      }
     }
+    console.log(fav_disabled);
     let comment_list = [];
     if (this.state.comments) {
       comment_list = this.state.comments;
@@ -363,14 +406,24 @@ class SinglePost extends Component {
             <div className="user-info-container col-12 col-6 col-md-3">
               <div className="sticky-top">
                 <div className="space"></div>
-                <div className="user-info" onClick={this.redirectProf}>
-                  <div className="row">
+                <div className="user-info">
+                  <div className="row" onClick={this.redirectProf}>
                     <div className="col-lg-3 col-3">
                       <img className="avatar" src={avatar} alt="" />
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong>{username}</strong>
                     </div>
+                  </div>
+                  <div className="row">
+                    <button
+                      className="btn btn-success btn-sm btn-fav btn-block"
+                      onClick={this.favPost}
+                      disabled={fav_disabled}
+                    >
+                      Favourite
+                    </button>
+                    <button className="btn btn-outline-danger btn-sm btn-block">Report Post</button>
                   </div>
                 </div>
               </div>
@@ -387,7 +440,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(SinglePost));

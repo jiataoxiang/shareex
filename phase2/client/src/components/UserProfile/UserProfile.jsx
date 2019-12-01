@@ -10,6 +10,8 @@ import PostsBoard from './PostsBoard';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 import Animation from './Animation.jsx';
+import FavoritesBoard from './FavoritesBoard';
+import ViewHistoryboard from './ViewHistoryBoard';
 
 class UserProfile extends React.Component {
   state = {
@@ -21,31 +23,28 @@ class UserProfile extends React.Component {
     following: [],
     curState: '',
     author: '',
-    functions: []
+    functions: [],
   };
 
   showComponent = component => {
     this.setState({
-      curState: component
+      curState: component,
     });
   };
 
   handlePopup = () => {
     // Show the pop up window.
     this.setState({
-      showPop: !this.state.showPop
+      showPop: !this.state.showPop,
     });
   };
 
   getNumPosts = currentUser => {
     axios
-      .get(
-        `/api/posts/user-posts/${currentUser._id.toString()}`,
-        this.props.tokenConfig()
-      )
+      .get(`/api/posts/user-posts/${currentUser._id.toString()}`, this.props.tokenConfig())
       .then(posts => {
         this.setState({
-          numPosts: posts.data.length
+          numPosts: posts.data.length,
         });
       })
       .catch(error => {
@@ -56,10 +55,7 @@ class UserProfile extends React.Component {
   updatePosts = () => {
     console.log('updating posts');
     axios
-      .get(
-        '/api/posts/by-user/' + this.props.current_user._id,
-        this.props.tokenConfig()
-      )
+      .get('/api/posts/by-user/' + this.props.current_user._id, this.props.tokenConfig())
       .then(res => {
         console.log(res.data);
         this.setState({ posts: res.data.posts });
@@ -71,23 +67,69 @@ class UserProfile extends React.Component {
   setFunctions = () => {
     if (this.state.curState === '') {
       this.setState({
-        curState: <PostsBoard author={this.props.current_user._id} />
+        curState: <PostsBoard author={this.props.current_user._id} />,
       });
     }
     this.setState({
       functions: [
         {
           id: 1,
-          title: 'message_board',
-          model: <MessageBoard author={this.props.current_user._id} />
+          title: 'Message Board',
+          model: <MessageBoard author={this.props.current_user._id} />,
         },
         {
           id: 2,
-          title: 'posts',
-          model: <PostsBoard author={this.props.current_user._id} />
-        }
-      ]
+          title: 'Posts',
+          model: <PostsBoard author={this.props.current_user._id} />,
+        },
+        {
+          id: 3,
+          title: 'Favorites',
+          model: (
+            <FavoritesBoard
+              author={this.props.current_user._id}
+              posts={this.props.current_user.favs}
+            />
+          ),
+        },
+        {
+          id: 4,
+          title: 'View History',
+          model: (
+            <ViewHistoryboard
+              author={this.props.current_user._id}
+              posts={this.props.current_user.view_history}
+            />
+          ),
+        },
+      ],
     });
+  };
+
+  showOption = option => {
+    if (option === 'Message Board') {
+      this.setState({ curState: <MessageBoard author={this.props.current_user._id} /> });
+    } else if (option === 'Posts') {
+      this.setState({ curState: <PostsBoard author={this.props.current_user._id} /> });
+    } else if (option === 'Favorites') {
+      this.setState({
+        curState: (
+          <FavoritesBoard
+            author={this.props.current_user._id}
+            posts={this.props.current_user.favs}
+          />
+        ),
+      });
+    } else if (option === 'View History') {
+      this.setState({
+        curState: (
+          <ViewHistoryboard
+            author={this.props.current_user._id}
+            posts={this.props.current_user.view_history}
+          />
+        ),
+      });
+    }
   };
 
   componentDidMount() {
@@ -101,7 +143,7 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following,
         likes: currentUser.likes.length,
-        motto: currentUser.motto
+        motto: currentUser.motto,
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -136,9 +178,7 @@ class UserProfile extends React.Component {
     if (inputFile != null) {
       // const isJPG = inputFile.type === 'image/jpeg';
       // const isPNG = inputFile.type === 'image/png';
-      const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(
-        inputFile.type
-      );
+      const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(inputFile.type);
 
       if (!is_valid_image) {
         inputFile.status = 'error';
@@ -152,8 +192,8 @@ class UserProfile extends React.Component {
       axios
         .post('/api/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         })
         .then(res => {
           console.log(res);
@@ -163,7 +203,7 @@ class UserProfile extends React.Component {
             .patch(
               `/api/users/${this.props.current_user._id}`,
               { [type]: url },
-              this.props.tokenConfig()
+              this.props.tokenConfig(),
             )
             .then(res => {
               console.log(res.data);
@@ -210,6 +250,7 @@ class UserProfile extends React.Component {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
+    const options = ['Message Board', 'Posts', 'Favorites', 'View History'];
     const followers = this.state.followers;
     return (
       <div className="user-profile-page">
@@ -244,12 +285,7 @@ class UserProfile extends React.Component {
               Change Banner
             </button>
           </div>
-          <input
-            type="file"
-            id="change-banner"
-            hidden="hidden"
-            onChange={this.changeBanner}
-          />
+          <input type="file" id="change-banner" hidden="hidden" onChange={this.changeBanner} />
         </div>
         <div className="container">
           <div className="row mt-3">
@@ -277,15 +313,24 @@ class UserProfile extends React.Component {
                       <strong>Likes:</strong> {this.state.likes}
                     </p>
                     <Link to="/prof_setting" id="profile-setting-btn">
-                      <button className="btn btn-light btn-block">
-                        Profile Setting
-                      </button>
+                      <button className="btn btn-light btn-block">Profile Setting</button>
                     </Link>
                   </div>
                 </div>
                 <h2>Options</h2>
                 <div className="list-group options">
-                  {this.state.functions.map(fun => (
+                  {options.map(option => {
+                    return (
+                      <button
+                        key={uid(Math.random())}
+                        className="list-group-item list-group-item-action"
+                        onClick={this.showOption.bind(this, option)}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                  {/* {this.state.functions.map(fun => (
                     <button
                       key={uid(Math.random())}
                       type="button"
@@ -294,16 +339,18 @@ class UserProfile extends React.Component {
                     >
                       {fun.title}
                     </button>
-                  ))}
+                  ))} */}
                 </div>
                 <br />
                 <div className="followers">
                   <h3> Followers</h3>
-                  {followers.map(follower => {
-                    return (
-                      <Follower key={uid(Math.random())} follower={follower} />
-                    );
-                  })}
+                  {followers.length !== 0 ? (
+                    followers.map(follower => {
+                      return <Follower key={uid(Math.random())} follower={follower} />;
+                    })
+                  ) : (
+                    <h4 className="text-center">No Follower</h4>
+                  )}
                 </div>
               </div>
             </div>
@@ -325,12 +372,7 @@ class UserProfile extends React.Component {
             >
               <h5>Change Avatar</h5>
             </button>
-            <input
-              type="file"
-              id="change-avatar"
-              hidden="hidden"
-              onChange={this.changeAvatar}
-            />
+            <input type="file" id="change-avatar" hidden="hidden" onChange={this.changeAvatar} />
           </div>
         </div>
       </div>
@@ -345,15 +387,15 @@ const mapStateToProps = state => ({
   tokenConfig: () => {
     const config = {
       headers: {
-        'Content-type': 'application/json'
-      }
+        'Content-type': 'application/json',
+      },
     };
     // If token, add to headers
     if (state.auth.token) {
       config.headers['x-auth-token'] = state.auth.token;
     }
     return config;
-  }
+  },
 });
 
 export default connect(mapStateToProps)(withRouter(UserProfile));

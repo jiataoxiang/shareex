@@ -14,6 +14,7 @@ function isAuth(req, res, next) {
 
   // check for token
   if (!token) {
+    console.log('No token, authorization denied!');
     return res.status(401).json({ message: 'No token, authorization denied!' });
   }
   try {
@@ -41,6 +42,7 @@ function isAuthorizedPost(req, res, next) {
       if (post._id.toString() === user_id) {
         next();
       } else {
+        console.log('Not authorized');
         return res.status(401).json({ message: 'Not authorized' });
       }
     })
@@ -67,6 +69,7 @@ function isAuthorizedUser(req, res, next) {
       if (!user.admin) {
         // if not admin, check if this action is made by same user
         if (req.params.user_id !== req.user.id) {
+          console.log('Unauthorized action');
           res.status(401).send('Unauthorized action');
         }
       }
@@ -91,5 +94,5 @@ module.exports = {
   isAuth: isAuth,
   isAuthorizedPost: isAuthorizedPost,
   isAuthorizedUser: isAuthorizedUser,
-  isAdmin: isAdmin
+  isAdmin: isAdmin,
 };

@@ -8,7 +8,7 @@ class AdminProfileFindUser extends React.Component {
         avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
         username: "",
         email: "",
-        motto: "132456789132456789123456789 131356aw1d4a56w1fda51fa35 1f3a1d5aw31fd35a1wf351aw35f1wa35f1",
+        motto: "",
         banned: false, 
         unbanned_date: -1,
         
@@ -42,7 +42,7 @@ class AdminProfileFindUser extends React.Component {
     }
     hideUser = () => {
         this.tempElements.display_user.setAttribute("hidden", true);
-        alert("The user does not exist.");
+        alert("This user does not exist.");
     }
     
     getUserInfo = () => {
@@ -56,16 +56,20 @@ class AdminProfileFindUser extends React.Component {
                     this.hideUser();
                 } else {
                     const curUser = user.data[0];
-                    this.setState({id: curUser._id,
-                                   avatar: curUser.avatar,
-                                   username: curUser.username, 
-                                   email: curUser.email, 
-                                   motto: curUser.motto, 
-                                   banned: curUser.banned, 
-                                   unbanned_date: Date.parse(curUser.unbanned_date)});
+                    this.setState({
+                        id: curUser._id,
+                        avatar: curUser.avatar,     
+                        username: curUser.username, 
+                        email: curUser.email, 
+                        motto: curUser.motto, 
+                        banned: curUser.banned, 
+                        unbanned_date: Date.parse(curUser.unbanned_date)
+                    });
                     this.showUser();
                 }
             }).catch(error => {
+                this.hideUser();
+                alert("Failed to get user.");
                 console.log(error);
             })
         }

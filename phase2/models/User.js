@@ -16,8 +16,8 @@ const UserSchema = new Schema({
     unique: true,
     validate: {
       validator: validator.isEmail,
-      message: 'Not Valid Email'
-    }
+      message: 'Not Valid Email',
+    },
   },
   gender: { type: String },
   admin: { type: Boolean, required: true, default: 'false' },
@@ -27,12 +27,13 @@ const UserSchema = new Schema({
   likes: { type: Array, default: [] },
   banned: { type: Boolean, default: false },
   unbanned_date: { type: Date, default: null },
-  avatar: { type: String, default: './img/User_Avatar.png' },
-  banner: { type: String, default: './img/banner.jpg' },
+  avatar: { type: String, default: '/img/User_Avatar.png' },
+  banner: { type: String, default: '/img/banner.jpg' },
   motto: { type: String, default: 'Welcome, new user' },
   color_theme: { type: String, default: 'dark' },
-  messages: {type: Array, default: []},
-  view_history: Array,
+  messages: { type: Array, default: [] },
+  view_history: { type: Array, default: [] },
+  favs: { type: Array, default: [] },
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {

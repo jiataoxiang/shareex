@@ -38,8 +38,12 @@
       }
     }
     .user-info-container {
+      cursor: pointer;
       .space {
         height: 5em;
+      }
+      button {
+        margin: 10px 20px 0px 20px;
       }
     }
     .user-info {

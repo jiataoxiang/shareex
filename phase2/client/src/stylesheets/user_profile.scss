@@ -214,6 +214,7 @@
   //follower
   .followers {
     margin-top: 1px;
+    margin-bottom: 5em;
   }
   //message board
 
@@ -223,6 +224,13 @@
   }
   .fix-height {
     height: 400px;
+  }
+  .favorite-board {
+  }
+  .view-history-board {
+    .btn-remove {
+      margin-top: 5px;
+    }
   }
 }
 @media screen and (max-width: 800px) {
