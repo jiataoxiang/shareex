@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Comment = require('../models/Comment');
 const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
-const { isAuth, isAuthorizedPost } = require('../middleware/auth');
+const { isAuth, isAuthorizedPost, isAdmin } = require('../middleware/auth');
 
 // call with query to add a filter, see post_test for an example
 router.get('/', (req, res) => {
@@ -290,6 +290,24 @@ router.patch('/add-fav', isAuth, (req, res) => {
 });
 
 router.patch('/:id', isAuth, (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+    res.status(404).send('post id not valid');
+  }
+
+  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    .then(post => {
+      if (!post) {
+        return res.status(404).send('Post not found, and cannot update');
+      } else {
+        return res.send(post);
+      }
+    })
+    .catch(error => {
+      res.status(400).send('Post not updated, bad request'); // bad request for changing the post.
+    });
+});
+
+router.patch('/delete/:id', isAuth, isAdmin, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     res.status(404).send('post id not valid');
   }

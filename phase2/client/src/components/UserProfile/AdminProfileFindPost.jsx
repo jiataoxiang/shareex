@@ -11,7 +11,7 @@ class AdminProfileFindPost extends React.Component {
         title: "",
         category: "",
         deleted: false, 
-        delete_date: null, 
+        delete_date: -1, 
         
         inputid: ""
     };
@@ -120,18 +120,54 @@ class AdminProfileFindPost extends React.Component {
     
     changeDelete = () => {
         if (this.state.deleted) {
-            //
-            
             this.setState({ deleted: false });
             this.tempElements.display_delete.setAttribute("hidden", true);
             this.tempElements.button_delete.innerHTML = "Delete";
         } else {
-            //
-            
             this.setState({ deleted: true });
             this.tempElements.display_delete.removeAttribute("hidden");
             this.tempElements.button_delete.innerHTML = "Recover";
         }
+    }
+    
+    changeDeleteToServer = () => {
+        axios.patch(
+          `/api/posts/delete/${this.state.id}`, {
+              hidden: !this.state.deleted, 
+              delete_date: Date.now()
+          }, this.tokenConfig()
+        ).then(result => {
+          if (result) {
+              this.setState({delete_date: Date.now()});
+              this.changeDelete();
+          } else {
+              alert("Failed to delete the post.");
+          }
+        }).catch(err => {
+          alert("Failed to delete the post.");
+          console.log(err);
+        })
+    }
+    
+    sendMsg = (msgBody, success, fail) => {
+        const newMsg = {
+            from: this.props.current_user._id,
+            to: this.state.id,
+            body: msgBody
+        } 
+        
+        axios.post(
+            `/api/notifications/create`, newMsg, this.tokenConfig()
+        ).then(msg => {
+            if (!msg) {
+                alert(fail);
+            } else {
+                alert(success);
+            }
+        }).catch(err => {
+            alert(fail);
+            console.log(err);
+        })
     }
     
     tokenConfig = () => {
@@ -237,7 +273,7 @@ class AdminProfileFindPost extends React.Component {
                         <div className="col-md-8">
                              <div id="delete-warning">
                                 <h6>Deleted {
-                                        Math.ceil((Date.now() - this.state.delete_date) 
+                                        Math.floor((Date.now() - this.state.delete_date) 
                                         / (1000*60*60*24))               
                                     } days ago.</h6>
                              </div>
@@ -246,7 +282,7 @@ class AdminProfileFindPost extends React.Component {
                             <button type="button"
                                 id="button-delete" 
                                 className="btn"
-                                onClick={this.changeDelete}>
+                                onClick={this.changeDeleteToServer}>
                                 Delete
                             </button>
                         </div>
