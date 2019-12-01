@@ -15,7 +15,9 @@ class FavoritesBoard extends Component {
 
   updatePosts = () => {
     const config = this.props.tokenConfig();
-    config.params = { posts: this.state.post_ids };
+    const post_ids = this.state.post_ids ? this.state.post_ids : [];
+    console.log(post_ids);
+    config.params = { posts: post_ids };
     axios
       .get('/api/posts/post-array', config)
       .then(res => {
