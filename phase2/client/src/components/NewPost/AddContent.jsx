@@ -67,17 +67,30 @@ class AddContent extends Component {
     const {title, deleteItem, secondary_key} = this.props;
     if (this.props.type === 'text') {
       return (
-        <div className="form-group">
-          <h4 htmlFor="content">Text</h4>
-          <textarea
-            className="form-control"
-            rows="5"
-            id="content"
-            placeholder="What's in your mind right now?"
-            onChange={this.sendTextBack}
-            defaultValue={this.props.title}
-          />
+        <div>
+          <div className="form-group">
+            <h4 htmlFor="content">Text</h4>
+            <textarea
+              className="form-control"
+              rows="5"
+              id="content"
+              placeholder="What's in your mind right now?"
+              onChange={this.sendTextBack}
+              defaultValue={this.props.title}
+            />
+          </div>
+          <div className="delete-button">
+            <button
+              className="btn btn-outline-success"
+              type="button"
+              id="DeleteButton"
+              onClick={deleteItem.bind(this, secondary_key)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
+
       );
     } else if (this.props.type === 'code') {
       // let content = `# write your JS code here`;
@@ -225,28 +238,30 @@ class AddContent extends Component {
           </div>
         </div>
         );
-    } else if (this.props.type === 'text_attach') {
-      return (
-        <div>
-          <Attachment
-            key={uid(rand_string())}
-            type={'text'}
-            content={title}
-            sendTextBack={this.sendTextBack}
-          />
-          <div className="delete-button">
-            <button
-              className="btn btn-outline-success"
-              type="button"
-              id="DeleteButton"
-              onClick={deleteItem.bind(this, secondary_key)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      );
-    } else if (this.props.type === 'code_attach') {
+    }
+    // else if (this.props.type === 'text_attach') {
+    //   return (
+    //     <div>
+    //       <Attachment
+    //         key={uid(rand_string())}
+    //         type={'text'}
+    //         content={title}
+    //         sendTextBack={this.sendTextBack}
+    //       />
+    //       <div className="delete-button">
+    //         <button
+    //           className="btn btn-outline-success"
+    //           type="button"
+    //           id="DeleteButton"
+    //           onClick={deleteItem.bind(this, secondary_key)}
+    //         >
+    //           Delete
+    //         </button>
+    //       </div>
+    //     </div>
+    //   );
+    // }
+    else if (this.props.type === 'code_attach') {
       return (
         <div>
           <Attachment
