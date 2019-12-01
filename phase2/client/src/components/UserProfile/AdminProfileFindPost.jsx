@@ -46,7 +46,7 @@ class AdminProfileFindPost extends React.Component {
     
     getPostInfo = () => {
         if (this.state.inputid.length === 0) {
-            alert("Must input a id.")
+            alert("Must input a id.");
         } else {
             axios.get(
                 `/api/posts/${this.state.inputid}`, this.tokenConfig()
@@ -97,7 +97,25 @@ class AdminProfileFindPost extends React.Component {
     }
     
     saveChange = () => {
-        
+        if (this.state.title.length === 0) {
+            alert("Title cannot be empty.");
+        } else {
+            axios.patch(
+                `/api/posts/${this.state.id}`, {
+                    title: this.state.title,
+                    category: this.state.category
+                }, this.tokenConfig()
+            ).then(post => {
+                if (!post) {
+                    alert("Failed to update post.");
+                } else {
+                    alert("Post saved.");
+                }
+            }).catch(error => {
+                alert("Failed to update post.");
+                console.log(error);
+            })
+        }
     }
     
     changeDelete = () => {
@@ -169,7 +187,6 @@ class AdminProfileFindPost extends React.Component {
                     </button>
                 </div>
                 
-                
                 <div id="display-post">
                     <div className="row row-info">
                         <div className="col-md-8">
@@ -179,8 +196,30 @@ class AdminProfileFindPost extends React.Component {
                               <h6>{this.state.username}</h6>
                             </div>
                             <div id="text-block" className="col-md-8">
-                              <p>Title:  {this.state.title}</p>
-                              <p>Category:  {this.state.category}</p>
+                              <span>
+                                <p className="prop-pre">Title:</p>
+                                <input
+                                    type="text"
+                                    id="title-input" 
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    name="title" 
+                                    value={this.state.title} 
+                                    onChange={this.handleInputChange}
+                                />
+                              </span>
+                              <span className="categroy">
+                                <p className="prop-pre">Category:</p>
+                                <select id="category-selection" 
+                                    name="category"
+                                    value={this.state.category}
+                                    onChange={this.handleInputChange}>
+                                  <option value="CS">CS</option>
+                                  <option value="Education">Education</option>
+                                  <option value="Travel">Travel</option>
+                                  <option value="Technology">Technology</option>
+                                </select>
+                              </span>
                             </div>
                           </div>
                         </div>

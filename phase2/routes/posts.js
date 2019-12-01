@@ -289,7 +289,7 @@ router.patch('/add-fav', isAuth, (req, res) => {
   });
 });
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     res.status(404).send('post id not valid');
   }
