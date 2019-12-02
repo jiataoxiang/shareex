@@ -88,8 +88,9 @@ router.get('/by-user/:user_id', isAuth, (req, res) => {
 // get user's favourite posts
 router.get('/post-array', (req, res) => {
   if (!req.query.posts) return res.send([]);
+  const posts = req.query.posts.filter(post => ObjectID.isValid(post));
   Post.find({
-    _id: { $in: req.query.posts },
+    _id: { $in: posts },
   })
     .sort({ created_at: -1 })
     .then(posts => {
