@@ -1,23 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import {rand_string} from '../../lib/util';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {uid} from 'react-uid';
+import { rand_string } from '../../lib/util';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { uid } from 'react-uid';
 import axios from 'axios';
-import {login} from "../../actions/authActions";
+import { login } from '../../actions/authActions';
 
 class NewPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // edit_mode: false,
-      contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
+      contents: [{ key: uid(rand_string()), parent_key: '', type: undefined, title: '' }],
       to_store: {
         title: '',
         category: 'Computer Science',
-        content: ''
+        content: '',
       },
     };
   }
@@ -28,13 +28,13 @@ class NewPost extends Component {
 
   loadPrevData = () => {
     console.log('run!!');
-    console.log("Before set mode: ", this.state.edit_mode);
+    console.log('Before set mode: ', this.state.edit_mode);
     console.log(this.props.location.state);
     if (this.props.location.state) {
-      console.log("Current old attaches are: ", this.props.location.state.attachments);
+      console.log('Current old attaches are: ', this.props.location.state.attachments);
       console.log('start loading prev data!');
       // set content lists, all attachments
-      this.setState({edit_mode: true});
+      this.setState({ edit_mode: true });
       let org_attach = [];
       this.props.location.state.attachments.forEach(e => {
         let type_to_show;
@@ -48,35 +48,35 @@ class NewPost extends Component {
           key: key,
           parent_key: key,
           type: type_to_show,
-          title: e.body
+          title: e.body,
         });
         org_attach.push({
           _id: e._id,
         });
       });
-      this.setState({original_attachments: org_attach});
+      this.setState({ original_attachments: org_attach });
 
       // set title, category, content
       const cur_post = this.props.location.state.post;
 
       const property = this.state.to_store;
       property.title = cur_post.title;
-      this.setState({property});
+      this.setState({ property });
 
       const property2 = this.state.to_store;
       property2.category = cur_post.category;
-      this.setState({property2});
+      this.setState({ property2 });
       this.setFrontEndCategory(cur_post.category);
 
       const property3 = this.state.to_store;
       property3.content = cur_post.body;
-      this.setState({property3});
+      this.setState({ property3 });
       console.log(this.state);
     }
   };
 
-  setFrontEndCategory = (category) => {
-    const id_name = category === "Computer Science" ? 'CS-option' : category + '-option';
+  setFrontEndCategory = category => {
+    const id_name = category === 'Computer Science' ? 'CS-option' : category + '-option';
     document.getElementById(id_name).selected = true;
   };
 
@@ -111,7 +111,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
   };
 
   // handle incoming video/image links and store them in state
@@ -134,7 +134,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
   };
 
   // handle incoming text/code and store them in state
@@ -185,7 +185,7 @@ class NewPost extends Component {
       if (this.state.contents[i].key === secondary_key) {
         const contents = this.state.contents;
         contents.splice(i, 1);
-        this.setState({contents: contents});
+        this.setState({ contents: contents });
       }
     }
   };
@@ -194,21 +194,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // configure the token used for authentication
@@ -237,7 +237,7 @@ class NewPost extends Component {
   addToDatabase = () => {
     // generate a post id when the 'submit' button is clicked
     if (this.state.to_store.title === '' || this.state.to_store.content === '') {
-      alert("Please fill in blank (Title/Content) field.");
+      alert('Please fill in blank (Title/Content) field.');
     } else {
       alert('Sure to submit?');
 
@@ -278,7 +278,8 @@ class NewPost extends Component {
       } else {
         // delete all the old attachments
         this.state.original_attachments.forEach(e => {
-          axios.delete("/api/attachments/" + e._id, this.tokenConfig())
+          axios
+            .delete('/api/attachments/' + e._id, this.tokenConfig())
             .then(res => {
               console.log(res);
             })
@@ -287,9 +288,14 @@ class NewPost extends Component {
             });
         });
 
-        axios.patch('/api/posts/update-post/' + this.props.location.state.post._id, a_post, this.tokenConfig())
+        axios
+          .patch(
+            '/api/posts/update-post/' + this.props.location.state.post._id,
+            a_post,
+            this.tokenConfig(),
+          )
           .then(res => {
-            console.log("Updated post: ", res);
+            console.log('Updated post: ', res);
           })
           .catch(err => {
             console.log(err);
@@ -311,14 +317,23 @@ class NewPost extends Component {
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
-              <input type="text" className="form-control" id="tile" defaultValue={this.state.to_store.title}
-                     onChange={this.inputTitle}/>
+              <input
+                type="text"
+                className="form-control"
+                id="tile"
+                defaultValue={this.state.to_store.title}
+                onChange={this.inputTitle}
+              />
             </div>
             <div id="contents">
               <div className="form-group">
                 <h4>Category:</h4>
-                <select className="form-control" id="category" defaultValue={this.state.to_store.category}
-                        onChange={this.inputCategory}>
+                <select
+                  className="form-control"
+                  id="category"
+                  defaultValue={this.state.to_store.category}
+                  onChange={this.inputCategory}
+                >
                   <option id="CS-option">Computer Science</option>
                   <option id="Travel-option">Travel</option>
                   <option id="Education-option">Education</option>
