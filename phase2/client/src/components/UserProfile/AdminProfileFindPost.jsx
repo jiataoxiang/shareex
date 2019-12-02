@@ -259,12 +259,12 @@ class AdminProfileFindPost extends React.Component {
           <div className="row row-info">
             <div className="col-md-8">
               <div className="row">
-                <div className="avatar-container">
+                <div className="col-md avatar-container">
                   <img id="user-avatar" src={this.state.avatar} alt="" />
                   <h6>{this.state.username}</h6>
                 </div>
                 <div id="text-block" className="col-md-8">
-                  <span>
+                  <div>
                     <p className="prop-pre">Title:</p>
                     <input
                       type="text"
@@ -275,8 +275,8 @@ class AdminProfileFindPost extends React.Component {
                       value={this.state.title}
                       onChange={this.handleInputChange}
                     />
-                  </span>
-                  <span className="categroy">
+                  </div>
+                  <div className="categroy">
                     <p className="prop-pre">Category:</p>
                     <select
                       id="category-selection"
@@ -289,7 +289,7 @@ class AdminProfileFindPost extends React.Component {
                       <option value="Travel">Travel</option>
                       <option value="Technology">Technology</option>
                     </select>
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>

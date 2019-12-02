@@ -220,7 +220,7 @@
     position: center;
   }
 
-  //follower
+  //follow
   .followers {
     margin-top: 1px;
     margin-bottom: 5em;
@@ -252,10 +252,16 @@
       color: white;
     }
   }
+  .follower-board {
+    h3 {
+      color: white;
+    }
+  }
   .other-profile-content {
     // margin-top: ;
   }
 }
+
 @media screen and (max-width: 800px) {
   .user-profile-page {
     .container-fluid {

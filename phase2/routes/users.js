@@ -221,7 +221,7 @@ router.post('/add-following/:id', isAuth, (req, res) => {
     });
 });
 
-//add follower
+//add follow
 router.post('/add-follower/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const follower_id = req.body.follower_id;
@@ -352,20 +352,34 @@ router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 });
 
 router.patch('/ban/:user_id', isAuth, isAdmin, (req, res) => {
+  console.log('Banning user');
+  console.log(req.params.user_id);
+  console.log(req.body);
+
   User.findById(req.params.user_id)
     .then(user => {
       if (!user) {
         res.status(404).send('User not found');
-      } else {
-        Object.keys(req.body).forEach(ele => {
-          user[ele] = req.body[ele];
-        });
-        user.save().then(result => {
-          res.send(result);
-        });
       }
+      Object.keys(req.body).forEach(ele => {
+        user[ele] = req.body[ele];
+      });
+      console.log(user);
+      user
+        .save()
+        .then(user => {
+          return res.send(user);
+        })
+        .catch(err => {
+          console.log('err at saving user:\n', err);
+          res.status(500).send('err');
+        });
+      // res.status(200).send('end');
     })
     .catch(err => {
+      console.log('\nerror: \n');
+      console.log(err.message);
+      console.log(err.response);
       res.status(500).send(err);
     });
 });

@@ -132,6 +132,7 @@ class AdminProfileFindUser extends React.Component {
         this.tokenConfig(),
       )
       .then(result => {
+        console.log(result.data);
         if (result.status === 200) {
           this.setState({ unbanned_date: unbanDate });
           this.changeBan();
@@ -230,13 +231,13 @@ class AdminProfileFindUser extends React.Component {
           <div className="row row-info">
             <div className="col-md-8">
               <div className="row">
-                <div className="col-2">
+                <div className="col-md-4">
                   <div className="avatar-container">
                     <img id="user-avatar" src={this.state.avatar} alt="" />
                     <h6>{this.state.username}</h6>
                   </div>
                 </div>
-                <div className="col-10">
+                <div className="col-md-8">
                   <div id="text-block" className="col-md-8">
                     <p>Email: {this.state.email}</p>
                     <p>Motto: {this.state.motto}</p>
@@ -261,8 +262,9 @@ class AdminProfileFindUser extends React.Component {
               </div>
               {this.state.banned ? (
                 <h6 id="banned-msg">
-                  Will be unbanned in
-                  {Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))} days.
+                  {'Will be unbanned in ' +
+                    Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))}
+                  days.
                 </h6>
               ) : (
                 <h5 id="not-banned-msg">Click Ban to Ban User</h5>
