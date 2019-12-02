@@ -73,13 +73,6 @@ class Post extends Component {
         console.log(err.response);
       });
 
-    axios.patch(`/api/users/like/${this.state.post.author}`)
-      .then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err)
-    });
-
   };
 
   thumbdown = () => {
@@ -95,12 +88,6 @@ class Post extends Component {
       .catch(err => {
         console.log(err.response);
       });
-    axios.patch(`/api/users/unlike/${this.state.post.author}`)
-      .then(res => {
-        console.log(res);
-      }).catch(err => {
-      console.log(err)
-    });
   };
 
   getThumbDisplay = () => {

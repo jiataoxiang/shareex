@@ -24,7 +24,6 @@ const UserSchema = new Schema({
   created_at: { type: Date, default: Date.now },
   followers: { type: Array, default: [] },
   following: { type: Array, default: [] },
-  likes: {type: Number, default: 0},
   banned: { type: Boolean, default: false },
   unbanned_date: { type: Date, default: null },
   avatar: { type: String, default: '/img/User_Avatar.png' },

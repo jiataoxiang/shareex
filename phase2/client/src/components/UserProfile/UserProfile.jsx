@@ -24,7 +24,6 @@ class UserProfile extends React.Component {
     curState: '',
     author: '',
     functions: [],
-    likes: 0
   };
 
   handlePopup = () => {
@@ -156,7 +155,6 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following,
         motto: currentUser.motto,
-        likes: currentUser.likes
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -319,9 +317,6 @@ class UserProfile extends React.Component {
                     </p>
                     <p>
                       <strong>Following:</strong> {this.state.following.length}
-                    </p>
-                    <p>
-                      <strong>Likes:</strong> {this.state.likes}
                     </p>
                     <Link to="/prof_setting" id="profile-setting-btn">
                       <button className="btn btn-light btn-block">Profile Setting</button>

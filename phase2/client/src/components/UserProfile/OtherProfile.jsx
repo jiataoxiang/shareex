@@ -20,7 +20,6 @@ class OtherProfile extends React.Component {
     followers: [],
     following: [],
     messages: [],
-    likes: 0,
     numPosts: -1,
     motto: '',
     current_message: '',
@@ -102,7 +101,6 @@ class OtherProfile extends React.Component {
         following: user.following,
         motto: user.motto,
         messages: user.messages,
-        likes: user.likes
       });
     });
   };
@@ -205,11 +203,6 @@ class OtherProfile extends React.Component {
               Following
               <br />
               <span className="profileStatsNumber">{this.state.following.length}</span>
-            </li>
-            <li>
-              Likes
-              <br />
-              <span className="profileStatsNumber">{this.state.likes}</span>
             </li>
           </ul>
         </div>
