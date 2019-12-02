@@ -151,11 +151,11 @@ class AdminProfile extends Component {
                   <p>Email: {this.state.email} </p>
                 </div>
                 <div id="option-tab">
-                  <div className="btn-group-vertical">
+                  <div className="list-group">
                     <button
                       type="button"
                       id="button-1"
-                      className="btn btn-light btn-selected"
+                      className="list-group-item list-group-item-action btn-selected"
                       onClick={() => this.changeTabRight(0)}
                     >
                       Dashboard
@@ -163,7 +163,7 @@ class AdminProfile extends Component {
                     <button
                       type="button"
                       id="button-2"
-                      className="btn btn-light"
+                      className="list-group-item list-group-item-action"
                       onClick={() => this.changeTabRight(1)}
                     >
                       Find User
@@ -171,7 +171,7 @@ class AdminProfile extends Component {
                     <button
                       type="button"
                       id="button-3"
-                      className="btn btn-light"
+                      className="list-group-item list-group-item-action"
                       onClick={() => this.changeTabRight(2)}
                     >
                       Find Post
@@ -179,7 +179,7 @@ class AdminProfile extends Component {
                     <button
                       type="button"
                       id="button-4"
-                      className="btn btn-light"
+                      className="list-group-item list-group-item-action"
                       onClick={() => this.changeTabRight(3)}
                     >
                       Notification

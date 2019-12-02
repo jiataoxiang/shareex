@@ -223,7 +223,7 @@ class AdminProfileFindUser extends React.Component {
             value={this.state.inputuser}
             onChange={this.handleInputChange}
           />
-          <button type="submit" className="btn" onClick={this.getUserInfo}>
+          <button type="submit" className="btn btn-primary" onClick={this.getUserInfo}>
             Find
           </button>
         </form>
@@ -247,7 +247,12 @@ class AdminProfileFindUser extends React.Component {
               </div>
             </div>
             <div className="col-md-4">
-              <button type="button" id="button-reset" className="btn" onClick={this.resetMotto}>
+              <button
+                type="button"
+                id="button-reset"
+                className="btn btn-warning"
+                onClick={this.resetMotto}
+              >
                 Reset Motto
               </button>
             </div>
@@ -275,7 +280,7 @@ class AdminProfileFindUser extends React.Component {
               <button
                 type="button"
                 id="button-ban"
-                className="btn"
+                className="btn btn-danger"
                 onClick={this.changeBanToServer}
               >
                 Ban
@@ -298,7 +303,7 @@ class AdminProfileFindUser extends React.Component {
                 />
               </div>
               <div className="col-md-4">
-                <button type="submit" className="btn" onClick={this.sendMsg}>
+                <button type="submit" className="btn btn-info" onClick={this.sendMsg}>
                   Send Message
                 </button>
               </div>

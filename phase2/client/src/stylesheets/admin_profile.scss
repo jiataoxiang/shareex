@@ -1,6 +1,22 @@
 .admin-profile-page {
+  background-image: none;
   padding-top: 100px;
   padding-bottom: 100px;
+  p {
+    color: white;
+  }
+
+  .btn {
+    // background-color: var(--background-secondary);
+    color: var(--text);
+  }
+  #button-reset {
+    color: black;
+  }
+  button[text='Find'] {
+    margin-left: 10px;
+  }
+
   .container-fluid {
     padding-left: 15%;
     padding-right: 15%;
@@ -20,19 +36,30 @@
   #user-info {
     width: 15em;
     margin-top: 2em;
+    p {
+      color: var(--text);
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: bold;
+    }
   }
 
   #option-tab {
     margin-top: 2.5em;
+    .list-group {
+      .list-group-item {
+        background-color: var(--background-secondary);
+        color: var(--text);
+      }
+    }
   }
 
   .btn-group-vertical {
     width: 15em;
-    .btn {
-      color: rgb(213, 219, 213);
-      border-color: grey;
-      background-color: var(--background-secondary);
-    }
+    // .btn {
+    //   color: rgb(213, 219, 213);
+    //   border-color: grey;
+    //   background-color: var(--background-secondary);
+    // }
     .btn-selected {
       border-left-width: 0.2em;
       border-left-color: rgb(37, 223, 37);
@@ -48,6 +75,9 @@
 
     .card-body {
       background-color: var(--background-secondary);
+      p {
+        color: var(--text);
+      }
     }
   }
 
@@ -59,12 +89,16 @@
         width: 15em;
         float: left;
       }
-      .btn {
-        color: #d5dbd5;
-        border-color: grey;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
+
+      button {
+        margin-left: 10px;
       }
+      // .btn {
+      //   color: #d5dbd5;
+      //   border-color: grey;
+      //   margin-left: 1em;
+      //   background-color: var(--background-secondary);
+      // }
     }
 
     #display-user {
@@ -107,13 +141,13 @@
         margin-bottom: 0;
       }
 
-      .btn {
-        color: #d5dbd5;
-        border-color: grey;
-        width: 150px;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
+      // .btn {
+      //   color: #d5dbd5;
+      //   border-color: grey;
+      //   width: 150px;
+      //   margin-left: 1em;
+      //   background-color: var(--background-secondary);
+      // }
 
       .row-msg {
         margin-top: 5px;
@@ -129,14 +163,10 @@
         width: 15em;
         float: left;
       }
-      .btn {
-        color: #d5dbd5;
-        border-color: grey;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
     }
-
+    p {
+      font-family: 'Alatsi', sans-serif;
+    }
     #display-post {
       .row-info {
         margin-top: 3em;
@@ -185,12 +215,12 @@
         width: 20em;
         float: left;
       }
-      .btn {
-        color: gray;
-        border-color: grey;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
+      // .btn {
+      //   color: #d5dbd5;
+      //   border-color: grey;
+      //   margin-left: 1em;
+      //   background-color: var(--background-secondary);
+      // }
     }
   }
   @media screen and (max-width: 991px) {

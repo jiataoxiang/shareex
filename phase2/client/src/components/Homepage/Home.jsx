@@ -163,7 +163,7 @@ class Home extends Component {
                         <option value="Education">Travel</option>
                         <option value="Travel">Education</option>
                         <option value="Technology">Cooking</option>
-                        <option value="Technology">Other</option>
+                        <option value="Other">Other</option>
                         <option value="Following">Following</option>
                       </select>
                     </span>

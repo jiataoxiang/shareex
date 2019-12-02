@@ -250,7 +250,7 @@ class AdminProfileFindPost extends React.Component {
             value={this.state.inputid}
             onChange={this.handleInputChange}
           />
-          <button type="submit" className="btn" onClick={this.getPostInfo}>
+          <button type="submit" className="btn btn-primary ml-2" onClick={this.getPostInfo}>
             Find
           </button>
         </form>
@@ -284,10 +284,11 @@ class AdminProfileFindPost extends React.Component {
                       value={this.state.category}
                       onChange={this.handleInputChange}
                     >
-                      <option value="CS">CS</option>
-                      <option value="Education">Education</option>
-                      <option value="Travel">Travel</option>
-                      <option value="Technology">Technology</option>
+                      <option value="CS">Computer Science</option>
+                      <option value="Education">Travel</option>
+                      <option value="Travel">Education</option>
+                      <option value="Technology">Cooking</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
