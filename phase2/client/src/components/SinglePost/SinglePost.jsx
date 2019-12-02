@@ -350,7 +350,7 @@ class SinglePost extends Component {
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
-                {<div className="edit-button">
+                {this.props.current_user._id === this.state.post.author ? <div className="edit-button">
                   <button
                     className="btn btn-outline-success"
                     type="button"
@@ -358,7 +358,7 @@ class SinglePost extends Component {
                   >
                     Edit
                   </button>
-                </div>}
+                </div> : null}
                 <h2>{this.state.post.title}</h2>
                 <div className="post-content">
                   <Attachment
