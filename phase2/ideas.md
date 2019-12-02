@@ -26,6 +26,7 @@ phase 1 feedback 说我们 library 用的多，功能太少了。phase1 我们�
 
 - navbar 中添加 post 分类：不同 category 以及只显示 following 的 user 的 post
 - add search bar that can search for a post or a user
+- 在每个 route 加上 null 的 error check,如果是 array input，filter by ObjectId.isValid() 确保没有 invalid id
 
 ## Wait to test
 

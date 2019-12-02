@@ -17,7 +17,6 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    console.log('Home did mount');
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
       return;
@@ -26,7 +25,6 @@ class Home extends Component {
       if (this.props.location.state.search_content) {
         this.search(this.props.location.state.search_content);
       } else if (this.props.location.state.search_content === '') {
-        console.log('debug');
         this.search();
       }
     }
@@ -39,7 +37,6 @@ class Home extends Component {
       if (nextProps.location.state.search_content) {
         this.search(nextProps.location.state.search_content);
       } else if (nextProps.location.state.search_content === '') {
-        console.log('componentWillReceiveProps debug');
         this.search();
       }
     }
@@ -57,12 +54,10 @@ class Home extends Component {
           console.log(error.message);
         });
     } else {
-      console.log(`Search for user: ${search_content}`);
       axios
         .get(`/api/users/search/${search_content}`)
         .then(res => {
           this.setState({ users: res.data.users });
-          console.log(res.data);
         })
         .catch(error => {
           console.log(error);
@@ -72,7 +67,6 @@ class Home extends Component {
 
   updatePosts = (category, sort_by) => {
     const search_content = document.getElementById('search-bar').value;
-    console.log('search: ', search_content);
     if (!sort_by) sort_by = 'created_at';
     axios
       .get('/api/posts', {
@@ -119,13 +113,11 @@ class Home extends Component {
       .get('/api/posts/recommendations')
       .then(res => {
         const recommendations = res.data;
-        console.log('recommendation: ', recommendations);
         this.setState({ recommendations: recommendations });
       })
       .catch(err => {
         console.log(err);
       });
-    console.log('getting recommendations');
   };
 
   applyFilters = () => {

@@ -11,14 +11,14 @@ class Login extends Component {
   state = {
     username: '',
     password: '',
-    message: null
+    message: null,
   };
 
   static propTypes = {
     isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     login: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
   };
 
   componentDidUpdate(prevProps) {
@@ -35,7 +35,6 @@ class Login extends Component {
   }
 
   colorTransition = () => {
-    console.log('making color transition.');
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
       document.documentElement.classList.remove('transition');
@@ -48,24 +47,17 @@ class Login extends Component {
     const { username, password } = this.state;
     const user = {
       username,
-      password
+      password,
     };
     // Attempt to login
     this.props.clearErrors();
     this.props
       .login(user)
       .then(res => {
-        console.log(res);
         if (res.user.color_theme) {
-          if (
-            document.documentElement.getAttribute('theme') !==
-            res.user.color_theme
-          ) {
+          if (document.documentElement.getAttribute('theme') !== res.user.color_theme) {
             this.colorTransition();
-            document.documentElement.setAttribute(
-              'theme',
-              res.user.color_theme
-            );
+            document.documentElement.setAttribute('theme', res.user.color_theme);
           }
         }
       })
@@ -101,20 +93,12 @@ class Login extends Component {
         <div className="form-container">
           <form action="" onSubmit={this.signin}>
             <div className="lock-container">
-              <img
-                src={'./img/logo_S.png'}
-                width="100px"
-                className="lock mx-auto"
-                alt=""
-              />
+              <img src={'./img/logo_S.png'} width="100px" className="lock mx-auto" alt="" />
               <h3>Sign In</h3>
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span
-                  className="input-group-text"
-                  id="inputGroup-sizing-default"
-                >
+                <span className="input-group-text" id="inputGroup-sizing-default">
                   Username
                 </span>
               </div>
@@ -129,10 +113,7 @@ class Login extends Component {
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span
-                  className="input-group-text"
-                  id="inputGroup-sizing-default"
-                >
+                <span className="input-group-text" id="inputGroup-sizing-default">
                   Password
                 </span>
               </div>
@@ -159,9 +140,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
-  current_user: state.auth.user
+  current_user: state.auth.user,
 });
 
-export default connect(mapStateToProps, { login, clearErrors })(
-  withRouter(Login)
-);
+export default connect(mapStateToProps, { login, clearErrors })(withRouter(Login));
