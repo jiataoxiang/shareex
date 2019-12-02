@@ -34,13 +34,11 @@ class NotificationBoard extends React.Component {
           return Date.parse(b.time) - Date.parse(a.time);
         });
         this.state.msg.unreadMsg.sort(function(a, b) {
-          console.log("log time");
-          console.log(b, a);
+          return Date.parse(b.time) - Date.parse(a.time);
         });
         this.setState({
           msg: this.state.msg
         })
-        // this.setState({ msgServer: true });
       })
       .catch(error => {
         console.log(error);
@@ -52,7 +50,6 @@ class NotificationBoard extends React.Component {
   }
 
   render() {
-    // console.log(this.state.msg);
     return (
       <Notification state={this.state.msg}/>
     );

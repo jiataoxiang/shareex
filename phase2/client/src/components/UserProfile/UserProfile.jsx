@@ -47,11 +47,9 @@ class UserProfile extends React.Component {
   };
 
   updatePosts = () => {
-    console.log('updating posts');
     axios
       .get('/api/posts/by-user/' + this.props.current_user._id, this.props.tokenConfig())
       .then(res => {
-        console.log(res.data);
         this.setState({ posts: res.data.posts });
       })
       .catch(error => {
@@ -164,7 +162,6 @@ class UserProfile extends React.Component {
       const formData = new FormData();
       formData.append('file', inputFile); // get first file chosen
       formData.append('public_id', `${type}_${this.props.current_user._id}`);
-      console.log('Uploading ' + type);
       this.setState({ alert: `Uploading ${type}` });
       axios
         .post('/api/upload', formData, {
@@ -173,7 +170,6 @@ class UserProfile extends React.Component {
           },
         })
         .then(res => {
-          console.log(res);
           const public_id = res.data[0].public_id;
           const url = res.data[0].url;
           axios
@@ -183,8 +179,6 @@ class UserProfile extends React.Component {
               this.props.tokenConfig(),
             )
             .then(res => {
-              console.log(res.data);
-              console.log('reload user');
               store.dispatch(loadUser());
               this.setState({ [type]: url });
               this.setState({ alert: 'Image Modified' });

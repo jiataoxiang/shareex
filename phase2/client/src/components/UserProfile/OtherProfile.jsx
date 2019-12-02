@@ -56,11 +56,9 @@ class OtherProfile extends React.Component {
   };
 
   updatePosts = () => {
-    console.log('updating posts');
     axios
       .get('/api/posts/by-user/' + this.state.author, this.props.tokenConfig())
       .then(res => {
-        console.log(res.data);
         this.setState({ posts: res.data.posts });
       })
       .catch(error => {
@@ -76,7 +74,6 @@ class OtherProfile extends React.Component {
   }
 
   getNumPosts = currentUser => {
-    console.log('the current usr is : ' + currentUser);
     axios
       .get(`/api/posts/user-posts/${currentUser}`, this.props.tokenConfig())
       .then(posts => {
@@ -92,7 +89,6 @@ class OtherProfile extends React.Component {
   getUserInfo = () => {
     axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
       user = user.data;
-      console.log(user);
       this.setState({
         nickname: user.username,
         banner: user.banner,
@@ -106,7 +102,6 @@ class OtherProfile extends React.Component {
   };
 
   isUnfollowing = () => {
-    // console.log(this.state.followers);
     return (
       this.state.followers.filter(follower => follower === this.props.current_user._id).length === 0
     );
@@ -121,15 +116,12 @@ class OtherProfile extends React.Component {
         this.props.tokenConfig(),
       )
       .then(following => {
-        console.log(following);
       })
       .catch(error => {
         console.log(error);
       });
 
     //remove follow in current user
-    console.log("author is "+this.state.author);
-    console.log("cur user is "+this.props.current_user._id);
     axios
       .post(
         `/api/users/remove-follower/${this.state.author}`,
@@ -156,7 +148,6 @@ class OtherProfile extends React.Component {
         this.props.tokenConfig(),
       )
       .then(following => {
-        console.log(following);
       })
       .catch(error => {
         console.log(error);
@@ -172,7 +163,6 @@ class OtherProfile extends React.Component {
         this.setState({
           followers: followers.data.followers,
         });
-        console.log(followers);
       })
       .catch(error => {
         console.log(error);

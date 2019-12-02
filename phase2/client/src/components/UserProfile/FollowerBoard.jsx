@@ -21,7 +21,6 @@ class FollowerBoard extends React.Component {
   getUserInfo = () => {
     axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
       user = user.data;
-      console.log(user);
       if(this._isMount){
         this.setState({
           followers: user.followers,

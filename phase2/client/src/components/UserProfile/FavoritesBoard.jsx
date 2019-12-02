@@ -16,12 +16,10 @@ class FavoritesBoard extends Component {
   updatePosts = () => {
     const config = this.props.tokenConfig();
     const post_ids = this.state.post_ids ? this.state.post_ids : [];
-    console.log(post_ids);
     config.params = { posts: post_ids };
     axios
       .get('/api/posts/post-array', config)
       .then(res => {
-        console.log(res.data);
         this.setState({ posts: res.data });
       })
       .catch(err => {
@@ -30,7 +28,6 @@ class FavoritesBoard extends Component {
   };
 
   removeFav = to_be_removed_post_id => {
-    console.log(to_be_removed_post_id);
 
     axios
       .patch(
@@ -41,10 +38,8 @@ class FavoritesBoard extends Component {
         this.props.tokenConfig(),
       )
       .then(res => {
-        console.log(res.data);
         store.dispatch(loadUser()); // update current user, since updatePosts will read favs
         const posts = this.state.posts.filter(post => post._id !== to_be_removed_post_id);
-        console.log(posts);
         const post_ids = this.state.post_ids.filter(id => id !== to_be_removed_post_id);
         this.setState({ post_ids, posts });
       })

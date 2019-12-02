@@ -20,7 +20,6 @@ class ViewHistoryBoard extends Component {
     axios
       .get('/api/posts/post-array', config)
       .then(res => {
-        console.log(res.data);
         this.setState({ posts: res.data });
       })
       .catch(err => {
@@ -36,8 +35,6 @@ class ViewHistoryBoard extends Component {
         this.props.tokenConfig(),
       )
       .then(res => {
-        console.log(res.data.message);
-        console.log(res.data.user_view_history);
         store.dispatch(loadUser());
         this.setState({ post_ids: [], posts: [] });
       })

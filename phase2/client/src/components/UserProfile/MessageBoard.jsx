@@ -11,8 +11,6 @@ class MessageBoard extends React.Component {
   };
 
   checkUserProfile = () => {
-    console.log('current user is : ' + this.props.current_user._id);
-    console.log('post user is : ' + this.state.author);
     return this.props.current_user._id === this.state.author;
   };
 
@@ -23,7 +21,6 @@ class MessageBoard extends React.Component {
   sendMessage = () => {
     const message = document.getElementById('message').value;
     const current_user_id = this.props.current_user._id;
-    console.log(this.state.author);
 
     axios
       .post(
@@ -34,8 +31,7 @@ class MessageBoard extends React.Component {
         },
         this.props.tokenConfig(),
       )
-      .then(user => {
-        console.log(user);
+      .then(() => {
       })
       .catch(error => {
         console.log(error);
@@ -47,7 +43,6 @@ class MessageBoard extends React.Component {
   getUserInfo = () => {
     axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
       user = user.data;
-      console.log(user);
       this.setState({
         messages: user.messages,
       });
