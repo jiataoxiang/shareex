@@ -132,6 +132,7 @@ class AdminProfileFindUser extends React.Component {
         this.tokenConfig(),
       )
       .then(result => {
+        console.log(result.data);
         if (result.status === 200) {
           this.setState({ unbanned_date: unbanDate });
           this.changeBan();
@@ -145,7 +146,8 @@ class AdminProfileFindUser extends React.Component {
       });
   };
 
-  sendMsg = () => {
+  sendMsg = e => {
+    e.preventDefault();
     if (this.state.inputmsg.length === 0) {
       alert('A message must have some contant.');
     } else {
@@ -229,14 +231,18 @@ class AdminProfileFindUser extends React.Component {
         <div id="display-user">
           <div className="row row-info">
             <div className="col-md-8">
-              <div className="row row-info">
-                <div className="col-md avatar-container">
-                  <img id="user-avatar" src={this.state.avatar} alt="" />
-                  <h6>{this.state.username}</h6>
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="avatar-container">
+                    <img id="user-avatar" src={this.state.avatar} alt="" />
+                    <h6>{this.state.username}</h6>
+                  </div>
                 </div>
-                <div id="col-md text-block" className="col-md-8">
-                  <p>Email: {this.state.email}</p>
-                  <p>Motto: {this.state.motto}</p>
+                <div className="col-md-8">
+                  <div id="text-block">
+                    <p>Email: {this.state.email}</p>
+                    <p>Motto: {this.state.motto}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,14 +253,23 @@ class AdminProfileFindUser extends React.Component {
             </div>
           </div>
 
-          <div className="row row-ban">
+          <div className="row row-ban mb-5">
             <div className="col-md-8">
               <div id="ban-warning">
-                <h6>
-                  Will be unbanned in{' '}
+                {/* <h6>
+                  Will be unbanned in
                   {Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))} days.
-                </h6>
+                </h6> */}
               </div>
+              {this.state.banned ? (
+                <h6 id="banned-msg">
+                  {'Will be unbanned in ' +
+                    Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24))}
+                  days.
+                </h6>
+              ) : (
+                <h5 id="not-banned-msg">Click Ban to Ban User</h5>
+              )}
             </div>
             <div className="col-md-4">
               <button
@@ -268,24 +283,27 @@ class AdminProfileFindUser extends React.Component {
             </div>
           </div>
 
-          <div className="row row-msg">
-            <div className="col-md-8">
-              <input
-                type="text"
-                className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                name="inputmsg"
-                value={this.state.inputmsg}
-                onChange={this.handleInputChange}
-              />
+          <form action="">
+            <div className="row row-msg">
+              <div className="col-md-8">
+                <input
+                  type="text"
+                  className="form-control"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                  name="inputmsg"
+                  value={this.state.inputmsg}
+                  onChange={this.handleInputChange}
+                  placeholder="Enter Message"
+                />
+              </div>
+              <div className="col-md-4">
+                <button type="submit" className="btn" onClick={this.sendMsg}>
+                  Send Message
+                </button>
+              </div>
             </div>
-            <div className="col-md-4">
-              <button type="button" className="btn" onClick={this.sendMsg}>
-                Send Message
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     );

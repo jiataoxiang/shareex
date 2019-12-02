@@ -8,11 +8,11 @@
   #left-tab {
     width: 15em;
     margin-top: 3.5em;
-    position: fixed;
+    // position: fixed;
   }
 
   #AdminProfileCircle {
-    display: block;
+    // display: block;
     margin-left: auto;
     margin-right: auto;
   }
@@ -60,7 +60,7 @@
         float: left;
       }
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         margin-left: 1em;
         background-color: var(--background-secondary);
@@ -71,7 +71,7 @@
       .row-info {
         margin-top: 2.5em;
       }
-    
+
       .avatar-container {
         text-align: center;
       }
@@ -82,14 +82,15 @@
         border-radius: 50%;
       }
 
-      #text-block {
-        margin-left: 2em;
-        margin-top: 3em;
-      }
+      // #text-block {
+      //   margin-left: 2em;
+      //   margin-top: 3em;
+      // }
 
       #button-reset {
-        position: absolute;
-        bottom: 5px;
+        // position: absolute;
+        // bottom: 5px;
+        margin-top: 30%;
       }
 
       #ban-warning {
@@ -97,8 +98,17 @@
         color: red;
       }
 
+      #banned-msg {
+        color: rgb(221, 13, 13);
+      }
+
+      #not-banned-msg {
+        color: rgb(201, 22, 22);
+        margin-bottom: 0;
+      }
+
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         width: 150px;
         margin-left: 1em;
@@ -120,7 +130,7 @@
         float: left;
       }
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         margin-left: 1em;
         background-color: var(--background-secondary);
@@ -128,6 +138,9 @@
     }
 
     #display-post {
+      .row-info {
+        margin-top: 3em;
+      }
       .avatar-container {
         text-align: center;
       }
@@ -135,23 +148,18 @@
       #user-avatar {
         width: 5em;
         height: 5em;
-        margin-top: 2.5em;
+        // margin-top: 2.5em;
         border-radius: 50%;
       }
 
-      #text-block {
-        margin-left: 2em;
-        margin-top: 3em;
-      }
+      // #text-block {
+      //   margin-left: 2em;
+      //   margin-top: 3em;
+      // }
 
       .prop-pre {
         display: inline-block;
         margin-right: 10px;
-      }
-
-      #button-change {
-        position: absolute;
-        bottom: 5px;
       }
 
       #delete-warning {
@@ -159,13 +167,13 @@
         color: red;
       }
 
-      .btn {
-        color: gray;
-        border-color: grey;
-        width: 150px;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
+      // .btn {
+      //   color: #d5dbd5;
+      //   border-color: grey;
+      //   width: 150px;
+      //   margin-left: 1em;
+      //   background-color: var(--background-secondary);
+      // }
     }
   }
 
@@ -183,6 +191,11 @@
         margin-left: 1em;
         background-color: var(--background-secondary);
       }
+    }
+  }
+  @media screen and (max-width: 991px) {
+    #finduser {
+      margin-top: 3em;
     }
   }
 }
