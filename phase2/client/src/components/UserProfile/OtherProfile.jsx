@@ -180,6 +180,35 @@ class OtherProfile extends React.Component {
     store.dispatch(loadUser());
   };
 
+  sendMsg = e => {
+    e.preventDefault();
+    this.sendMsgToServer(`user ${this.state.nickname} is reported by ${this.props.current_user.username}`,
+      'Message sent.',
+      'Message failed to send.');
+  };
+
+  sendMsgToServer = (msgBody, success, fail) => {
+
+    const newMsg = {
+      from: this.props.current_user._id,
+      body: msgBody,
+    };
+
+    axios
+      .post(`/api/notifications/to-admin`, newMsg, this.props.tokenConfig())
+      .then(msg => {
+        if (!msg) {
+          alert(fail);
+        } else {
+          alert(success);
+        }
+      })
+      .catch(err => {
+        alert(fail);
+        console.log(err);
+      });
+  };
+
   render() {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
@@ -214,15 +243,25 @@ class OtherProfile extends React.Component {
                   <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>{this.state.description}</p>
-                  {this.isUnfollowing() ? (
+                  {this.props.current_user.admin ?
+                    (null) :
+                    (this.isUnfollowing() ? (
                     <button className="btn btn-success btn-block" onClick={this.followRequest}>
-                      <strong>Follow</strong>
+                     <strong>Follow</strong>
                     </button>
-                  ) : (
+                    ) : (
                     <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
-                      <strong>Unfollow</strong>
+                     <strong>Unfollow</strong>
                     </button>
-                  )}
+                    ))
+                  }
+                  {
+                    this.props.current_user.admin ?
+                      (null) :
+                      (<button className="btn btn-danger btn-block" onClick={this.sendMsg}>
+                        <strong>Report</strong>
+                      </button>)
+                  }
                 </div>
                 <h2>Options</h2>
                 <div className="list-group options">
