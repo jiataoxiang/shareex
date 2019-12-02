@@ -42,9 +42,12 @@ class Follower extends React.Component {
 
   render() {
     return (
-      <div className="follower">
-        <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" onClick={this.redirectProfile}/>
-        <span className="username-text">{this.state.follower_name}</span>
+      <div>
+        <div className="follower">
+          <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" onClick={this.redirectProfile}/>
+          <span className="username-text">{this.state.follower_name}</span>
+        </div>
+        <br/>
       </div>
     );
   }

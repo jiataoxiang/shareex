@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from './Follower';
 import MessageBoard from './MessageBoard';
 import PostsBoard from './PostsBoard';
 import store from '../../store';
@@ -144,6 +143,7 @@ class UserProfile extends React.Component {
     }
   };
 
+
   componentDidMount() {
     // Current user info
     const currentUser = this.props.current_user;
@@ -154,7 +154,6 @@ class UserProfile extends React.Component {
         avatar: currentUser.avatar,
         followers: currentUser.followers,
         following: currentUser.following,
-        likes: currentUser.likes.length,
         motto: currentUser.motto,
       });
       this.getNumPosts(currentUser);
@@ -263,7 +262,6 @@ class UserProfile extends React.Component {
       window.location.href = '/';
     }
     const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board'];
-    const followers = this.state.followers;
     return (
       <div className="user-profile-page">
         {this.state.alert ? (
@@ -319,9 +317,6 @@ class UserProfile extends React.Component {
                     </p>
                     <p>
                       <strong>Following:</strong> {this.state.following.length}
-                    </p>
-                    <p>
-                      <strong>Likes:</strong> {this.state.likes}
                     </p>
                     <Link to="/prof_setting" id="profile-setting-btn">
                       <button className="btn btn-light btn-block">Profile Setting</button>
