@@ -6,16 +6,72 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {uid} from 'react-uid';
 import axios from 'axios';
+import {login} from "../../actions/authActions";
 
 class NewPost extends Component {
-  state = {
-    contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
-    to_store: {
-      title: '',
-      category: 'Computer Science',
-      content: ''
-    },
-    attachments: [],
+  constructor(props) {
+    super(props);
+    this.state = {
+      // edit_mode: false,
+      contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
+      to_store: {
+        title: '',
+        category: 'Computer Science',
+        content: ''
+      },
+    };
+  }
+
+  componentDidMount() {
+    this.loadPrevData();
+  }
+
+  loadPrevData = () => {
+    console.log('run!!');
+    console.log("Before set mode: ", this.state.edit_mode);
+    console.log(this.props.location.state);
+    if (this.props.location.state) {
+      console.log("Current old attaches are: ", this.props.location.state.attachments);
+      console.log('start loading prev data!');
+      // set content lists, all attachments
+      this.setState({edit_mode: true});
+      let org_attach = [];
+      this.props.location.state.attachments.forEach(e => {
+        let type_to_show;
+        if (e.type === 'show-text') {
+          type_to_show = 'text';
+        } else {
+          type_to_show = e.type + '_attach';
+        }
+        const key = uid(rand_string());
+        this.state.contents.push({
+          key: key,
+          parent_key: key,
+          type: type_to_show,
+          title: e.body
+        });
+        org_attach.push({
+          _id: e._id,
+        });
+      });
+      this.setState({original_attachments: org_attach});
+
+      // set title, category, content
+      const cur_post = this.props.location.state.post;
+
+      const property = this.state.to_store;
+      property.title = cur_post.title;
+      this.setState({property});
+
+      const property2 = this.state.to_store;
+      property2.category = cur_post.category;
+      this.setState({property2});
+
+      const property3 = this.state.to_store;
+      property3.content = cur_post.body;
+      this.setState({property3});
+      console.log(this.state);
+    }
   };
 
   // find the correct position to insert new item
@@ -61,10 +117,6 @@ class NewPost extends Component {
     const pos_content = this.findInsertPosContent(secondary_key);
 
     // insert the item into the content list.
-    console.log("The content list is: ", this.state.contents);
-    console.log("The attach list is: ", this.state.attachments);
-    console.log("The sec key is: ", secondary_key);
-    console.log("The index found is: ", pos_content);
     const content = {
       key: uid(rand_string()),
       parent_key: secondary_key,
@@ -179,11 +231,11 @@ class NewPost extends Component {
   // store the data in this.state.to_store to the database
   addToDatabase = () => {
     // generate a post id when the 'submit' button is clicked
-    if(this.state.to_store.title === '' || this.state.to_store.content === ''){
+    if (this.state.to_store.title === '' || this.state.to_store.content === '') {
       alert("Please fill in blank (Title/Content) field.");
-    } else{
+    } else {
       alert('Sure to submit?');
-      // const re_sort_attach = this.state.attachments.reverse();
+
       const re_sort_attach = [];
       this.state.contents.slice(1, this.state.contents.length).forEach(item => {
         if (item.type === 'text') {
@@ -207,15 +259,38 @@ class NewPost extends Component {
         category: this.state.to_store.category,
         body: this.state.to_store.content,
         attachments: re_sort_attach.reverse(),
+        // original_attachments: this.state.original_attachments,
       };
-      axios
-        .post('/api/posts', a_post, this.tokenConfig())
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
+      if (!this.state.edit_mode) {
+        axios
+          .post('/api/posts', a_post, this.tokenConfig())
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        // delete all the old attachments
+        this.state.original_attachments.forEach(e => {
+          axios.delete("/api/attachments/" + e._id, this.tokenConfig())
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
         });
+
+        axios.patch('/api/posts/update-post/' + this.props.location.state.post._id, a_post, this.tokenConfig())
+          .then(res => {
+            console.log("Updated post: ", res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+
       // redirect to home page
       this.props.history.push('/');
     }
@@ -229,12 +304,14 @@ class NewPost extends Component {
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
-              <input type="text" className="form-control" id="tile" onChange={this.inputTitle}/>
+              <input type="text" className="form-control" id="tile" defaultValue={this.state.to_store.title}
+                     onChange={this.inputTitle}/>
             </div>
             <div id="contents">
               <div className="form-group">
                 <h4>Category:</h4>
-                <select className="form-control" id="category" onChange={this.inputCategory}>
+                <select className="form-control" id="category" defaultValue={this.state.to_store.category}
+                        onChange={this.inputCategory}>
                   <option>Computer Science</option>
                   <option>Travel</option>
                   <option>Education</option>
@@ -250,6 +327,7 @@ class NewPost extends Component {
                   rows="5"
                   id="content"
                   placeholder="What's in your mind right now?"
+                  defaultValue={this.state.to_store.content}
                   onChange={this.inputContent}
                 />
               </div>

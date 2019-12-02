@@ -12,6 +12,7 @@ const cloudinary = require('cloudinary').v2;
 const formData = require('express-form-data');
 const config = require('config');
 const notificationsRouter = require("./routes/notifications");
+const attachmentRouter = require("./routes/attachments");
 const app = express();
 
 // view engine setup
@@ -32,6 +33,7 @@ app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/test', testRouter);
 app.use("/api/notifications", notificationsRouter);
+app.use("/api/attachments", attachmentRouter);
 
 // Connect to mongodb with mongoose, this require only runs the javascript file instead of importing it
 require('./util/mongoose_connection');

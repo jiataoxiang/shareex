@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 import '../../stylesheets/single_post.scss';
 import Comment from '../Comment';
 import Attachment from '../Attachment';
-import { connect } from 'react-redux';
-import { rand_string } from '../../lib/util';
-import { uid } from 'react-uid';
+import {connect} from 'react-redux';
+import {rand_string} from '../../lib/util';
+import {uid} from 'react-uid';
 import axios from 'axios';
 import store from '../../store';
-import { loadUser } from '../../actions/authActions';
+import {loadUser} from '../../actions/authActions';
 
 class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
@@ -56,7 +56,7 @@ class SinglePost extends Component {
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
-        { post_id: this.props.match.params.id },
+        {post_id: this.props.match.params.id},
         this.tokenConfig(),
       )
       .then(res => {
@@ -80,7 +80,7 @@ class SinglePost extends Component {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
-        this.setState({ post: res.data });
+        this.setState({post: res.data});
         this.getPostAuthor(res.data.author);
         console.log('The post id we get is:', res.data._id);
       })
@@ -93,7 +93,7 @@ class SinglePost extends Component {
     axios
       .get('/api/users/' + user_id, this.tokenConfig())
       .then(user => {
-        this.setState({ post_author: user.data });
+        this.setState({post_author: user.data});
       })
       .catch(err => {
         console.log(err);
@@ -105,7 +105,7 @@ class SinglePost extends Component {
       .get('/api/posts/' + this.props.match.params.id + '/attachments', this.tokenConfig())
       .then(res => {
         // console.log("Get the Attach data:", res.data);
-        this.setState({ attachments: res.data.attachments });
+        this.setState({attachments: res.data.attachments});
       })
       .catch(err => {
         console.log(err);
@@ -116,7 +116,7 @@ class SinglePost extends Component {
   getComments = () => {
     axios
       .get('/api/comments/', {
-        params: { post_id: this.props.match.params.id },
+        params: {post_id: this.props.match.params.id},
       })
       .then(comments => {
         let add_editMode = [];
@@ -126,7 +126,7 @@ class SinglePost extends Component {
           add_editMode.push(ele);
           this.getCommentUsername(ele._id, ele.author);
         });
-        this.setState({ comments: add_editMode });
+        this.setState({comments: add_editMode});
       })
       .catch(err => {
         console.log(err);
@@ -143,7 +143,7 @@ class SinglePost extends Component {
             comments[i].username = user.data.username;
           }
         }
-        this.setState({ comments: comments });
+        this.setState({comments: comments});
       })
       .catch(err => {
         console.log(err);
@@ -232,7 +232,7 @@ class SinglePost extends Component {
         comments[i].edit_mode = true;
       }
     }
-    this.setState({ comments: comments });
+    this.setState({comments: comments});
   };
 
   /* display an empty comment which can be edited in comment list */
@@ -246,7 +246,7 @@ class SinglePost extends Component {
         edit_mode: true,
         new_comment: true,
       });
-      this.setState({ comments: comments });
+      this.setState({comments: comments});
 
       document.getElementById('new-comment-button').setAttribute('hidden', true);
     } else {
@@ -261,10 +261,21 @@ class SinglePost extends Component {
     if (!user || !(user === author)) {
       this.props.history.push({
         pathname: '/otherprofile',
-        state: { post_id: this.state.post._id, author: this.state.post.author },
+        state: {post_id: this.state.post._id, author: this.state.post.author},
       });
     } else {
       this.props.history.push('/userprofile');
+    }
+  };
+
+  redirectNewPost = () => {
+    if (this.props.current_user._id !== this.state.post.author){
+      alert("You cannot edit other's post.");
+    } else {
+      this.props.history.push({
+        pathname: '/new_post',
+        state: {post: this.state.post, attachments: this.state.attachments, edit_mode: true},
+      });
     }
   };
 
@@ -337,12 +348,23 @@ class SinglePost extends Component {
       comment_list = this.state.comments;
     }
 
+    console.log("Attachments in single post are: ", this.state.attachments);
+
     return (
       <div className="single-post-2-page">
         <div className="container">
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
+                {<div className="edit-button">
+                  <button
+                    className="btn btn-outline-success"
+                    type="button"
+                    onClick={this.redirectNewPost}
+                  >
+                    Edit
+                  </button>
+                </div>}
                 <h2>{this.state.post.title}</h2>
                 <div className="post-content">
                   <Attachment
@@ -373,7 +395,7 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
-                  {(function() {
+                  {(function () {
                     if (comment_list.length === 0) {
                       return (
                         <React.Fragment>
@@ -410,7 +432,7 @@ class SinglePost extends Component {
                 <div className="user-info">
                   <div className="row" onClick={this.redirectProf}>
                     <div className="col-lg-3 col-3">
-                      <img className="avatar" src={avatar} alt="" />
+                      <img className="avatar" src={avatar} alt=""/>
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong>{username}</strong>

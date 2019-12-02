@@ -90,7 +90,6 @@ class AddContent extends Component {
             </button>
           </div>
         </div>
-
       );
     } else if (this.props.type === 'code') {
       // let content = `# write your JS code here`;

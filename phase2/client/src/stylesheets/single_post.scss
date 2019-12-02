@@ -5,6 +5,10 @@
     margin-top: 2em;
     .single-post-container {
       .single-post {
+        .edit-button{
+          float: right;
+        }
+
         .post-content {
           margin-top: 1em;
           background-color: var(--background-secondary);
