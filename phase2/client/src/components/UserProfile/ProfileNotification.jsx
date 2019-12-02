@@ -28,6 +28,7 @@ class AdminProfileNotification extends React.Component {
     }
     
     componentDidMount() {
+        console.log(this.props.state.readMsg);
         const readMsg = this.props.state.readMsg;
         const unreadMsg = this.props.state.unreadMsg;
         
@@ -35,6 +36,8 @@ class AdminProfileNotification extends React.Component {
             return Date.parse(b.time) - Date.parse(a.time);
         });
         unreadMsg.sort(function(a, b){
+            console.log("log time");
+            console.log(b, a);
             return Date.parse(b.time) - Date.parse(a.time);
         });
         
@@ -43,6 +46,7 @@ class AdminProfileNotification extends React.Component {
     }
 
     render() {
+        // console.log(this.state);
         return (
             <div id="notification-tab">
                 <div id="search-notification">

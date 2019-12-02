@@ -12,6 +12,7 @@ import Animation from './Animation.jsx';
 import FavoritesBoard from './FavoritesBoard';
 import ViewHistoryboard from './ViewHistoryBoard';
 import FollowerBoard from './FollowerBoard';
+import NotificationBoard from './NotificationBoard';
 
 class UserProfile extends React.Component {
   state = {
@@ -23,7 +24,6 @@ class UserProfile extends React.Component {
     following: [],
     curState: '',
     author: '',
-    functions: [],
   };
 
   handlePopup = () => {
@@ -64,49 +64,6 @@ class UserProfile extends React.Component {
         curState: <PostsBoard author={this.props.current_user._id} />,
       });
     }
-    this.setState({
-      functions: [
-        {
-          id: 1,
-          title: 'Message Board',
-          model: <MessageBoard author={this.props.current_user._id} />,
-        },
-        {
-          id: 2,
-          title: 'Posts',
-          model: <PostsBoard author={this.props.current_user._id} />,
-        },
-        {
-          id: 3,
-          title: 'Favorites',
-          model: (
-            <FavoritesBoard
-              author={this.props.current_user._id}
-              posts={this.props.current_user.favs}
-            />
-          ),
-        },
-        {
-          id: 4,
-          title: 'View History',
-          model: (
-            <ViewHistoryboard
-              author={this.props.current_user._id}
-              posts={this.props.current_user.view_history}
-            />
-          ),
-        },
-        {
-          id: 5,
-          title: 'Follower Following',
-          model: (
-            <FollowerBoard
-              author={this.props.current_user._id}
-            />
-          )
-        }
-      ],
-    });
   };
 
   showOption = option => {
@@ -140,6 +97,15 @@ class UserProfile extends React.Component {
           />
         ),
       });
+    }else if (option === "Notifications") {
+      this.readNotifications();
+      this.setState({
+        curState: (
+          <NotificationBoard
+            author={this.props.current_user._id}
+          />
+        )
+      })
     }
   };
 
@@ -257,11 +223,26 @@ class UserProfile extends React.Component {
     this.uploadImage('avatar', inputFile);
   };
 
+  readNotifications = () => {
+    axios
+      .post(`/api/notifications/read/${this.props.current_user._id}`, {}, this.props.tokenConfig())
+      .then(result => {
+        if (!result) {
+          console.log('Notifications count not be read.');
+        } else {
+          console.log(result.data.nModified + ' new notifications read.');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   render() {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
-    const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board'];
+    const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board', "Notifications"];
     return (
       <div className="user-profile-page">
         {this.state.alert ? (

@@ -25,7 +25,7 @@ class NotificationCard extends React.Component {
             new RegExp(keyArray.join("|"), "ig"),
             str => `<Fragment class="text-highlight">${str}</Fragment>`
         );
-        return (<div dangerouslySetInnerHTML={{ __html: highlightText }} />);
+        return (<div className="text-container" dangerouslySetInnerHTML={{ __html: highlightText }} />);
     }
 
     componentDidMount() {
