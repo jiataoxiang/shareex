@@ -250,7 +250,7 @@ class AdminProfileFindUser extends React.Component {
               <button
                 type="button"
                 id="button-reset"
-                className="btn btn-warning"
+                className="btn btn-secondary"
                 onClick={this.resetMotto}
               >
                 Reset Motto
