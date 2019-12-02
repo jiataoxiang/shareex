@@ -266,7 +266,7 @@ class SinglePost extends Component {
       alert("You cannot edit other's post.");
     } else {
       this.props.history.push({
-        pathname: '/new_post',
+        pathname: '/edit_post',
         state: {post: this.state.post, attachments: this.state.attachments, edit_mode: true},
       });
     }

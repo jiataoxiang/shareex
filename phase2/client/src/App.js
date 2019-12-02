@@ -68,6 +68,7 @@ class App extends React.Component {
             <Route exact path="/login" component={() => <Login state={this.state} />} />
             <Route exact path="/signup" component={() => <SignUp state={this.state} />} />
             <Route exact path="/new_post" component={() => <NewPost state={this.state} />} />
+            <Route exact path="/edit_post" component={() => <NewPost state={this.state} />} />
             {/*<Route*/}
             {/*  exact*/}
             {/*  path="/single_post/:id"*/}
