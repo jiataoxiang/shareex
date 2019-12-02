@@ -307,7 +307,7 @@ class NewPost extends Component {
     return (
       <div className="new-post-page">
         <div className="container-fluid">
-          <h1>New Post</h1>
+          {this.state.edit_mode ? <h1>Edit Post</h1> : <h1>New Post</h1>}
           <div className="secondary-container">
             <div className="form-group">
               <h4>Title</h4>
