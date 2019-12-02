@@ -20,7 +20,7 @@ class OtherProfile extends React.Component {
     followers: [],
     following: [],
     messages: [],
-    likes: [],
+    likes: 0,
     numPosts: -1,
     motto: '',
     current_message: '',
@@ -100,9 +100,9 @@ class OtherProfile extends React.Component {
         avatar: user.avatar,
         followers: user.followers,
         following: user.following,
-        likes: user.likes,
         motto: user.motto,
         messages: user.messages,
+        likes: user.likes
       });
     });
   };

@@ -24,6 +24,7 @@ class UserProfile extends React.Component {
     curState: '',
     author: '',
     functions: [],
+    likes: 0
   };
 
   handlePopup = () => {
@@ -143,6 +144,7 @@ class UserProfile extends React.Component {
     }
   };
 
+
   componentDidMount() {
     // Current user info
     const currentUser = this.props.current_user;
@@ -153,8 +155,8 @@ class UserProfile extends React.Component {
         avatar: currentUser.avatar,
         followers: currentUser.followers,
         following: currentUser.following,
-        likes: currentUser.likes,
         motto: currentUser.motto,
+        likes: currentUser.likes
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -262,7 +264,6 @@ class UserProfile extends React.Component {
       window.location.href = '/';
     }
     const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board'];
-    const followers = this.state.followers;
     return (
       <div className="user-profile-page">
         {this.state.alert ? (

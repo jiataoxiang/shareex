@@ -394,4 +394,38 @@ router.post('/add-messenger/:id', (req, res) => {
     });
 });
 
+router.patch("/like/:id", (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send("user id is not valid")
+  }
+  User.findById(id).then(user => {
+    user.likes += 1;
+    user.save().then(new_user => {
+      res.send(new_user)
+    }).catch((err) => {
+      res.status(400).send(err)
+    })
+  }).catch(err => {
+    res.status(400).send(err)
+  })
+});
+
+router.patch("/unlike/:id", (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send("user id is not valid")
+  }
+  User.findById(id).then(user => {
+    user.likes -= 1;
+    user.save().then(new_user => {
+      res.send(new_user)
+    }).catch((err) => {
+      res.status(400).send(err)
+    })
+  }).catch(err => {
+    res.status(400).send(err)
+  })
+});
+
 module.exports = router;
