@@ -1,7 +1,7 @@
 .user-profile-page {
   // setup background
   background-image: url('/img/login_background3.jpg');
-  // min-height: 500px;
+  min-height: 100vh;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -45,6 +45,7 @@
   /* Style the big profile picture circle here. */
   #bigProfilePicCircle {
     /* Add properties below */
+    cursor: pointer;
     position: absolute;
     top: 130px;
     left: 10em;
@@ -85,7 +86,7 @@
 
   /*** Profile info box styles below ***/
   .container-fluid {
-    padding: 0 10% 0 10%;
+    padding: 0 10% 20px 10%;
     .space {
       height: 53px;
     }
@@ -220,7 +221,7 @@
     position: center;
   }
 
-  //follower
+  //follow
   .followers {
     margin-top: 1px;
     margin-bottom: 5em;
@@ -252,7 +253,16 @@
       color: white;
     }
   }
+  .follower-board {
+    h3 {
+      color: white;
+    }
+  }
+  .other-profile-content {
+    // margin-top: ;
+  }
 }
+
 @media screen and (max-width: 800px) {
   .user-profile-page {
     .container-fluid {
@@ -275,3 +285,10 @@
 //     padding: 0 10em 0 10em;
 //   }
 // }
+
+.other-profile-page {
+  .container-fluid {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}

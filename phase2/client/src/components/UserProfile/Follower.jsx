@@ -1,19 +1,21 @@
 import React from 'react';
 import axios from "axios";
 import '../../stylesheets/follower.scss';
+import {withRouter} from 'react-router-dom'
 import { connect } from 'react-redux';
 
 class Follower extends React.Component {
   _isMount = false;
 
+
   state = {
-    follower: this.props.follower
+    follow: this.props.follow
   };
 
   componentDidMount() {
     this._isMount = true;
-    //get follower avatar and name
-    axios.get(`/api/users/${this.state.follower}`, this.props.tokenConfig())
+    //get follow avatar and name
+    axios.get(`/api/users/${this.state.follow}`, this.props.tokenConfig())
       .then((follower) => {
         if(this._isMount){
           this.setState({
@@ -31,15 +33,21 @@ class Follower extends React.Component {
     this._isMount = false;
   };
 
-  redirectProfile = () =>{
-
+  redirectProfile = () => {
+    this.props.history.push({
+      pathname: '/otherprofile',
+      state: {post_id: null, author: this.state.follow},
+    });
   };
 
   render() {
     return (
-      <div className="follower">
-        <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" onClick={this.redirectProfile}/>
-        <span className="username-text">{this.state.follower_name}</span>
+      <div>
+        <div className="follower">
+          <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" onClick={this.redirectProfile}/>
+          <span className="username-text">{this.state.follower_name}</span>
+        </div>
+        <br/>
       </div>
     );
   }
@@ -63,4 +71,4 @@ const mapStateToProps = state => ({
   }
 });
 
-export default connect(mapStateToProps)(Follower);
+export default connect(mapStateToProps)(withRouter(Follower));

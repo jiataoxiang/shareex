@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import {rand_string} from '../../lib/util';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {uid} from 'react-uid';
+import { rand_string } from '../../lib/util';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { uid } from 'react-uid';
 import axios from 'axios';
 import {login} from "../../actions/authActions";
 
@@ -75,7 +75,7 @@ class NewPost extends Component {
   };
 
   // find the correct position to insert new item
-  findInsertPosContent = (key) => {
+  findInsertPosContent = key => {
     const list = this.state.contents;
     for (let i = 0; i < list.length; i++) {
       if (list[i].key === key) {
@@ -105,8 +105,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
-
+    this.setState({ contents: contents });
   };
 
   // handle incoming video/image links and store them in state
@@ -129,7 +128,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({contents: contents});
+    this.setState({ contents: contents });
   };
 
   // handle incoming text/code and store them in state
@@ -162,7 +161,7 @@ class NewPost extends Component {
           key: uid(rand_string()),
           parent_key: secondary_key,
           type: type,
-          title: '' ? type !== 'code' : ``
+          title: '' ? type !== 'code' : ``,
         };
         const content_list = this.state.contents;
         content_list.splice(i + 1, 0, content);
@@ -175,12 +174,12 @@ class NewPost extends Component {
   };
 
   // delete an specified item from current post
-  deleteItem = (secondary_key) => {
+  deleteItem = secondary_key => {
     for (let i = 0; i < this.state.contents.length; i++) {
       if (this.state.contents[i].key === secondary_key) {
         const contents = this.state.contents;
         contents.splice(i, 1);
-        this.setState({contents: contents});
+        this.setState({ contents: contents });
       }
     }
   };
@@ -189,21 +188,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({property});
+    this.setState({ property });
   };
 
   // configure the token used for authentication
@@ -297,9 +296,11 @@ class NewPost extends Component {
   };
 
   render() {
+    if (!this.props.isAuthenticated) this.props.history.push('/');
+
     return (
       <div className="new-post-page">
-        <div className="container">
+        <div className="container-fluid">
           <h1>New Post</h1>
           <div className="secondary-container">
             <div className="form-group">

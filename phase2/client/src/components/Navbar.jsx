@@ -115,6 +115,7 @@ class Navbar extends React.Component {
   };
 
   searchTypeChange = e => {
+    if (!document.getElementById('post-filters')) return;
     if (e.target.value === 'post') {
       document.getElementById('post-filters').classList.remove('hide');
     } else if (e.target.value === 'user') {
@@ -195,7 +196,7 @@ class Navbar extends React.Component {
           </div>
 
           {this.props.isAuthenticated ? (
-            <Link className="nav-link nav-item" to="new_post">
+            <Link className="nav-link nav-item new-post-btn" to="/new_post">
               <button className="btn btn-outline-primary btn-sm">New Post</button>
             </Link>
           ) : null}

@@ -4,6 +4,8 @@ import '../stylesheets/post.scss';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import store from '../store';
+import { loadUser } from '../actions/authActions';
 
 class Post extends Component {
   _isMount = false;
@@ -63,11 +65,14 @@ class Post extends Component {
       .patch('/api/posts/like/' + this.state.post._id, {}, this.tokenConfig())
       .then(res => {
         console.log(res.data);
-        this.setState({ post: res.data.post, has_liked: true });
+        if(this._isMount){
+          this.setState({ post: res.data.post, has_liked: true });
+        }
       })
       .catch(err => {
         console.log(err.response);
       });
+
   };
 
   thumbdown = () => {
@@ -76,7 +81,9 @@ class Post extends Component {
       .patch('/api/posts/unlike/' + this.state.post._id, {}, this.tokenConfig())
       .then(res => {
         console.log(res.data);
-        this.setState({ post: res.data.post, has_liked: false });
+        if(this._isMount){
+          this.setState({ post: res.data.post, has_liked: false });
+        }
       })
       .catch(err => {
         console.log(err.response);
@@ -177,8 +184,15 @@ class Post extends Component {
             })}
           </div>
           <hr />
-          <Link to={`/single_post/${this.props.post._id}`} className="btn btn-primary">
-            See Details
+          <Link
+            to={{
+              pathname: `/single_post/${this.props.post._id}`,
+              state: {
+                current_user_id: this.props.current_user._id,
+              },
+            }}
+          >
+            <button className="btn btn-primary">See Details</button>
           </Link>
 
           <span className="likes float-right">Likes: {likes}</span>

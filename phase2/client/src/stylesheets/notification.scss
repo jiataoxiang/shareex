@@ -1,15 +1,13 @@
 .notification-card {
     margin-top: 20px;
+    background-color: var(--background-secondary);
+    
     .avatar {
         margin-top: 10px;
         margin-left: 10px;
         width: 60px;
         height: 60px;
         border-radius: 50%;
-    }
-    
-    .notification-card {
-        background-color:antiquewhite;
     }
     
     .author-container {

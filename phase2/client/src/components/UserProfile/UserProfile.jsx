@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Follower from './Follower';
 import MessageBoard from './MessageBoard';
 import PostsBoard from './PostsBoard';
 import store from '../../store';
@@ -12,6 +11,7 @@ import { loadUser } from '../../actions/authActions';
 import Animation from './Animation.jsx';
 import FavoritesBoard from './FavoritesBoard';
 import ViewHistoryboard from './ViewHistoryBoard';
+import FollowerBoard from './FollowerBoard';
 
 class UserProfile extends React.Component {
   state = {
@@ -24,12 +24,6 @@ class UserProfile extends React.Component {
     curState: '',
     author: '',
     functions: [],
-  };
-
-  showComponent = component => {
-    this.setState({
-      curState: component,
-    });
   };
 
   handlePopup = () => {
@@ -102,6 +96,15 @@ class UserProfile extends React.Component {
             />
           ),
         },
+        {
+          id: 5,
+          title: 'Follower Following',
+          model: (
+            <FollowerBoard
+              author={this.props.current_user._id}
+            />
+          )
+        }
       ],
     });
   };
@@ -129,8 +132,17 @@ class UserProfile extends React.Component {
           />
         ),
       });
+    } else if (option === 'Follower Board') {
+      this.setState({
+        curState: (
+          <FollowerBoard
+            author={this.props.current_user._id}
+          />
+        ),
+      });
     }
   };
+
 
   componentDidMount() {
     // Current user info
@@ -142,7 +154,6 @@ class UserProfile extends React.Component {
         avatar: currentUser.avatar,
         followers: currentUser.followers,
         following: currentUser.following,
-        likes: currentUser.likes.length,
         motto: currentUser.motto,
       });
       this.getNumPosts(currentUser);
@@ -250,8 +261,7 @@ class UserProfile extends React.Component {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
-    const options = ['Message Board', 'Posts', 'Favorites', 'View History'];
-    const followers = this.state.followers;
+    const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board'];
     return (
       <div className="user-profile-page">
         {this.state.alert ? (
@@ -290,7 +300,6 @@ class UserProfile extends React.Component {
         <div className="container-fluid">
           <div className="row mt-3">
             <div className="col-lg-4">
-              <div className="sticky-top">
                 {/* <div className="space"></div> */}
                 <div className="profileInfo card">
                   <div className="card-header">
@@ -308,9 +317,6 @@ class UserProfile extends React.Component {
                     </p>
                     <p>
                       <strong>Following:</strong> {this.state.following.length}
-                    </p>
-                    <p>
-                      <strong>Likes:</strong> {this.state.likes}
                     </p>
                     <Link to="/prof_setting" id="profile-setting-btn">
                       <button className="btn btn-light btn-block">Profile Setting</button>
@@ -341,18 +347,6 @@ class UserProfile extends React.Component {
                     </button>
                   ))} */}
                 </div>
-                <br />
-                <div className="followers">
-                  <h3> Followers</h3>
-                  {followers.length !== 0 ? (
-                    followers.map(follower => {
-                      return <Follower key={uid(Math.random())} follower={follower} />;
-                    })
-                  ) : (
-                    <h4 className="text-center">No Follower</h4>
-                  )}
-                </div>
-              </div>
             </div>
             <div className="col-lg-8">{this.state.curState}</div>
           </div>

@@ -41,7 +41,7 @@ html {
 html[theme='dark'] {
   --background-primary: #222222;
   --text: #ffffff;
-  --background-secondary: #333333;
+  --background-secondary: #3d3c3c;
   --hr-color: white;
   --background-image-opacity: 0.5;
 }
@@ -81,17 +81,16 @@ h4 {
   font-family: 'Acme', sans-serif;
 }
 
-h5 {
+h5,
+h5,
+h6,
+button {
   font-family: 'Francois One', sans-serif;
 }
 
 p,
 a {
   font-family: 'Assistant', sans-serif;
-}
-
-button {
-  font-family: 'Francois One', sans-serif;
 }
 
 span {
