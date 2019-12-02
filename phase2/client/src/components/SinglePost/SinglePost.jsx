@@ -61,12 +61,13 @@ class SinglePost extends Component {
       });
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('received props');
-  //   if (nextProps.current_user) {
-  //     this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    // console.log('received props');
+    if (nextProps.current_user) {
+      // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
+      this.setState({cur_user_id: nextProps.current_user._id});
+    }
+  }
 
   getPostData = () => {
     axios
@@ -350,7 +351,7 @@ class SinglePost extends Component {
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
-                {<div className="edit-button">
+                {this.state.cur_user_id === this.state.post.author ? <div className="edit-button">
                   <button
                     className="btn btn-outline-success"
                     type="button"
@@ -358,7 +359,7 @@ class SinglePost extends Component {
                   >
                     Edit
                   </button>
-                </div>}
+                </div> : null}
                 <h2>{this.state.post.title}</h2>
                 <div className="post-content">
                   <Attachment

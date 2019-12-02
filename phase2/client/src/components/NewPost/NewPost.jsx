@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import { rand_string } from '../../lib/util';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { uid } from 'react-uid';
+import {rand_string} from '../../lib/util';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {uid} from 'react-uid';
 import axios from 'axios';
 import {login} from "../../actions/authActions";
 
@@ -66,12 +66,18 @@ class NewPost extends Component {
       const property2 = this.state.to_store;
       property2.category = cur_post.category;
       this.setState({property2});
+      this.setFrontEndCategory(cur_post.category);
 
       const property3 = this.state.to_store;
       property3.content = cur_post.body;
       this.setState({property3});
       console.log(this.state);
     }
+  };
+
+  setFrontEndCategory = (category) => {
+    const id_name = category === "Computer Science" ? 'CS-option' : category + '-option';
+    document.getElementById(id_name).selected = true;
   };
 
   // find the correct position to insert new item
@@ -105,7 +111,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({ contents: contents });
+    this.setState({contents: contents});
   };
 
   // handle incoming video/image links and store them in state
@@ -128,7 +134,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({ contents: contents });
+    this.setState({contents: contents});
   };
 
   // handle incoming text/code and store them in state
@@ -179,7 +185,7 @@ class NewPost extends Component {
       if (this.state.contents[i].key === secondary_key) {
         const contents = this.state.contents;
         contents.splice(i, 1);
-        this.setState({ contents: contents });
+        this.setState({contents: contents});
       }
     }
   };
@@ -188,21 +194,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // configure the token used for authentication
@@ -313,12 +319,12 @@ class NewPost extends Component {
                 <h4>Category:</h4>
                 <select className="form-control" id="category" defaultValue={this.state.to_store.category}
                         onChange={this.inputCategory}>
-                  <option>Computer Science</option>
-                  <option>Travel</option>
-                  <option>Education</option>
-                  <option>Technology</option>
-                  <option>Cooking</option>
-                  <option>Other</option>
+                  <option id="CS-option">Computer Science</option>
+                  <option id="Travel-option">Travel</option>
+                  <option id="Education-option">Education</option>
+                  <option id="Technology-option">Technology</option>
+                  <option id="Cooking-option">Cooking</option>
+                  <option id="Other-option">Other</option>
                 </select>
               </div>
               <div className="form-group">
