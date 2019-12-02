@@ -130,7 +130,7 @@
         float: left;
       }
       .btn {
-        color: gray;
+        color: #d5dbd5;
         border-color: grey;
         margin-left: 1em;
         background-color: var(--background-secondary);
@@ -138,6 +138,9 @@
     }
 
     #display-post {
+      .row-info {
+        margin-top: 3em;
+      }
       .avatar-container {
         text-align: center;
       }
@@ -145,23 +148,18 @@
       #user-avatar {
         width: 5em;
         height: 5em;
-        margin-top: 2.5em;
+        // margin-top: 2.5em;
         border-radius: 50%;
       }
 
-      #text-block {
-        margin-left: 2em;
-        margin-top: 3em;
-      }
+      // #text-block {
+      //   margin-left: 2em;
+      //   margin-top: 3em;
+      // }
 
       .prop-pre {
         display: inline-block;
         margin-right: 10px;
-      }
-
-      #button-change {
-        position: absolute;
-        bottom: 5px;
       }
 
       #delete-warning {
@@ -169,13 +167,13 @@
         color: red;
       }
 
-      .btn {
-        color: gray;
-        border-color: grey;
-        width: 150px;
-        margin-left: 1em;
-        background-color: var(--background-secondary);
-      }
+      // .btn {
+      //   color: #d5dbd5;
+      //   border-color: grey;
+      //   width: 150px;
+      //   margin-left: 1em;
+      //   background-color: var(--background-secondary);
+      // }
     }
   }
 

@@ -146,7 +146,8 @@ class AdminProfileFindUser extends React.Component {
       });
   };
 
-  sendMsg = () => {
+  sendMsg = e => {
+    e.preventDefault();
     if (this.state.inputmsg.length === 0) {
       alert('A message must have some contant.');
     } else {
@@ -238,7 +239,7 @@ class AdminProfileFindUser extends React.Component {
                   </div>
                 </div>
                 <div className="col-md-8">
-                  <div id="text-block" className="col-md-8">
+                  <div id="text-block">
                     <p>Email: {this.state.email}</p>
                     <p>Motto: {this.state.motto}</p>
                   </div>
@@ -282,24 +283,27 @@ class AdminProfileFindUser extends React.Component {
             </div>
           </div>
 
-          <div className="row row-msg">
-            <div className="col-md-8">
-              <input
-                type="text"
-                className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                name="inputmsg"
-                value={this.state.inputmsg}
-                onChange={this.handleInputChange}
-              />
+          <form action="">
+            <div className="row row-msg">
+              <div className="col-md-8">
+                <input
+                  type="text"
+                  className="form-control"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                  name="inputmsg"
+                  value={this.state.inputmsg}
+                  onChange={this.handleInputChange}
+                  placeholder="Enter Message"
+                />
+              </div>
+              <div className="col-md-4">
+                <button type="submit" className="btn" onClick={this.sendMsg}>
+                  Send Message
+                </button>
+              </div>
             </div>
-            <div className="col-md-4">
-              <button type="button" className="btn" onClick={this.sendMsg}>
-                Send Message
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     );

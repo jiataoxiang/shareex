@@ -294,8 +294,19 @@ class AdminProfileFindPost extends React.Component {
               </div>
             </div>
             <div className="col-md-4">
-              <button type="button" id="button-change" className="btn" onClick={this.saveChange}>
+              {/* <button type="button" id="button-change" className="btn" onClick={this.saveChange}>
                 Save Changes
+              </button> */}
+              <button className="btn btn-success btn-block" onClick={this.saveChange}>
+                Save Changes
+              </button>
+              <button
+                type="button"
+                id="button-delete"
+                className="btn btn-danger btn-block"
+                onClick={this.changeDeleteToServer}
+              >
+                Delete
               </button>
             </div>
           </div>
@@ -311,14 +322,14 @@ class AdminProfileFindPost extends React.Component {
               </div>
             </div>
             <div className="col-md-4">
-              <button
+              {/* <button
                 type="button"
                 id="button-delete"
                 className="btn"
                 onClick={this.changeDeleteToServer}
               >
                 Delete
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
