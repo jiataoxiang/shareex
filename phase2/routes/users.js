@@ -28,18 +28,15 @@ router.get('/search/:keyword', (req, res) => {
       ? { username: { $regex: `${req.params.keyword}`, $options: 'i' } }
       : {};
   filter.admin = { $ne: true };
-  console.log(filter);
   User.find(filter)
     .limit(100)
     .select('username')
     .select('avatar')
     .select('email')
     .then(users => {
-      console.log(users);
       res.json({ users });
     })
     .catch(error => {
-      console.log(error.message);
       res.status(500).json({ message: error.message });
     });
 });
@@ -47,7 +44,6 @@ router.get('/search/:keyword', (req, res) => {
 // register
 router.post('/', (req, res) => {
   const { username, email, password } = req.body;
-  console.log(username, password, email);
   // Make sure all inputs are filled in
   if (!username || !email || !password) {
     return res.status(400).json({ message: 'Please enter all fields' });
@@ -66,7 +62,6 @@ router.post('/', (req, res) => {
     email: req.body.email,
   })
     .then(user => {
-      console.log('user created: ', user);
       jwt.sign(
         { id: user._id },
         config.get('jwtSecret'),
@@ -85,7 +80,6 @@ router.post('/', (req, res) => {
       );
     })
     .catch(err => {
-      console.log('error when registering user: ', err);
       res.status(400).json({ message: err.message });
     });
 });
@@ -94,8 +88,6 @@ router.post('/', (req, res) => {
 router.post('/login', (req, res) => {
   const hour = 3600;
   const { username, password } = req.body;
-  console.log(username);
-  console.log(password);
   if (!username || !password) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
@@ -116,10 +108,8 @@ router.post('/login', (req, res) => {
             (err, token) => {
               if (err) throw err;
               user = user.toObject();
-              console.log('user: ', user);
 
               delete user.password; // prevent sending hashed password to frontend
-              console.log('user: ', user);
               res.json({
                 token,
                 user,
@@ -141,7 +131,6 @@ router.post('/login', (req, res) => {
 router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
   User.findById(req.params.user_id, (err, user) => {
     if (err) {
-      console.log('delete user: ', err);
       return res.status(500).json({ message: err.message });
     }
     if (!user) {
@@ -160,7 +149,6 @@ router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 
 // return user info without password, given it's logged in and token is provided and not expired
 router.get('/auth', isAuth, (req, res) => {
-  // console.log('check', req.user);
   User.findById(req.user.id)
     .select('-password')
     .then(user => {
@@ -306,7 +294,6 @@ router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) 
 });
 
 router.patch('/:user_id/remove-view-history', isAuth, isAuthorizedUser, (req, res) => {
-  console.log('removing view history');
   User.findByIdAndUpdate(req.params.user_id, {
     view_history: [],
   })
@@ -352,10 +339,6 @@ router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 });
 
 router.patch('/ban/:user_id', isAuth, isAdmin, (req, res) => {
-  console.log('Banning user');
-  console.log(req.params.user_id);
-  console.log(req.body);
-
   User.findById(req.params.user_id)
     .then(user => {
       if (!user) {
@@ -364,22 +347,17 @@ router.patch('/ban/:user_id', isAuth, isAdmin, (req, res) => {
       Object.keys(req.body).forEach(ele => {
         user[ele] = req.body[ele];
       });
-      console.log(user);
       user
         .save()
         .then(user => {
           return res.send(user);
         })
         .catch(err => {
-          console.log('err at saving user:\n', err);
           res.status(500).send('err');
         });
       // res.status(200).send('end');
     })
     .catch(err => {
-      console.log('\nerror: \n');
-      console.log(err.message);
-      console.log(err.response);
       res.status(500).send(err);
     });
 });
@@ -408,38 +386,48 @@ router.post('/add-messenger/:id', (req, res) => {
     });
 });
 
-router.patch("/like/:id", (req, res) => {
+router.patch('/like/:id', (req, res) => {
   const id = req.params.id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is not valid")
+    res.status(404).send('user id is not valid');
   }
-  User.findById(id).then(user => {
-    user.likes += 1;
-    user.save().then(new_user => {
-      res.send(new_user)
-    }).catch((err) => {
-      res.status(400).send(err)
+  User.findById(id)
+    .then(user => {
+      user.likes += 1;
+      user
+        .save()
+        .then(new_user => {
+          res.send(new_user);
+        })
+        .catch(err => {
+          res.status(400).send(err);
+        });
     })
-  }).catch(err => {
-    res.status(400).send(err)
-  })
+    .catch(err => {
+      res.status(400).send(err);
+    });
 });
 
-router.patch("/unlike/:id", (req, res) => {
+router.patch('/unlike/:id', (req, res) => {
   const id = req.params.id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is not valid")
+    res.status(404).send('user id is not valid');
   }
-  User.findById(id).then(user => {
-    user.likes -= 1;
-    user.save().then(new_user => {
-      res.send(new_user)
-    }).catch((err) => {
-      res.status(400).send(err)
+  User.findById(id)
+    .then(user => {
+      user.likes -= 1;
+      user
+        .save()
+        .then(new_user => {
+          res.send(new_user);
+        })
+        .catch(err => {
+          res.status(400).send(err);
+        });
     })
-  }).catch(err => {
-    res.status(400).send(err)
-  })
+    .catch(err => {
+      res.status(400).send(err);
+    });
 });
 
 module.exports = router;

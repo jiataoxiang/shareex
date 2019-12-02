@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -11,13 +10,12 @@ const commentsRouter = require('./routes/comments');
 const cloudinary = require('cloudinary').v2;
 const formData = require('express-form-data');
 const config = require('config');
-const notificationsRouter = require("./routes/notifications");
-const attachmentRouter = require("./routes/attachments");
+const notificationsRouter = require('./routes/notifications');
+const attachmentRouter = require('./routes/attachments');
 const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(formData.parse());
@@ -32,8 +30,8 @@ app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/test', testRouter);
-app.use("/api/notifications", notificationsRouter);
-app.use("/api/attachments", attachmentRouter);
+app.use('/api/notifications', notificationsRouter);
+app.use('/api/attachments', attachmentRouter);
 
 // Connect to mongodb with mongoose, this require only runs the javascript file instead of importing it
 require('./util/mongoose_connection');
@@ -42,26 +40,17 @@ require('./util/mongoose_connection');
 cloudinary.config({
   cloud_name: config.get('CLOUD_NAME'),
   api_key: config.get('API_KEY'),
-  api_secret: config.get('API_SECRET')
-});
-
-// all other routes
-app.get('/hello', (req, res) => {
-  res.send('<h1>Hello World</h1>');
+  api_secret: config.get('API_SECRET'),
 });
 
 app.post('/api/upload', (req, res) => {
-  console.log('upload route reached');
   const public_id = req.body.public_id;
   const options = {};
   if (public_id) {
     options.public_id = public_id;
   }
   const values = Object.values(req.files);
-  console.log('public id: ', public_id);
-  const promises = values.map(image =>
-    cloudinary.uploader.upload(image.path, options)
-  );
+  const promises = values.map(image => cloudinary.uploader.upload(image.path, options));
 
   Promise.all(promises)
     .then(results => res.json(results))
@@ -74,11 +63,6 @@ app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -87,7 +71,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send('error');
 });
 
 module.exports = app;
