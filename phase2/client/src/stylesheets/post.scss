@@ -6,6 +6,10 @@
     cursor: pointer;
   }
 
+  .hidden-label {
+    color: red;
+  }
+
   span.likes {
     color: var(--text);
   }

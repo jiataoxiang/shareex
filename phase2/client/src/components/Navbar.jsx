@@ -16,7 +16,6 @@ class Navbar extends React.Component {
   };
 
   colorTransition = () => {
-    console.log('making color transition.');
     document.documentElement.classList.add('transition');
     window.setTimeout(() => {
       document.documentElement.classList.remove('transition');
@@ -51,14 +50,6 @@ class Navbar extends React.Component {
       },
     });
   };
-
-  componentDidMount() {
-    console.log('componentDidMount');
-  }
-
-  componentWillReceiveProps() {
-    console.log('componentWillReceiveProps');
-  }
 
   tokenConfig = () => {
     // Get token from localstorage
@@ -105,7 +96,6 @@ class Navbar extends React.Component {
           this.tokenConfig(),
         )
         .then(res => {
-          console.log(res.data);
           store.dispatch(loadUser());
         })
         .catch(err => {

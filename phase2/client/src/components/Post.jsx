@@ -191,7 +191,7 @@ class Post extends Component {
           >
             <button className="btn btn-primary">See Details</button>
           </Link>
-
+          {this.props.post.hidden ? <span className="ml-2 hidden-label">Hidden</span> : null}
           <span className="likes float-right">Likes: {likes}</span>
           {/* {this.getThumbDisplay()} */}
           {this.props.current_user.admin || this.state.has_liked ? (
