@@ -113,10 +113,9 @@ router.get('/post-array', (req, res) => {
   Post.find({
     _id: {$in: posts},
   })
-    .sort({created_at: -1})
     .then(posts => {
       console.log(posts);
-      res.send(posts);
+      res.send(posts.reverse());
     })
     .catch(err => {
       console.log('debug: ', err.message);

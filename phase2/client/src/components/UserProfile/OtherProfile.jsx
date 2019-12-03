@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../stylesheets/user_profile.scss';
-import { withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import MessageBoard from './MessageBoard';
 import PostsBoard from './PostsBoard';
 import { uid } from 'react-uid';
@@ -31,6 +31,7 @@ class OtherProfile extends React.Component {
       curState: component,
     });
   };
+
 
   setFunctions = () => {
     if (this.state.curState === '') {
@@ -182,7 +183,8 @@ class OtherProfile extends React.Component {
 
   sendMsg = e => {
     e.preventDefault();
-    this.sendMsgToServer(`user ${this.state.nickname} is reported by ${this.props.current_user.username}`,
+    const message = document.getElementById("message-input").value;
+    this.sendMsgToServer(message,
       'Message sent.',
       'Message failed to send.');
   };
@@ -216,33 +218,27 @@ class OtherProfile extends React.Component {
     return (
       <div className="user-profile-page other-profile-page">
         <img className="bannerPic" src={this.state.banner} alt="Banner" />
-        <div id="profileStats">
-          <ul className="text-center">
-            <li>
-              Posts
-              <br />
-              <span className="profileStatsNumber">{this.state.numPosts}</span>
-            </li>
-            <li>
-              Followers
-              <br />
-              <span className="profileStatsNumber">{this.state.followers.length}</span>
-            </li>
-            <li>
-              Following
-              <br />
-              <span className="profileStatsNumber">{this.state.following.length}</span>
-            </li>
-          </ul>
-        </div>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-4">
-              <div className="sticky-top">
-                <div id="profileInfo">
-                  <h2>Name: {this.state.nickname}</h2>
-                  <p>Motto: {this.state.motto}</p>
-                  <p>{this.state.description}</p>
+                <div className="profileInfo card">
+                  <div className="card-header">
+                    <h2>Name: {this.state.nickname}</h2>
+                  </div>
+                  <div className="card-body">
+                    <p>
+                      <strong>Motto:</strong> {this.state.motto}
+                    </p>
+                    <p>
+                      <strong>Posts:</strong> {this.state.numPosts}
+                    </p>
+                    <p>
+                      <strong>Followers:</strong> {this.state.followers.length}
+                    </p>
+                    <p>
+                      <strong>Following:</strong> {this.state.following.length}
+                    </p>
+                  </div>
                   {this.props.current_user.admin ?
                     (null) :
                     (this.isUnfollowing() ? (
@@ -258,9 +254,42 @@ class OtherProfile extends React.Component {
                   {
                     this.props.current_user.admin ?
                       (null) :
-                      (<button className="btn btn-warning btn-block" onClick={this.sendMsg}>
-                        <strong>Report</strong>
-                      </button>)
+                      (<div>
+                        <button data-toggle="modal" data-target="#myModal" className="margin-top btn btn-warning btn-block" onClick={this.showModal}>
+                          <strong>Report</strong>
+                        </button>
+                        <div id="myModal" className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog"
+                             aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div className="modal-dialog modal-lg">
+                            <div className="modal-content">
+                              <div className="modal-body">
+                                <div className="form-group">
+                                  <label htmlFor="message-input" className="title-color col-form-label">Report reason:</label>
+                                  <input
+                                    type="text"
+                                    id="message-input"
+                                    className="form-control"
+                                    aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    name="title"
+                                  />
+                                </div>
+                                <div className="modal-footer">
+                                  <button
+                                    type="button"
+                                    id="button-delete"
+                                    className="btn btn-danger btn-block"
+                                    onClick={this.sendMsg}
+                                  >
+                                    Send
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        )
                   }
                 </div>
                 <h2>Options</h2>
@@ -277,12 +306,11 @@ class OtherProfile extends React.Component {
                   ))}
                 </div>
                 <br />
-              </div>
             </div>
             <div className="col-md-8 other-profile-content">{this.state.curState}</div>
           </div>
-          <div id="profileImgContainer">
-            <img id="bigProfilePicCircle" src={this.state.avatar} alt="ProfilePicture" />
+          <div id="otherProfileImgContainer">
+            <img id="otherProfilePicCircle" src={this.state.avatar} alt="ProfilePicture" />
           </div>
         </div>
       </div>
