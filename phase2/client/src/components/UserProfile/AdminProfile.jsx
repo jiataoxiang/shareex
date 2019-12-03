@@ -9,15 +9,19 @@ import FindPost from './AdminProfileFindPost';
 import Notification from './ProfileNotification';
 
 class AdminProfile extends Component {
-  // TODO: connect to server, get info from API
   state = {
     avatar: process.env.PUBLIC_URL + './img/User_Avatar.png',
     nickname: 'Admin',
     email: 'place@holder.com',
     tabState: 0,
-    msg: { readMsg: [], unreadMsg: [] },
     msgServer: false,
   };
+
+  // Contains notifications.
+  msg = {
+      readMsg: [], 
+      unreadMsg: []
+  }
 
   tabLeft = [];
   getTabButtons = () => {
@@ -27,7 +31,8 @@ class AdminProfile extends Component {
     this.tabLeft.push(document.getElementById('button-4'));
   };
 
-  tabRight = [<Dashboard />, <FindUser />, <FindPost />, <Notification state={this.state.msg} />];
+  tabRight = [<Dashboard />, <FindUser />, <FindPost />, <Notification state={this.msg} />];
+  // Change what is rendered on the right.
   changeTabRight = num => {
     if (num === 3 && !this.state.msgServer) {
       alert('Please be patient, notifications are still loading');
@@ -39,60 +44,54 @@ class AdminProfile extends Component {
       this.setState({ tabState: num });
 
       this.hideBadge();
-      this.readNotifications();
     } else {
       this.tabLeft.forEach(button => {
         button.classList.remove('btn-selected');
       });
       this.tabLeft[num].classList.add('btn-selected');
       this.setState({ tabState: num });
+        
+      this.getNotifications();
     }
   };
 
+  // Hide the new badge for notifications.
   hideBadge = () => {
     const msg_badge = document.getElementById('unread-notifications');
     msg_badge.setAttribute('hidden', true);
   };
 
+  // Show the new badge for notifications.
   showBadge = () => {
     const msg_badge = document.getElementById('unread-notifications');
     msg_badge.removeAttribute('hidden');
   };
 
+  // Read notifications from server.
   getNotifications = () => {
     this.hideBadge();
+    this.setState({ msgServer: false });
 
     axios
-      .get(`/api/notifications/receiver/${this.props.auth.user._id}`, this.tokenConfig())
+      .get(
+        `/api/notifications/receiver/${this.props.auth.user._id}`, this.tokenConfig()
+      )
       .then(msgs => {
+        this.msg.readMsg = [];
+        this.msg.unreadMsg = [];
+        
         msgs.data.forEach(msg => {
           if (msg.read) {
-            this.state.msg.readMsg.push(msg);
+            this.msg.readMsg.push(msg);
           } else {
             this.showBadge();
-            this.state.msg.unreadMsg.push(msg);
+            this.msg.unreadMsg.push(msg);
           }
         });
+      }).then(result => {
         this.setState({ 
-            msg: this.state.msg, 
-            msgServer: true 
+          msgServer: true 
         });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  readNotifications = () => {
-    axios
-      .post(`/api/notifications/read/${this.props.auth.user._id}`, {}, this.tokenConfig())
-      .then(result => {
-        if (!result) {
-          console.log('Notifications count not be read.');
-        } else {
-          this.hideBadge();
-          console.log(result.data.nModified + ' new notifications read.');
-        }
       })
       .catch(error => {
         console.log(error);

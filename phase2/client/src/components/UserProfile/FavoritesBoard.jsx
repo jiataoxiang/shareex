@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { uid } from 'react-uid';
 import Post from '../Post';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
@@ -28,7 +27,6 @@ class FavoritesBoard extends Component {
   };
 
   removeFav = to_be_removed_post_id => {
-
     axios
       .patch(
         `/api/posts/remove-fav/${to_be_removed_post_id}`,

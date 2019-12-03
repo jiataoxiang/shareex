@@ -1,7 +1,12 @@
 .signup-page {
-  padding-top: 70px;
   position: relative;
-  // overflow: hidden;
+  background-image: url('/img/login_background3.jpg');
+  // min-height: 500px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
   .background-img {
     position: absolute;
     left: 0;
@@ -22,8 +27,8 @@
   }
 
   .form-container {
+    padding-top: 10em;
     margin: auto;
-    margin-top: 10em;
     width: 20em;
     text-align: center;
     position: relative;
@@ -48,6 +53,8 @@
 }
 @media screen and (max-height: 800px) {
   .signup-page {
-    padding-top: 5px;
+    .form-container {
+      padding-top: 5em;
+    }
   }
 }

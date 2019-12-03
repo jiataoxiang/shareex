@@ -1,7 +1,12 @@
 .login-page {
-  padding-top: 70px;
   position: relative;
-  // overflow: hidden;
+  background-image: url('/img/login_background3.jpg');
+  // min-height: 500px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
   .background-img {
     position: absolute;
     left: 0;
@@ -12,9 +17,10 @@
   }
   // background: url(sweettexture.jpg) blue;
   .form-container {
+    padding-top: 10em;
     margin: auto;
-    margin-top: 10em;
     width: 20em;
+
     text-align: center;
     z-index: 2;
     position: relative;
@@ -46,6 +52,8 @@
 }
 @media screen and (max-height: 800px) {
   .login-page {
-    padding-top: 20px;
+    .form-container {
+      padding-top: 5em;
+    }
   }
 }

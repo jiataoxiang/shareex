@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { uid } from 'react-uid';
 import axios from 'axios';
-import { login } from '../../actions/authActions';
 
 class NewPost extends Component {
   constructor(props) {
@@ -379,7 +378,6 @@ class NewPost extends Component {
           >
             Submit
           </button>
-
         </div>
       </div>
     );

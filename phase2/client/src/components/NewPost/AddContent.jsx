@@ -7,7 +7,6 @@ import Attachment from '../Attachment';
 import { uid } from 'react-uid';
 import { rand_string } from '../../lib/util';
 import ImageUploader from '../ImageUploader';
-import SingleImageUpload from '../SingleImageUpload';
 
 const code = `function add(a, b) {
   return a + b;

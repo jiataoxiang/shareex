@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { uid } from 'react-uid';
 import Post from '../Post';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';

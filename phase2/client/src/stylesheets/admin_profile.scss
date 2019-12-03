@@ -78,7 +78,9 @@
         width: 15em;
         float: left;
       }
-
+      p {
+        font-family: 'Alatsi', sans-serif;
+      }
       button {
         margin-left: 10px;
       }
@@ -120,9 +122,9 @@
       .row-msg {
         margin-top: 5px;
       }
-        
+
       .btn {
-        width: 10em;  
+        width: 10em;
       }
     }
   }
@@ -162,9 +164,9 @@
         margin-top: 1em;
         color: red;
       }
-        
+
       .edit-post-buttons {
-        margin-top: 33px;  
+        margin-top: 33px;
       }
     }
   }
