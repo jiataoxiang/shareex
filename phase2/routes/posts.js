@@ -94,6 +94,30 @@ router.get('/recommendations', (req, res) => {
     });
 });
 
+router.get('/countposts', isAuth, isAdmin, (req, res) => {
+    Post.count().then((count) => {
+        res.send({count: count});
+    }).catch(err => {
+        res.status(500).send();
+    })
+});
+
+router.get('/countdaily', isAuth, isAdmin, (req, res) => {
+    var yesterday = new Date(Date.now() - 1*24*60*60*1000);
+    
+    Post.find({
+      created_at: {$gt: yesterday} 
+    }).then((posts) => {
+        if (!posts) {
+            res.status(404).send();
+        } else {
+            res.send({count: posts.length});
+        }
+    }).catch(err => {
+        res.status(500).send();
+    })
+});
+
 // get posts by user id
 router.get('/by-user/:user_id', isAuth, (req, res) => {
   Post.find({author: req.params.user_id})

@@ -171,6 +171,20 @@ router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
   });
 });
 
+router.get('/countusers', isAuth, isAdmin, (req, res) => {
+    User.find({
+      admin: false 
+    }).then((posts) => {
+        if (!posts) {
+            res.status(404).send();
+        } else {
+            res.send({count: posts.length});
+        }
+    }).catch(err => {
+        res.status(500).send();
+    })
+});
+
 // return user info without password, given it's logged in and token is provided and not expired
 router.get('/auth', isAuth, (req, res) => {
   User.findById(req.user.id)
