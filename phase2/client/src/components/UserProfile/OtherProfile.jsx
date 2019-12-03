@@ -258,7 +258,7 @@ class OtherProfile extends React.Component {
                   {
                     this.props.current_user.admin ?
                       (null) :
-                      (<button className="btn btn-danger btn-block" onClick={this.sendMsg}>
+                      (<button className="btn btn-warning btn-block" onClick={this.sendMsg}>
                         <strong>Report</strong>
                       </button>)
                   }

@@ -24,6 +24,7 @@ class UserProfile extends React.Component {
     following: [],
     curState: '',
     author: '',
+    msg: { readMsg: [], unreadMsg: [] },
   };
 
   handlePopup = () => {
@@ -97,6 +98,7 @@ class UserProfile extends React.Component {
       });
     }else if (option === "Notifications") {
       this.readNotifications();
+      this.hideBadge();
       this.setState({
         curState: (
           <NotificationBoard
@@ -105,6 +107,39 @@ class UserProfile extends React.Component {
         )
       })
     }
+  };
+
+  hideBadge = () => {
+    const msg_badge = document.getElementById('unread-notifications');
+    msg_badge.setAttribute('hidden', true);
+  };
+
+  showBadge = () => {
+    const msg_badge = document.getElementById('unread-notifications');
+    msg_badge.removeAttribute('hidden');
+  };
+
+  getNotifications = () => {
+    this.hideBadge();
+
+    axios
+      .get(`/api/notifications/receiver/${this.props.current_user._id}`, this.props.tokenConfig())
+      .then(msgs => {
+        msgs.data.forEach(msg => {
+          if (msg.read) {
+            this.state.msg.readMsg.push(msg);
+          } else {
+            this.showBadge();
+            this.state.msg.unreadMsg.push(msg);
+          }
+        });
+        this.setState({
+          msg: this.state.msg,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
 
@@ -123,6 +158,7 @@ class UserProfile extends React.Component {
       this.getNumPosts(currentUser);
       this.updatePosts();
       this.setFunctions();
+      this.getNotifications();
     }
   }
 
@@ -236,7 +272,7 @@ class UserProfile extends React.Component {
     if (!this.props.isAuthenticated) {
       window.location.href = '/';
     }
-    const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board', "Notifications"];
+    const options = ['Message Board', 'Posts', 'Favorites', 'View History', 'Follower Board'];
     return (
       <div className="user-profile-page">
         {this.state.alert ? (
@@ -311,16 +347,17 @@ class UserProfile extends React.Component {
                       </button>
                     );
                   })}
-                  {/* {this.state.functions.map(fun => (
-                    <button
-                      key={uid(Math.random())}
-                      type="button"
-                      className="list-group-item list-group-item-action"
-                      onClick={this.showComponent.bind(this, fun.model)}
-                    >
-                      {fun.title}
-                    </button>
-                  ))} */}
+                  <button
+                    type="button"
+                    id="button-4"
+                    className="list-group-item list-group-item-action"
+                    onClick={this.showOption.bind(this, "Notifications")}
+                  >
+                    Notification
+                    <span id="unread-notifications" className="badge badge-danger">
+                        New
+                      </span>
+                  </button>
                 </div>
             </div>
             <div className="col-lg-8">{this.state.curState}</div>
