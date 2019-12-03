@@ -12,7 +12,6 @@ import Animation from './Animation.jsx';
 import FavoritesBoard from './FavoritesBoard';
 import ViewHistoryboard from './ViewHistoryBoard';
 import FollowerBoard from './FollowerBoard';
-import NotificationBoard from './NotificationBoard';
 import Notification from './ProfileNotification';
 
 class UserProfile extends React.Component {

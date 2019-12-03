@@ -91,10 +91,11 @@ router.post("/to-admin", isAuth, (req, res) => {
        const admins = users.filter(user => user.admin === true)
        admins.forEach(admin => {
            const to = admin._id;
-           const new_msg = {
+          const new_msg = {
                from : sender,
                to: to,
-               body: content
+               body: content,
+               link: req.body.link
            };
            Notification.create(new_msg).then(msg => {
                console.log("notification create: ", msg);

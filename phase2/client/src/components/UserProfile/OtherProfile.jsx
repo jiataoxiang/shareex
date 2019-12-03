@@ -188,7 +188,8 @@ class OtherProfile extends React.Component {
   sendMsgToServer = (msgBody, success, fail) => {
     const newMsg = {
       from: this.props.current_user._id,
-      body: msgBody,
+      body: `user \"${this.state.nickname}\" is reported by user \"${this.props.current_user.username}\": ` + msgBody,
+      link: `/otherprofile/${this.state.author}`
     };
 
     axios
@@ -263,10 +264,13 @@ class OtherProfile extends React.Component {
                     >
                       <div className="modal-dialog modal-lg">
                         <div className="modal-content">
+                          <div className="modal-header">
+                            <h2 className="title-color">{`Report user ${this.state.nickname}`}</h2>
+                          </div>
                           <div className="modal-body">
                             <div className="form-group">
                               <label htmlFor="message-input" className="title-color col-form-label">
-                                Report reason:
+                                Reason:
                               </label>
                               <input
                                 type="text"
@@ -280,8 +284,16 @@ class OtherProfile extends React.Component {
                             <div className="modal-footer">
                               <button
                                 type="button"
+                                className="btn btn-secondary"
+                                data-dismiss="modal"
+                              >
+                                Close
+                              </button>
+                              <button
+                                type="button"
                                 id="button-delete"
-                                className="btn btn-danger btn-block"
+                                className="btn btn-primary btn-danger btn-block"
+                                data-dismiss="modal"
                                 onClick={this.sendMsg}
                               >
                                 Send
