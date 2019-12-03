@@ -73,7 +73,9 @@ class SinglePost extends Component {
         console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
-        this.props.history.push();
+        this.props.history.push({
+          pathname: '/404notfound',
+        });
         console.log(err);
       });
   };

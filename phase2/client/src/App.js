@@ -84,6 +84,7 @@ class App extends React.Component {
             {/* <Route exact path="/tmp" component={Tmp} /> */}
 
             <Route component={NotFound404} />
+            <Route exact path="/404notfound" component={NotFound404} />
           </Switch>
         </BrowserRouter>
       </Provider>
