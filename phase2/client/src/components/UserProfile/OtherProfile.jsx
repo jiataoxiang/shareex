@@ -11,8 +11,7 @@ import {loadUser} from "../../actions/authActions";
 
 class OtherProfile extends React.Component {
   state = {
-    post_id: this.props.location.state.post_id,
-    author: this.props.location.state.author,
+    author: '',
     curState: '',
     nickname: '',
     banner: '',
@@ -56,11 +55,9 @@ class OtherProfile extends React.Component {
   };
 
   updatePosts = () => {
-    console.log('updating posts');
     axios
       .get('/api/posts/by-user/' + this.state.author, this.props.tokenConfig())
       .then(res => {
-        console.log(res.data);
         this.setState({ posts: res.data.posts });
       })
       .catch(error => {
@@ -70,13 +67,9 @@ class OtherProfile extends React.Component {
 
   componentDidMount() {
     this.getUserInfo();
-    this.getNumPosts(this.state.author);
-    this.updatePosts();
-    this.setFunctions();
   }
 
   getNumPosts = currentUser => {
-    console.log('the current usr is : ' + currentUser);
     axios
       .get(`/api/posts/user-posts/${currentUser}`, this.props.tokenConfig())
       .then(posts => {
@@ -90,23 +83,35 @@ class OtherProfile extends React.Component {
   };
 
   getUserInfo = () => {
-    axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
-      user = user.data;
-      console.log(user);
-      this.setState({
-        nickname: user.username,
-        banner: user.banner,
-        avatar: user.avatar,
-        followers: user.followers,
-        following: user.following,
-        motto: user.motto,
-        messages: user.messages,
-      });
+    this.setState({
+      author: this.props.match.params.id
+    });
+    axios.get(`/api/users/${this.props.match.params.id}`, this.props.tokenConfig())
+    .then(user => {
+      if (!user) {
+        window.location.href = '/';
+      } else {
+        user = user.data;
+        this.setState({
+          nickname: user.username,
+          banner: user.banner,
+          avatar: user.avatar,
+          followers: user.followers,
+          following: user.following,
+          motto: user.motto,
+          messages: user.messages,
+        });
+        this.getNumPosts(this.state.author);
+        this.updatePosts();
+        this.setFunctions();
+      }
+    })
+    .catch(err => {
+        console.log(err);
     });
   };
 
   isUnfollowing = () => {
-    // console.log(this.state.followers);
     return (
       this.state.followers.filter(follower => follower === this.props.current_user._id).length === 0
     );
@@ -121,15 +126,12 @@ class OtherProfile extends React.Component {
         this.props.tokenConfig(),
       )
       .then(following => {
-        console.log(following);
       })
       .catch(error => {
         console.log(error);
       });
 
     //remove follow in current user
-    console.log("author is "+this.state.author);
-    console.log("cur user is "+this.props.current_user._id);
     axios
       .post(
         `/api/users/remove-follower/${this.state.author}`,
@@ -156,7 +158,6 @@ class OtherProfile extends React.Component {
         this.props.tokenConfig(),
       )
       .then(following => {
-        console.log(following);
       })
       .catch(error => {
         console.log(error);
@@ -172,12 +173,40 @@ class OtherProfile extends React.Component {
         this.setState({
           followers: followers.data.followers,
         });
-        console.log(followers);
       })
       .catch(error => {
         console.log(error);
       });
     store.dispatch(loadUser());
+  };
+
+  sendMsg = e => {
+    e.preventDefault();
+    this.sendMsgToServer(`user ${this.state.nickname} is reported by ${this.props.current_user.username}`,
+      'Message sent.',
+      'Message failed to send.');
+  };
+
+  sendMsgToServer = (msgBody, success, fail) => {
+
+    const newMsg = {
+      from: this.props.current_user._id,
+      body: msgBody,
+    };
+
+    axios
+      .post(`/api/notifications/to-admin`, newMsg, this.props.tokenConfig())
+      .then(msg => {
+        if (!msg) {
+          alert(fail);
+        } else {
+          alert(success);
+        }
+      })
+      .catch(err => {
+        alert(fail);
+        console.log(err);
+      });
   };
 
   render() {
@@ -214,15 +243,25 @@ class OtherProfile extends React.Component {
                   <h2>Name: {this.state.nickname}</h2>
                   <p>Motto: {this.state.motto}</p>
                   <p>{this.state.description}</p>
-                  {this.isUnfollowing() ? (
+                  {this.props.current_user.admin ?
+                    (null) :
+                    (this.isUnfollowing() ? (
                     <button className="btn btn-success btn-block" onClick={this.followRequest}>
-                      <strong>Follow</strong>
+                     <strong>Follow</strong>
                     </button>
-                  ) : (
+                    ) : (
                     <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
-                      <strong>Unfollow</strong>
+                     <strong>Unfollow</strong>
                     </button>
-                  )}
+                    ))
+                  }
+                  {
+                    this.props.current_user.admin ?
+                      (null) :
+                      (<button className="btn btn-danger btn-block" onClick={this.sendMsg}>
+                        <strong>Report</strong>
+                      </button>)
+                  }
                 </div>
                 <h2>Options</h2>
                 <div className="list-group options">

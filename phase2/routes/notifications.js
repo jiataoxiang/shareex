@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { isAuth } = require('../middleware/auth');
 const {ObjectID} = require("mongodb");
-
 // return all notifications that one user received.
 router.get('/receiver/:id', isAuth, (req, res) => {
     Notification.find({to: req.params.id}).then(msgs => {
@@ -82,6 +81,31 @@ router.post('/create', isAuth, (req, res) => {
             res.status(500).send(err);
         })
     }
-})
+});
+
+router.post("/to-admin", isAuth, (req, res) => {
+   const sender = req.body.from;
+   const content = req.body.body;
+   User.find({}).then(users => {
+       const admins = users.filter(user => user.admin === true)
+       admins.forEach(admin => {
+           const to = admin._id;
+           const new_msg = {
+               from : sender,
+               to: to,
+               body: content
+           };
+           Notification.create(new_msg).then(msg => {
+               console.log("notification create: ", msg);
+               msg.save().then(msg => {
+                   res.send(msg);
+               })
+           }).catch(err => {
+               res.status(500).send(err);
+           })
+       })
+   })
+
+});
 
 module.exports = router;

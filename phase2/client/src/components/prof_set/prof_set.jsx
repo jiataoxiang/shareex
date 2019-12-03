@@ -42,13 +42,13 @@ class ProfSet extends Component {
     }
   }
 
-  // Remove error properties.
+  // Remove error properties for one object.
   clearError = (object) => {
     object.style.backgroundColor = "white";
     object.parentElement.classList.remove("errorShake");
   }
   
-  // Add error properties.
+  // Add error properties for one object.
   setError = (object) => {
     object.style.backgroundColor = "lightpink";
     object.parentElement.classList.add("errorShake");
@@ -150,6 +150,7 @@ class ProfSet extends Component {
               this.props.current_user.email = toPatch.email;
               this.props.current_user.motto = toPatch.motto;
               alert("Profile saved.");
+              document.getElementById("button-cancel").click();
           } else {
               alert("Profile failed to save.");
           }

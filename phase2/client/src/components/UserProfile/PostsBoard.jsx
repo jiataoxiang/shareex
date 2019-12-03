@@ -18,11 +18,9 @@ class PostsBoard extends React.Component {
   }
 
   updatePosts = () => {
-    console.log('updating posts');
     axios
       .get('/api/posts/by-user/' + this.state.author, this.props.tokenConfig())
       .then(res => {
-        console.log(res.data);
         if(this._isMount){
           this.setState({ posts: res.data.posts });
         }
