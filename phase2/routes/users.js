@@ -7,7 +7,6 @@ const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
 
-
 // setup file upload system
 cloudinary.config({
   cloud_name: config.get('CLOUD_NAME'),
@@ -15,11 +14,10 @@ cloudinary.config({
   api_secret: config.get('API_SECRET'),
 });
 
-const deleteImage = (public_id) => {
-  cloudinary.uploader.destroy(public_id)
-    .then(
-      console.log("Delete image from cloudinary executed.")
-    );
+const deleteImage = public_id => {
+  cloudinary.uploader
+    .destroy(public_id)
+    .then(console.log('Delete image from cloudinary executed.'));
 };
 
 /* GET users listing. */
@@ -112,6 +110,17 @@ router.post('/login', (req, res) => {
       username: username,
     }).then(user => {
       if (!user) return res.status(400).json({ message: 'User Does not exist' });
+
+      console.log(user.banned);
+      if (user.unbanned_date > new Date() && user.banned) {
+        console.log('you banned');
+        return res.status(403).json({ message: 'You are Banned' });
+      } else if (user.unbanned_date < Date.now && user.banned) {
+        console.log('here');
+        user.banned = false;
+        user.save();
+      }
+      console.log('not banned');
       user.comparePassword(password, function(err, isMatch) {
         if (err) throw err;
         if (isMatch) {
@@ -156,8 +165,8 @@ router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
     const banner_url = user.banner;
     const avatar = avatar_url.split('.');
     const banner = banner_url.split('.');
-    const avatar_public_key = avatar[avatar.length-2].split('/').reverse()[0];
-    const banner_public_key = banner[banner.length-2].split('/').reverse()[0];
+    const avatar_public_key = avatar[avatar.length - 2].split('/').reverse()[0];
+    const banner_public_key = banner[banner.length - 2].split('/').reverse()[0];
     deleteImage(avatar_public_key);
     deleteImage(banner_public_key);
     user.remove().catch(err => {
@@ -172,17 +181,19 @@ router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
 });
 
 router.get('/countusers', isAuth, isAdmin, (req, res) => {
-    User.find({
-      admin: false 
-    }).then((posts) => {
-        if (!posts) {
-            res.status(404).send();
-        } else {
-            res.send({count: posts.length});
-        }
-    }).catch(err => {
-        res.status(500).send();
+  User.find({
+    admin: false,
+  })
+    .then(posts => {
+      if (!posts) {
+        res.status(404).send();
+      } else {
+        res.send({ count: posts.length });
+      }
     })
+    .catch(err => {
+      res.status(500).send();
+    });
 });
 
 // return user info without password, given it's logged in and token is provided and not expired
