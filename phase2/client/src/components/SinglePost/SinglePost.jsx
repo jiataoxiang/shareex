@@ -321,12 +321,13 @@ class SinglePost extends Component {
   deletePost = () => {
     axios.delete("/api/posts/" + this.props.match.params.id, this.tokenConfig())
       .then(res => {
+        this.props.history.push('/');
         console.log(res);
       })
       .catch(err => {
         console.log(err);
       });
-    this.props.history.push('/');
+
   };
 
   render() {

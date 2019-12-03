@@ -270,6 +270,8 @@ class NewPost extends Component {
         axios
           .post('/api/posts', a_post, this.tokenConfig())
           .then(res => {
+            // redirect to home page
+            this.props.history.push('/');
             console.log(res);
           })
           .catch(err => {
@@ -296,14 +298,13 @@ class NewPost extends Component {
           )
           .then(res => {
             console.log('Updated post: ', res);
+            // redirect to home page
+            this.props.history.push('/');
           })
           .catch(err => {
             console.log(err);
           });
       }
-
-      // redirect to home page
-      this.props.history.push('/');
     }
   };
 
