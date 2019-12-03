@@ -12,7 +12,7 @@ import Animation from './Animation.jsx';
 import FavoritesBoard from './FavoritesBoard';
 import ViewHistoryboard from './ViewHistoryBoard';
 import FollowerBoard from './FollowerBoard';
-import NotificationBoard from './NotificationBoard';
+import Notification from './ProfileNotification';
 
 class UserProfile extends React.Component {
   state = {
@@ -24,7 +24,12 @@ class UserProfile extends React.Component {
     following: [],
     curState: '',
     author: '',
-    msg: { readMsg: [], unreadMsg: [] },
+    msgServer: false,
+  };
+
+  msg =  {
+    readMsg: [],
+    unreadMsg: []
   };
 
   handlePopup = () => {
@@ -93,12 +98,16 @@ class UserProfile extends React.Component {
         curState: <FollowerBoard author={this.props.current_user._id} />,
       });
     } else if (option === 'Notifications') {
-      this.readNotifications();
-      this.hideBadge();
-      this.setState({
-        curState: <NotificationBoard author={this.props.current_user._id} />,
-      });
+      if(!this.state.msgServer) {
+        alert('Please be patient, notifications are still loading');
+      }else {
+        this.hideBadge();
+        this.setState({
+          curState: <Notification state={this.msg} />,
+        });
+      }
     }
+    this.getNotifications();
   };
 
   hideBadge = () => {
@@ -113,23 +122,26 @@ class UserProfile extends React.Component {
 
   getNotifications = () => {
     this.hideBadge();
-
+    this.setState({ msgServer: false });
     axios
       .get(`/api/notifications/receiver/${this.props.current_user._id}`, this.props.tokenConfig())
       .then(msgs => {
+        this.msg.readMsg = [];
+        this.msg.unreadMsg = [];
+
         msgs.data.forEach(msg => {
           if (msg.read) {
-            this.state.msg.readMsg.push(msg);
+            this.msg.readMsg.push(msg);
           } else {
             this.showBadge();
-            this.state.msg.unreadMsg.push(msg);
+            this.msg.unreadMsg.push(msg);
           }
         });
-        this.setState({
-          msg: this.state.msg,
-        });
-      })
-      .catch(error => {
+      }).then(() => {
+      this.setState({
+        msgServer: true
+      });
+    }).catch(error => {
         console.log(error);
       });
   };
@@ -243,20 +255,6 @@ class UserProfile extends React.Component {
     this.uploadImage('avatar', inputFile);
   };
 
-  readNotifications = () => {
-    axios
-      .post(`/api/notifications/read/${this.props.current_user._id}`, {}, this.props.tokenConfig())
-      .then(result => {
-        if (!result) {
-          console.log('Notifications count not be read.');
-        } else {
-          console.log(result.data.nModified + ' new notifications read.');
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
 
   render() {
     if (!this.props.isAuthenticated) {
