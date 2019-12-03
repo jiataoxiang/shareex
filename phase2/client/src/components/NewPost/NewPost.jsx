@@ -239,7 +239,7 @@ class NewPost extends Component {
     if (this.state.to_store.title === '' || this.state.to_store.content === '') {
       alert('Please fill in blank (Title/Content) field.');
     } else {
-      alert('Sure to submit?');
+      // alert('Sure to submit?');
 
       const re_sort_attach = [];
       this.state.contents.slice(1, this.state.contents.length).forEach(item => {
