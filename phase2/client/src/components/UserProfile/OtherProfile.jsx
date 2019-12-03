@@ -248,7 +248,7 @@ class OtherProfile extends React.Component {
                     <button
                       data-toggle="modal"
                       data-target="#myModal"
-                      className="margin-top btn btn-warning btn-block"
+                      className="btn btn-warning btn-block"
                       onClick={this.showModal}
                     >
                       <strong>Report</strong>

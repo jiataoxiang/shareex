@@ -109,7 +109,7 @@ router.post("/to-admin", isAuth, (req, res) => {
 
 });
 
-router.delete('/:id', isAuth, isAuthorizedUser, (req, res) => {
+router.delete('/:id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
         res.status(404).send();
   }
