@@ -71,6 +71,8 @@ class AdminProfileNotification extends React.Component {
                                        key={uid(Math.random())} 
                                        msg={msg} 
                                        search={this.state.inputsearch} />
+                        } else {
+                            return null;
                         }
                     })}
                     <h4>---- Old ----</h4>
@@ -81,6 +83,8 @@ class AdminProfileNotification extends React.Component {
                                        key={uid(Math.random())} 
                                        msg={msg} 
                                        search={this.state.inputsearch} />
+                        } else {
+                            return null;
                         }
                     })}
                 </div>

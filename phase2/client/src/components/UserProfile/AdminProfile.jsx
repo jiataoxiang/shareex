@@ -73,7 +73,10 @@ class AdminProfile extends Component {
             this.state.msg.unreadMsg.push(msg);
           }
         });
-        this.setState({ msgServer: true });
+        this.setState({ 
+            msg: this.state.msg, 
+            msgServer: true 
+        });
       })
       .catch(error => {
         console.log(error);
