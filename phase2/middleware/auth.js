@@ -90,9 +90,25 @@ function isAdmin(req, res, next) {
   });
 }
 
+// check if current user is admin
+// assume isAuth is called before this middleware since req.user is needed to check current user (token)
+// difference from isAdmin: Will call next anyways, but isAdmin attribute will be set for req.suer
+function isAdminTolerant(req, res, next) {
+  User.findById(req.user.id).then(user => {
+    if (!user) res.status(404).send('user not found');
+    if (user.admin) {
+      req.user.admin = true;
+    } else {
+      req.user.admin = false;
+    }
+    next();
+  });
+}
+
 module.exports = {
   isAuth: isAuth,
   isAuthorizedPost: isAuthorizedPost,
   isAuthorizedUser: isAuthorizedUser,
   isAdmin: isAdmin,
+  isAdminTolerant: isAdminTolerant,
 };

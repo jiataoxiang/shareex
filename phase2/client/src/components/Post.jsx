@@ -112,6 +112,7 @@ class Post extends Component {
     const { images } = this.state;
     const thumb_btn_invert_class =
       document.documentElement.getAttribute('theme') === 'dark' ? 'thumb-btn-invert' : '';
+    const body_display = body.length < 500 ? body : body.substring(0, 500) + '...';
     return (
       <div className="post card">
         <div className="card-header">
@@ -141,7 +142,7 @@ class Post extends Component {
           ) : null}
 
           {/* <h5 className="card-title">Special title treatment</h5> */}
-          <p className="card-text">{body}</p>
+          <p className="card-text">{body_display}</p>
           <div className="row">
             {images.map((image, i) => {
               const id = uid(Math.random());
@@ -191,7 +192,7 @@ class Post extends Component {
           >
             <button className="btn btn-primary">See Details</button>
           </Link>
-
+          {this.props.post.hidden ? <span className="ml-2 hidden-label">Hidden</span> : null}
           <span className="likes float-right">Likes: {likes}</span>
           {/* {this.getThumbDisplay()} */}
           {this.props.current_user.admin || this.state.has_liked ? (
