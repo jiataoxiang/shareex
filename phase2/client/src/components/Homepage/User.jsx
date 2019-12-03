@@ -7,12 +7,7 @@ class User extends Component {
     return (
       <div className="user-component">
         <Link
-          to={{
-            pathname: '/otherprofile',
-            state: {
-              author: this.props.id,
-            },
-          }}
+          to={'/otherprofile/' + this.props.id}
         >
           <div className="row">
             <div className="col-md-2 avatar-container">

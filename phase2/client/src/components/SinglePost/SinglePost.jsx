@@ -370,8 +370,9 @@ class SinglePost extends Component {
               <div className="single-post">
                 {this.state.cur_user_id === this.state.post.author ? <div className="edit-button">
                   <button
-                    className="btn btn-outline-success"
+                    className="btn btn-outline-success btn-outline-danger"
                     type="button"
+                    id='delete-post-btn'
                     onClick={this.deletePost}
                   >
                     Delete
