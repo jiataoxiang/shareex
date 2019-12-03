@@ -5,8 +5,9 @@ const Notification = require('../models/Notification');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { isAuth } = require('../middleware/auth');
+const { isAuth, isAuthorizedUser } = require('../middleware/auth');
 const {ObjectID} = require("mongodb");
+
 // return all notifications that one user received.
 router.get('/receiver/:id', isAuth, (req, res) => {
     Notification.find({to: req.params.id}).then(msgs => {
@@ -106,6 +107,24 @@ router.post("/to-admin", isAuth, (req, res) => {
        })
    })
 
+});
+
+router.delete('/:id', isAuth, isAuthorizedUser, (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+        res.status(404).send();
+  }
+    
+  Notification.findById(req.params.id).then(msg => {
+      if (!msg) {
+          res.status(400).send();
+      } else {
+          msg.remove().then(result => {
+              res.send(result);
+          })
+      }
+  }).catch(err => {
+      console.log(err);
+  });
 });
 
 module.exports = router;

@@ -1,6 +1,8 @@
 import React from 'react';
 import '../stylesheets/notification.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import axios from 'axios';
 const datetime = require('date-and-time');
 
 class NotificationCard extends React.Component {
@@ -17,7 +19,8 @@ class NotificationCard extends React.Component {
         time: "",
         read: true,
         
-        highlight: ""
+        highlight: "",
+        deleted: false
     };
 
     // Replace the all words in the search bar with different font.
@@ -29,6 +32,41 @@ class NotificationCard extends React.Component {
         );
         return (<div className="text-container" dangerouslySetInnerHTML={{ __html: highlightText }} />);
     }
+    
+    deleteMsg = () => {
+        axios.delete(
+            `/api/notifications/${this.state._noti_id}`, this.tokenConfig())
+        .then(result => {
+            if (!result || !result.data) {
+                alert('Failed to delete.');
+            } else {
+                this.setState({ deleted: true });
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+    
+    tokenConfig = () => {
+        // Get token from localstorage
+        const token = this.props.auth.token;
+
+        // Headers
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+            },
+        };
+
+        // If token, add to headers
+        if (token) {
+            config.headers['x-auth-token'] = token;
+        } else {
+            window.location.href = '/';
+        }
+
+        return config;
+    };
 
     componentDidMount() {
         const msg = this.props.msg;
@@ -87,9 +125,24 @@ class NotificationCard extends React.Component {
                             this.state.link ? 
                             <Link className="msg-link" 
                                 to={this.state.link}>
-                                Detail
+                                <button 
+                                    id="detail-btn" 
+                                    className="detail-btn btn btn-outline-primary"
+                                > 
+                                    Detail
+                                </button>
                             </Link> : 
                             null
+                        }
+                        {
+                            this.state.deleted ?
+                            <span className="delete-grey border border-danger rounded"> Deleted </span> :
+                            <button 
+                                className="delete-btn btn btn-danger"
+                                onClick={this.deleteMsg}
+                            > 
+                                Delete 
+                            </button>
                         }
                     </span>
                 </div>
@@ -98,4 +151,12 @@ class NotificationCard extends React.Component {
     }
 }
 
-export default NotificationCard;
+// getting from reducers (error and auth reducers)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(NotificationCard);
