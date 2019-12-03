@@ -157,7 +157,7 @@ class OtherProfile extends React.Component {
         { following_id: this.state.author },
         this.props.tokenConfig(),
       )
-      .then(following => {})
+      .then(() => {})
       .catch(error => {
         console.log(error);
       });
@@ -182,13 +182,17 @@ class OtherProfile extends React.Component {
   sendMsg = e => {
     e.preventDefault();
     const message = document.getElementById('message-input').value;
-    this.sendMsgToServer(message, 'Message sent.', 'Message failed to send.');
+    if (!message) {
+      alert("Report failed because you didn't fill in the reason!")
+    }else {
+      this.sendMsgToServer(message, 'Message sent.', 'Message failed to send.');
+    }
   };
 
   sendMsgToServer = (msgBody, success, fail) => {
     const newMsg = {
       from: this.props.current_user._id,
-      body: `user \"${this.state.nickname}\" is reported by user \"${this.props.current_user.username}\": ` + msgBody,
+      body: `User \"${this.state.nickname}\" is reported by user \"${this.props.current_user.username}\", reason is : ` + msgBody,
       link: `/otherprofile/${this.state.author}`
     };
 
