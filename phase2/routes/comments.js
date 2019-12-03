@@ -4,6 +4,7 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
+const { isAuth, isAdmin } = require('../middleware/auth');
 
 // call with query to add a filter, see post_test.js for a similar example
 router.get('/', (req, res) => {
@@ -23,6 +24,22 @@ router.get('/', (req, res) => {
         res.status(500).json({ message: error }); // server error
       }
     );
+});
+
+router.get('/countdaily', isAuth, isAdmin, (req, res) => {
+    var yesterday = new Date(Date.now() - 1*24*60*60*1000);
+    
+    Comment.find({
+      created_at: {$gt: yesterday} 
+    }).then((posts) => {
+        if (!posts) {
+            res.status(404).send();
+        } else {
+            res.send({count: posts.length});
+        }
+    }).catch(err => {
+        res.status(500).send();
+    })
 });
 
 // create a comment
