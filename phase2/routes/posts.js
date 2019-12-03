@@ -127,7 +127,6 @@ router.get('/post-array', (req, res) => {
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
     .then(post => {
-      // console.log("In serverside post.jsx: ", post);
       if (post) {
         return res.send(post);
       }

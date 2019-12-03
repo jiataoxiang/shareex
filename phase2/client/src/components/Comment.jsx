@@ -19,8 +19,13 @@ class Comment extends Component {
     );
   };
 
+  reportComment = e => {
+    const msg = document.getElementById('report-input').value;
+    document.getElementById('report-input').value = '';
+    this.props.report_comment(msg);
+  };
+
   getButtons = () => {
-    console.log('Current edit_mode: ', this.props.edit_mode);
     if (this.props.edit_mode) {
       return (
         <button
@@ -48,6 +53,44 @@ class Comment extends Component {
           >
             Delete
           </button>
+        </div>
+      );
+    }
+    else{
+      const { deleteComment, editComment, secondary_key } = this.props;
+      console.log('This.props.key is: ', secondary_key);
+      return (
+        <div>
+          <button
+            className="btn btn-outline-primary float-right"
+            data-toggle="modal"
+            data-target="#exampleModalCenter"
+          >
+            Report
+          </button>
+          <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
+               aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLongTitle">Report this post.</h5>
+                </div>
+                <div className="modal-body">
+                  <div className="input-group mb-3">
+                    <input type="text" className="form-control" placeholder="Enter your report information."
+                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                           id="report-input"/>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-primary" data-dismiss="modal"
+                          onClick={this.reportComment}>Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     }

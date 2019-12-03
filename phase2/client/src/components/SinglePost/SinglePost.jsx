@@ -79,6 +79,7 @@ class SinglePost extends Component {
         console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
+        this.props.history.push();
         console.log(err);
       });
   };
@@ -156,13 +157,12 @@ class SinglePost extends Component {
     axios
       .delete('/api/comments/' + comment_id)
       .then(deleted => {
+        this.getComments();
         console.log(deleted);
       })
       .catch(err => {
         console.log(err);
       });
-    // this.setState({comments: new_comments});
-    this.getComments();
   };
 
   /* callback passed to a Comment to submit a Comment on this page */
@@ -302,20 +302,24 @@ class SinglePost extends Component {
 
   submitReport = () => {
     const msg = document.getElementById('report-input').value;
-    document.getElementById('report-input').value = '';
-    console.log(this.state.cur_user_id);
-    console.log("The msg is: ", msg);
-    const notification = {
-      from: this.state.cur_user_id,
-      body: msg,
-    };
-    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if(msg===''){
+      alert('Report message could not be empty.');
+    }
+    else{
+      document.getElementById('report-input').value = '';
+      const notification = {
+        from: this.state.cur_user_id,
+        body: msg,
+        link: "/single_post/" + this.props.match.params.id,
+      };
+      axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   deletePost = () => {
@@ -330,12 +334,29 @@ class SinglePost extends Component {
 
   };
 
+  reportComment = (msg) => {
+    const notification = {
+      from: this.state.cur_user_id,
+      body: msg,
+      link: "/single_post/" + this.props.match.params.id,
+    };
+    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     let cur_user_id = '';
+    let post_author_id = '';
     let username = '';
     let avatar = '';
     let post_id = '';
     let cur_user_admin = true;
+    let is_cur_user;
     if (this.state.cur_user) {
       cur_user_admin = this.state.cur_user.admin;
     }
@@ -345,8 +366,12 @@ class SinglePost extends Component {
       cur_user_id = this.props.current_user._id;
     }
     if (this.state.post_author) {
+      post_author_id = this.state.post_author._id;
       username = this.state.post_author.username;
       avatar = this.state.post_author.avatar;
+    }
+    if (post_author_id && cur_user_id) {
+      is_cur_user = post_author_id === cur_user_id;
     }
     let fav_disabled = false;
     if (this.state.post) {
@@ -441,6 +466,7 @@ class SinglePost extends Component {
                         editComment={this.editComment}
                         edit_mode={comment.edit_mode}
                         new_comment={comment.new_comment}
+                        report_comment={this.reportComment}
                       />
                     );
                   })}
@@ -448,10 +474,7 @@ class SinglePost extends Component {
               </div>
             </div>
             <div className="col-12 col-6 col-md-3">
-
               <div className="user-info-container">
-                {/* <div className="space"></div> */}
-
                 <div className="user-info">
                   <div className="row">
                     <div className="col-lg-3 col-3">
@@ -463,7 +486,7 @@ class SinglePost extends Component {
                       <strong>{username}</strong>
                     </div>
                   </div>
-                  {cur_user_admin ? null : <div className="row">
+                  {cur_user_admin || is_cur_user ? null : <div className="row">
                     <button
                       className="btn btn-success btn-sm btn-fav btn-block"
                       onClick={this.favPost}
