@@ -66,6 +66,7 @@ class SinglePost extends Component {
     if (nextProps.current_user) {
       // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
       this.setState({cur_user_id: nextProps.current_user._id});
+      this.setState({cur_user: nextProps.current_user})
     }
   }
 
@@ -262,7 +263,7 @@ class SinglePost extends Component {
   };
 
   redirectNewPost = () => {
-    if (this.props.current_user._id !== this.state.post.author){
+    if (this.props.current_user._id !== this.state.post.author) {
       alert("You cannot edit other's post.");
     } else {
       this.props.history.push({
@@ -294,7 +295,6 @@ class SinglePost extends Component {
   };
 
   favPost = () => {
-    console.log('adding to fav');
     axios
       .patch(
         '/api/posts/add-fav',
@@ -314,11 +314,25 @@ class SinglePost extends Component {
       });
   };
 
+  repPost = () => {
+    // const noti = {
+    //   from: ,
+    //   to: ,
+    //   body:
+    // };
+    // axios.post("/api/notifications/create", , this.tokenConfig())
+
+  };
+
   render() {
     let cur_user_id = '';
     let username = '';
     let avatar = '';
     let post_id = '';
+    let cur_user_admin = true;
+    if (this.state.cur_user) {
+      cur_user_admin = this.state.cur_user.admin;
+    }
     if (!this.props.isAuthenticated) this.props.history.push('/');
 
     if (this.props.current_user !== null) {
@@ -337,13 +351,11 @@ class SinglePost extends Component {
         }
       }
     }
-    console.log(fav_disabled);
+
     let comment_list = [];
     if (this.state.comments) {
       comment_list = this.state.comments;
     }
-
-    console.log("Attachments in single post are: ", this.state.attachments);
 
     return (
       <div className="single-post-2-page">
@@ -433,7 +445,7 @@ class SinglePost extends Component {
                       <strong>{username}</strong>
                     </div>
                   </div>
-                  <div className="row">
+                  {cur_user_admin ? null : <div className="row">
                     <button
                       className="btn btn-success btn-sm btn-fav btn-block"
                       onClick={this.favPost}
@@ -441,8 +453,12 @@ class SinglePost extends Component {
                     >
                       Favourite
                     </button>
-                    <button className="btn btn-outline-danger btn-sm btn-block">Report Post</button>
-                  </div>
+                    <button
+                      className="btn btn-outline-danger btn-sm btn-block"
+                      onClick={this.repPost}
+                    >Report Post
+                    </button>
+                  </div>}
                 </div>
               </div>
             </div>
