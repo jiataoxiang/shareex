@@ -449,16 +449,17 @@ class SinglePost extends Component {
                 {/* <div className="space"></div> */}
 
                 <div className="user-info">
-                  <div className="row">
-                    <div className="col-lg-3 col-3">
-                      <Link to={`/otherprofile/${this.state.post.author}`}>
+                  <Link to={`/otherprofile/${this.state.post.author}`}>
+                    <div className="row">
+                      <div className="col-lg-3 col-3">
                         <img className="avatar" src={avatar} alt="" />
-                      </Link>
+                      </div>
+                      <div className="col-lg-9 col-9">
+                        <strong id="username-display">{username}</strong>
+                      </div>
                     </div>
-                    <div className="col-lg-9 col-9">
-                      <strong>{username}</strong>
-                    </div>
-                  </div>
+                  </Link>
+
                   {cur_user_admin ? null : (
                     <div className="row">
                       <button

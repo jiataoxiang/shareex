@@ -12,14 +12,14 @@ class SignUp extends Component {
     name: '',
     email: '',
     password: '',
-    message: null
+    message: null,
   };
 
   static propTypes = {
     isAuthenticated: PropTypes.bool,
     error: PropTypes.object.isRequired,
     register: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
   };
 
   componentDidUpdate(prevProps) {
@@ -44,7 +44,7 @@ class SignUp extends Component {
     const new_user = {
       username,
       email,
-      password
+      password,
     };
 
     // Attempt to register
@@ -70,8 +70,6 @@ class SignUp extends Component {
     }
     return (
       <div className="signup-page">
-        <img className="background-img" src="/img/login_background3.jpg" alt="" />
-
         {this.state.message ? (
           <div className="alert alert-danger" role="alert">
             {this.state.message}
@@ -79,19 +77,11 @@ class SignUp extends Component {
         ) : null}
         <div className="form-container">
           <form action="" onSubmit={this.signup}>
-            <img
-              src={'./img/logo_S.png'}
-              width="100px"
-              className="lock mx-auto"
-              alt=""
-            />
+            <img src={'./img/logo_S.png'} width="100px" className="lock mx-auto" alt="" />
             <h3 id="signup-title">Sign Up</h3>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span
-                  className="input-group-text"
-                  id="inputGroup-sizing-default"
-                >
+                <span className="input-group-text" id="inputGroup-sizing-default">
                   Username
                 </span>
               </div>
@@ -107,10 +97,7 @@ class SignUp extends Component {
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span
-                  className="input-group-text"
-                  id="inputGroup-sizing-default"
-                >
+                <span className="input-group-text" id="inputGroup-sizing-default">
                   Email
                 </span>
               </div>
@@ -126,10 +113,7 @@ class SignUp extends Component {
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
-                <span
-                  className="input-group-text"
-                  id="inputGroup-sizing-default"
-                >
+                <span className="input-group-text" id="inputGroup-sizing-default">
                   Password
                 </span>
               </div>
@@ -165,11 +149,9 @@ class SignUp extends Component {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
+  error: state.error,
 });
 
-export default connect(mapStateToProps, { register, clearErrors })(
-  withRouter(SignUp)
-);
+export default connect(mapStateToProps, { register, clearErrors })(withRouter(SignUp));
 
 // export default SignUp;

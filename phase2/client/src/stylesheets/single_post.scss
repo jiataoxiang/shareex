@@ -1,5 +1,5 @@
 .single-post-2-page {
-  padding-top: 70px;
+  padding-top: 10px;
   background-image: url('/img/login_background3.jpg');
   min-height: 100vh;
   background-attachment: fixed;
@@ -8,18 +8,18 @@
   background-size: cover;
   .container-fluid {
     .modal-backdrop {
-      position:unset !important;
+      position: unset !important;
     }
     padding-left: 10%;
     padding-right: 10%;
     margin-top: 2em;
     .single-post-container {
       .single-post {
-        #delete-post-btn{
+        #delete-post-btn {
           margin-right: 5px;
         }
 
-        .edit-button{
+        .edit-button {
           float: right;
         }
 
@@ -56,14 +56,19 @@
       }
     }
     .user-info-container {
-      cursor: pointer;
-      margin-top: 90px;
+      // cursor: pointer;
+      margin-top: 54px;
       button {
         margin: 10px 20px 0px 20px;
       }
     }
     .user-info {
-      #exampleModalLongTitle{
+      #username-display {
+        font-size: 25px;
+        margin-left: 20px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+      #exampleModalLongTitle {
         color: black;
       }
 
@@ -83,7 +88,7 @@
       }
     }
   }
-  @media screen and (max-width: 845px) {
+  @media screen and (max-width: 766px) {
     .container-fluid {
       .user-info-container {
         margin-top: 20px;
