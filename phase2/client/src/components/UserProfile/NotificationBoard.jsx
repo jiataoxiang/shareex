@@ -1,11 +1,9 @@
 import Notification from './ProfileNotification';
 import React from 'react';
-import { uid } from 'react-uid';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 class NotificationBoard extends React.Component {
-
   _isMount = false;
   state = {
     author: this.props.author,
@@ -19,7 +17,6 @@ class NotificationBoard extends React.Component {
   }
 
   getNotifications = () => {
-
     axios
       .get(`/api/notifications/receiver/${this.state.author}`, this.props.tokenConfig())
       .then(msgs => {
@@ -30,15 +27,15 @@ class NotificationBoard extends React.Component {
             this.state.msg.unreadMsg.push(msg);
           }
         });
-        this.state.msg.readMsg.sort(function(a, b){
+        this.state.msg.readMsg.sort(function(a, b) {
           return Date.parse(b.time) - Date.parse(a.time);
         });
         this.state.msg.unreadMsg.sort(function(a, b) {
           return Date.parse(b.time) - Date.parse(a.time);
         });
         this.setState({
-          msg: this.state.msg
-        })
+          msg: this.state.msg,
+        });
       })
       .catch(error => {
         console.log(error);
@@ -50,9 +47,7 @@ class NotificationBoard extends React.Component {
   }
 
   render() {
-    return (
-      <Notification state={this.state.msg}/>
-    );
+    return <Notification state={this.state.msg} />;
   }
 }
 

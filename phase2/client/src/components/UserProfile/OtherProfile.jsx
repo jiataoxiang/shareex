@@ -1,13 +1,13 @@
 import React from 'react';
 import '../../stylesheets/user_profile.scss';
-import {Link, withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import MessageBoard from './MessageBoard';
 import PostsBoard from './PostsBoard';
 import { uid } from 'react-uid';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import store from "../../store";
-import {loadUser} from "../../actions/authActions";
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 class OtherProfile extends React.Component {
   state = {
@@ -31,7 +31,6 @@ class OtherProfile extends React.Component {
       curState: component,
     });
   };
-
 
   setFunctions = () => {
     if (this.state.curState === '') {
@@ -85,31 +84,32 @@ class OtherProfile extends React.Component {
 
   getUserInfo = () => {
     this.setState({
-      author: this.props.match.params.id
+      author: this.props.match.params.id,
     });
-    axios.get(`/api/users/${this.props.match.params.id}`, this.props.tokenConfig())
-    .then(user => {
-      if (!user) {
-        window.location.href = '/';
-      } else {
-        user = user.data;
-        this.setState({
-          nickname: user.username,
-          banner: user.banner,
-          avatar: user.avatar,
-          followers: user.followers,
-          following: user.following,
-          motto: user.motto,
-          messages: user.messages,
-        });
-        this.getNumPosts(this.state.author);
-        this.updatePosts();
-        this.setFunctions();
-      }
-    })
-    .catch(err => {
+    axios
+      .get(`/api/users/${this.props.match.params.id}`, this.props.tokenConfig())
+      .then(user => {
+        if (!user) {
+          window.location.href = '/';
+        } else {
+          user = user.data;
+          this.setState({
+            nickname: user.username,
+            banner: user.banner,
+            avatar: user.avatar,
+            followers: user.followers,
+            following: user.following,
+            motto: user.motto,
+            messages: user.messages,
+          });
+          this.getNumPosts(this.state.author);
+          this.updatePosts();
+          this.setFunctions();
+        }
+      })
+      .catch(err => {
         console.log(err);
-    });
+      });
   };
 
   isUnfollowing = () => {
@@ -126,8 +126,7 @@ class OtherProfile extends React.Component {
         { following_id: this.state.author },
         this.props.tokenConfig(),
       )
-      .then(following => {
-      })
+      .then(following => {})
       .catch(error => {
         console.log(error);
       });
@@ -158,8 +157,7 @@ class OtherProfile extends React.Component {
         { following_id: this.state.author },
         this.props.tokenConfig(),
       )
-      .then(following => {
-      })
+      .then(following => {})
       .catch(error => {
         console.log(error);
       });
@@ -183,14 +181,11 @@ class OtherProfile extends React.Component {
 
   sendMsg = e => {
     e.preventDefault();
-    const message = document.getElementById("message-input").value;
-    this.sendMsgToServer(message,
-      'Message sent.',
-      'Message failed to send.');
+    const message = document.getElementById('message-input').value;
+    this.sendMsgToServer(message, 'Message sent.', 'Message failed to send.');
   };
 
   sendMsgToServer = (msgBody, success, fail) => {
-
     const newMsg = {
       from: this.props.current_user._id,
       body: msgBody,
@@ -221,91 +216,98 @@ class OtherProfile extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-4">
-                <div className="profileInfo card">
-                  <div className="card-header">
-                    <h2>Name: {this.state.nickname}</h2>
-                  </div>
-                  <div className="card-body">
-                    <p>
-                      <strong>Motto:</strong> {this.state.motto}
-                    </p>
-                    <p>
-                      <strong>Posts:</strong> {this.state.numPosts}
-                    </p>
-                    <p>
-                      <strong>Followers:</strong> {this.state.followers.length}
-                    </p>
-                    <p>
-                      <strong>Following:</strong> {this.state.following.length}
-                    </p>
-                  </div>
-                  {this.props.current_user.admin ?
-                    (null) :
-                    (this.isUnfollowing() ? (
-                    <button className="btn btn-success btn-block" onClick={this.followRequest}>
-                     <strong>Follow</strong>
+              <div className="profileInfo card">
+                <div className="card-header">
+                  <h2>Name: {this.state.nickname}</h2>
+                </div>
+                <div className="card-body">
+                  <p>
+                    <strong>Motto:</strong> {this.state.motto}
+                  </p>
+                  <p>
+                    <strong>Posts:</strong> {this.state.numPosts}
+                  </p>
+                  <p>
+                    <strong>Followers:</strong> {this.state.followers.length}
+                  </p>
+                  <p>
+                    <strong>Following:</strong> {this.state.following.length}
+                  </p>
+                </div>
+                {this.props.current_user.admin ? null : this.isUnfollowing() ? (
+                  <button className="btn btn-success btn-block" onClick={this.followRequest}>
+                    <strong>Follow</strong>
+                  </button>
+                ) : (
+                  <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
+                    <strong>Unfollow</strong>
+                  </button>
+                )}
+                {this.props.current_user.admin ? null : (
+                  <div>
+                    <button
+                      data-toggle="modal"
+                      data-target="#myModal"
+                      className="margin-top btn btn-warning btn-block"
+                      onClick={this.showModal}
+                    >
+                      <strong>Report</strong>
                     </button>
-                    ) : (
-                    <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
-                     <strong>Unfollow</strong>
-                    </button>
-                    ))
-                  }
-                  {
-                    this.props.current_user.admin ?
-                      (null) :
-                      (<div>
-                        <button data-toggle="modal" data-target="#myModal" className="margin-top btn btn-warning btn-block" onClick={this.showModal}>
-                          <strong>Report</strong>
-                        </button>
-                        <div id="myModal" className="modal fade bd-example-modal-lg" tabIndex="-1" role="dialog"
-                             aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                          <div className="modal-dialog modal-lg">
-                            <div className="modal-content">
-                              <div className="modal-body">
-                                <div className="form-group">
-                                  <label htmlFor="message-input" className="title-color col-form-label">Report reason:</label>
-                                  <input
-                                    type="text"
-                                    id="message-input"
-                                    className="form-control"
-                                    aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-default"
-                                    name="title"
-                                  />
-                                </div>
-                                <div className="modal-footer">
-                                  <button
-                                    type="button"
-                                    id="button-delete"
-                                    className="btn btn-danger btn-block"
-                                    onClick={this.sendMsg}
-                                  >
-                                    Send
-                                  </button>
-                                </div>
-                              </div>
+                    <div
+                      id="myModal"
+                      className="modal fade bd-example-modal-lg"
+                      tabIndex="-1"
+                      role="dialog"
+                      aria-labelledby="myLargeModalLabel"
+                      aria-hidden="true"
+                    >
+                      <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                          <div className="modal-body">
+                            <div className="form-group">
+                              <label htmlFor="message-input" className="title-color col-form-label">
+                                Report reason:
+                              </label>
+                              <input
+                                type="text"
+                                id="message-input"
+                                className="form-control"
+                                aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default"
+                                name="title"
+                              />
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                id="button-delete"
+                                className="btn btn-danger btn-block"
+                                onClick={this.sendMsg}
+                              >
+                                Send
+                              </button>
                             </div>
                           </div>
                         </div>
                       </div>
-                        )
-                  }
-                </div>
-                <h2>Options</h2>
-                <div className="list-group options">
-                  {this.state.functions.map(fun => (
-                    <button
-                      key={uid(Math.random())}
-                      type="button"
-                      className="list-group-item list-group-item-action"
-                      onClick={this.showComponent.bind(this, fun.model)}
-                    >
-                      {fun.title}
-                    </button>
-                  ))}
-                </div>
-                <br />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <h2>Options</h2>
+              <div className="list-group options">
+                {this.state.functions.map(fun => (
+                  <button
+                    key={uid(Math.random())}
+                    type="button"
+                    className="list-group-item list-group-item-action"
+                    onClick={this.showComponent.bind(this, fun.model)}
+                  >
+                    {fun.title}
+                  </button>
+                ))}
+              </div>
+              <br />
             </div>
             <div className="col-md-8 other-profile-content">{this.state.curState}</div>
           </div>

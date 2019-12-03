@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import "../stylesheets/attachment.scss";
-import Editor from "react-simple-code-editor";
-import {highlight, languages} from "prismjs";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
+import React, { Component } from 'react';
+import '../stylesheets/attachment.scss';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
 
 class Attachment extends Component {
   state = {};
 
   // show the generate and return the specified <Attachment> tag
   getElement = () => {
-    if (this.props.type === "text") {
+    if (this.props.type === 'text') {
       return (
         <div className="form-group">
           <h4 htmlFor="content">Text</h4>
@@ -24,13 +24,13 @@ class Attachment extends Component {
           />
         </div>
       );
-    } else if (this.props.type === "show-text") {
+    } else if (this.props.type === 'show-text') {
       return (
         <div className="form-group">
           <p>{this.props.content}</p>
         </div>
       );
-    } else if (this.props.type === "code") {
+    } else if (this.props.type === 'code') {
       return (
         <div className="code-container">
           <div className="form-group">
@@ -43,12 +43,13 @@ class Attachment extends Component {
               padding={10}
               style={{
                 fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12
+                fontSize: 12,
               }}
             />
           </div>
-        </div>);
-    } else if (this.props.type === "youtube") {
+        </div>
+      );
+    } else if (this.props.type === 'youtube') {
       return (
         <iframe
           width="100%"
@@ -60,12 +61,13 @@ class Attachment extends Component {
           allowFullScreen
         ></iframe>
       );
-    } else if (this.props.type === "image") {
-      return <img src={this.props.content} alt=""/>;
-    } else if (this.props.type === "image_link") {
+    } else if (this.props.type === 'image') {
+      return <img src={this.props.content} alt="" />;
+    } else if (this.props.type === 'image_link') {
       return (
-        <div className='form-group'>
+        <div className="form-group">
           <img
+            alt=""
             width="100%"
             height="100%"
             title="image"
@@ -74,7 +76,7 @@ class Attachment extends Component {
           />
         </div>
       );
-    } else if (this.props.type === "pdf") {
+    } else if (this.props.type === 'pdf') {
       return (
         <embed
           className="pdf"

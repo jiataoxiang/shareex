@@ -90,22 +90,14 @@ class UserProfile extends React.Component {
       });
     } else if (option === 'Follower Board') {
       this.setState({
-        curState: (
-          <FollowerBoard
-            author={this.props.current_user._id}
-          />
-        ),
+        curState: <FollowerBoard author={this.props.current_user._id} />,
       });
-    }else if (option === "Notifications") {
+    } else if (option === 'Notifications') {
       this.readNotifications();
       this.hideBadge();
       this.setState({
-        curState: (
-          <NotificationBoard
-            author={this.props.current_user._id}
-          />
-        )
-      })
+        curState: <NotificationBoard author={this.props.current_user._id} />,
+      });
     }
   };
 
@@ -141,7 +133,6 @@ class UserProfile extends React.Component {
         console.log(error);
       });
   };
-
 
   componentDidMount() {
     // Current user info
@@ -206,7 +197,6 @@ class UserProfile extends React.Component {
           },
         })
         .then(res => {
-          const public_id = res.data[0].public_id;
           const url = res.data[0].url;
           axios
             .patch(
@@ -311,54 +301,54 @@ class UserProfile extends React.Component {
         <div className="container-fluid">
           <div className="row mt-3">
             <div className="col-lg-4">
-                {/* <div className="space"></div> */}
-                <div className="profileInfo card">
-                  <div className="card-header">
-                    <h2>Name: {this.state.nickname}</h2>
-                  </div>
-                  <div className="card-body">
-                    <p>
-                      <strong>Motto:</strong> {this.state.motto}
-                    </p>
-                    <p>
-                      <strong>Posts:</strong> {this.state.numPosts}
-                    </p>
-                    <p>
-                      <strong>Followers:</strong> {this.state.followers.length}
-                    </p>
-                    <p>
-                      <strong>Following:</strong> {this.state.following.length}
-                    </p>
-                    <Link to="/prof_setting" id="profile-setting-btn">
-                      <button className="btn btn-light btn-block">Profile Setting</button>
-                    </Link>
-                  </div>
+              {/* <div className="space"></div> */}
+              <div className="profileInfo card">
+                <div className="card-header">
+                  <h2>Name: {this.state.nickname}</h2>
                 </div>
-                <h2>Options</h2>
-                <div className="list-group options">
-                  {options.map(option => {
-                    return (
-                      <button
-                        key={uid(Math.random())}
-                        className="list-group-item list-group-item-action"
-                        onClick={this.showOption.bind(this, option)}
-                      >
-                        {option}
-                      </button>
-                    );
-                  })}
-                  <button
-                    type="button"
-                    id="button-4"
-                    className="list-group-item list-group-item-action"
-                    onClick={this.showOption.bind(this, "Notifications")}
-                  >
-                    Notification
-                    <span id="unread-notifications" className="badge badge-danger">
-                        New
-                      </span>
-                  </button>
+                <div className="card-body">
+                  <p>
+                    <strong>Motto:</strong> {this.state.motto}
+                  </p>
+                  <p>
+                    <strong>Posts:</strong> {this.state.numPosts}
+                  </p>
+                  <p>
+                    <strong>Followers:</strong> {this.state.followers.length}
+                  </p>
+                  <p>
+                    <strong>Following:</strong> {this.state.following.length}
+                  </p>
+                  <Link to="/prof_setting" id="profile-setting-btn">
+                    <button className="btn btn-light btn-block">Profile Setting</button>
+                  </Link>
                 </div>
+              </div>
+              <h2>Options</h2>
+              <div className="list-group options">
+                {options.map(option => {
+                  return (
+                    <button
+                      key={uid(Math.random())}
+                      className="list-group-item list-group-item-action"
+                      onClick={this.showOption.bind(this, option)}
+                    >
+                      {option}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  id="button-4"
+                  className="list-group-item list-group-item-action"
+                  onClick={this.showOption.bind(this, 'Notifications')}
+                >
+                  Notification
+                  <span id="unread-notifications" className="badge badge-danger">
+                    New
+                  </span>
+                </button>
+              </div>
             </div>
             <div className="col-lg-8">{this.state.curState}</div>
           </div>

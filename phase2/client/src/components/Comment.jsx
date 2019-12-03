@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import '../stylesheets/comment.scss';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 class Comment extends Component {
   state = {};
 
   submitComment = event => {
-    const comment_content =
-      event.target.previousElementSibling.firstElementChild.value;
+    const comment_content = event.target.previousElementSibling.firstElementChild.value;
     console.log('The current comment id is: ', this.props.secondary_key);
     this.props.submitComment(
       comment_content,
       this.props.post_id,
       this.props.secondary_key,
-      this.props.new_comment
+      this.props.new_comment,
     );
   };
 
@@ -103,7 +101,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(Comment));
