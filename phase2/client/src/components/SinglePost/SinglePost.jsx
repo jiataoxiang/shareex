@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import '../../stylesheets/single_post.scss';
 import Comment from '../Comment';
 import Attachment from '../Attachment';
@@ -247,20 +247,6 @@ class SinglePost extends Component {
     }
   };
 
-  /* redirect to the proper profile page */
-  redirectProf = () => {
-    const user = this.props.current_user._id;
-    const author = this.state.post.author;
-    if (!user || !(user === author)) {
-      this.props.history.push({
-        pathname: '/otherprofile',
-        state: {post_id: this.state.post._id, author: this.state.post.author},
-      });
-    } else {
-      this.props.history.push('/userprofile');
-    }
-  };
-
   redirectNewPost = () => {
     if (this.props.current_user._id !== this.state.post.author){
       alert("You cannot edit other's post.");
@@ -425,9 +411,11 @@ class SinglePost extends Component {
               <div className="sticky-top user-info-container">
                 {/* <div className="space"></div> */}
                 <div className="user-info">
-                  <div className="row" onClick={this.redirectProf}>
+                  <div className="row">
                     <div className="col-lg-3 col-3">
-                      <img className="avatar" src={avatar} alt=""/>
+                      <Link to={`/otherprofile/${this.state.post.author}`}>
+                        <img className="avatar" src={avatar} alt=""/>
+                      </Link>
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong>{username}</strong>

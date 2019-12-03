@@ -62,7 +62,7 @@ class App extends React.Component {
             />
             <Route
               exact
-              path="/otherprofile"
+              path="/otherprofile/:id"
               component={() => <OtherProfile state={this.state} />}
             />
             <Route exact path="/login" component={() => <Login state={this.state} />} />

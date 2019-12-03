@@ -11,8 +11,7 @@ import {loadUser} from "../../actions/authActions";
 
 class OtherProfile extends React.Component {
   state = {
-    post_id: this.props.location.state.post_id,
-    author: this.props.location.state.author,
+    author: '',
     curState: '',
     nickname: '',
     banner: '',
@@ -68,9 +67,6 @@ class OtherProfile extends React.Component {
 
   componentDidMount() {
     this.getUserInfo();
-    this.getNumPosts(this.state.author);
-    this.updatePosts();
-    this.setFunctions();
   }
 
   getNumPosts = currentUser => {
@@ -87,17 +83,31 @@ class OtherProfile extends React.Component {
   };
 
   getUserInfo = () => {
-    axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
-      user = user.data;
-      this.setState({
-        nickname: user.username,
-        banner: user.banner,
-        avatar: user.avatar,
-        followers: user.followers,
-        following: user.following,
-        motto: user.motto,
-        messages: user.messages,
-      });
+    this.setState({
+      author: this.props.match.params.id
+    });
+    axios.get(`/api/users/${this.props.match.params.id}`, this.props.tokenConfig())
+    .then(user => {
+      if (!user) {
+        window.location.href = '/';
+      } else {
+        user = user.data;
+        this.setState({
+          nickname: user.username,
+          banner: user.banner,
+          avatar: user.avatar,
+          followers: user.followers,
+          following: user.following,
+          motto: user.motto,
+          messages: user.messages,
+        });
+        this.getNumPosts(this.state.author);
+        this.updatePosts();
+        this.setFunctions();
+      }
+    })
+    .catch(err => {
+        console.log(err);
     });
   };
 
