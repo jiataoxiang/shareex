@@ -66,6 +66,7 @@ class SinglePost extends Component {
     if (nextProps.current_user) {
       // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
       this.setState({cur_user_id: nextProps.current_user._id});
+      this.setState({cur_user: nextProps.current_user})
     }
   }
 
@@ -248,7 +249,7 @@ class SinglePost extends Component {
   };
 
   redirectNewPost = () => {
-    if (this.props.current_user._id !== this.state.post.author){
+    if (this.props.current_user._id !== this.state.post.author) {
       alert("You cannot edit other's post.");
     } else {
       this.props.history.push({
@@ -280,7 +281,6 @@ class SinglePost extends Component {
   };
 
   favPost = () => {
-    console.log('adding to fav');
     axios
       .patch(
         '/api/posts/add-fav',
@@ -300,11 +300,44 @@ class SinglePost extends Component {
       });
   };
 
+  submitReport = () => {
+    const msg = document.getElementById('report-input').value;
+    document.getElementById('report-input').value = '';
+    console.log(this.state.cur_user_id);
+    console.log("The msg is: ", msg);
+    const notification = {
+      from: this.state.cur_user_id,
+      body: msg,
+    };
+    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  deletePost = () => {
+    axios.delete("/api/posts/" + this.props.match.params.id, this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    this.props.history.push('/');
+  };
+
   render() {
     let cur_user_id = '';
     let username = '';
     let avatar = '';
     let post_id = '';
+    let cur_user_admin = true;
+    if (this.state.cur_user) {
+      cur_user_admin = this.state.cur_user.admin;
+    }
     if (!this.props.isAuthenticated) this.props.history.push('/');
 
     if (this.props.current_user !== null) {
@@ -323,13 +356,11 @@ class SinglePost extends Component {
         }
       }
     }
-    console.log(fav_disabled);
+
     let comment_list = [];
     if (this.state.comments) {
       comment_list = this.state.comments;
     }
-
-    console.log("Attachments in single post are: ", this.state.attachments);
 
     return (
       <div className="single-post-2-page">
@@ -338,6 +369,14 @@ class SinglePost extends Component {
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
                 {this.state.cur_user_id === this.state.post.author ? <div className="edit-button">
+                  <button
+                    className="btn btn-outline-success btn-outline-danger"
+                    type="button"
+                    id='delete-post-btn'
+                    onClick={this.deletePost}
+                  >
+                    Delete
+                  </button>
                   <button
                     className="btn btn-outline-success"
                     type="button"
@@ -408,8 +447,10 @@ class SinglePost extends Component {
               </div>
             </div>
             <div className="col-12 col-6 col-md-3">
-              <div className="sticky-top user-info-container">
+
+              <div className="user-info-container">
                 {/* <div className="space"></div> */}
+
                 <div className="user-info">
                   <div className="row">
                     <div className="col-lg-3 col-3">
@@ -421,7 +462,7 @@ class SinglePost extends Component {
                       <strong>{username}</strong>
                     </div>
                   </div>
-                  <div className="row">
+                  {cur_user_admin ? null : <div className="row">
                     <button
                       className="btn btn-success btn-sm btn-fav btn-block"
                       onClick={this.favPost}
@@ -429,8 +470,36 @@ class SinglePost extends Component {
                     >
                       Favourite
                     </button>
-                    <button className="btn btn-outline-danger btn-sm btn-block">Report Post</button>
-                  </div>
+                    <button
+                      className="btn btn-outline-danger btn-sm btn-block"
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
+                    >Report Post
+                    </button>
+                    <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">Report this post.</h5>
+                          </div>
+                          <div className="modal-body">
+                            <div className="input-group mb-3">
+                              <input type="text" className="form-control" placeholder="Enter your report information."
+                                     aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                     id="report-input"/>
+                            </div>
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal"
+                                    onClick={this.submitReport}>Submit
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>}
                 </div>
               </div>
             </div>

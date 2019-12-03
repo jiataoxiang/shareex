@@ -378,6 +378,7 @@ class NewPost extends Component {
           >
             Submit
           </button>
+
         </div>
       </div>
     );

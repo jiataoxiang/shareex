@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import '../stylesheets/navbar.scss';
-import { connect } from 'react-redux';
-import { logout } from '../actions/authActions';
+import {connect} from 'react-redux';
+import {logout} from '../actions/authActions';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { loadUser } from '../actions/authActions';
+import {loadUser} from '../actions/authActions';
 import store from '../store';
 
 class Navbar extends React.Component {
@@ -29,11 +29,11 @@ class Navbar extends React.Component {
     } else {
       return this.props.current_user.admin ? (
         <Link to="/adminprofile">
-          <img id="user-avatar" src={this.props.current_user.avatar} alt="" />
+          <img id="user-avatar" src={this.props.current_user.avatar} alt=""/>
         </Link>
       ) : (
         <Link to="/userprofile">
-          <img id="user-avatar" src={this.props.current_user.avatar} alt="" />
+          <img id="user-avatar" src={this.props.current_user.avatar} alt=""/>
         </Link>
       );
     }
@@ -123,6 +123,11 @@ class Navbar extends React.Component {
     }
   };
 
+  logout = () => {
+    document.getElementById('search-bar').value = '';
+    this.props.logout();
+  }
+
   render() {
     return (
       <nav className="navbar-page navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -135,7 +140,7 @@ class Navbar extends React.Component {
             },
           }}
         >
-          <img src={process.env.PUBLIC_URL + '/img/logo_S.png'} alt="" width="50px" />
+          <img src={process.env.PUBLIC_URL + '/img/logo_S.png'} alt="" width="50px"/>
           <span id="shareEx-logo-text">ShareEx</span>
         </Link>
 
@@ -203,7 +208,7 @@ class Navbar extends React.Component {
           {this.props.isAuthenticated ? (
             <button
               className="btn btn-outline-danger btn-sm logout-btn"
-              onClick={this.props.logout}
+              onClick={this.logout}
             >
               Logout
             </button>
@@ -238,4 +243,4 @@ const mapStateToProps = state => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logout })(withRouter(Navbar));
+export default connect(mapStateToProps, {logout})(withRouter(Navbar));

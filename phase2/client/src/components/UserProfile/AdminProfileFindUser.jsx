@@ -16,12 +16,14 @@ class AdminProfileFindUser extends React.Component {
     inputuser: '',
     inputmsg: '',
   };
+  // Objects that may not visible depend on the post status.
   tempElements = {
     display_user: null,
     display_banned: null,
     button_ban: null,
   };
 
+  // Input Change handler.
   handleInputChange = event => {
     const target = event.target;
     const name = target.name;
@@ -30,6 +32,7 @@ class AdminProfileFindUser extends React.Component {
     this.setState({ [name]: value });
   };
 
+  // Show the user found.
   showUser = () => {
     this.setState({ inputmsg: '' });
     this.tempElements.display_user.removeAttribute('hidden');
@@ -41,11 +44,14 @@ class AdminProfileFindUser extends React.Component {
       this.tempElements.button_ban.innerHTML = 'Ban';
     }
   };
+
+  // Hide the user object when appropriate.
   hideUser = () => {
     this.tempElements.display_user.setAttribute('hidden', true);
     alert('This user does not exist.');
   };
 
+  // Read user from server.
   getUserInfo = e => {
     e.preventDefault();
     if (this.state.inputuser.length < 4) {
@@ -78,6 +84,7 @@ class AdminProfileFindUser extends React.Component {
     }
   };
 
+  // Reset a user's motto and notify him.
   resetMotto = () => {
     const newMotto = 'Welcome, new user';
 
@@ -109,6 +116,7 @@ class AdminProfileFindUser extends React.Component {
       });
   };
 
+  // Ban or unban a user.
   changeBan = () => {
     if (this.state.banned) {
       this.setState({ banned: false });
@@ -121,6 +129,7 @@ class AdminProfileFindUser extends React.Component {
     }
   };
 
+  // Change the banned status to server.
   changeBanToServer = () => {
     const unbanDate = Date.now() + 1000 * 60 * 60 * 24 * 5;
     axios
@@ -156,6 +165,7 @@ class AdminProfileFindUser extends React.Component {
     }
   };
 
+  // Send a notification to server.
   sendMsgToServer = (msgBody, success, fail) => {
     const newMsg = {
       from: this.props.current_user._id,
