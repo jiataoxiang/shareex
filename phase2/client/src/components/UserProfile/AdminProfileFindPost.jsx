@@ -268,7 +268,7 @@ class AdminProfileFindPost extends React.Component {
 
         <div id="display-post">
           <div className="row row-info">
-            <div className="col-md-8">
+            <div className="col-md-6">
               <div className="row">
                 <div className="col-md avatar-container">
                   <Link to={`/otherprofile/${this.state.author}`}>
@@ -313,7 +313,7 @@ class AdminProfileFindPost extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col-md-4 edit-post-buttons">
+            <div className="col-md-3 edit-post-buttons">
               <button className="btn btn-success btn-block" 
                 onClick={this.saveChange}
               >
