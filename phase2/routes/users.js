@@ -5,6 +5,22 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
+const cloudinary = require('cloudinary').v2;
+
+
+// setup file upload system
+cloudinary.config({
+  cloud_name: config.get('CLOUD_NAME'),
+  api_key: config.get('API_KEY'),
+  api_secret: config.get('API_SECRET'),
+});
+
+const deleteImage = (public_id) => {
+  cloudinary.uploader.destroy(public_id)
+    .then(
+      console.log("Delete image from cloudinary executed.")
+    );
+};
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -136,6 +152,14 @@ router.delete('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "post doesn't exist}" });
     }
+    const avatar_url = user.avatar;
+    const banner_url = user.banner;
+    const avatar = avatar_url.split('.');
+    const banner = banner_url.split('.');
+    const avatar_public_key = avatar[avatar.length-2].split('/').reverse()[0];
+    const banner_public_key = banner[banner.length-2].split('/').reverse()[0];
+    deleteImage(avatar_public_key);
+    deleteImage(banner_public_key);
     user.remove().catch(err => {
       return res.status(500).json({ message: err.message });
     });

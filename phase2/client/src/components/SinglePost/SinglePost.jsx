@@ -300,14 +300,33 @@ class SinglePost extends Component {
       });
   };
 
-  repPost = () => {
-    // const noti = {
-    //   from: ,
-    //   to: ,
-    //   body:
-    // };
-    // axios.post("/api/notifications/create", , this.tokenConfig())
+  submitReport = () => {
+    const msg = document.getElementById('report-input').value;
+    document.getElementById('report-input').value = '';
+    console.log(this.state.cur_user_id);
+    console.log("The msg is: ", msg);
+    const notification = {
+      from: this.state.cur_user_id,
+      body: msg,
+    };
+    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
+  deletePost = () => {
+    axios.delete("/api/posts/" + this.props.match.params.id, this.tokenConfig())
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    this.props.history.push('/');
   };
 
   render() {
@@ -350,6 +369,13 @@ class SinglePost extends Component {
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
                 {this.state.cur_user_id === this.state.post.author ? <div className="edit-button">
+                  <button
+                    className="btn btn-outline-success"
+                    type="button"
+                    onClick={this.deletePost}
+                  >
+                    Delete
+                  </button>
                   <button
                     className="btn btn-outline-success"
                     type="button"
@@ -420,8 +446,10 @@ class SinglePost extends Component {
               </div>
             </div>
             <div className="col-12 col-6 col-md-3">
-              <div className="sticky-top user-info-container">
+
+              <div className="user-info-container">
                 {/* <div className="space"></div> */}
+
                 <div className="user-info">
                   <div className="row">
                     <div className="col-lg-3 col-3">
@@ -443,9 +471,33 @@ class SinglePost extends Component {
                     </button>
                     <button
                       className="btn btn-outline-danger btn-sm btn-block"
-                      onClick={this.repPost}
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
                     >Report Post
                     </button>
+                    <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">Report this post.</h5>
+                          </div>
+                          <div className="modal-body">
+                            <div className="input-group mb-3">
+                              <input type="text" className="form-control" placeholder="Enter your report information."
+                                     aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                     id="report-input"/>
+                            </div>
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal"
+                                    onClick={this.submitReport}>Submit
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>}
                 </div>
               </div>

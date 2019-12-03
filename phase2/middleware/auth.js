@@ -39,7 +39,7 @@ function isAuthorizedPost(req, res, next) {
       if (!post) {
         return res.status(404).json({ message: "Post doesn't exist" });
       }
-      if (post._id.toString() === user_id) {
+      if (post.author.toString() === user_id) {
         next();
       } else {
         console.log('Not authorized');

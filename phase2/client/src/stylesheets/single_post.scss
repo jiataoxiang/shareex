@@ -7,6 +7,9 @@
   background-repeat: no-repeat;
   background-size: cover;
   .container-fluid {
+    .modal-backdrop {
+      position:unset !important;
+    }
     padding-left: 10%;
     padding-right: 10%;
     margin-top: 2em;
@@ -50,12 +53,16 @@
     }
     .user-info-container {
       cursor: pointer;
-      top: 155px;
+      margin-top: 90px;
       button {
         margin: 10px 20px 0px 20px;
       }
     }
     .user-info {
+      #exampleModalLongTitle{
+        color: black;
+      }
+
       margin-top: 0em;
       background-color: var(--background-secondary);
       padding: 10px;
@@ -69,6 +76,13 @@
       strong {
         margin-left: 10px;
         color: var(--text);
+      }
+    }
+  }
+  @media screen and (max-width: 845px) {
+    .container-fluid {
+      .user-info-container {
+        margin-top: 20px;
       }
     }
   }
