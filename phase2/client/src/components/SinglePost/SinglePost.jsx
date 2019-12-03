@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter, Link} from 'react-router-dom';
 import '../../stylesheets/single_post.scss';
 import Comment from '../Comment';
 import Attachment from '../Attachment';
-import { connect } from 'react-redux';
-import { rand_string } from '../../lib/util';
-import { uid } from 'react-uid';
+import {connect} from 'react-redux';
+import {rand_string} from '../../lib/util';
+import {uid} from 'react-uid';
 import axios from 'axios';
 import store from '../../store';
-import { loadUser } from '../../actions/authActions';
+import {loadUser} from '../../actions/authActions';
 
 class SinglePost extends Component {
   // In state, we have 2 arrays, comments and attachments
@@ -42,7 +42,7 @@ class SinglePost extends Component {
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
-        { post_id: this.props.match.params.id },
+        {post_id: this.props.match.params.id},
         this.tokenConfig(),
       )
       .then(res => {
@@ -59,8 +59,8 @@ class SinglePost extends Component {
     // console.log('received props');
     if (nextProps.current_user) {
       // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
-      this.setState({ cur_user_id: nextProps.current_user._id });
-      this.setState({ cur_user: nextProps.current_user });
+      this.setState({cur_user_id: nextProps.current_user._id});
+      this.setState({cur_user: nextProps.current_user});
     }
   }
 
@@ -68,11 +68,14 @@ class SinglePost extends Component {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
-        this.setState({ post: res.data });
+        this.setState({post: res.data});
         this.getPostAuthor(res.data.author);
         console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
+        this.props.history.push({
+          pathname: '/404notfound',
+        });
         console.log(err);
       });
   };
@@ -81,7 +84,7 @@ class SinglePost extends Component {
     axios
       .get('/api/users/' + user_id, this.tokenConfig())
       .then(user => {
-        this.setState({ post_author: user.data });
+        this.setState({post_author: user.data});
       })
       .catch(err => {
         console.log(err);
@@ -93,7 +96,7 @@ class SinglePost extends Component {
       .get('/api/posts/' + this.props.match.params.id + '/attachments', this.tokenConfig())
       .then(res => {
         // console.log("Get the Attach data:", res.data);
-        this.setState({ attachments: res.data.attachments });
+        this.setState({attachments: res.data.attachments});
       })
       .catch(err => {
         console.log(err);
@@ -104,7 +107,7 @@ class SinglePost extends Component {
   getComments = () => {
     axios
       .get('/api/comments/', {
-        params: { post_id: this.props.match.params.id },
+        params: {post_id: this.props.match.params.id},
       })
       .then(comments => {
         let add_editMode = [];
@@ -114,7 +117,7 @@ class SinglePost extends Component {
           add_editMode.push(ele);
           this.getCommentUsername(ele._id, ele.author);
         });
-        this.setState({ comments: add_editMode });
+        this.setState({comments: add_editMode});
       })
       .catch(err => {
         console.log(err);
@@ -131,7 +134,7 @@ class SinglePost extends Component {
             comments[i].username = user.data.username;
           }
         }
-        this.setState({ comments: comments });
+        this.setState({comments: comments});
       })
       .catch(err => {
         console.log(err);
@@ -150,13 +153,12 @@ class SinglePost extends Component {
     axios
       .delete('/api/comments/' + comment_id)
       .then(deleted => {
+        this.getComments();
         console.log(deleted);
       })
       .catch(err => {
         console.log(err);
       });
-    // this.setState({comments: new_comments});
-    this.getComments();
   };
 
   /* callback passed to a Comment to submit a Comment on this page */
@@ -220,7 +222,7 @@ class SinglePost extends Component {
         comments[i].edit_mode = true;
       }
     }
-    this.setState({ comments: comments });
+    this.setState({comments: comments});
   };
 
   /* display an empty comment which can be edited in comment list */
@@ -234,7 +236,7 @@ class SinglePost extends Component {
         edit_mode: true,
         new_comment: true,
       });
-      this.setState({ comments: comments });
+      this.setState({comments: comments});
 
       document.getElementById('new-comment-button').setAttribute('hidden', true);
     } else {
@@ -248,7 +250,7 @@ class SinglePost extends Component {
     } else {
       this.props.history.push({
         pathname: '/edit_post',
-        state: { post: this.state.post, attachments: this.state.attachments, edit_mode: true },
+        state: {post: this.state.post, attachments: this.state.attachments, edit_mode: true},
       });
     }
   };
@@ -296,28 +298,45 @@ class SinglePost extends Component {
 
   submitReport = () => {
     const msg = document.getElementById('report-input').value;
-    document.getElementById('report-input').value = '';
-    console.log(this.state.cur_user_id);
-    console.log('The msg is: ', msg);
-    const notification = {
-      from: this.state.cur_user_id,
-      body: msg,
-    };
-    axios
-      .post('/api/notifications/to-admin', notification, this.tokenConfig())
+    if (msg === '') {
+      alert('Report message could not be empty.');
+    } else {
+      document.getElementById('report-input').value = '';
+      const notification = {
+        from: this.state.cur_user_id,
+        body: msg,
+        link: "/single_post/" + this.props.match.params.id,
+      };
+      axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
+  deletePost = () => {
+    axios.delete("/api/posts/" + this.props.match.params.id, this.tokenConfig())
       .then(res => {
+        this.props.history.push('/');
         console.log(res);
       })
       .catch(err => {
         console.log(err);
       });
+
   };
 
-  deletePost = () => {
-    axios
-      .delete('/api/posts/' + this.props.match.params.id, this.tokenConfig())
+  reportComment = (msg) => {
+    const notification = {
+      from: this.state.cur_user_id,
+      body: msg,
+      link: "/single_post/" + this.props.match.params.id,
+    };
+    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
       .then(res => {
-        this.props.history.push('/');
         console.log(res);
       })
       .catch(err => {
@@ -327,10 +346,12 @@ class SinglePost extends Component {
 
   render() {
     let cur_user_id = '';
+    let post_author_id = '';
     let username = '';
     let avatar = '';
     let post_id = '';
     let cur_user_admin = true;
+    let is_cur_user;
     if (this.state.cur_user) {
       cur_user_admin = this.state.cur_user.admin;
     }
@@ -340,8 +361,12 @@ class SinglePost extends Component {
       cur_user_id = this.props.current_user._id;
     }
     if (this.state.post_author) {
+      post_author_id = this.state.post_author._id;
       username = this.state.post_author.username;
       avatar = this.state.post_author.avatar;
+    }
+    if (post_author_id && cur_user_id) {
+      is_cur_user = post_author_id === cur_user_id;
     }
     let fav_disabled = false;
     if (this.state.post) {
@@ -413,7 +438,7 @@ class SinglePost extends Component {
                   </button>
                 </div>
                 <div className="comments">
-                  {(function() {
+                  {(function () {
                     if (comment_list.length === 0) {
                       return (
                         <React.Fragment>
@@ -438,6 +463,7 @@ class SinglePost extends Component {
                         editComment={this.editComment}
                         edit_mode={comment.edit_mode}
                         new_comment={comment.new_comment}
+                        report_comment={this.reportComment}
                       />
                     );
                   })}
@@ -446,86 +472,50 @@ class SinglePost extends Component {
             </div>
             <div className="col-12 col-6 col-md-3">
               <div className="user-info-container">
-                {/* <div className="space"></div> */}
-
                 <div className="user-info">
-                  <Link to={`/otherprofile/${this.state.post.author}`}>
-                    <div className="row">
-                      <div className="col-lg-3 col-3">
-                        <img className="avatar" src={avatar} alt="" />
-                      </div>
-                      <div className="col-lg-9 col-9">
-                        <strong id="username-display">{username}</strong>
-                      </div>
+                  <Link to={`/otherprofile/${this.state.post.author}`}/>
+                  <div className="row">
+                    <div className="col-lg-3 col-3">
+                      <img className="avatar" src={avatar} alt=""/>
                     </div>
-                  </Link>
-
-                  {cur_user_admin ? null : (
-                    <div className="row">
-                      <button
-                        className="btn btn-success btn-sm btn-fav btn-block"
-                        onClick={this.favPost}
-                        disabled={fav_disabled}
-                      >
-                        Favourite
-                      </button>
-                      <button
-                        className="btn btn-outline-danger btn-sm btn-block"
-                        data-toggle="modal"
-                        data-target="#exampleModalCenter"
-                      >
-                        Report Post
-                      </button>
-                      <div
-                        className="modal fade"
-                        id="exampleModalCenter"
-                        tabIndex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalCenterTitle"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog modal-dialog-centered" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5 className="modal-title" id="exampleModalLongTitle">
-                                Report this post.
-                              </h5>
-                            </div>
-                            <div className="modal-body">
-                              <div className="input-group mb-3">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter your report information."
-                                  aria-label="Recipient's username"
-                                  aria-describedby="basic-addon2"
-                                  id="report-input"
-                                />
-                              </div>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
-                                onClick={this.submitReport}
-                              >
-                                Submit
-                              </button>
+                    <div className="col-lg-9 col-9">
+                      <strong id="username-display">{username}</strong>
+                    </div>
+                  </div>
+                </div>
+                {cur_user_admin || is_cur_user ? null :
+                  <div className="row">
+                    <button
+                      className="btn btn-success btn-sm btn-fav btn-block"
+                      onClick={this.favPost}
+                      disabled={fav_disabled}
+                    >
+                      Favourite
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-sm btn-block"
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
+                    >Report Post
+                    </button>
+                    <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">Report this post.</h5>
+                          </div>
+                          <div className="modal-body">
+                            <div className="input-group mb-3">
+                              <input type="text" className="form-control" placeholder="Enter your report information."
+                                     aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                     id="report-input"/>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>}
               </div>
             </div>
           </div>
@@ -535,12 +525,13 @@ class SinglePost extends Component {
   }
 }
 
+
 // getting from reducers (error and auth reducers)
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  error: state.error,
-  current_user: state.auth.user,
-  auth: state.auth,
+isAuthenticated: state.auth.isAuthenticated,
+error: state.error,
+current_user: state.auth.user,
+auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(SinglePost));
