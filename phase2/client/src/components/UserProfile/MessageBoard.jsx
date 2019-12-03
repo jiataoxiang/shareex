@@ -53,17 +53,6 @@ class MessageBoard extends React.Component {
     const messages = this.state.messages;
     return (
       <div className="message-board">
-        {/* <div className="space"/> */}
-        <div className="overflow-auto">
-          <h3>Message Board</h3>
-          {messages.length === 0 ? (
-            <h4 className="text-center">No Message Yet</h4>
-          ) : (
-            messages.map(message => {
-              return <Message key={uid(Math.random())} message={message} />;
-            })
-          )}
-        </div>
         {this.checkUserProfile() ? null : (
           <div className="input-group mb-3">
             <div className="input-group-prepend">
@@ -81,6 +70,16 @@ class MessageBoard extends React.Component {
             />
           </div>
         )}
+        <div className="overflow-auto">
+          <h3>Message Board</h3>
+          {messages.length === 0 ? (
+            <h4 className="text-center">No Message Yet</h4>
+          ) : (
+            messages.reverse().map(message => {
+              return <Message key={uid(Math.random())} message={message} />;
+            })
+          )}
+        </div>
       </div>
     );
   }

@@ -42,13 +42,25 @@
     -o-transition: opacity 0.3s;
     transition: opacity 0.3s;
   }
-  /* Style the big profile picture circle here. */
   #bigProfilePicCircle {
-    /* Add properties below */
     cursor: pointer;
     position: absolute;
     top: 130px;
     left: 10em;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid black;
+  }
+
+  #otherProfileImgContainer {
+    margin-left: auto;
+  }
+
+  #otherProfilePicCircle {
+    position: absolute;
+    top: 130px;
+    left: 45%;
     width: 200px;
     height: 200px;
     border-radius: 50%;
@@ -260,6 +272,12 @@
   }
   .other-profile-content {
     // margin-top: ;
+  }
+  .title-color {
+    color: black;
+  }
+  .margin-top {
+    margin-top: 10px;
   }
 }
 
