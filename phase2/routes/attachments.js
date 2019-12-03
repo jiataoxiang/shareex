@@ -23,6 +23,7 @@ router.delete('/:id', (req, res) => {
     });
 });
 
+// add a new attachment
 router.post('/', (req, res) => {
   const attach = new Attachment({
     type: req.body.type,

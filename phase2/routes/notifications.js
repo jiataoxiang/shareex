@@ -74,7 +74,6 @@ router.post('/create', isAuth, (req, res) => {
         return res.status(400).send();
     } else {
         Notification.create(req.body).then(msg => {
-            console.log("notification create: ", msg);
             msg.save().then(msg => {
                 res.send(msg);
             })
@@ -84,11 +83,12 @@ router.post('/create', isAuth, (req, res) => {
     }
 });
 
+// add a new notification that will be sent to the admin
 router.post("/to-admin", isAuth, (req, res) => {
    const sender = req.body.from;
    const content = req.body.body;
    User.find({}).then(users => {
-       const admins = users.filter(user => user.admin === true)
+       const admins = users.filter(user => user.admin === true);
        admins.forEach(admin => {
            const to = admin._id;
           const new_msg = {
@@ -110,6 +110,7 @@ router.post("/to-admin", isAuth, (req, res) => {
 
 });
 
+// delete a notification by id provided
 router.delete('/:id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
         res.status(404).send();

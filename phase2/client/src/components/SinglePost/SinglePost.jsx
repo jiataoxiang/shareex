@@ -11,7 +11,6 @@ import store from '../../store';
 import {loadUser} from '../../actions/authActions';
 
 class SinglePost extends Component {
-  // In state, we have 2 arrays, comments and attachments
   state = {
     post: '',
     comments: [],
@@ -27,10 +26,10 @@ class SinglePost extends Component {
     this.addToViewHistory();
   }
 
+  // add data to view history
   addToViewHistory = () => {
     let user_id;
     if (this.props.location.state) {
-      console.log('The current user id is not null: ', this.props.location.state.current_user_id);
       user_id = this.props.location.state.current_user_id
         ? this.props.location.state.current_user_id
         : user_id;
@@ -38,7 +37,6 @@ class SinglePost extends Component {
     if (!user_id) {
       return;
     }
-    console.log('calling to add view history');
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
@@ -46,8 +44,6 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
-        console.log('added to view history');
-        console.log(res.data);
         store.dispatch(loadUser());
       })
       .catch(err => {
@@ -55,22 +51,21 @@ class SinglePost extends Component {
       });
   };
 
+  // ensure necessary data is loaded
   componentWillReceiveProps(nextProps) {
-    // console.log('received props');
     if (nextProps.current_user) {
-      // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
       this.setState({cur_user_id: nextProps.current_user._id});
       this.setState({cur_user: nextProps.current_user});
     }
   }
 
+  // get data for this post
   getPostData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.setState({post: res.data});
         this.getPostAuthor(res.data.author);
-        console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
         this.props.history.push({
@@ -80,6 +75,7 @@ class SinglePost extends Component {
       });
   };
 
+  // get author of this post
   getPostAuthor = user_id => {
     axios
       .get('/api/users/' + user_id, this.tokenConfig())
@@ -91,11 +87,11 @@ class SinglePost extends Component {
       });
   };
 
+  // get all attachments for this post
   getAttachData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id + '/attachments', this.tokenConfig())
       .then(res => {
-        // console.log("Get the Attach data:", res.data);
         this.setState({attachments: res.data.attachments});
       })
       .catch(err => {
@@ -103,7 +99,7 @@ class SinglePost extends Component {
       });
   };
 
-  /* get comments belonging to the post on this page */
+  // get comments belonging to the post on this page
   getComments = () => {
     axios
       .get('/api/comments/', {
@@ -124,6 +120,7 @@ class SinglePost extends Component {
       });
   };
 
+  // get a comment's author name
   getCommentUsername = (comment_id, id) => {
     axios
       .get('/api/users/' + id, this.tokenConfig())
@@ -141,7 +138,7 @@ class SinglePost extends Component {
       });
   };
 
-  /* callback passed to a Comment to delete a Comment on this page */
+  // callback passed to a Comment to delete a Comment on this page
   deleteComment = comment_id => {
     const comments = this.state.comments;
     const new_comments = [];
@@ -154,14 +151,13 @@ class SinglePost extends Component {
       .delete('/api/comments/' + comment_id)
       .then(deleted => {
         this.getComments();
-        console.log(deleted);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  /* callback passed to a Comment to submit a Comment on this page */
+  // callback passed to a Comment to submit a Comment on this page
   submitComment = (comment_content, post_id, comment_id, new_comment) => {
     if (new_comment) {
       // if this is a new comment
@@ -182,13 +178,26 @@ class SinglePost extends Component {
       axios
         .post('/api/comments/', a_comment)
         .then(comments => {
-          console.log('Posted the comment data:', comments.data);
           this.getComments();
         })
         .catch(err => {
           console.log(err);
         });
       document.getElementById('new-comment-button').removeAttribute('hidden');
+
+      const body_send = {
+        from: this.props.current_user._id,
+        to: this.state.post_author._id,
+        body: this.props.current_user.username + " commented on your post <" + this.state.post.title + ">",
+        link: "/single_post/" + this.props.match.params.id,
+      };
+      axios.post("/api/notifications/create",body_send, this.tokenConfig())
+        .then(res=>{
+          console.log(res);
+        })
+        .catch(err=>{
+          console.log(err);
+        });
     } else {
       // if this is a existed comment
       const comments = this.state.comments;
@@ -204,7 +213,6 @@ class SinglePost extends Component {
       axios
         .patch('/api/comments/' + comment_id, modified)
         .then(comments => {
-          console.log('Modified the comment data:', comments.data);
           this.getComments();
         })
         .catch(err => {
@@ -214,7 +222,7 @@ class SinglePost extends Component {
     }
   };
 
-  /* callback passed to a Comment to edit a Comment on this page */
+  // callback passed to a Comment to edit a Comment on this page
   editComment = comment_id => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
@@ -225,7 +233,7 @@ class SinglePost extends Component {
     this.setState({comments: comments});
   };
 
-  /* display an empty comment which can be edited in comment list */
+  // display an empty comment which can be edited in comment list
   addComment = () => {
     if (this.props.current_user._id) {
       const comments = this.state.comments;
@@ -244,6 +252,7 @@ class SinglePost extends Component {
     }
   };
 
+  // redirect to new post page to edit
   redirectNewPost = () => {
     if (this.props.current_user._id !== this.state.post.author) {
       alert("You cannot edit other's post.");
@@ -255,6 +264,7 @@ class SinglePost extends Component {
     }
   };
 
+  // token configuration for authentication purpose
   tokenConfig = () => {
     // Get token from localstorage
     const token = this.props.auth.token;
@@ -276,6 +286,7 @@ class SinglePost extends Component {
     return config;
   };
 
+  // update favpost infomation
   favPost = () => {
     axios
       .patch(
@@ -287,8 +298,6 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
-        console.log('faved the post');
-        console.log(res.data);
         store.dispatch(loadUser());
       })
       .catch(err => {
@@ -296,15 +305,17 @@ class SinglePost extends Component {
       });
   };
 
+  // submit the report message
   submitReport = () => {
     const msg = document.getElementById('report-input').value;
     if (msg === '') {
       alert('Report message could not be empty.');
     } else {
       document.getElementById('report-input').value = '';
+      console.log(this.props.current_user.username + " reported post <" + this.state.post.title + ">: " + msg);
       const notification = {
         from: this.state.cur_user_id,
-        body: msg,
+        body: this.props.current_user.username + " reported post <" + this.state.post.title + ">: " + msg,
         link: "/single_post/" + this.props.match.params.id,
       };
       axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
@@ -317,31 +328,16 @@ class SinglePost extends Component {
     }
   };
 
+  // delete this post
   deletePost = () => {
     axios.delete("/api/posts/" + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.props.history.push('/');
-        console.log(res);
       })
       .catch(err => {
         console.log(err);
       });
 
-  };
-
-  reportComment = (msg) => {
-    const notification = {
-      from: this.state.cur_user_id,
-      body: msg,
-      link: "/single_post/" + this.props.match.params.id,
-    };
-    axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   render() {
@@ -382,6 +378,9 @@ class SinglePost extends Component {
     if (this.state.comments) {
       comment_list = this.state.comments;
     }
+
+    console.log("The cur user id is: ", this.state.cur_user_id);
+    console.log("The author id is: ", this.state.post.author);
 
     return (
       <div className="single-post-2-page">
@@ -463,7 +462,6 @@ class SinglePost extends Component {
                         editComment={this.editComment}
                         edit_mode={comment.edit_mode}
                         new_comment={comment.new_comment}
-                        report_comment={this.reportComment}
                       />
                     );
                   })}
@@ -512,6 +510,12 @@ class SinglePost extends Component {
                                      id="report-input"/>
                             </div>
                           </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal"
+                                    onClick={this.submitReport}>Submit
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -525,13 +529,12 @@ class SinglePost extends Component {
   }
 }
 
-
 // getting from reducers (error and auth reducers)
 const mapStateToProps = state => ({
-isAuthenticated: state.auth.isAuthenticated,
-error: state.error,
-current_user: state.auth.user,
-auth: state.auth,
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  current_user: state.auth.user,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(withRouter(SinglePost));
