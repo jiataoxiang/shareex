@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -15,12 +16,14 @@ class AdminProfileFindPost extends React.Component {
 
     inputid: '',
   };
+  // Objects that may not visible depend on the post status.
   tempElements = {
     display_post: null,
     display_delete: null,
     button_delete: null,
   };
 
+  // Input Change handler.
   handleInputChange = event => {
     const target = event.target;
     const name = target.name;
@@ -29,6 +32,7 @@ class AdminProfileFindPost extends React.Component {
     this.setState({ [name]: value });
   };
 
+  // Show the post found.
   showPost = () => {
     this.tempElements.display_post.removeAttribute('hidden');
     if (this.state.deleted) {
@@ -40,10 +44,12 @@ class AdminProfileFindPost extends React.Component {
     }
   };
 
+  // Hide the post object when appropriate.
   hidePost = () => {
     this.tempElements.display_post.setAttribute('hidden', true);
   };
 
+  // Read post from server.
   getPostInfo = e => {
     e.preventDefault();
     if (this.state.inputid.length === 0) {
@@ -76,6 +82,7 @@ class AdminProfileFindPost extends React.Component {
     }
   };
 
+  // Read author from server.
   getAuthorInfo = () => {
     axios
       .get(`/api/users/${this.state.author}`, this.tokenConfig())
@@ -99,6 +106,7 @@ class AdminProfileFindPost extends React.Component {
       });
   };
 
+  // Save post status to server.
   saveChange = () => {
     if (this.state.title.length === 0) {
       alert('Title cannot be empty.');
@@ -135,13 +143,14 @@ class AdminProfileFindPost extends React.Component {
     }
   };
 
+  // Delete or recover a post.
   changeDelete = () => {
     if (this.state.deleted) {
       this.setState({ deleted: false });
       this.tempElements.display_delete.setAttribute('hidden', true);
       this.tempElements.button_delete.innerHTML = 'Delete';
 
-      const msgBody = 'Your post ' + this.state.title + ' is recovered by an administrator';
+      const msgBody = 'Your post <<' + this.state.title + '>> is recovered by an administrator';
       const newMsg = {
         from: this.props.current_user._id,
         to: this.state.author,
@@ -154,7 +163,7 @@ class AdminProfileFindPost extends React.Component {
       this.tempElements.display_delete.removeAttribute('hidden');
       this.tempElements.button_delete.innerHTML = 'Recover';
 
-      const msgBody = 'Your post ' + this.state.title + ' is deleted by an administrator';
+      const msgBody = 'Your post <<' + this.state.title + '>> is deleted by an administrator';
       const newMsg = {
         from: this.props.current_user._id,
         to: this.state.author,
@@ -164,6 +173,7 @@ class AdminProfileFindPost extends React.Component {
     }
   };
 
+  // Change the deleted status on the server.
   changeDeleteToServer = () => {
     axios
       .patch(
@@ -188,6 +198,7 @@ class AdminProfileFindPost extends React.Component {
       });
   };
 
+  // Send a notification to server.
   sendMsg = msg => {
     axios
       .post(`/api/notifications/create`, msg, this.tokenConfig())
@@ -257,10 +268,12 @@ class AdminProfileFindPost extends React.Component {
 
         <div id="display-post">
           <div className="row row-info">
-            <div className="col-md-8">
+            <div className="col-md-6">
               <div className="row">
                 <div className="col-md avatar-container">
-                  <img id="user-avatar" src={this.state.avatar} alt="" />
+                  <Link to={`/otherprofile/${this.state.author}`}>
+                    <img id="user-avatar" src={this.state.avatar} alt="" />
+                  </Link>
                   <h6>{this.state.username}</h6>
                 </div>
                 <div id="text-block" className="col-md-8">
@@ -291,14 +304,19 @@ class AdminProfileFindPost extends React.Component {
                       <option value="Other">Other</option>
                     </select>
                   </div>
+                  <div id="delete-warning">
+                    <h6>
+                        Deleted{' '}
+                        {Math.floor((Date.now() - this.state.delete_date) / (1000 * 60 * 60 * 24))} days ago.
+                    </h6>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              {/* <button type="button" id="button-change" className="btn" onClick={this.saveChange}>
-                Save Changes
-              </button> */}
-              <button className="btn btn-success btn-block" onClick={this.saveChange}>
+            <div className="col-md-3 edit-post-buttons">
+              <button className="btn btn-success btn-block" 
+                onClick={this.saveChange}
+              >
                 Save Changes
               </button>
               <button
@@ -309,28 +327,6 @@ class AdminProfileFindPost extends React.Component {
               >
                 Delete
               </button>
-            </div>
-          </div>
-
-          <div className="row row-delete">
-            <div className="col-md-8">
-              <div id="delete-warning">
-                <h6>
-                  Deleted{' '}
-                  {Math.floor((Date.now() - this.state.delete_date) / (1000 * 60 * 60 * 24))} days
-                  ago.
-                </h6>
-              </div>
-            </div>
-            <div className="col-md-4">
-              {/* <button
-                type="button"
-                id="button-delete"
-                className="btn"
-                onClick={this.changeDeleteToServer}
-              >
-                Delete
-              </button> */}
             </div>
           </div>
         </div>

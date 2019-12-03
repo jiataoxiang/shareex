@@ -71,7 +71,7 @@ class NotificationCard extends React.Component {
                 <div className="author-container">
                     { this.state.admin ? 
                         <img className="avatar" src={ this.state.avatar } alt="" /> :
-                        <Link to='/otherprofile'>
+                        <Link to={`/otherprofile/${this.state._user_id}`}>
                             <img className="avatar" src={ this.state.avatar } alt="" />
                         </Link>
                     }
