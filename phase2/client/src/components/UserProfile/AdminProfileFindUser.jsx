@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -234,7 +235,9 @@ class AdminProfileFindUser extends React.Component {
               <div className="row">
                 <div className="col-md-4">
                   <div className="avatar-container">
-                    <img id="user-avatar" src={this.state.avatar} alt="" />
+                    <Link to={`/otherprofile/${this.state.id}`}>
+                      <img id="user-avatar" src={this.state.avatar} alt="" />
+                    </Link>
                     <h6>{this.state.username}</h6>
                   </div>
                 </div>

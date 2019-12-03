@@ -9,6 +9,7 @@ class AdminProfileNotification extends React.Component {
         inputsearch: ""
     };
     
+    // Input change handler.
     handleInputChange = (event) => {
         const target = event.target;
         const name = target.name;
@@ -17,6 +18,7 @@ class AdminProfileNotification extends React.Component {
         this.setState({[name]: value});
     }
     
+    // Check if a notification contains any word in the search inputbox.
     checkSearch = (msgBody) => {
         let toReturn = false;
         this.state.inputsearch.split(' ').forEach(key => {
