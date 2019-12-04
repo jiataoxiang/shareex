@@ -33,6 +33,8 @@ password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
+Cloudinary is used to store images and pdf
+
 #### Home Page	`/`
 
 All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
@@ -97,8 +99,31 @@ User can report a post by clicking `Report Post` button located on the right sid
 
 User can favorite a post of others' by clicking the `Favourite` button  located on the right side of the post page. After clicking this button, the button will become transparent, and it cannot be clicked again. Notice: user will not be able to report or favourite his/her own post.
 
+## Overview of Routes
+
+In the routes folder in `phase2`, there are all of our route files.
+
+- attachments.js: `/api/attachments`
+  - Create, delete attachments
+- comments.js: `/api/comments`
+  - Create, get, edit, delete comments
+- index.js: `/`
+  - Only used for testing if a server connection is successful
+- notification.js: `/api/notifications`
+- posts.js: `/api/posts`
+  - Get, Create, edit, and delete posts
+  - Change attributes of a post like number of views
+- users.js: `/api/users`
+  - Create user
+  - login user
+  - Patch (edit) user's attributes like passwords, view-history
+
+There are too many routes, every route in these files has comments explaining their functions.
+
+
+
 ## Special features
 
 - All pages support mobile device display. Elements on page are set to change depending on screen sizes.
 - Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.
-- 
+- Cascade delete, when a user is deleted, its avatar, banner images in cloudinary is also deleted, as well as its notifications, posts, and the posts' attachments, comments.
