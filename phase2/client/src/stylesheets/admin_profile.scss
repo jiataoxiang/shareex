@@ -80,9 +80,11 @@
       }
       p {
         font-family: 'Alatsi', sans-serif;
+        color: var(--text);
       }
       button {
         margin-left: 10px;
+        color: white;
       }
     }
 
@@ -99,6 +101,18 @@
         width: 5em;
         height: 5em;
         border-radius: 50%;
+      }
+
+      button {
+        color: white;
+      }
+
+      h6 {
+        color: var(--text);
+      }
+
+      p {
+        color: var(--text);
       }
 
       #button-reset {
