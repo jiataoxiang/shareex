@@ -15,4 +15,5 @@ export const toHttps = url => {
   } else if (url.substring(0, 4) === 'http') {
     return url.replace('http', 'https'); // replace only replaces the first occurrence, it's safe
   }
+  return url;
 };
