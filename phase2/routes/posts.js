@@ -29,7 +29,11 @@ const deleteImage = public_id => {
 router.get('/', isAuth, isAdminTolerant, (req, res) => {
   let filter = {};
   if (req.query.category) {
-    filter.category = req.query.category;
+    if (req.query.category === 'Following' && req.query.following) {
+      filter.author = { $in: req.query.following };
+    } else {
+      filter.category = req.query.category;
+    }
   }
   const { search_content } = req.query;
   if (search_content) {
@@ -38,6 +42,7 @@ router.get('/', isAuth, isAdminTolerant, (req, res) => {
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
+  console.log(req.query.sort_by);
   Post.find(filter)
     .sort({ [req.query.sort_by]: -1 })
     // .sort({ likes: -1 })

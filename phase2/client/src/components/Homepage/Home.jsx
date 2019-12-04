@@ -73,6 +73,7 @@ class Home extends Component {
       sort_by,
       category,
       search_content,
+      following: this.props.current_user.following,
     };
     axios
       .get('/api/posts', config)

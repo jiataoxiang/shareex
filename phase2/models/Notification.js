@@ -7,7 +7,7 @@ const NotificationSchema = new Schema({
   body: { type: String, required: true },
   link: { type: String },
   type: { type: String, default: '' },
-  created_at: { type: Date, default: new Date() },
+  created_at: { type: Date, default: Date.now },
   read: { type: Boolean, default: false },
 });
 

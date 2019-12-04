@@ -13,6 +13,7 @@ import FavoritesBoard from './FavoritesBoard';
 import ViewHistoryboard from './ViewHistoryBoard';
 import FollowerBoard from './FollowerBoard';
 import Notification from './ProfileNotification';
+import { toHttps } from '../../lib/util';
 
 class UserProfile extends React.Component {
   state = {
@@ -211,7 +212,7 @@ class UserProfile extends React.Component {
           },
         })
         .then(res => {
-          const url = res.data[0].url;
+          const url = toHttps(res.data[0].url);
           axios
             .patch(
               `/api/users/${this.props.current_user._id}`,
