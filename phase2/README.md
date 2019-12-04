@@ -108,7 +108,7 @@ User can report a post by clicking `Report Post` button located on the right sid
 User can favorite a post of others' by clicking the `Favourite` button  located on the right side of the post page. After clicking this button, the button will become transparent, and it cannot be clicked again. Notice: user will not be able to report or favourite his/her own post.
 
 
-
+In middleware folder, auth.js includes some middleware functions. We add these middlewares to routes as needed to check if user if authenticated, authorized or is an admin.
 
 #### User Profile `./userprofile`
 

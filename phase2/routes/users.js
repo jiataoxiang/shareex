@@ -1,57 +1,53 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const { isAuth, isAuthorizedUser, isAdmin } = require("../middleware/auth");
-const { ObjectID } = require("mongodb");
-const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+const User = require('../models/User');
+const Post = require('../models/Post');
+const jwt = require('jsonwebtoken');
+const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
+const { ObjectID } = require('mongodb');
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
 
 // setup file upload system
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
+  api_secret: process.env.API_SECRET,
 });
 
 const deleteImage = public_id => {
   cloudinary.uploader
     .destroy(public_id)
-    .then(console.log("Delete image from cloudinary executed."));
+    .then(console.log('Delete image from cloudinary executed.'));
 };
 
 /* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("users route");
+router.get('/', function(req, res, next) {
+  res.send('users route');
 });
 
 // check isAuthenticated
-router.get("/check-auth", isAuth, (req, res) => {
-  res.send("Is Authenticated.");
+router.get('/check-auth', isAuth, (req, res) => {
+  res.send('Is Authenticated.');
 });
 
 // check isAuthorizedUser
-router.get(
-  "/:user_id/check-authorized",
-  isAuth,
-  isAuthorizedUser,
-  (req, res) => {
-    res.send("Is Authenticated and Authorized.");
-  }
-);
+router.get('/:user_id/check-authorized', isAuth, isAuthorizedUser, (req, res) => {
+  res.send('Is Authenticated and Authorized.');
+});
 
 // search for user by keywords, return a list of users
-router.get("/search/:keyword", (req, res) => {
+router.get('/search/:keyword', isAuth, (req, res) => {
   const filter =
-    req.params.keyword !== "undefined"
-      ? { username: { $regex: `${req.params.keyword}`, $options: "i" } }
+    req.params.keyword !== 'undefined'
+      ? { username: { $regex: `${req.params.keyword}`, $options: 'i' } }
       : {};
   filter.admin = { $ne: true };
   User.find(filter)
     .limit(100)
-    .select("username")
-    .select("avatar")
-    .select("email")
+    .select('username')
+    .select('avatar')
+    .select('email')
     .then(users => {
       res.json({ users });
     })
@@ -61,26 +57,24 @@ router.get("/search/:keyword", (req, res) => {
 });
 
 // register
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const { username, email, password } = req.body;
   // Make sure all inputs are filled in
   if (!username || !email || !password) {
-    return res.status(400).json({ message: "Please enter all fields" });
+    return res.status(400).json({ message: 'Please enter all fields' });
   }
   if (password.length < 4) {
-    return res
-      .status(400)
-      .json({ message: "Password must be longer than 4 characters" });
+    return res.status(400).json({ message: 'Password must be longer than 4 characters' });
   }
   User.findOne({ username }).then(user => {
-    if (user) return res.status(400).json({ message: "User already exists" });
+    if (user) return res.status(400).json({ message: 'User already exists' });
   });
 
   const hour = 3600;
   User.create({
     username: req.body.username,
     password: req.body.password,
-    email: req.body.email
+    email: req.body.email,
   })
     .then(user => {
       jwt.sign(
@@ -95,9 +89,9 @@ router.post("/", (req, res) => {
           delete user.password; // prevent sending hashed password to frontend
           res.json({
             token,
-            user
+            user,
           });
-        }
+        },
       );
     })
     .catch(err => {
@@ -106,29 +100,28 @@ router.post("/", (req, res) => {
 });
 
 // login
-router.post("/login", (req, res) => {
+router.post('/login', (req, res) => {
   const hour = 3600;
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: "Please enter all fields" });
+    return res.status(400).json({ message: 'Please enter all fields' });
   }
   try {
     User.findOne({
-      username: username
+      username: username,
     }).then(user => {
-      if (!user)
-        return res.status(400).json({ message: "User Does not exist" });
+      if (!user) return res.status(400).json({ message: 'User Does not exist' });
 
       console.log(user.banned);
       if (user.unbanned_date > new Date() && user.banned) {
-        console.log("you banned");
-        return res.status(403).json({ message: "You are Banned" });
+        console.log('you banned');
+        return res.status(403).json({ message: 'You are Banned' });
       } else if (user.unbanned_date < Date.now && user.banned) {
-        console.log("here");
+        console.log('here');
         user.banned = false;
         user.save();
       }
-      console.log("not banned");
+      console.log('not banned');
       user.comparePassword(password, function(err, isMatch) {
         if (err) throw err;
         if (isMatch) {
@@ -146,12 +139,12 @@ router.post("/login", (req, res) => {
               res.json({
                 token,
                 user,
-                message: "Authenticated"
+                message: 'Authenticated',
               });
-            }
+            },
           );
         } else {
-          return res.status(400).json({ message: "The password is invalid" });
+          return res.status(400).json({ message: 'The password is invalid' });
         }
       });
     });
@@ -161,7 +154,7 @@ router.post("/login", (req, res) => {
 });
 
 // delete a user
-router.delete("/:user_id", isAuth, isAdmin, (req, res) => {
+router.delete('/:user_id', isAuth, isAdmin, (req, res) => {
   User.findById(req.params.user_id, (err, user) => {
     if (err) {
       return res.status(500).json({ message: err.message });
@@ -171,10 +164,10 @@ router.delete("/:user_id", isAuth, isAdmin, (req, res) => {
     }
     const avatar_url = user.avatar;
     const banner_url = user.banner;
-    const avatar = avatar_url.split(".");
-    const banner = banner_url.split(".");
-    const avatar_public_key = avatar[avatar.length - 2].split("/").reverse()[0];
-    const banner_public_key = banner[banner.length - 2].split("/").reverse()[0];
+    const avatar = avatar_url.split('.');
+    const banner = banner_url.split('.');
+    const avatar_public_key = avatar[avatar.length - 2].split('/').reverse()[0];
+    const banner_public_key = banner[banner.length - 2].split('/').reverse()[0];
     deleteImage(avatar_public_key);
     deleteImage(banner_public_key);
     user.remove().catch(err => {
@@ -184,13 +177,14 @@ router.delete("/:user_id", isAuth, isAdmin, (req, res) => {
     // req.flash("success", "Your account has been deleted.");
     // req.logout();
     // return res.redirect("/");
-    return res.json({ message: "user deleted" });
+    return res.json({ message: 'user deleted' });
   });
 });
 
-router.get("/countusers", isAuth, isAdmin, (req, res) => {
+// count number of users in database
+router.get('/countusers', isAuth, isAdmin, (req, res) => {
   User.find({
-    admin: false
+    admin: false,
   })
     .then(posts => {
       if (!posts) {
@@ -205,27 +199,27 @@ router.get("/countusers", isAuth, isAdmin, (req, res) => {
 });
 
 // return user info without password, given it's logged in and token is provided and not expired
-router.get("/auth", isAuth, (req, res) => {
+router.get('/auth', isAuth, (req, res) => {
   User.findById(req.user.id)
-    .select("-password")
+    .select('-password')
     .then(user => {
       res.json(user);
     })
     .catch(err => {
-      res.status(401).send("Not login yet");
+      res.status(401).send('Not login yet');
     });
 });
 
 //get user by id without sending back password.
 // getting user info, no password sent back, no need to check is authorized
-router.get("/:user_id", isAuth, (req, res) => {
+router.get('/:user_id', isAuth, (req, res) => {
   const user_id = req.params.user_id;
   if (!ObjectID.isValid(user_id)) {
     res.status(404).send();
   }
 
   User.findById(user_id)
-    .select("-password")
+    .select('-password')
     .then(user => {
       res.send(user);
     })
@@ -236,11 +230,11 @@ router.get("/:user_id", isAuth, (req, res) => {
 
 //get user by username without sending back password.
 // getting user info, no password sent back, no need to check is authorized
-router.get("/username/:username", isAuth, (req, res) => {
+router.get('/username/:username', isAuth, (req, res) => {
   const username = req.params.username;
 
   User.find({ username: username })
-    .select("-password")
+    .select('-password')
     .then(user => {
       res.send(user);
     })
@@ -250,21 +244,17 @@ router.get("/username/:username", isAuth, (req, res) => {
 });
 
 //add following
-router.post("/add-following/:id", isAuth, (req, res) => {
+router.post('/add-following/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const following_id = req.body.following_id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid");
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(
-    id,
-    { $push: { following: following_id } },
-    { new: true }
-  )
+  User.findByIdAndUpdate(id, { $push: { following: following_id } }, { new: true })
     .then(user => {
       if (!user) {
-        res.status(404).send("user not found when add following");
+        res.status(404).send('user not found when add following');
       }
       res.send(user);
     })
@@ -273,23 +263,19 @@ router.post("/add-following/:id", isAuth, (req, res) => {
     });
 });
 
-//add follow
-router.post("/add-follower/:id", isAuth, (req, res) => {
+//add follower
+router.post('/add-follower/:id', isAuth, (req, res) => {
   const id = req.params.id;
   const follower_id = req.body.follower_id;
 
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid");
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(
-    id,
-    { $push: { followers: follower_id } },
-    { new: true }
-  )
+  User.findByIdAndUpdate(id, { $push: { followers: follower_id } }, { new: true })
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found!");
+        res.status(404).send('user is not found!');
       }
       res.send(user);
     })
@@ -299,22 +285,18 @@ router.post("/add-follower/:id", isAuth, (req, res) => {
 });
 
 //remove follower
-router.post("/remove-follower/:id", (req, res) => {
+router.post('/remove-follower/:id', (req, res) => {
   const id = req.params.id;
   const follower_id = req.body.follower_id;
 
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid");
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(
-    id,
-    { $pull: { followers: follower_id } },
-    { new: true }
-  )
+  User.findByIdAndUpdate(id, { $pull: { followers: follower_id } }, { new: true })
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found!");
+        res.status(404).send('user is not found!');
       }
       res.send(user);
     })
@@ -324,22 +306,18 @@ router.post("/remove-follower/:id", (req, res) => {
 });
 
 //remove following
-router.post("/remove-following/:id", (req, res) => {
+router.post('/remove-following/:id', (req, res) => {
   const id = req.params.id;
   const following_id = req.body.following_id;
 
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid");
+    res.status(404).send('user id is invalid');
   }
 
-  User.findByIdAndUpdate(
-    id,
-    { $pull: { following: following_id } },
-    { new: true }
-  )
+  User.findByIdAndUpdate(id, { $pull: { following: following_id } }, { new: true })
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found");
+        res.status(404).send('user is not found');
       }
       res.send(user);
     })
@@ -348,74 +326,64 @@ router.post("/remove-following/:id", (req, res) => {
     });
 });
 
-router.patch(
-  "/:user_id/add-view-history",
-  isAuth,
-  isAuthorizedUser,
-  (req, res) => {
-    if (!req.body.post_id) {
-      return res.status(400).send("post id DNE");
-    }
-    if (!ObjectID.isValid(req.body.post_id))
-      return res.status(400).send("post id not valid");
+// add view history to user
+router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) => {
+  if (!req.body.post_id) {
+    return res.status(400).send('post id DNE');
+  }
+  if (!ObjectID.isValid(req.body.post_id)) return res.status(400).send('post id not valid');
 
-    User.findById(req.params.user_id).then(user => {
-      if (!user) return res.status(404).send("User not found!");
-      user.view_history = user.view_history.filter(
-        post_id => post_id !== req.body.post_id
-      );
-      user.view_history.unshift(req.body.post_id);
-      Post.findById(req.body.post_id).then(post => {
-        if (!post) {
-          res.status(404).send("no such post");
-        }
-        if (!post.views) post.views = 0;
-        post.views = post.views + 1;
-        post
-          .save()
-          .then(() => {})
-          .catch(err => {
-            console.log(err);
-          });
-      });
-      user
+  User.findById(req.params.user_id).then(user => {
+    if (!user) return res.status(404).send('User not found!');
+    user.view_history = user.view_history.filter(post_id => post_id !== req.body.post_id);
+    user.view_history.unshift(req.body.post_id);
+    Post.findById(req.body.post_id).then(post => {
+      if (!post) {
+        return res.status(404).send('no such post');
+      }
+      if (!post.views) post.views = 0;
+      post.views = post.views + 1;
+      post
         .save()
-        .then(user => {
-          res.send(`Successfully added ${req.body.post_id} to view history.`);
-        })
+        .then(() => {})
         .catch(err => {
-          res.status(500).send(err);
+          console.log(err);
         });
     });
-  }
-);
-
-router.patch(
-  "/:user_id/remove-view-history",
-  isAuth,
-  isAuthorizedUser,
-  (req, res) => {
-    User.findByIdAndUpdate(req.params.user_id, {
-      view_history: []
-    })
+    user
+      .save()
       .then(user => {
-        if (!user) return res.status(404).send("User not found!");
-        res.json({
-          message: "Successfully Removed View History",
-          user_view_history: []
-        });
+        res.send(`Successfully added ${req.body.post_id} to view history.`);
       })
       .catch(err => {
         res.status(500).send(err);
       });
-  }
-);
+  });
+});
 
-router.patch("/:user_id", isAuth, isAuthorizedUser, (req, res) => {
+// remove view history of user
+router.patch('/:user_id/remove-view-history', isAuth, isAuthorizedUser, (req, res) => {
+  User.findByIdAndUpdate(req.params.user_id, {
+    view_history: [],
+  })
+    .then(user => {
+      if (!user) return res.status(404).send('User not found!');
+      res.json({
+        message: 'Successfully Removed View History',
+        user_view_history: [],
+      });
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
+});
+
+// patch/change a user's attributes, only authorized user is allowed
+router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
   User.findById(req.params.user_id)
     .then(user => {
       if (!user) {
-        res.status(404).send("User not found");
+        res.status(404).send('User not found');
       } else {
         Object.keys(req.body).forEach(ele => {
           user[ele] = req.body[ele];
@@ -430,11 +398,12 @@ router.patch("/:user_id", isAuth, isAuthorizedUser, (req, res) => {
     });
 });
 
-router.patch("/ban/:user_id", isAuth, isAdmin, (req, res) => {
+// ban a user, only admin is allowed
+router.patch('/ban/:user_id', isAuth, isAdmin, (req, res) => {
   User.findById(req.params.user_id)
     .then(user => {
       if (!user) {
-        res.status(404).send("User not found");
+        res.status(404).send('User not found');
       }
       Object.keys(req.body).forEach(ele => {
         user[ele] = req.body[ele];
@@ -445,7 +414,7 @@ router.patch("/ban/:user_id", isAuth, isAdmin, (req, res) => {
           return res.send(user);
         })
         .catch(err => {
-          res.status(500).send("err");
+          res.status(500).send('err');
         });
       // res.status(200).send('end');
     })
@@ -455,21 +424,21 @@ router.patch("/ban/:user_id", isAuth, isAdmin, (req, res) => {
 });
 
 //add messenger info to user
-router.post("/add-messenger/:id", (req, res) => {
+router.post('/add-messenger/:id', (req, res) => {
   const id = req.params.id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is invalid");
+    res.status(404).send('user id is invalid');
   }
 
   const message = {
     content: req.body.content,
-    messenger_id: req.body.messenger_id
+    messenger_id: req.body.messenger_id,
   };
 
   User.findByIdAndUpdate(id, { $push: { messages: message } }, { new: true })
     .then(user => {
       if (!user) {
-        res.status(404).send("user is not found");
+        res.status(404).send('user is not found');
       }
       res.send(user);
     })
@@ -478,10 +447,11 @@ router.post("/add-messenger/:id", (req, res) => {
     });
 });
 
-router.patch("/like/:id", (req, res) => {
+// add like to a user
+router.patch('/like/:id', (req, res) => {
   const id = req.params.id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is not valid");
+    res.status(404).send('user id is not valid');
   }
   User.findById(id)
     .then(user => {
@@ -500,10 +470,11 @@ router.patch("/like/:id", (req, res) => {
     });
 });
 
-router.patch("/unlike/:id", (req, res) => {
+// remove 1 like from user
+router.patch('/unlike/:id', (req, res) => {
   const id = req.params.id;
   if (!ObjectID.isValid(id)) {
-    res.status(404).send("user id is not valid");
+    res.status(404).send('user id is not valid');
   }
   User.findById(id)
     .then(user => {
