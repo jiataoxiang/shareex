@@ -26,12 +26,18 @@ npm start
 | user2    | user2    |
 | admin    | admin    |
 
+
+
 ## Connect db through shell
 
 `mongo "mongodb+srv://shareex-36p7c.mongodb.net/test" --username dev`
 password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
+
+
+
+# Features:
 
 #### Home Page	`/`
 
@@ -60,6 +66,10 @@ Passwords are all encrypted with bcrypt. User session is set to be 2 hours long,
 #### Create a new post. `/new_post`
 
 After you log in to your account. You could click the `New Post` button in the navber. Users are required to provide information `Title` and `Content` fields. The `Category` field has default option: `Computer Science`. If user leave any of `Title` or `Content` fields empty, the post will not be allowed to submit. 
+
+
+
+#### Single Post `./single_post/:id`
 
 **Add attachments**
 
@@ -97,15 +107,17 @@ User can report a post by clicking `Report Post` button located on the right sid
 
 User can favorite a post of others' by clicking the `Favourite` button  located on the right side of the post page. After clicking this button, the button will become transparent, and it cannot be clicked again. Notice: user will not be able to report or favourite his/her own post.
 
+
+
 #### User Profile `./userprofile`
 
-Avatar: When you click upper half of avatar circle, animation will replace the banner, and it will be changed back if you click it again. If you click the lower half of the circle, you will be able to change your avatar (only support `.jpg`, `.jpeg`, `.png` file, but you will be warned if you choose other file).
+**Avatar**: When you click upper half of avatar circle, animation will replace the banner, and it will be changed back if you click it again. If you click the lower half of the circle, you will be able to change your avatar (only support `.jpg`, `.jpeg`, `.png` file, but you will be warned if you choose other file).
 
-Banner: When your mouse move over the banner, a changed banner button will drop down, and you will be able to change your banner.
+**Banner**: When your mouse move over the banner, a changed banner button will drop down, and you will be able to change your banner.
 
-Information: Display name, motto, email, number of post, number of follower, number of following, and edit button, you can change your information by clicking edit button.
+**Information**: Display name, motto, email, number of post, number of follower, number of following, and edit button, you can change your information by clicking edit button.
 
-options: (note: message board is not for communication, users leave comments here to describe this user)
+**options**: (note: message board is not for communication, users leave comments here to describe this user)
 
 when you click message board, you will be able to see all messages that other user send to you
 
@@ -119,17 +131,21 @@ when you click Follower Board, you will be able to see all the users you are fol
 
 when you click Notification, you will be able to see notifications that sent by either admin or other users. You can search your notification, delete notification, and see detail, which direct you to other profile or single post (source of your notification)
 
+
+
 #### Other profile: `./otherprofile/:id`
 
 You can go to other profile by clicking icons whenever other users' avatar appear.
 
-Information: Display name, motto, email, number of post, number of follower, number of following, you can follow a user by clicking follow button and then the button will be changed to unfollow button.  Under follow button, there is a report button, you can report a user by click report button, but you have to send reasonable message, when you report a user, a notification will be sent to all admin.
+**Information**: Display name, motto, email, number of post, number of follower, number of following, you can follow a user by clicking follow button and then the button will be changed to unfollow button.  Under follow button, there is a report button, you can report a user by click report button, but you have to send reasonable message, when you report a user, a notification will be sent to all admin.
 
-options:
+**options**:
 
 when you click message board, you will be able to see all messages(comments) that other users describe this user, and you can also send message in other profile 
 
 when you click post, you will be able to see all posts that owned by this user.
+
+
 
 ## Special features
 
