@@ -126,6 +126,9 @@
     border-radius: 5px;
     margin-bottom: 1em;
     margin-top: 50px;
+    strong {
+      color: var(--text);
+    }
     button {
       border: 1px solid rgba(0, 0, 0, 0.125);
     }

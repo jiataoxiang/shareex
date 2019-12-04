@@ -327,7 +327,7 @@ class UserProfile extends React.Component {
                   </Link>
                 </div>
               </div>
-              <h2>Options</h2>
+              <h2 id="option">Options</h2>
               <div className="list-group options">
                 {options.map(option => {
                   return (
