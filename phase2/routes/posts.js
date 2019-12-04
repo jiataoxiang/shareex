@@ -29,7 +29,11 @@ const deleteImage = public_id => {
 router.get('/', isAuth, isAdminTolerant, (req, res) => {
   let filter = {};
   if (req.query.category) {
-    filter.category = req.query.category;
+    if (req.query.category === 'Following' && req.query.following) {
+      filter.author = { $in: req.query.following };
+    } else {
+      filter.category = req.query.category;
+    }
   }
   const { search_content } = req.query;
   if (search_content) {
