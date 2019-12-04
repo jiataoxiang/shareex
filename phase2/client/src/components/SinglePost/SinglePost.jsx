@@ -191,11 +191,9 @@ class SinglePost extends Component {
         body: this.props.current_user.username + " commented on your post <" + this.state.post.title + ">",
         link: "/single_post/" + this.props.match.params.id,
       };
-      axios.post("/api/notifications/create",body_send, this.tokenConfig())
-        .then(res=>{
-          console.log(res);
-        })
-        .catch(err=>{
+      axios.post("/api/notifications/create", body_send, this.tokenConfig())
+        .then()
+        .catch(err => {
           console.log(err);
         });
     } else {
@@ -312,16 +310,13 @@ class SinglePost extends Component {
       alert('Report message could not be empty.');
     } else {
       document.getElementById('report-input').value = '';
-      console.log(this.props.current_user.username + " reported post <" + this.state.post.title + ">: " + msg);
       const notification = {
         from: this.state.cur_user_id,
         body: this.props.current_user.username + " reported post <" + this.state.post.title + ">: " + msg,
         link: "/single_post/" + this.props.match.params.id,
       };
       axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
-        .then(res => {
-          console.log(res);
-        })
+        .then()
         .catch(err => {
           console.log(err);
         });
@@ -378,9 +373,6 @@ class SinglePost extends Component {
     if (this.state.comments) {
       comment_list = this.state.comments;
     }
-
-    console.log("The cur user id is: ", this.state.cur_user_id);
-    console.log("The author id is: ", this.state.post.author);
 
     return (
       <div className="single-post-2-page">

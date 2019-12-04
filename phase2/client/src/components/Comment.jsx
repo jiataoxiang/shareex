@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../stylesheets/comment.scss';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 class Comment extends Component {
   state = {};
 
+  // add a new comment to the database
   submitComment = event => {
     const comment_content = event.target.previousElementSibling.firstElementChild.value;
     this.props.submitComment(
@@ -16,6 +17,7 @@ class Comment extends Component {
     );
   };
 
+  // show buttons on the page
   getButtons = () => {
     if (this.props.edit_mode) {
       return (
@@ -28,8 +30,7 @@ class Comment extends Component {
       );
     }
     if (this.props.current_user_id === this.props.comment_user_id) {
-      const { deleteComment, editComment, secondary_key } = this.props;
-      console.log('This.props.key is: ', secondary_key);
+      const {deleteComment, editComment, secondary_key} = this.props;
       return (
         <div>
           <button
@@ -49,6 +50,7 @@ class Comment extends Component {
     }
   };
 
+  // shown content on the page
   getContentDisplay = () => {
     if (this.props.edit_mode) {
       return (
@@ -88,7 +90,7 @@ class Comment extends Component {
             {this.getButtons()}
           </div>
         </div>
-        <hr />
+        <hr/>
       </div>
     );
   }

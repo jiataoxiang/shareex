@@ -130,7 +130,7 @@ class NewPost extends Component {
     this.setState({contents: contents});
   };
 
-  // handle incoming text/code and store them in state
+  // handle incoming text and store them in state
   addedAttachmentWords = (content, data_type, parent_key, secondary_key) => {
     const resultContent = this.alreadyExistedContents(secondary_key);
     this.state.contents.splice(resultContent, 1, {
@@ -260,7 +260,6 @@ class NewPost extends Component {
           .then(res => {
             // redirect to home page
             this.props.history.push('/');
-            console.log(res);
           })
           .catch(err => {
             console.log(err);
@@ -270,9 +269,7 @@ class NewPost extends Component {
         this.state.original_attachments.forEach(e => {
           axios
             .delete('/api/attachments/' + e._id, this.tokenConfig())
-            .then(res => {
-              console.log(res);
-            })
+            .then()
             .catch(err => {
               console.log(err);
             });
@@ -285,7 +282,6 @@ class NewPost extends Component {
             this.tokenConfig(),
           )
           .then(res => {
-            console.log('Updated post: ', res);
             // redirect to home page
             this.props.history.push('/');
           })

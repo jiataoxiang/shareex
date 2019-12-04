@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
-const Comment = require('../models/Comment');
-const { ObjectID } = require('mongodb');
+const {ObjectID} = require('mongodb');
 const Attachment = require('../models/Attachment');
-const { isAuth, isAuthorizedPost, isAdmin, isAdminTolerant } = require('../middleware/auth');
+const {isAuth, isAuthorizedPost, isAdmin, isAdminTolerant} = require('../middleware/auth');
 const cloudinary = require('cloudinary').v2;
 const config = require('config');
 
@@ -20,9 +19,7 @@ cloudinary.config({
 const deleteImage = public_id => {
   cloudinary.uploader
     .destroy(public_id)
-    .then(res => {
-      console.log('Delete image from cloudinary executed.');
-    })
+    .then()
     .catch(err => {
       console.log('No such image in cloudinary');
     });
@@ -30,32 +27,24 @@ const deleteImage = public_id => {
 
 // call with query to add a filter, see post_test for an example
 router.get('/', isAuth, isAdminTolerant, (req, res) => {
-  console.log(
-    '\n\n\n\nSort By: ',
-    req.query.sort_by,
-    '\nCategory: ',
-    req.query.category,
-    '\n\n\n\n',
-  );
-
   let filter = {};
   if (req.query.category) {
     filter.category = req.query.category;
   }
-  const { search_content } = req.query;
+  const {search_content} = req.query;
   if (search_content) {
-    filter.title = { $regex: `${search_content}`, $options: 'i' };
+    filter.title = {$regex: `${search_content}`, $options: 'i'};
   }
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
   Post.find(filter)
-    .sort({ [req.query.sort_by]: -1 })
+    .sort({[req.query.sort_by]: -1})
     // .sort({ likes: -1 })
     .limit(100)
     .then(
       posts => {
-        res.json({ posts }); // can wrap in object if want to add more properties
+        res.json({posts}); // can wrap in object if want to add more properties
       },
       error => {
         res.status(500).send(error); // server error
@@ -67,28 +56,28 @@ router.get('/', isAuth, isAdminTolerant, (req, res) => {
 router.get('/search/:keyword', (req, res) => {
   const filter =
     req.params.keyword !== 'undefined'
-      ? { title: { $regex: `${req.params.keyword}`, $options: 'i' } }
+      ? {title: {$regex: `${req.params.keyword}`, $options: 'i'}}
       : {};
   Post.find(filter)
-    .sort({ created_at: -1 })
+    .sort({created_at: -1})
     .then(posts => {
-      res.json({ posts });
+      res.json({posts});
     })
     .catch(error => {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({message: error.message});
     });
 });
 
 // get recommendaed posts
 router.get('/recommendations', (req, res) => {
   Post.find({})
-    .sort({ created_at: -1, views: -1 })
+    .sort({created_at: -1, views: -1})
     .limit(10)
     .then(posts => {
       res.send(posts);
     })
     .catch(error => {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({message: error.message});
     });
 });
 
@@ -96,7 +85,7 @@ router.get('/recommendations', (req, res) => {
 router.get('/countposts', isAuth, isAdmin, (req, res) => {
   Post.count()
     .then(count => {
-      res.send({ count: count });
+      res.send({count: count});
     })
     .catch(err => {
       res.status(500).send();
@@ -107,13 +96,13 @@ router.get('/countdaily', isAuth, isAdmin, (req, res) => {
   var yesterday = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
 
   Post.find({
-    created_at: { $gt: yesterday },
+    created_at: {$gt: yesterday},
   })
     .then(posts => {
       if (!posts) {
         res.status(404).send();
       } else {
-        res.send({ count: posts.length });
+        res.send({count: posts.length});
       }
     })
     .catch(err => {
@@ -123,18 +112,18 @@ router.get('/countdaily', isAuth, isAdmin, (req, res) => {
 
 // get posts by user id
 router.get('/by-user/:user_id', isAuth, isAdminTolerant, (req, res) => {
-  const filter = { author: req.params.user_id };
+  const filter = {author: req.params.user_id};
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
 
   Post.find(filter)
-    .sort({ created_at: -1 })
+    .sort({created_at: -1})
     .then(posts => {
-      res.json({ posts });
+      res.json({posts});
     })
     .catch(error => {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({message: error.message});
     });
 });
 
@@ -143,14 +132,13 @@ router.get('/post-array', isAuth, isAdminTolerant, (req, res) => {
   if (!req.query.posts) return res.send([]);
   const posts = req.query.posts.filter(post => ObjectID.isValid(post));
   const filter = {
-    _id: { $in: posts },
+    _id: {$in: posts},
   };
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
   Post.find(filter)
     .then(posts => {
-      console.log(posts);
       res.send(posts.reverse());
     })
     .catch(err => {
@@ -192,7 +180,7 @@ router.patch('/update-post/:id', (req, res) => {
       };
       updated_post.attachments = attach_list;
 
-      Post.findByIdAndUpdate(req.params.id, { $set: updated_post }, { new: true })
+      Post.findByIdAndUpdate(req.params.id, {$set: updated_post}, {new: true})
         .then(post => {
           if (!post) {
             return res.status(404).send('Post not found, and cannot update');
@@ -313,12 +301,12 @@ router.get('/user-posts/:user_id', isAuth, (req, res) => {
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.post_id)) {
-    return res.status(404).json({ message: 'post id not valid' });
+    return res.status(404).json({message: 'post id not valid'});
   }
   Post.findById(req.params.post_id)
     .then(post => {
       if (!post) {
-        return res.status(404).json({ message: 'Post not found, and cannot update' });
+        return res.status(404).json({message: 'Post not found, and cannot update'});
       }
       // check if user has liked this post
       User.findById(req.user.id).then(user => {
@@ -326,7 +314,7 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
           // if user is admin, can skip and
           if (post.likes_users) {
             if (post.likes_users.includes(req.user.id)) {
-              return res.status(403).json({ message: 'You have liked the post' });
+              return res.status(403).json({message: 'You have liked the post'});
             }
           }
         }
@@ -344,23 +332,23 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
         post.likes++;
 
         post.save().then(new_post => {
-          return res.json({ post });
+          return res.json({post});
         });
       });
     })
     .catch(error => {
-      res.status(400).json({ message: 'Post not updated, bad request' }); // bad request for changing the post.
+      res.status(400).json({message: 'Post not updated, bad request'}); // bad request for changing the post.
     });
 });
 
 // unlike a post
 router.patch('/unlike/:post_id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.post_id)) {
-    return res.status(404).json({ message: 'post id not valid' });
+    return res.status(404).json({message: 'post id not valid'});
   }
   Post.findById(req.params.post_id).then(post => {
     if (!post) {
-      return res.status(404).json({ message: 'Post not found, and cannot update' });
+      return res.status(404).json({message: 'Post not found, and cannot update'});
     }
     // check if user has liked this post
     User.findById(req.user.id).then(user => {
@@ -368,7 +356,7 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
         // if user is admin, can skip and
         if (post.likes_users) {
           if (!post.likes_users.includes(req.user.id)) {
-            return res.status(403).json({ message: 'You have not liked the post' });
+            return res.status(403).json({message: 'You have not liked the post'});
           }
         }
       }
@@ -381,7 +369,7 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
 
       post.likes--;
       post.save().then(new_post => {
-        return res.json({ post });
+        return res.json({post});
       });
     });
   });
@@ -400,7 +388,7 @@ router.patch('/add-fav', isAuth, (req, res) => {
     user
       .save()
       .then(user => {
-        Post.findByIdAndUpdate(req.body.post_id, { $inc: { favs: 1 } })
+        Post.findByIdAndUpdate(req.body.post_id, {$inc: {favs: 1}})
           .then(post => {
             res.send('Added to favs of user and increment favs of post');
           })
@@ -417,9 +405,9 @@ router.patch('/add-fav', isAuth, (req, res) => {
 
 // update fav number by post id
 router.patch('/remove-fav/:post_id', isAuth, (req, res) => {
-  User.findByIdAndUpdate(req.body.user_id, { $pull: { favs: req.params.post_id } })
+  User.findByIdAndUpdate(req.body.user_id, {$pull: {favs: req.params.post_id}})
     .then(user => {
-      Post.findByIdAndUpdate(req.params.post_id, { $inc: { favs: -1 } })
+      Post.findByIdAndUpdate(req.params.post_id, {$inc: {favs: -1}})
         .then(post => {
           res.send('updated, removed favs');
         })
@@ -440,7 +428,7 @@ router.patch('/:id', isAuth, (req, res) => {
     res.status(404).send('post id not valid');
   }
 
-  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+  Post.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
     .then(post => {
       if (!post) {
         return res.status(404).send('Post not found, and cannot update');
@@ -459,7 +447,7 @@ router.patch('/delete/:id', isAuth, isAdmin, (req, res) => {
     res.status(404).send('post id not valid');
   }
 
-  Post.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+  Post.findByIdAndUpdate(req.params.id, {$set: req.body}, {new: true})
     .then(post => {
       if (!post) {
         return res.status(404).send('Post not found, and cannot update');
@@ -474,13 +462,13 @@ router.patch('/delete/:id', isAuth, isAdmin, (req, res) => {
 
 // get attachments of given post
 router.get('/:post_id/attachments', (req, res) => {
-  Attachment.find({ post_id: req.params.post_id })
-    .sort({ _id: -1 })
+  Attachment.find({post_id: req.params.post_id})
+    .sort({_id: -1})
     .then(attachments => {
-      res.json({ attachments: attachments });
+      res.json({attachments: attachments});
     })
     .catch(error => {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({message: error.message});
     });
 });
 

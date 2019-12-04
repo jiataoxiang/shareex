@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import '../stylesheets/image_uploader.scss';
 
 class ImageUploader extends Component {
@@ -14,32 +14,28 @@ class ImageUploader extends Component {
     isUploading: false,
   };
 
+  // remove file from cloudinary database
   removeFile = () => {
     if (this.state.public_id) {
       axios
         .delete(`/upload/${this.state.public_id}`)
-        .then(res => {
-          console.log(res);
-        })
+        .then()
         .catch(err => {
           console.log(err);
         });
     }
   };
 
+  // onchange function
   onChange = async e => {
     if (!this.props.public_id) {
       this.removeFile();
     }
-    console.log('BEFORE RETURN ');
     if (!e.target.files[0]) return;
-    console.log('AFTER RETURN');
     this.setState({
       filename: e.target.files[0].name,
       file_type: e.target.files[0].type,
     });
-    console.log(e.target.files);
-    // const input_element = document.getElementById('file-input');
     const input_element = e.target;
     if (!input_element.files || !input_element.files[0]) {
       this.setMessage('No file chosen');
@@ -47,7 +43,7 @@ class ImageUploader extends Component {
     }
     const file = input_element.files[0];
     const file_type = file.type;
-    this.setState({ isUploading: true });
+    this.setState({isUploading: true});
     if (!file_type.includes('png') && !file_type.includes('jpg') && !file_type.includes('pdf')) {
       this.setMessage('File must be jpg, png or pdf file');
       return;
@@ -74,10 +70,9 @@ class ImageUploader extends Component {
       });
 
       this.setMessage('File Uploaded');
-      console.log(res.data[0]);
-      this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
+      this.setState({url: res.data[0].url, public_id: res.data[0].public_id});
       this.props.setParentState('file_url', this.state.url, file_type);
-      this.setState({ isUploading: false });
+      this.setState({isUploading: false});
     } catch (err) {
       if (err.response.status === 500) {
         this.setMessage('There was a problem with the server');
@@ -87,26 +82,29 @@ class ImageUploader extends Component {
       console.log(err);
     }
   };
+
   componentWillUnmount() {
     this.setState = (state, callback) => {
       return;
     };
   }
+
+  // set up upload bar
   setUploadPercentage = progress => {
-    this.setState({ progress });
+    this.setState({progress});
   };
 
   onSubmit = async e => {
     e.preventDefault();
   };
 
+  // show the added file
   getDisplay = () => {
     if (this.state.isUploading) {
       return <h3>Uploading</h3>;
     }
     if (this.state.url) {
       if (this.state.file_type.includes('pdf')) {
-        console.log('is a pdf');
         return (
           <embed
             className="center"
@@ -118,12 +116,12 @@ class ImageUploader extends Component {
       } else {
         return (
           <React.Fragment>
-            <br />
+            <br/>
             <img
               src={this.state.url}
               className="rounded mx-auto d-block"
               alt="..."
-              style={{ width: '100%' }}
+              style={{width: '100%'}}
             />
           </React.Fragment>
         );
@@ -133,15 +131,15 @@ class ImageUploader extends Component {
     }
   };
 
+  // set message
   setMessage = msg => {
-    this.setState({ msg });
+    this.setState({msg});
     setTimeout(() => {
-      this.setState({ msg: '' });
+      this.setState({msg: ''});
     }, 5000);
   };
 
   render() {
-    // const buttonCSS = { padding: 0, border: 'none', background: 'none' };
     return (
       <div className="image-uploader-component">
         <h2>Upload your Image/PDF</h2>
@@ -167,7 +165,7 @@ class ImageUploader extends Component {
           <div
             className="progress-bar"
             role="progressbar"
-            style={{ width: `${this.state.progress}%` }}
+            style={{width: `${this.state.progress}%`}}
             aria-valuenow={this.state.progress}
             aria-valuemin="0"
             aria-valuemax="100"

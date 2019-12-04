@@ -98,7 +98,6 @@ router.post("/to-admin", isAuth, (req, res) => {
                link: req.body.link
            };
            Notification.create(new_msg).then(msg => {
-               console.log("notification create: ", msg);
                msg.save().then(msg => {
                    res.send(msg);
                })

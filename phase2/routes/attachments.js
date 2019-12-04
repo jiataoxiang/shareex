@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { ObjectID } = require('mongodb');
+const {ObjectID} = require('mongodb');
 const Attachment = require('../models/Attachment');
-const { isAuth, isAuthorizedPost, isAdmin } = require('../middleware/auth');
+const {isAuth, isAuthorizedPost, isAdmin} = require('../middleware/auth');
 
 // delete all attachments of a post
 router.delete('/:id', (req, res) => {
