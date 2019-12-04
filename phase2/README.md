@@ -35,14 +35,10 @@ password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
-<<<<<<< HEAD
+Cloudinary is used to store images and pdf
 
 
 # Features:
-=======
-Cloudinary is used to store images and pdf
->>>>>>> 5a673b650b534bfe0cc9c3b99ca8427c4d97de41
-
 #### Home Page	`/`
 
 All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
