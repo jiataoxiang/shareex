@@ -1,7 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../stylesheets/attachment.scss';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
 
 class Attachment extends Component {
   state = {};
@@ -41,7 +39,7 @@ class Attachment extends Component {
         ></iframe>
       );
     } else if (this.props.type === 'image') {
-      return <img src={this.props.content} alt=""/>;
+      return <img src={this.props.content} alt="" />;
     } else if (this.props.type === 'image_link') {
       return (
         <div className="form-group">

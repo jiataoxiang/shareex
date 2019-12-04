@@ -1,9 +1,7 @@
-import React, {Component} from 'react';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
+import React, { Component } from 'react';
 import Attachment from '../Attachment';
-import {uid} from 'react-uid';
-import {rand_string} from '../../lib/util';
+import { uid } from 'react-uid';
+import { rand_string } from '../../lib/util';
 import ImageUploader from '../ImageUploader';
 
 class AddContent extends Component {
@@ -13,20 +11,20 @@ class AddContent extends Component {
 
   // handle the input link
   handleInputLink = event => {
-    this.setState({input_link: event.target.value});
+    this.setState({ input_link: event.target.value });
   };
 
   // send the input link to the NewPost component
   sendLinkBack = event => {
-    const {addedAttachmentLink, secondary_key, parent_key} = this.props;
+    const { addedAttachmentLink, secondary_key, parent_key } = this.props;
     const type = event.target.id === 'youtube' ? 'youtube' : 'image_link';
     addedAttachmentLink(this.state.input_link, type, parent_key, secondary_key);
   };
 
   // send the input text to the NewPost component
   sendTextBack = event => {
-    const {addedAttachmentWords, parent_key, secondary_key} = this.props;
-    this.setState({text: event.target.value});
+    const { addedAttachmentWords, parent_key, secondary_key } = this.props;
+    this.setState({ text: event.target.value });
     addedAttachmentWords(event.target.value, 'text', parent_key, secondary_key);
   };
 
@@ -34,14 +32,14 @@ class AddContent extends Component {
   setFileState = (key, value, file_type) => {
     const type_of_file = file_type.includes('pdf') ? 'pdf' : 'image';
     const url_type = file_type.includes('pdf') ? 'pdf_url' : 'image_url';
-    this.setState({[url_type]: value});
+    this.setState({ [url_type]: value });
     const url = file_type.includes('pdf') ? this.state.pdf_url : this.state.image_url;
     this.props.addedAttachmentFile(type_of_file, url, this.props.secondary_key);
   };
 
   // generate and return the required attachment
   getContentInput = () => {
-    const {title, deleteItem, secondary_key} = this.props;
+    const { title, deleteItem, secondary_key } = this.props;
     if (this.props.type === 'text') {
       return (
         <div>
@@ -91,14 +89,14 @@ class AddContent extends Component {
     } else if (this.props.type === 'file') {
       return (
         <div className="upload-btn-wrapper">
-          <ImageUploader setParentState={this.setFileState} public_id={''}/>
+          <ImageUploader setParentState={this.setFileState} public_id={''} />
         </div>
       );
     } else if (this.props.type === 'image_link') {
       return (
         <div className="form-group">
           <h4>Image Link</h4>
-          <input type="text" className="form-control" onChange={this.handleInputLink}/>
+          <input type="text" className="form-control" onChange={this.handleInputLink} />
           <button
             type="submit"
             className="btn btn-primary btn-lg float-right input-link-button"
@@ -112,13 +110,13 @@ class AddContent extends Component {
     } else if (this.props.type === 'pdf') {
       return (
         <div className="upload-btn-wrapper">
-          <ImageUploader setParentState={this.setFileState} public_id={''}/>
+          <ImageUploader setParentState={this.setFileState} public_id={''} />
         </div>
       );
     } else if (this.props.type === 'pdf_attach') {
       return (
         <div>
-          <Attachment key={uid(rand_string())} type={'pdf'} content={title}/>
+          <Attachment key={uid(rand_string())} type={'pdf'} content={title} />
           <div className="delete-button">
             <button
               className="btn btn-danger"
@@ -134,11 +132,7 @@ class AddContent extends Component {
     } else if (this.props.type === 'image_attach') {
       return (
         <div>
-          <Attachment
-            key={uid(rand_string())}
-            type={'image'}
-            content={title}
-          />
+          <Attachment key={uid(rand_string())} type={'image'} content={title} />
           <div className="delete-button">
             <button
               className="btn btn-danger"
@@ -154,7 +148,7 @@ class AddContent extends Component {
     } else if (this.props.type === 'youtube_attach') {
       return (
         <div>
-          <Attachment key={uid(rand_string())} type={'youtube'} content={title}/>
+          <Attachment key={uid(rand_string())} type={'youtube'} content={title} />
           <div className="delete-button">
             <button
               className="btn btn-danger"
@@ -170,7 +164,7 @@ class AddContent extends Component {
     } else if (this.props.type === 'image_link_attach') {
       return (
         <div>
-          <Attachment key={uid(rand_string())} type={'image_link'} content={title}/>
+          <Attachment key={uid(rand_string())} type={'image_link'} content={title} />
           <div className="delete-button">
             <button
               className="btn btn-danger"
@@ -187,7 +181,7 @@ class AddContent extends Component {
   };
 
   render() {
-    const {addInput, secondary_key} = this.props;
+    const { addInput, secondary_key } = this.props;
     return (
       <div className="add-content-component">
         <div className="content-input">{this.getContentInput()}</div>
@@ -239,8 +233,8 @@ class AddContent extends Component {
             </div>
           </div>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
       </div>
     );
   }
