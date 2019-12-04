@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../../stylesheets/new_post.scss';
 import AddContent from './AddContent';
-import { rand_string } from '../../lib/util';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { uid } from 'react-uid';
+import {rand_string} from '../../lib/util';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {uid} from 'react-uid';
 import axios from 'axios';
 
 class NewPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // edit_mode: false,
-      contents: [{ key: uid(rand_string()), parent_key: '', type: undefined, title: '' }],
+      contents: [{key: uid(rand_string()), parent_key: '', type: undefined, title: ''}],
       to_store: {
         title: '',
         category: 'Computer Science',
@@ -21,19 +20,16 @@ class NewPost extends Component {
     };
   }
 
+  // load necessary data that will be shown on this page
   componentDidMount() {
     this.loadPrevData();
   }
 
+  // load old page data
   loadPrevData = () => {
-    console.log('run!!');
-    console.log('Before set mode: ', this.state.edit_mode);
-    console.log(this.props.location.state);
     if (this.props.location.state) {
-      console.log('Current old attaches are: ', this.props.location.state.attachments);
-      console.log('start loading prev data!');
       // set content lists, all attachments
-      this.setState({ edit_mode: true });
+      this.setState({edit_mode: true});
       let org_attach = [];
       this.props.location.state.attachments.forEach(e => {
         let type_to_show;
@@ -53,27 +49,27 @@ class NewPost extends Component {
           _id: e._id,
         });
       });
-      this.setState({ original_attachments: org_attach });
+      this.setState({original_attachments: org_attach});
 
       // set title, category, content
       const cur_post = this.props.location.state.post;
 
       const property = this.state.to_store;
       property.title = cur_post.title;
-      this.setState({ property });
+      this.setState({property});
 
       const property2 = this.state.to_store;
       property2.category = cur_post.category;
-      this.setState({ property2 });
+      this.setState({property2});
       this.setFrontEndCategory(cur_post.category);
 
       const property3 = this.state.to_store;
       property3.content = cur_post.body;
-      this.setState({ property3 });
-      console.log(this.state);
+      this.setState({property3});
     }
   };
 
+  // Set the frontend category field
   setFrontEndCategory = category => {
     const id_name = category === 'Computer Science' ? 'CS-option' : category + '-option';
     document.getElementById(id_name).selected = true;
@@ -94,11 +90,9 @@ class NewPost extends Component {
     const type_to_show = type === 'image' ? 'image_attach' : 'pdf_attach';
     // find the correct position in content to insert
     const pos_content = this.findInsertPosContent(secondary_key);
-    console.log('pdf link is: ', data_url);
 
     // insert the item into the content list.
     const content = {
-      // key: secondary_key,
       key: uid(rand_string()),
       parent_key: secondary_key,
       type: type_to_show,
@@ -110,7 +104,7 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({ contents: contents });
+    this.setState({contents: contents});
   };
 
   // handle incoming video/image links and store them in state
@@ -133,12 +127,11 @@ class NewPost extends Component {
     } else {
       contents.splice(pos_content + 1, 0, content);
     }
-    this.setState({ contents: contents });
+    this.setState({contents: contents});
   };
 
   // handle incoming text/code and store them in state
   addedAttachmentWords = (content, data_type, parent_key, secondary_key) => {
-    // content
     const resultContent = this.alreadyExistedContents(secondary_key);
     this.state.contents.splice(resultContent, 1, {
       key: secondary_key,
@@ -184,7 +177,7 @@ class NewPost extends Component {
       if (this.state.contents[i].key === secondary_key) {
         const contents = this.state.contents;
         contents.splice(i, 1);
-        this.setState({ contents: contents });
+        this.setState({contents: contents});
       }
     }
   };
@@ -193,21 +186,21 @@ class NewPost extends Component {
   inputTitle = event => {
     const property = this.state.to_store;
     property.title = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // Update the category whenever user changes their title.
   inputCategory = event => {
     const property = this.state.to_store;
     property.category = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // Update the content whenever user changes their title.
   inputContent = event => {
     const property = this.state.to_store;
     property.content = event.target.value;
-    this.setState({ property });
+    this.setState({property});
   };
 
   // configure the token used for authentication
@@ -238,8 +231,6 @@ class NewPost extends Component {
     if (this.state.to_store.title === '' || this.state.to_store.content === '') {
       alert('Please fill in blank (Title/Content) field.');
     } else {
-      // alert('Sure to submit?');
-
       const re_sort_attach = [];
       this.state.contents.slice(1, this.state.contents.length).forEach(item => {
         if (item.type === 'text') {
@@ -249,7 +240,6 @@ class NewPost extends Component {
         }
         const array = item.type.split('_');
         if (array[array.length - 1] === 'attach') {
-          // youtube_attach, image_link_attach, pdf_attach, image_attach, text
           const sliced = array.slice(0, array.length - 1);
           item.type = sliced.join('_');
           item.body = item.title;
@@ -263,7 +253,6 @@ class NewPost extends Component {
         category: this.state.to_store.category,
         body: this.state.to_store.content,
         attachments: re_sort_attach.reverse(),
-        // original_attachments: this.state.original_attachments,
       };
       if (!this.state.edit_mode) {
         axios
@@ -309,7 +298,6 @@ class NewPost extends Component {
 
   render() {
     if (!this.props.isAuthenticated) this.props.history.push('/');
-
     return (
       <div className="new-post-page">
         <div className="container-fluid">

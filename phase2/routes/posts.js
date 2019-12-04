@@ -16,6 +16,7 @@ cloudinary.config({
   api_secret: config.get('API_SECRET'),
 });
 
+// delete file from cloudinary
 const deleteImage = public_id => {
   cloudinary.uploader
     .destroy(public_id)
@@ -62,14 +63,12 @@ router.get('/', isAuth, isAdminTolerant, (req, res) => {
     );
 });
 
+// get all posts by keyword
 router.get('/search/:keyword', (req, res) => {
-  console.log('keyword: ' + req.params.keyword);
-  console.log('keyword: ', typeof req.params.keyword);
   const filter =
     req.params.keyword !== 'undefined'
       ? { title: { $regex: `${req.params.keyword}`, $options: 'i' } }
       : {};
-  console.log(filter);
   Post.find(filter)
     .sort({ created_at: -1 })
     .then(posts => {
@@ -80,6 +79,7 @@ router.get('/search/:keyword', (req, res) => {
     });
 });
 
+// get recommendaed posts
 router.get('/recommendations', (req, res) => {
   Post.find({})
     .sort({ created_at: -1, views: -1 })
@@ -92,6 +92,7 @@ router.get('/recommendations', (req, res) => {
     });
 });
 
+// get the number of posts
 router.get('/countposts', isAuth, isAdmin, (req, res) => {
   Post.count()
     .then(count => {
@@ -126,6 +127,7 @@ router.get('/by-user/:user_id', isAuth, isAdminTolerant, (req, res) => {
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
+
   Post.find(filter)
     .sort({ created_at: -1 })
     .then(posts => {
@@ -146,7 +148,6 @@ router.get('/post-array', isAuth, isAdminTolerant, (req, res) => {
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
-  console.log(filter);
   Post.find(filter)
     .then(posts => {
       console.log(posts);
@@ -162,7 +163,6 @@ router.get('/post-array', isAuth, isAdminTolerant, (req, res) => {
 router.get('/:id', (req, res) => {
   Post.findById(req.params.id)
     .then(post => {
-      // console.log("In serverside post.jsx: ", post);
       if (post) {
         return res.send(post);
       }
@@ -192,7 +192,6 @@ router.patch('/update-post/:id', (req, res) => {
       };
       updated_post.attachments = attach_list;
 
-      console.log('Post to to updated after is like: ', updated_post);
       Post.findByIdAndUpdate(req.params.id, { $set: updated_post }, { new: true })
         .then(post => {
           if (!post) {
@@ -239,28 +238,24 @@ router.post('/', isAuth, async (req, res) => {
   }
 });
 
+// helper function to add attachments of a post to the database
 make_post_helper = (attachments, post) => {
   return new Promise((resolve, reject) => {
     const ans = [];
     attachments.forEach(async attachment => {
-      console.log(
-        'Before create()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>',
-      );
       const new_attachment = new Attachment({
         type: attachment.type,
         body: attachment.body,
         post_id: post._id,
       });
       new_attachment.save();
-      console.log(
-        'After save()>>>>>>>>> >>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>>>>>>>>>> >>>>>>>>> >>>>>>>>>>>>>>>>>>',
-      );
       ans.push(new_attachment._id);
     });
     resolve(ans);
   });
 };
 
+// delete a post by id
 router.delete('/:id', isAuth, isAuthorizedPost, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     return res.status(404).send('post id not valid');
@@ -274,7 +269,6 @@ router.delete('/:id', isAuth, isAuthorizedPost, (req, res) => {
               const url = attach.body;
               const words = url.split('.');
               const public_key = words[words.length - 2].split('/').reverse()[0];
-              console.log('We are in server: ', public_key);
               deleteImage(public_key);
             }
           })
@@ -283,7 +277,6 @@ router.delete('/:id', isAuth, isAuthorizedPost, (req, res) => {
           });
       });
 
-      console.log('deleting post: ', post);
       if (!post) {
         return res.status(400).send("post doesn't exist");
       }
@@ -296,6 +289,7 @@ router.delete('/:id', isAuth, isAuthorizedPost, (req, res) => {
     });
 });
 
+// get post by user id
 router.get('/user-posts/:user_id', isAuth, (req, res) => {
   const user_id = req.params.user_id;
   if (!ObjectID.isValid(user_id)) {
@@ -318,7 +312,6 @@ router.get('/user-posts/:user_id', isAuth, (req, res) => {
 
 // add like
 router.patch('/like/:post_id', isAuth, (req, res) => {
-  console.log('Liking post');
   if (!ObjectID.isValid(req.params.post_id)) {
     return res.status(404).json({ message: 'post id not valid' });
   }
@@ -362,7 +355,6 @@ router.patch('/like/:post_id', isAuth, (req, res) => {
 
 // unlike a post
 router.patch('/unlike/:post_id', isAuth, (req, res) => {
-  console.log('Unliking post');
   if (!ObjectID.isValid(req.params.post_id)) {
     return res.status(404).json({ message: 'post id not valid' });
   }
@@ -397,7 +389,6 @@ router.patch('/unlike/:post_id', isAuth, (req, res) => {
 
 // add favorite
 router.patch('/add-fav', isAuth, (req, res) => {
-  console.log(req.body);
   if (!ObjectID.isValid(req.body.post_id)) {
     return res.status(400).send('Post Id Not valid');
   }
@@ -424,6 +415,7 @@ router.patch('/add-fav', isAuth, (req, res) => {
   });
 });
 
+// update fav number by post id
 router.patch('/remove-fav/:post_id', isAuth, (req, res) => {
   User.findByIdAndUpdate(req.body.user_id, { $pull: { favs: req.params.post_id } })
     .then(user => {
@@ -442,6 +434,7 @@ router.patch('/remove-fav/:post_id', isAuth, (req, res) => {
     });
 });
 
+// update a post content by post id
 router.patch('/:id', isAuth, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     res.status(404).send('post id not valid');
@@ -460,6 +453,7 @@ router.patch('/:id', isAuth, (req, res) => {
     });
 });
 
+// update a part of a post
 router.patch('/delete/:id', isAuth, isAdmin, (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
     res.status(404).send('post id not valid');
@@ -483,7 +477,6 @@ router.get('/:post_id/attachments', (req, res) => {
   Attachment.find({ post_id: req.params.post_id })
     .sort({ _id: -1 })
     .then(attachments => {
-      // console.log("In the serverside post.js: ", attachments);
       res.json({ attachments: attachments });
     })
     .catch(error => {

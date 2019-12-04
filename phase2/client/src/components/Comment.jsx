@@ -8,7 +8,6 @@ class Comment extends Component {
 
   submitComment = event => {
     const comment_content = event.target.previousElementSibling.firstElementChild.value;
-    console.log('The current comment id is: ', this.props.secondary_key);
     this.props.submitComment(
       comment_content,
       this.props.post_id,
@@ -18,7 +17,6 @@ class Comment extends Component {
   };
 
   getButtons = () => {
-    console.log('Current edit_mode: ', this.props.edit_mode);
     if (this.props.edit_mode) {
       return (
         <button

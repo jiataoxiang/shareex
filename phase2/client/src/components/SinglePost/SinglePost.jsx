@@ -11,7 +11,6 @@ import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 
 class SinglePost extends Component {
-  // In state, we have 2 arrays, comments and attachments
   state = {
     post: '',
     comments: [],
@@ -27,10 +26,10 @@ class SinglePost extends Component {
     this.addToViewHistory();
   }
 
+  // add data to view history
   addToViewHistory = () => {
     let user_id;
     if (this.props.location.state) {
-      console.log('The current user id is not null: ', this.props.location.state.current_user_id);
       user_id = this.props.location.state.current_user_id
         ? this.props.location.state.current_user_id
         : user_id;
@@ -38,7 +37,6 @@ class SinglePost extends Component {
     if (!user_id) {
       return;
     }
-    console.log('calling to add view history');
     axios
       .patch(
         `/api/users/${user_id}/add-view-history`,
@@ -46,8 +44,6 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
-        console.log('added to view history');
-        console.log(res.data);
         store.dispatch(loadUser());
       })
       .catch(err => {
@@ -55,28 +51,31 @@ class SinglePost extends Component {
       });
   };
 
+  // ensure necessary data is loaded
   componentWillReceiveProps(nextProps) {
-    // console.log('received props');
     if (nextProps.current_user) {
-      // this.addToViewHistory(nextProps.current_user._id, this.props.match.params.id);
       this.setState({ cur_user_id: nextProps.current_user._id });
       this.setState({ cur_user: nextProps.current_user });
     }
   }
 
+  // get data for this post
   getPostData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.setState({ post: res.data });
         this.getPostAuthor(res.data.author);
-        console.log('The post id we get is:', res.data._id);
       })
       .catch(err => {
+        this.props.history.push({
+          pathname: '/404notfound',
+        });
         console.log(err);
       });
   };
 
+  // get author of this post
   getPostAuthor = user_id => {
     axios
       .get('/api/users/' + user_id, this.tokenConfig())
@@ -88,11 +87,11 @@ class SinglePost extends Component {
       });
   };
 
+  // get all attachments for this post
   getAttachData = () => {
     axios
       .get('/api/posts/' + this.props.match.params.id + '/attachments', this.tokenConfig())
       .then(res => {
-        // console.log("Get the Attach data:", res.data);
         this.setState({ attachments: res.data.attachments });
       })
       .catch(err => {
@@ -100,7 +99,7 @@ class SinglePost extends Component {
       });
   };
 
-  /* get comments belonging to the post on this page */
+  // get comments belonging to the post on this page
   getComments = () => {
     axios
       .get('/api/comments/', {
@@ -121,6 +120,7 @@ class SinglePost extends Component {
       });
   };
 
+  // get a comment's author name
   getCommentUsername = (comment_id, id) => {
     axios
       .get('/api/users/' + id, this.tokenConfig())
@@ -138,7 +138,7 @@ class SinglePost extends Component {
       });
   };
 
-  /* callback passed to a Comment to delete a Comment on this page */
+  // callback passed to a Comment to delete a Comment on this page
   deleteComment = comment_id => {
     const comments = this.state.comments;
     const new_comments = [];
@@ -150,16 +150,14 @@ class SinglePost extends Component {
     axios
       .delete('/api/comments/' + comment_id)
       .then(deleted => {
-        console.log(deleted);
+        this.getComments();
       })
       .catch(err => {
         console.log(err);
       });
-    // this.setState({comments: new_comments});
-    this.getComments();
   };
 
-  /* callback passed to a Comment to submit a Comment on this page */
+  // callback passed to a Comment to submit a Comment on this page
   submitComment = (comment_content, post_id, comment_id, new_comment) => {
     if (new_comment) {
       // if this is a new comment
@@ -180,13 +178,31 @@ class SinglePost extends Component {
       axios
         .post('/api/comments/', a_comment)
         .then(comments => {
-          console.log('Posted the comment data:', comments.data);
           this.getComments();
         })
         .catch(err => {
           console.log(err);
         });
       document.getElementById('new-comment-button').removeAttribute('hidden');
+
+      const body_send = {
+        from: this.props.current_user._id,
+        to: this.state.post_author._id,
+        body:
+          this.props.current_user.username +
+          ' commented on your post <' +
+          this.state.post.title +
+          '>',
+        link: '/single_post/' + this.props.match.params.id,
+      };
+      axios
+        .post('/api/notifications/create', body_send, this.tokenConfig())
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else {
       // if this is a existed comment
       const comments = this.state.comments;
@@ -202,7 +218,6 @@ class SinglePost extends Component {
       axios
         .patch('/api/comments/' + comment_id, modified)
         .then(comments => {
-          console.log('Modified the comment data:', comments.data);
           this.getComments();
         })
         .catch(err => {
@@ -212,7 +227,7 @@ class SinglePost extends Component {
     }
   };
 
-  /* callback passed to a Comment to edit a Comment on this page */
+  // callback passed to a Comment to edit a Comment on this page
   editComment = comment_id => {
     const comments = this.state.comments;
     for (let i = 0; i < comments.length; i++) {
@@ -223,7 +238,7 @@ class SinglePost extends Component {
     this.setState({ comments: comments });
   };
 
-  /* display an empty comment which can be edited in comment list */
+  // display an empty comment which can be edited in comment list
   addComment = () => {
     if (this.props.current_user._id) {
       const comments = this.state.comments;
@@ -242,6 +257,7 @@ class SinglePost extends Component {
     }
   };
 
+  // redirect to new post page to edit
   redirectNewPost = () => {
     if (this.props.current_user._id !== this.state.post.author) {
       alert("You cannot edit other's post.");
@@ -253,6 +269,7 @@ class SinglePost extends Component {
     }
   };
 
+  // token configuration for authentication purpose
   tokenConfig = () => {
     // Get token from localstorage
     const token = this.props.auth.token;
@@ -274,6 +291,7 @@ class SinglePost extends Component {
     return config;
   };
 
+  // update favpost infomation
   favPost = () => {
     axios
       .patch(
@@ -285,8 +303,6 @@ class SinglePost extends Component {
         this.tokenConfig(),
       )
       .then(res => {
-        console.log('faved the post');
-        console.log(res.data);
         store.dispatch(loadUser());
       })
       .catch(err => {
@@ -294,31 +310,43 @@ class SinglePost extends Component {
       });
   };
 
+  // submit the report message
   submitReport = () => {
     const msg = document.getElementById('report-input').value;
-    document.getElementById('report-input').value = '';
-    console.log(this.state.cur_user_id);
-    console.log('The msg is: ', msg);
-    const notification = {
-      from: this.state.cur_user_id,
-      body: msg,
-    };
-    axios
-      .post('/api/notifications/to-admin', notification, this.tokenConfig())
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (msg === '') {
+      alert('Report message could not be empty.');
+    } else {
+      document.getElementById('report-input').value = '';
+      console.log(
+        this.props.current_user.username + ' reported post <' + this.state.post.title + '>: ' + msg,
+      );
+      const notification = {
+        from: this.state.cur_user_id,
+        body:
+          this.props.current_user.username +
+          ' reported post <' +
+          this.state.post.title +
+          '>: ' +
+          msg,
+        link: '/single_post/' + this.props.match.params.id,
+      };
+      axios
+        .post('/api/notifications/to-admin', notification, this.tokenConfig())
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
+  // delete this post
   deletePost = () => {
     axios
       .delete('/api/posts/' + this.props.match.params.id, this.tokenConfig())
       .then(res => {
         this.props.history.push('/');
-        console.log(res);
       })
       .catch(err => {
         console.log(err);
@@ -327,10 +355,12 @@ class SinglePost extends Component {
 
   render() {
     let cur_user_id = '';
+    let post_author_id = '';
     let username = '';
     let avatar = '';
     let post_id = '';
     let cur_user_admin = true;
+    let is_cur_user;
     if (this.state.cur_user) {
       cur_user_admin = this.state.cur_user.admin;
     }
@@ -340,8 +370,12 @@ class SinglePost extends Component {
       cur_user_id = this.props.current_user._id;
     }
     if (this.state.post_author) {
+      post_author_id = this.state.post_author._id;
       username = this.state.post_author.username;
       avatar = this.state.post_author.avatar;
+    }
+    if (post_author_id && cur_user_id) {
+      is_cur_user = post_author_id === cur_user_id;
     }
     let fav_disabled = false;
     if (this.state.post) {
@@ -448,86 +482,82 @@ class SinglePost extends Component {
             </div>
             <div className="col-12 col-6 col-md-3">
               <div className="user-info-container">
-                {/* <div className="space"></div> */}
-
                 <div className="user-info">
-                  <Link to={`/otherprofile/${this.state.post.author}`}>
-                    <div className="row">
-                      <div className="col-lg-3 col-3">
-                        <img className="avatar" src={avatar} alt="" />
-                      </div>
-                      <div className="col-lg-9 col-9">
-                        <strong id="username-display">{username}</strong>
-                      </div>
+                  <Link to={`/otherprofile/${this.state.post.author}`} />
+                  <div className="row">
+                    <div className="col-lg-3 col-3">
+                      <img className="avatar" src={avatar} alt="" />
                     </div>
-                  </Link>
-
-                  {cur_user_admin ? null : (
-                    <div className="row">
-                      <button
-                        className="btn btn-success btn-sm btn-fav btn-block"
-                        onClick={this.favPost}
-                        disabled={fav_disabled}
-                      >
-                        Favourite
-                      </button>
-                      <button
-                        className="btn btn-outline-danger btn-sm btn-block"
-                        data-toggle="modal"
-                        data-target="#exampleModalCenter"
-                      >
-                        Report Post
-                      </button>
-                      <div
-                        className="modal fade"
-                        id="exampleModalCenter"
-                        tabIndex="-1"
-                        role="dialog"
-                        aria-labelledby="exampleModalCenterTitle"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog modal-dialog-centered" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h5 className="modal-title" id="exampleModalLongTitle">
-                                Report this post.
-                              </h5>
+                    <div className="col-lg-9 col-9">
+                      <strong id="username-display">{username}</strong>
+                    </div>
+                  </div>
+                </div>
+                {cur_user_admin || is_cur_user ? null : (
+                  <div className="row">
+                    <button
+                      className="btn btn-success btn-sm btn-fav btn-block"
+                      onClick={this.favPost}
+                      disabled={fav_disabled}
+                    >
+                      Favourite
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-sm btn-block"
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
+                    >
+                      Report Post
+                    </button>
+                    <div
+                      className="modal fade"
+                      id="exampleModalCenter"
+                      tabIndex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true"
+                    >
+                      <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLongTitle">
+                              Report this post.
+                            </h5>
+                          </div>
+                          <div className="modal-body">
+                            <div className="input-group mb-3">
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter your report information."
+                                aria-label="Recipient's username"
+                                aria-describedby="basic-addon2"
+                                id="report-input"
+                              />
                             </div>
-                            <div className="modal-body">
-                              <div className="input-group mb-3">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Enter your report information."
-                                  aria-label="Recipient's username"
-                                  aria-describedby="basic-addon2"
-                                  id="report-input"
-                                />
-                              </div>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                data-dismiss="modal"
-                                onClick={this.submitReport}
-                              >
-                                Submit
-                              </button>
-                            </div>
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              data-dismiss="modal"
+                            >
+                              Close
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              data-dismiss="modal"
+                              onClick={this.submitReport}
+                            >
+                              Submit
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
