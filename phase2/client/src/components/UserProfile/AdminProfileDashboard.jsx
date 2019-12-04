@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 class AdminProfileDashboard extends React.Component {
+    _isMount = true;
     state = {
         totalUsers: -1,
         totalPosts: -1,
@@ -16,9 +17,13 @@ class AdminProfileDashboard extends React.Component {
             `/api/users/countusers`, this.tokenConfig()
         ).then(result => {
             if (result && result.data.count) {
-                this.setState({ totalUsers: result.data.count });
+                if (this._isMount) {
+                    this.setState({ totalUsers: result.data.count });
+                }
             } else {
-                this.setState({ dailyComments: 0 });
+                if (this._isMount) {
+                    this.setState({ dailyComments: 0 });
+                }
             }
         }).catch(error => {
             console.log(error);
@@ -30,10 +35,12 @@ class AdminProfileDashboard extends React.Component {
         axios.get(
             `/api/posts/countposts`, this.tokenConfig()
         ).then(result => {
-            if (result && result.data.count) {
-                this.setState({ totalPosts: result.data.count });
-            } else {
-                this.setState({ dailyComments: 0 });
+            if (this._isMount) {
+                if (result && result.data.count) {
+                    this.setState({ totalPosts: result.data.count });
+                } else {
+                    this.setState({ dailyComments: 0 });
+                }
             }
         }).catch(error => {
             console.log(error);
@@ -45,10 +52,12 @@ class AdminProfileDashboard extends React.Component {
         axios.get(
             `/api/comments/countdaily`, this.tokenConfig()
         ).then(result => {
-            if (result && result.data.count) {
-                this.setState({ dailyComments: result.data.count });
-            } else {
-                this.setState({ dailyComments: 0 });
+            if (this._isMount) {
+                if (result && result.data.count) {
+                    this.setState({ dailyComments: result.data.count });
+                } else {
+                    this.setState({ dailyComments: 0 });
+                }
             }
         }).catch(error => {
             console.log(error);
@@ -60,15 +69,17 @@ class AdminProfileDashboard extends React.Component {
         axios.get(
             `/api/posts/countdaily`, this.tokenConfig()
         ).then(result => {
-            if (result && result.data.count) {
-                this.setState({ dailyPosts: result.data.count });
-            } else {
-                this.setState({ dailyComments: 0 });
+            if (this._isMount) {
+                if (result && result.data.count) {
+                    this.setState({ dailyPosts: result.data.count });
+                } else {
+                    this.setState({ dailyComments: 0 });
+                }
             }
         }).catch(error => {
             console.log(error);
         });
-    }
+    };
     
     tokenConfig = () => {
         // Get token from localstorage
@@ -92,12 +103,17 @@ class AdminProfileDashboard extends React.Component {
     };
 
     componentDidMount() {
+        this._isMount = true;
         this.getTotalUsers();
         this.getTotalPosts();
         this.getDailyComments();
         this.getDailyPosts();
     }
-    
+
+    componentWillUnmount() {
+        this._isMount = false;
+    }
+
     render() {
         return (
             <div className="dashboard">

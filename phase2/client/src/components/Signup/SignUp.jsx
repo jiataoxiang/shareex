@@ -53,7 +53,7 @@ class SignUp extends Component {
 
   componentDidMount() {
     // If alreadly loged in, go to home page.
-    if (this.props.state.current_user) {
+    if (this.props.isAuthenticated) {
       alert('You already loged in!');
       this.props.history.push('/');
     }

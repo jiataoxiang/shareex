@@ -1,29 +1,37 @@
 # Phase2
 
-## commands for development
+## Deployment
 
-Running the app with debug mode: `DEBUG=phase2:* npm start`
-`phase2` is the app running and to have log displayed, \* means turn on all logs
+https://shareex.huakunshen.com/
+
+### Run the app
+
+cd into phase2 folder
+
+```
+npm install
+cd client npm install
+npm start
+cd ..
+npm start
+```
+
+
+
+
 
 ## Connect db through shell
 
 `mongo "mongodb+srv://shareex-36p7c.mongodb.net/test" --username dev`
 password: `dev`
 
-when server return info, use this format:
-
-```json
-res.json{
-  message: "message",
-  otherData: otherData
-}
-```
-
-always use message instead of msg
 
 
+#### Home Page
 
+All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
 
+The search bar in the navbar can be used to search for posts and user by their title/username from anywhere in the app. After 
 
 #### Create a new post.
 
