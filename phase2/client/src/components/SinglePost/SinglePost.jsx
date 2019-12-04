@@ -195,7 +195,8 @@ class SinglePost extends Component {
           '>',
         link: '/single_post/' + this.props.match.params.id,
       };
-      axios.post("/api/notifications/create", body_send, this.tokenConfig())
+      axios
+        .post('/api/notifications/create', body_send, this.tokenConfig())
         .then()
         .catch(err => {
           console.log(err);
@@ -324,7 +325,8 @@ class SinglePost extends Component {
           msg,
         link: '/single_post/' + this.props.match.params.id,
       };
-      axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+      axios
+        .post('/api/notifications/to-admin', notification, this.tokenConfig())
         .then()
         .catch(err => {
           console.log(err);
@@ -385,6 +387,9 @@ class SinglePost extends Component {
     }
 
     const current_user_id = this.props.isAuthenticated ? this.props.current_user._id : null;
+    const profile_link_address = is_cur_user
+      ? '/userprofile'
+      : `/otherprofile/${this.state.post.author}`;
 
     return (
       <div className="single-post-2-page">
@@ -474,20 +479,19 @@ class SinglePost extends Component {
             </div>
             <div className="col-12 col-6 col-md-3">
               <div className="user-info-container">
-                <div className="user-info">
-                  <div className="row">
-                    <div className="col-lg-3 col-3">
-                      {is_cur_user ? <Link to={`/userprofile`}>
+                <Link to={profile_link_address}>
+                  <div className="user-info">
+                    <div className="row">
+                      <div className="col-lg-3 col-3">
                         <img className="avatar" src={avatar} alt="" />
-                      </Link> : <Link to={`/otherprofile/${this.state.post.author}`}>
-                        <img className="avatar" src={avatar} alt="" />
-                      </Link>}
-                    </div>
-                    <div className="col-lg-9 col-9">
-                      <strong id="username-display">{username}</strong>
+                      </div>
+                      <div className="col-lg-9 col-9">
+                        <strong id="username-display">{username}</strong>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
+
                 {cur_user_admin || is_cur_user ? null : (
                   <div className="row">
                     <button
