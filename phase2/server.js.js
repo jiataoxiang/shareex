@@ -9,11 +9,11 @@ const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 const cloudinary = require('cloudinary').v2;
 const formData = require('express-form-data');
-const config = require('config');
 const notificationsRouter = require('./routes/notifications');
 const attachmentRouter = require('./routes/attachments');
 const app = express();
-
+require('dotenv').config();
+const PORT = process.env.PORT || 5000;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
@@ -38,9 +38,9 @@ require('./util/mongoose_connection');
 
 // setup file upload system
 cloudinary.config({
-  cloud_name: config.get('CLOUD_NAME'),
-  api_key: config.get('API_KEY'),
-  api_secret: config.get('API_SECRET'),
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
 app.post('/api/upload', (req, res) => {
@@ -74,4 +74,6 @@ app.use(function(err, req, res, next) {
   res.send('error');
 });
 
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`Server Listening on Port: ${PORT}`);
+});

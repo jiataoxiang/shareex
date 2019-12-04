@@ -183,8 +183,8 @@ class OtherProfile extends React.Component {
     e.preventDefault();
     const message = document.getElementById('message-input').value;
     if (!message) {
-      alert("Report failed because you didn't fill in the reason!")
-    }else {
+      alert("Report failed because you didn't fill in the reason!");
+    } else {
       this.sendMsgToServer(message, 'Message sent.', 'Message failed to send.');
     }
   };
@@ -192,8 +192,10 @@ class OtherProfile extends React.Component {
   sendMsgToServer = (msgBody, success, fail) => {
     const newMsg = {
       from: this.props.current_user._id,
-      body: `User \"${this.state.nickname}\" is reported by user \"${this.props.current_user.username}\", reason is : ` + msgBody,
-      link: `/otherprofile/${this.state.author}`
+      body:
+        `User "${this.state.nickname}" is reported by user "${this.props.current_user.username}", reason is : ` +
+        msgBody,
+      link: `/otherprofile/${this.state.author}`,
     };
 
     axios
