@@ -46,7 +46,7 @@ class Home extends Component {
     const display_post = document.getElementById('search-type-select').value === 'post';
     if (display_post) {
       axios
-        .get(`/api/posts/search/${search_content}`)
+        .get(`/api/posts/search/${search_content}`, this.tokenConfig())
         .then(res => {
           this.setState({ posts: res.data.posts });
         })
@@ -55,7 +55,7 @@ class Home extends Component {
         });
     } else {
       axios
-        .get(`/api/users/search/${search_content}`)
+        .get(`/api/users/search/${search_content}`, this.tokenConfig())
         .then(res => {
           this.setState({ users: res.data.users });
         })
@@ -110,7 +110,7 @@ class Home extends Component {
   // getRecommendations() returns the recommendations to be displayed on home page
   updateRecommendations = () => {
     axios
-      .get('/api/posts/recommendations')
+      .get('/api/posts/recommendations', this.tokenConfig())
       .then(res => {
         const recommendations = res.data;
         this.setState({ recommendations: recommendations });

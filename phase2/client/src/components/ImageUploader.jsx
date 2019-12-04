@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../stylesheets/image_uploader.scss';
 
 class ImageUploader extends Component {
@@ -43,9 +43,14 @@ class ImageUploader extends Component {
     }
     const file = input_element.files[0];
     const file_type = file.type;
-    this.setState({isUploading: true});
-    if (!file_type.includes('png') && !file_type.includes('jpg') && !file_type.includes('pdf')) {
-      this.setMessage('File must be jpg, png or pdf file');
+    this.setState({ isUploading: true });
+    if (
+      !file_type.includes('png') &&
+      !file_type.includes('jpg') &&
+      !file_type.includes('jpeg') &&
+      !file_type.includes('pdf')
+    ) {
+      this.setMessage('File must be jpg, jpeg, png or pdf file');
       return;
     }
     const formData = new FormData();
@@ -70,9 +75,9 @@ class ImageUploader extends Component {
       });
 
       this.setMessage('File Uploaded');
-      this.setState({url: res.data[0].url, public_id: res.data[0].public_id});
+      this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
       this.props.setParentState('file_url', this.state.url, file_type);
-      this.setState({isUploading: false});
+      this.setState({ isUploading: false });
     } catch (err) {
       if (err.response.status === 500) {
         this.setMessage('There was a problem with the server');
@@ -91,7 +96,7 @@ class ImageUploader extends Component {
 
   // set up upload bar
   setUploadPercentage = progress => {
-    this.setState({progress});
+    this.setState({ progress });
   };
 
   onSubmit = async e => {
@@ -105,23 +110,17 @@ class ImageUploader extends Component {
     }
     if (this.state.url) {
       if (this.state.file_type.includes('pdf')) {
-        return (
-          <embed
-            className="center"
-            src={this.state.url}
-            width="100%"
-            height="1000px"
-          />
-        );
+        const url = this.state.url.replace('http', 'https');
+        return <embed className="center" src={url} width="100%" height="1000px" />;
       } else {
         return (
           <React.Fragment>
-            <br/>
+            <br />
             <img
               src={this.state.url}
               className="rounded mx-auto d-block"
               alt="..."
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
             />
           </React.Fragment>
         );
@@ -133,9 +132,9 @@ class ImageUploader extends Component {
 
   // set message
   setMessage = msg => {
-    this.setState({msg});
+    this.setState({ msg });
     setTimeout(() => {
-      this.setState({msg: ''});
+      this.setState({ msg: '' });
     }, 5000);
   };
 
@@ -165,7 +164,7 @@ class ImageUploader extends Component {
           <div
             className="progress-bar"
             role="progressbar"
-            style={{width: `${this.state.progress}%`}}
+            style={{ width: `${this.state.progress}%` }}
             aria-valuenow={this.state.progress}
             aria-valuemin="0"
             aria-valuemax="100"
