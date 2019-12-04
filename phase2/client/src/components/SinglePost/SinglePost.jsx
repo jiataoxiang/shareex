@@ -474,10 +474,11 @@ class SinglePost extends Component {
             <div className="col-12 col-6 col-md-3">
               <div className="user-info-container">
                 <div className="user-info">
-                  <Link to={`/otherprofile/${this.state.post.author}`} />
                   <div className="row">
                     <div className="col-lg-3 col-3">
-                      <img className="avatar" src={avatar} alt="" />
+                      <Link to={`/otherprofile/${this.state.post.author}`}>
+                        <img className="avatar" src={avatar} alt="" />
+                      </Link>
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong id="username-display">{username}</strong>
