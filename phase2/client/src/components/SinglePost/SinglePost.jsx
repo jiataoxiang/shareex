@@ -358,13 +358,15 @@ class SinglePost extends Component {
       comment_list = this.state.comments;
     }
 
+    const current_user_id = this.props.isAuthenticated ? this.props.current_user._id : null;
+
     return (
       <div className="single-post-2-page">
         <div className="container-fluid">
           <div className="row">
             <div className="single-post-container col-12 col-md-9">
               <div className="single-post">
-                {this.state.cur_user_id === this.state.post.author ? (
+                {current_user_id === this.state.post.author ? (
                   <div className="edit-button">
                     <button
                       className="btn btn-outline-success btn-outline-danger"

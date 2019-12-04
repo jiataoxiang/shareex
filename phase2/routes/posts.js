@@ -126,8 +126,6 @@ router.get('/by-user/:user_id', isAuth, isAdminTolerant, (req, res) => {
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
-  console.log('\n\n\n\n\ndebug\n\n\n\n\n');
-  console.log(filter);
   Post.find(filter)
     .sort({ created_at: -1 })
     .then(posts => {
