@@ -502,7 +502,7 @@ class SinglePost extends Component {
                       Favourite
                     </button>
                     <button
-                      className="btn btn-outline-danger btn-sm btn-block"
+                      className="btn btn-danger btn-sm btn-block"
                       data-toggle="modal"
                       data-target="#exampleModalCenter"
                     >
