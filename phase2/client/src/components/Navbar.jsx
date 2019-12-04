@@ -149,28 +149,30 @@ class Navbar extends React.Component {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
               <form className="form-inline my-2 my-lg-0" onSubmit={this.search}>
-                <div className="input-group">
-                  <input
-                    className="form-control input-group-prepend"
-                    type="search"
-                    id="search-bar"
-                    placeholder="Search"
-                    aria-label="Search"
-                  />
-                  <select
-                    className="custom-select mr-sm-1"
-                    id="search-type-select"
-                    onChange={this.searchTypeChange}
-                  >
-                    <option value="post">Post</option>
-                    <option value="user">User</option>
-                  </select>
-                  <div className="input-group-append">
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
-                      Search
-                    </button>
+                {this.props.isAuthenticated ? (
+                  <div className="input-group">
+                    <input
+                      className="form-control input-group-prepend"
+                      type="search"
+                      id="search-bar"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <select
+                      className="custom-select mr-sm-1"
+                      id="search-type-select"
+                      onChange={this.searchTypeChange}
+                    >
+                      <option value="post">Post</option>
+                      <option value="user">User</option>
+                    </select>
+                    <div className="input-group-append">
+                      <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        Search
+                      </button>
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </form>
             </li>
           </ul>

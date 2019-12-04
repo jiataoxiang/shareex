@@ -78,7 +78,7 @@ router.post('/', (req, res) => {
     .then(user => {
       jwt.sign(
         { id: user._id },
-        config.get('jwtSecret'),
+        process.env.jwtSecret,
         {
           expiresIn: 12 * hour,
         },
@@ -126,7 +126,7 @@ router.post('/login', (req, res) => {
         if (isMatch) {
           jwt.sign(
             { id: user._id },
-            config.get('jwtSecret'),
+            process.env.jwtSecret,
             {
               expiresIn: hour * 12,
             },
@@ -202,6 +202,9 @@ router.get('/auth', isAuth, (req, res) => {
     .select('-password')
     .then(user => {
       res.json(user);
+    })
+    .catch(err => {
+      res.status(401).send('Not login yet');
     });
 });
 
