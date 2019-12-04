@@ -20,3 +20,11 @@ res.json{
 ```
 
 always use message instead of msg
+
+
+
+
+
+### Create a new post.
+
+You could fing the `New Post`
