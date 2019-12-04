@@ -15,7 +15,6 @@ import Navbar from './components/Navbar';
 // import { rand_string } from "./lib/util";
 // import { uid } from "react-uid";
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import mock_data from './mock_data';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import { Provider } from 'react-redux';
@@ -30,15 +29,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      users: mock_data.users,
-      posts: mock_data.posts,
-      comments: mock_data.comments,
-      attachments: mock_data.attachments,
-      current_user: mock_data.current_user,
-      current_post: mock_data.current_post,
-      setAppState: this.setAppState,
-    });
     store.dispatch(loadUser());
   }
 
@@ -50,36 +40,24 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <Navbar state={this.state} />
+          <Navbar />
           <Switch>
             <Route exact path="/" component={() => <Home />} />
-            <Route exact path="/index.html" component={() => <Home state={this.state} />} />
-            <Route exact path="/userprofile" component={() => <UserProfile state={this.state} />} />
-            <Route
-              exact
-              path="/adminprofile"
-              component={() => <AdminProfile state={this.state} />}
-            />
-            <Route
-              exact
-              path="/otherprofile/:id"
-              component={() => <OtherProfile state={this.state} />}
-            />
-            <Route exact path="/login" component={() => <Login state={this.state} />} />
-            <Route exact path="/signup" component={() => <SignUp state={this.state} />} />
-            <Route exact path="/new_post" component={() => <NewPost state={this.state} />} />
-            <Route exact path="/edit_post" component={() => <NewPost state={this.state} />} />
+            <Route exact path="/index.html" component={() => <Home />} />
+            <Route exact path="/userprofile" component={() => <UserProfile />} />
+            <Route exact path="/adminprofile" component={() => <AdminProfile />} />
+            <Route exact path="/otherprofile/:id" component={() => <OtherProfile />} />
+            <Route exact path="/login" component={() => <Login />} />
+            <Route exact path="/signup" component={() => <SignUp />} />
+            <Route exact path="/new_post" component={() => <NewPost />} />
+            <Route exact path="/edit_post" component={() => <NewPost />} />
             {/*<Route*/}
             {/*  exact*/}
             {/*  path="/single_post/:id"*/}
-            {/*  component={() => <SinglePost state={this.state}/>}*/}
+            {/*  component={() => <SinglePost />}*/}
             {/*/>*/}
-            <Route exact path="/single_post/:id" render={() => <SinglePost state={this.state} />} />
-            <Route
-              exact
-              path="/prof_setting"
-              component={() => <ProfSetting state={this.state} />}
-            />
+            <Route exact path="/single_post/:id" render={() => <SinglePost />} />
+            <Route exact path="/prof_setting" component={() => <ProfSetting />} />
             <Route exact path="/image_uploader" component={() => <ImageUploader />} />
             {/* <Route exact path="/tmp" component={Tmp} /> */}
 
