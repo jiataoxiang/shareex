@@ -61,7 +61,7 @@ Content in navbar are displayed based on authentication. e.g. `logout` only appe
 
 #### Sign in & Sign up	`/login`, `/signup`
 
-Passwords are all encrypted with bcrypt. User session is set to be 2 hours long, i.e. expired after 2 hours.
+Passwords are all encrypted with bcrypt. User session is set to be 2 hours long, i.e. expired after 2 hours. jsonwebtoken is used for authentication and user session. Redux is used for managing state of react app instead of statezero, since at the time the professor taught statezero, we have already wrote redux code and have no time to change to statezero.
 
 #### Create a new post. `/new_post`
 
