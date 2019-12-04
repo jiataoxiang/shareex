@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 class AdminProfileFindPost extends React.Component {
-
   _isMount = false;
 
   state = {
@@ -51,6 +50,7 @@ class AdminProfileFindPost extends React.Component {
   // Hide the post object when appropriate.
   hidePost = () => {
     this.tempElements.display_post.setAttribute("hidden", true);
+    alert("Post does not exists.");
   };
 
   // Read post from server.
@@ -74,7 +74,7 @@ class AdminProfileFindPost extends React.Component {
                 title: curPost.title,
                 category: curPost.category,
                 deleted: curPost.hidden,
-                delete_date: Date.parse(curPost.delete_date),
+                delete_date: Date.parse(curPost.delete_date)
               });
             }
             this.getAuthorInfo();
@@ -82,7 +82,6 @@ class AdminProfileFindPost extends React.Component {
         })
         .catch(error => {
           this.hidePost();
-          alert("Failed to get post.");
           console.log(error);
         });
     }
@@ -101,7 +100,7 @@ class AdminProfileFindPost extends React.Component {
           if (this._isMount) {
             this.setState({
               avatar: curUser.avatar,
-              username: curUser.username,
+              username: curUser.username
             });
           }
           this.showPost();
@@ -160,8 +159,8 @@ class AdminProfileFindPost extends React.Component {
       if (this._isMount) {
         this.setState({ deleted: false });
       }
-      this.tempElements.display_delete.setAttribute('hidden', true);
-      this.tempElements.button_delete.innerHTML = 'Delete';
+      this.tempElements.display_delete.setAttribute("hidden", true);
+      this.tempElements.button_delete.innerHTML = "Delete";
 
       const msgBody =
         "Your post <<" +
@@ -178,8 +177,8 @@ class AdminProfileFindPost extends React.Component {
       if (this._isMount) {
         this.setState({ deleted: true });
       }
-      this.tempElements.display_delete.removeAttribute('hidden');
-      this.tempElements.button_delete.innerHTML = 'Recover';
+      this.tempElements.display_delete.removeAttribute("hidden");
+      this.tempElements.button_delete.innerHTML = "Recover";
 
       const msgBody =
         "Your post <<" + this.state.title + ">> is deleted by an administrator";
@@ -224,7 +223,7 @@ class AdminProfileFindPost extends React.Component {
     axios
       .delete("/api/posts/permdelete/" + this.state.id, this.tokenConfig())
       .then(res => {
-        this.hidePost();
+        this.tempElements.display_post.setAttribute("hidden", true);
       })
       .catch(err => {
         console.log(err);
@@ -271,8 +270,8 @@ class AdminProfileFindPost extends React.Component {
 
   componentDidMount() {
     this._isMount = true;
-    this.tempElements.display_post = document.getElementById('display-post');
-    this.tempElements.display_post.setAttribute('hidden', true);
+    this.tempElements.display_post = document.getElementById("display-post");
+    this.tempElements.display_post.setAttribute("hidden", true);
 
     this.tempElements.display_delete = document.getElementById(
       "delete-warning"
