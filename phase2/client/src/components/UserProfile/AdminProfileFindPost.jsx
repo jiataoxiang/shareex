@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class AdminProfileFindPost extends React.Component {
+
+  _isMount = false;
+
   state = {
     avatar: process.env.PUBLIC_URL + './img/User_Avatar.png',
     username: '',
@@ -28,8 +31,9 @@ class AdminProfileFindPost extends React.Component {
     const target = event.target;
     const name = target.name;
     const value = target.value;
-
-    this.setState({ [name]: value });
+    if (this._isMount) {
+      this.setState({ [name]: value });
+    }
   };
 
   // Show the post found.
@@ -63,14 +67,16 @@ class AdminProfileFindPost extends React.Component {
             alert('This post does not exist.');
           } else {
             const curPost = post.data;
-            this.setState({
-              id: curPost._id,
-              author: curPost.author,
-              title: curPost.title,
-              category: curPost.category,
-              deleted: curPost.hidden,
-              delete_date: Date.parse(curPost.delete_date),
-            });
+            if (this._isMount) {
+              this.setState({
+                id: curPost._id,
+                author: curPost.author,
+                title: curPost.title,
+                category: curPost.category,
+                deleted: curPost.hidden,
+                delete_date: Date.parse(curPost.delete_date),
+              });
+            }
             this.getAuthorInfo();
           }
         })
@@ -92,10 +98,12 @@ class AdminProfileFindPost extends React.Component {
           alert('The author of this post no longer exists.');
         } else {
           const curUser = user.data;
-          this.setState({
-            avatar: curUser.avatar,
-            username: curUser.username,
-          });
+          if (this._isMount) {
+            this.setState({
+              avatar: curUser.avatar,
+              username: curUser.username,
+            });
+          }
           this.showPost();
         }
       })
@@ -146,7 +154,9 @@ class AdminProfileFindPost extends React.Component {
   // Delete or recover a post.
   changeDelete = () => {
     if (this.state.deleted) {
-      this.setState({ deleted: false });
+      if (this._isMount) {
+        this.setState({ deleted: false });
+      }
       this.tempElements.display_delete.setAttribute('hidden', true);
       this.tempElements.button_delete.innerHTML = 'Delete';
 
@@ -159,7 +169,9 @@ class AdminProfileFindPost extends React.Component {
       };
       this.sendMsg(newMsg);
     } else {
-      this.setState({ deleted: true });
+      if (this._isMount) {
+        this.setState({ deleted: true });
+      }
       this.tempElements.display_delete.removeAttribute('hidden');
       this.tempElements.button_delete.innerHTML = 'Recover';
 
@@ -186,7 +198,9 @@ class AdminProfileFindPost extends React.Component {
       )
       .then(result => {
         if (result) {
-          this.setState({ delete_date: Date.now() });
+          if (this._isMount) {
+            this.setState({ delete_date: Date.now() });
+          }
           this.changeDelete();
         } else {
           alert('Failed to delete the post.');
@@ -237,6 +251,7 @@ class AdminProfileFindPost extends React.Component {
   };
 
   componentDidMount() {
+    this._isMount = true;
     this.tempElements.display_post = document.getElementById('display-post');
     this.tempElements.display_post.setAttribute('hidden', true);
 
@@ -244,6 +259,10 @@ class AdminProfileFindPost extends React.Component {
     this.tempElements.display_delete.setAttribute('hidden', true);
 
     this.tempElements.button_delete = document.getElementById('button-delete');
+  }
+
+  componentWillUnmount() {
+    this._isMount = false;
   }
 
   render() {

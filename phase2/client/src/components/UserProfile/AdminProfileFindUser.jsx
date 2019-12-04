@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class AdminProfileFindUser extends React.Component {
+
+  _isMount = true;
+
   state = {
     id: '',
     avatar: process.env.PUBLIC_URL + './img/User_Avatar.png',
@@ -28,13 +31,16 @@ class AdminProfileFindUser extends React.Component {
     const target = event.target;
     const name = target.name;
     const value = target.value;
-
-    this.setState({ [name]: value });
+    if (this._isMount){
+      this.setState({ [name]: value });
+    }
   };
 
   // Show the user found.
   showUser = () => {
-    this.setState({ inputmsg: '' });
+    if (this._isMount) {
+      this.setState({ inputmsg: '' });
+    }
     this.tempElements.display_user.removeAttribute('hidden');
     if (this.state.banned) {
       this.tempElements.display_banned.removeAttribute('hidden');
@@ -64,15 +70,17 @@ class AdminProfileFindUser extends React.Component {
             this.hideUser();
           } else {
             const curUser = user.data[0];
-            this.setState({
-              id: curUser._id,
-              avatar: curUser.avatar,
-              username: curUser.username,
-              email: curUser.email,
-              motto: curUser.motto,
-              banned: curUser.banned,
-              unbanned_date: Date.parse(curUser.unbanned_date),
-            });
+            if (this._isMount) {
+              this.setState({
+                id: curUser._id,
+                avatar: curUser.avatar,
+                username: curUser.username,
+                email: curUser.email,
+                motto: curUser.motto,
+                banned: curUser.banned,
+                unbanned_date: Date.parse(curUser.unbanned_date),
+              });
+            }
             this.showUser();
           }
         })
@@ -97,7 +105,9 @@ class AdminProfileFindUser extends React.Component {
       .then(result => {
         if (result.status === 200) {
           this.props.current_user.motto = newMotto;
-          this.setState({ motto: newMotto });
+          if (this._isMount) {
+            this.setState({ motto: newMotto });
+          }
           alert('Motto reset.');
           return true;
         } else {
@@ -119,11 +129,15 @@ class AdminProfileFindUser extends React.Component {
   // Ban or unban a user.
   changeBan = () => {
     if (this.state.banned) {
-      this.setState({ banned: false });
+      if (this._isMount) {
+        this.setState({ banned: false });
+      }
       this.tempElements.display_banned.setAttribute('hidden', true);
       this.tempElements.button_ban.innerHTML = 'Ban';
     } else {
-      this.setState({ banned: true });
+      if (this._isMount) {
+        this.setState({ banned: true });
+      }
       this.tempElements.display_banned.removeAttribute('hidden');
       this.tempElements.button_ban.innerHTML = 'Unban';
     }
@@ -144,7 +158,9 @@ class AdminProfileFindUser extends React.Component {
       .then(result => {
         console.log(result.data);
         if (result.status === 200) {
-          this.setState({ unbanned_date: unbanDate });
+          if (this._isMount) {
+            this.setState({ unbanned_date: unbanDate });
+          }
           this.changeBan();
         } else {
           alert('Failed to ban the user.');
@@ -210,6 +226,7 @@ class AdminProfileFindUser extends React.Component {
   };
 
   componentDidMount() {
+    this._isMount = true;
     this.tempElements.display_user = document.getElementById('display-user');
     this.tempElements.display_user.setAttribute('hidden', true);
 
@@ -217,6 +234,10 @@ class AdminProfileFindUser extends React.Component {
     this.tempElements.display_banned.setAttribute('hidden', true);
 
     this.tempElements.button_ban = document.getElementById('button-ban');
+  }
+
+  componentWillUnmount() {
+    this._isMount = false;
   }
 
   render() {
