@@ -24,7 +24,7 @@ class OtherProfile extends React.Component {
     current_message: '',
     posts: [],
     functions: [],
-    email: ''
+    email: '',
   };
 
   showComponent = component => {
@@ -102,7 +102,7 @@ class OtherProfile extends React.Component {
             following: user.following,
             motto: user.motto,
             messages: user.messages,
-            email: user.email
+            email: user.email,
           });
           this.getNumPosts(this.state.author);
           this.updatePosts();
@@ -245,77 +245,80 @@ class OtherProfile extends React.Component {
                   <p>
                     <strong>Following:</strong> {this.state.following.length}
                   </p>
-                </div>
-                {this.props.current_user.admin ? null : this.isUnfollowing() ? (
-                  <button className="btn btn-success btn-block" onClick={this.followRequest}>
-                    <strong>Follow</strong>
-                  </button>
-                ) : (
-                  <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
-                    <strong>Unfollow</strong>
-                  </button>
-                )}
-                {this.props.current_user.admin ? null : (
-                  <div>
-                    <button
-                      data-toggle="modal"
-                      data-target="#myModal"
-                      className="btn btn-warning btn-block"
-                      onClick={this.showModal}
-                    >
-                      <strong>Report</strong>
+                  {this.props.current_user.admin ? null : this.isUnfollowing() ? (
+                    <button className="btn btn-success btn-block" onClick={this.followRequest}>
+                      <strong>Follow</strong>
                     </button>
-                    <div
-                      id="myModal"
-                      className="modal fade bd-example-modal-lg"
-                      tabIndex="-1"
-                      role="dialog"
-                      aria-labelledby="myLargeModalLabel"
-                      aria-hidden="true"
-                    >
-                      <div className="modal-dialog modal-lg">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h2 className="title-color">{`Report user ${this.state.nickname}`}</h2>
-                          </div>
-                          <div className="modal-body">
-                            <div className="form-group">
-                              <label htmlFor="message-input" className="title-color col-form-label">
-                                Reason:
-                              </label>
-                              <input
-                                type="text"
-                                id="message-input"
-                                className="form-control"
-                                aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default"
-                                name="title"
-                              />
+                  ) : (
+                    <button className="btn btn-danger btn-block" onClick={this.unFollowRequest}>
+                      <strong>Unfollow</strong>
+                    </button>
+                  )}
+                  {this.props.current_user.admin ? null : (
+                    <div>
+                      <button
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        className="btn btn-warning btn-block"
+                        onClick={this.showModal}
+                      >
+                        <strong>Report</strong>
+                      </button>
+                      <div
+                        id="myModal"
+                        className="modal fade bd-example-modal-lg"
+                        tabIndex="-1"
+                        role="dialog"
+                        aria-labelledby="myLargeModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div className="modal-dialog modal-lg">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h2 className="title-color">{`Report user ${this.state.nickname}`}</h2>
                             </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button
-                                type="button"
-                                id="button-delete"
-                                className="btn btn-primary btn-danger btn-block"
-                                data-dismiss="modal"
-                                onClick={this.sendMsg}
-                              >
-                                Send
-                              </button>
+                            <div className="modal-body">
+                              <div className="form-group">
+                                <label
+                                  htmlFor="message-input"
+                                  className="title-color col-form-label"
+                                >
+                                  Reason:
+                                </label>
+                                <input
+                                  type="text"
+                                  id="message-input"
+                                  className="form-control"
+                                  aria-label="Sizing example input"
+                                  aria-describedby="inputGroup-sizing-default"
+                                  name="title"
+                                />
+                              </div>
+                              <div className="modal-footer">
+                                <button
+                                  type="button"
+                                  className="btn btn-secondary"
+                                  data-dismiss="modal"
+                                >
+                                  Close
+                                </button>
+                                <button
+                                  type="button"
+                                  id="button-delete"
+                                  className="btn btn-primary btn-danger btn-block"
+                                  data-dismiss="modal"
+                                  onClick={this.sendMsg}
+                                >
+                                  Send
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
               <h2 id="option">Options</h2>
               <div className="list-group options">
