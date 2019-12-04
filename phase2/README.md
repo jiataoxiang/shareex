@@ -35,9 +35,13 @@ password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
+<<<<<<< HEAD
 
 
 # Features:
+=======
+Cloudinary is used to store images and pdf
+>>>>>>> 5a673b650b534bfe0cc9c3b99ca8427c4d97de41
 
 #### Home Page	`/`
 
@@ -109,6 +113,7 @@ User can favorite a post of others' by clicking the `Favourite` button  located 
 
 
 
+
 #### User Profile `./userprofile`
 
 **Avatar**: When you click upper half of avatar circle, animation will replace the banner, and it will be changed back if you click it again. If you click the lower half of the circle, you will be able to change your avatar (only support `.jpg`, `.jpeg`, `.png` file, but you will be warned if you choose other file).
@@ -151,5 +156,27 @@ when you click post, you will be able to see all posts that owned by this user.
 
 - All pages support mobile device display. Elements on page are set to change depending on screen sizes.
 - Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.
-- 
+- Cascade delete, when a user is deleted, its avatar, banner images in cloudinary is also deleted, as well as its notifications, posts, and the posts' attachments, comments.
 
+
+
+## Overview of Routes
+
+In the routes folder in `phase2`, there are all of our route files.
+
+- attachments.js: `/api/attachments`
+  - Create, delete attachments
+- comments.js: `/api/comments`
+  - Create, get, edit, delete comments
+- index.js: `/`
+  - Only used for testing if a server connection is successful
+- notification.js: `/api/notifications`
+- posts.js: `/api/posts`
+  - Get, Create, edit, and delete posts
+  - Change attributes of a post like number of views
+- users.js: `/api/users`
+  - Create user
+  - login user
+  - Patch (edit) user's attributes like passwords, view-history
+
+There are too many routes, every route in these files has comments explaining their functions.

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const testRouter = require('./routes/test');
 const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 const cloudinary = require('cloudinary').v2;
@@ -24,7 +23,6 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/comments', commentsRouter);
-app.use('/api/test', testRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/attachments', attachmentRouter);
 
