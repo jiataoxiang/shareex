@@ -4,6 +4,8 @@
 
 https://shareex.huakunshen.com/
 
+We rent our own server, configured it with a domain name and installed SSL certificate for security, thus the connection is via `https` protocol.
+
 ### Run the app
 
 cd into phase2 folder
@@ -16,14 +18,20 @@ cd ..
 npm start
 ```
 
+**users:**
 
-
-
+| username | password |
+| -------- | -------- |
+| user     | user     |
+| user2    | user2    |
+| admin    | admin    |
 
 ## Connect db through shell
 
 `mongo "mongodb+srv://shareex-36p7c.mongodb.net/test" --username dev`
 password: `dev`
+
+**Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
 
 
@@ -31,7 +39,17 @@ password: `dev`
 
 All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
 
-The search bar in the navbar can be used to search for posts and user by their title/username from anywhere in the app. After 
+The search bar in the navbar can be used to search for posts and user by their title/username from anywhere in the app. After getting search results, you can still apply filters on those results.
+
+Recommendations are filtered out from all posts, sorted by created time and number of views.
+
+#### Navbar
+
+Content in navbar are displayed based on authentication. e.g. `logout` only appears when user is logged in. 
+
+#### Sign in & Sign up
+
+Passwords are all encrypted with bcrypt.
 
 #### Create a new post.
 
