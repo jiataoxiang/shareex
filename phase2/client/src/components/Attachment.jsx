@@ -54,7 +54,10 @@ class Attachment extends Component {
         </div>
       );
     } else if (this.props.type === 'pdf') {
-      const url = this.props.content.replace('http', 'https');
+      const url =
+        this.props.content.substring(0, 5) === 'https'
+          ? this.props.content
+          : this.props.content.replace('http', 'https');
       return <embed className="pdf" src={url} type="application/pdf" width="100%" height="100%" />;
     }
   };

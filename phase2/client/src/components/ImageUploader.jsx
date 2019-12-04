@@ -110,7 +110,10 @@ class ImageUploader extends Component {
     }
     if (this.state.url) {
       if (this.state.file_type.includes('pdf')) {
-        const url = this.state.url.replace('http', 'https');
+        const url =
+          this.state.url.substring(0, 5) === 'https'
+            ? this.state.url
+            : this.state.url.replace('http', 'https');
         return <embed className="center" src={url} width="100%" height="1000px" />;
       } else {
         return (
