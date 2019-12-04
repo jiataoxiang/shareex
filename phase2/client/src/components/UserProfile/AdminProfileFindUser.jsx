@@ -282,7 +282,8 @@ class AdminProfileFindUser extends React.Component {
               {this.state.banned ? (
                 <h6 id="banned-msg">
                   {'Will be unbanned in ' +
-                    Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24)) + ' days.'}
+                    Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24)) +
+                    ' days.'}
                 </h6>
               ) : (
                 <h5 id="not-banned-msg">Click Ban to Ban User</h5>

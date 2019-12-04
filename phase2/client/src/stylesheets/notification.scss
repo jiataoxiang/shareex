@@ -1,69 +1,79 @@
 .notification-card {
-    margin-top: 20px;
-    background-color: var(--background-secondary);
-    
-    .avatar {
-        margin-top: 10px;
-        margin-left: 10px;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-    }
+  margin-top: 20px;
+  background-color: var(--background-secondary);
 
-    .text-container {
-        word-break: break-all;
-        margin-bottom: 20px;
-    }
-    
-    .author-container {
-        text-align: center;
-        width: 75px;
-    }
-    
-    .text-highlight {
-        background-color: gold;
-        color: black;
-    }
-    
-    .msg-status {
-        margin-top: 10px;
-        display: block;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-    }
-    
-    .msg-time {
-        color: darkviolet;
-    }
-    
-    .detail-btn {
-        width: 70px;
-        height: 30px;
-        line-height: 15px;
-        text-align: center;
-        position: absolute;
-        right: 100px;
-        bottom: 5px; 
-    }
-    
-    .delete-btn {
-        width: 70px;
-        height: 30px;
-        line-height: 15px;
-        text-align: center;
-        position: absolute;
-        right: 20px;
-        bottom: 5px;
-    }
-    
-    .delete-grey {
-        width: 70px;
-        height: 30px;
-        line-height: 28px;
-        text-align: center;
-        position: absolute;
-        right: 20px;
-        bottom: 5px;
-    }
+  .avatar {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+
+  .text-container {
+    word-break: break-all;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  h6 {
+    color: var(--text);
+  }
+
+  .btn-danger {
+    color: white;
+  }
+
+  .author-container {
+    text-align: center;
+    width: 75px;
+  }
+
+  .text-highlight {
+    background-color: gold;
+    color: black;
+  }
+
+  .msg-status {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .msg-time {
+    color: var(--text);
+  }
+
+  .detail-btn {
+    width: 70px;
+    height: 30px;
+    line-height: 15px;
+    text-align: center;
+    position: absolute;
+    right: 100px;
+    bottom: 5px;
+  }
+
+  .delete-btn {
+    width: 70px;
+    height: 30px;
+    line-height: 15px;
+    text-align: center;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+    color: white !important;
+  }
+
+  .delete-grey {
+    width: 70px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+  }
 }
