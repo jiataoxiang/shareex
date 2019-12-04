@@ -350,11 +350,12 @@ class SinglePost extends Component {
     let username = '';
     let avatar = '';
     let post_id = '';
-    let cur_user_admin = true;
-    let is_cur_user;
-    if (this.state.cur_user) {
-      cur_user_admin = this.state.cur_user.admin;
+    let cur_user_admin;
+    let is_cur_user = true;
+    if (this.props.current_user) {
+      cur_user_admin = this.props.current_user.admin;
     }
+
     if (!this.props.isAuthenticated) this.props.history.push('/');
 
     if (this.props.current_user !== null) {
