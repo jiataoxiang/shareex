@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../stylesheets/attachment.scss';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 
@@ -30,25 +28,6 @@ class Attachment extends Component {
           <p>{this.props.content}</p>
         </div>
       );
-    } else if (this.props.type === 'code') {
-      return (
-        <div className="code-container">
-          <div className="form-group">
-            <h4 htmlFor="content">Code</h4>
-            <Editor
-              className="code-editor"
-              value={this.props.content}
-              onValueChange={this.props.sendCodeBack}
-              highlight={code => highlight(code, languages.js)}
-              padding={10}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-              }}
-            />
-          </div>
-        </div>
-      );
     } else if (this.props.type === 'youtube') {
       return (
         <iframe
@@ -62,7 +41,7 @@ class Attachment extends Component {
         ></iframe>
       );
     } else if (this.props.type === 'image') {
-      return <img src={this.props.content} alt="" />;
+      return <img src={this.props.content} alt=""/>;
     } else if (this.props.type === 'image_link') {
       return (
         <div className="form-group">

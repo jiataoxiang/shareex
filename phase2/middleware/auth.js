@@ -1,7 +1,7 @@
-const config = require('config');
 const jwt = require('jsonwebtoken');
 const Post = require('../models/Post');
 const User = require('../models/User');
+require('dotenv').config();
 
 // how to check how much time is left until expiration?
 // get expiration time, times it by 1000
@@ -19,7 +19,7 @@ function isAuth(req, res, next) {
   }
   try {
     // verify token
-    const decoded = jwt.verify(token, config.get('jwtSecret'));
+    const decoded = jwt.verify(token, process.env.jwtSecret);
 
     // Add user from payload
     req.user = decoded;

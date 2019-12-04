@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 const { isAuth, isAuthorizedUser, isAdmin } = require('../middleware/auth');
 const { ObjectID } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
 
 // setup file upload system
 cloudinary.config({
-  cloud_name: config.get('CLOUD_NAME'),
-  api_key: config.get('API_KEY'),
-  api_secret: config.get('API_SECRET'),
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
 const deleteImage = public_id => {
