@@ -112,16 +112,12 @@ router.post('/login', (req, res) => {
     }).then(user => {
       if (!user) return res.status(400).json({ message: 'User Does not exist' });
 
-      console.log(user.banned);
       if (user.unbanned_date > new Date() && user.banned) {
-        console.log('you banned');
         return res.status(403).json({ message: 'You are Banned' });
       } else if (user.unbanned_date < Date.now && user.banned) {
-        console.log('here');
         user.banned = false;
         user.save();
       }
-      console.log('not banned');
       user.comparePassword(password, function(err, isMatch) {
         if (err) throw err;
         if (isMatch) {

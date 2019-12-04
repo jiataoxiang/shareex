@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import '../stylesheets/image_uploader.scss';
+import { toHttps } from '../lib/util';
 
 class ImageUploader extends Component {
   state = {
@@ -75,7 +76,8 @@ class ImageUploader extends Component {
       });
 
       this.setMessage('File Uploaded');
-      this.setState({ url: res.data[0].url, public_id: res.data[0].public_id });
+      const url = toHttps(res.data[0].url);
+      this.setState({ url: url, public_id: res.data[0].public_id });
       this.props.setParentState('file_url', this.state.url, file_type);
       this.setState({ isUploading: false });
     } catch (err) {
@@ -110,10 +112,7 @@ class ImageUploader extends Component {
     }
     if (this.state.url) {
       if (this.state.file_type.includes('pdf')) {
-        const url =
-          this.state.url.substring(0, 5) === 'https'
-            ? this.state.url
-            : this.state.url.replace('http', 'https');
+        const url = toHttps(this.state.url);
         return <embed className="center" src={url} width="100%" height="1000px" />;
       } else {
         return (
