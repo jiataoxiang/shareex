@@ -7,8 +7,12 @@ import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 
 class FavoritesBoard extends Component {
+
+  _isMount = true;
+
   state = { post_ids: this.props.posts, posts: [] };
   componentDidMount() {
+    this._isMount = true;
     this.updatePosts();
   }
 
@@ -19,7 +23,9 @@ class FavoritesBoard extends Component {
     axios
       .get('/api/posts/post-array', config)
       .then(res => {
-        this.setState({ posts: res.data });
+        if (this._isMount) {
+          this.setState({ posts: res.data });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -39,7 +45,9 @@ class FavoritesBoard extends Component {
         store.dispatch(loadUser()); // update current user, since updatePosts will read favs
         const posts = this.state.posts.filter(post => post._id !== to_be_removed_post_id);
         const post_ids = this.state.post_ids.filter(id => id !== to_be_removed_post_id);
-        this.setState({ post_ids, posts });
+        if (this._isMount) {
+          this.setState({ post_ids, posts });
+        }
       })
       .catch(err => {
         console.log(err);

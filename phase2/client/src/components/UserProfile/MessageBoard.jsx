@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class MessageBoard extends React.Component {
+
+  _isMount = true;
+
   state = {
     author: this.props.author,
     messages: [],
@@ -15,6 +18,7 @@ class MessageBoard extends React.Component {
   };
 
   componentDidMount() {
+    this._isMount = true;
     this.getUserInfo();
   }
 
@@ -43,11 +47,17 @@ class MessageBoard extends React.Component {
   getUserInfo = () => {
     axios.get(`/api/users/${this.state.author}`, this.props.tokenConfig()).then(user => {
       user = user.data;
-      this.setState({
-        messages: user.messages,
-      });
+      if (this._isMount) {
+        this.setState({
+          messages: user.messages,
+        });
+      }
     });
   };
+
+  componentWillUnmount() {
+    this._isMount = false;
+  }
 
   render() {
     const messages = this.state.messages;
