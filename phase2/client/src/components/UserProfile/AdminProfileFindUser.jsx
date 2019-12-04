@@ -1,29 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import axios from 'axios';
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import axios from "axios";
 
 class AdminProfileFindUser extends React.Component {
-
   _isMount = true;
 
   state = {
-    id: '',
-    avatar: process.env.PUBLIC_URL + './img/User_Avatar.png',
-    username: '',
-    email: '',
-    motto: '',
+    id: "",
+    avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+    username: "",
+    email: "",
+    motto: "",
     banned: false,
     unbanned_date: -1,
 
-    inputuser: '',
-    inputmsg: '',
+    inputuser: "",
+    inputmsg: ""
   };
   // Objects that may not visible depend on the post status.
   tempElements = {
     display_user: null,
     display_banned: null,
-    button_ban: null,
+    button_ban: null
   };
 
   // Input Change handler.
@@ -31,7 +30,7 @@ class AdminProfileFindUser extends React.Component {
     const target = event.target;
     const name = target.name;
     const value = target.value;
-    if (this._isMount){
+    if (this._isMount) {
       this.setState({ [name]: value });
     }
   };
@@ -39,29 +38,29 @@ class AdminProfileFindUser extends React.Component {
   // Show the user found.
   showUser = () => {
     if (this._isMount) {
-      this.setState({ inputmsg: '' });
+      this.setState({ inputmsg: "" });
     }
-    this.tempElements.display_user.removeAttribute('hidden');
+    this.tempElements.display_user.removeAttribute("hidden");
     if (this.state.banned) {
-      this.tempElements.display_banned.removeAttribute('hidden');
-      this.tempElements.button_ban.innerHTML = 'Unban';
+      this.tempElements.display_banned.removeAttribute("hidden");
+      this.tempElements.button_ban.innerHTML = "Unban";
     } else {
-      this.tempElements.display_banned.setAttribute('hidden', true);
-      this.tempElements.button_ban.innerHTML = 'Ban';
+      this.tempElements.display_banned.setAttribute("hidden", true);
+      this.tempElements.button_ban.innerHTML = "Ban";
     }
   };
 
   // Hide the user object when appropriate.
   hideUser = () => {
-    this.tempElements.display_user.setAttribute('hidden', true);
-    alert('This user does not exist.');
+    this.tempElements.display_user.setAttribute("hidden", true);
+    alert("This user does not exist.");
   };
 
   // Read user from server.
   getUserInfo = e => {
     e.preventDefault();
     if (this.state.inputuser.length < 4) {
-      alert('Invalid username.');
+      alert("Invalid username.");
     } else {
       axios
         .get(`/api/users/username/${this.state.inputuser}`, this.tokenConfig())
@@ -78,7 +77,7 @@ class AdminProfileFindUser extends React.Component {
                 email: curUser.email,
                 motto: curUser.motto,
                 banned: curUser.banned,
-                unbanned_date: Date.parse(curUser.unbanned_date),
+                unbanned_date: Date.parse(curUser.unbanned_date)
               });
             }
             this.showUser();
@@ -86,7 +85,7 @@ class AdminProfileFindUser extends React.Component {
         })
         .catch(error => {
           this.hideUser();
-          alert('Failed to get user.');
+          alert("Failed to get user.");
           console.log(error);
         });
     }
@@ -94,24 +93,29 @@ class AdminProfileFindUser extends React.Component {
 
   // Reset a user's motto and notify him.
   resetMotto = () => {
-    const newMotto = 'Welcome, new user';
+    const newMotto = "Welcome, new user";
 
-    const msgBody = 'Your motto is reset due to containing inappropriate language';
-    const success = 'Notified ' + this.state.username;
-    const fail = 'Could not notify the user.';
+    const msgBody =
+      "Your motto is reset due to containing inappropriate language";
+    const success = "Notified " + this.state.username;
+    const fail = "Could not notify the user.";
 
     axios
-      .patch(`/api/users/${this.state.id}`, { motto: newMotto }, this.tokenConfig())
+      .patch(
+        `/api/users/${this.state.id}`,
+        { motto: newMotto },
+        this.tokenConfig()
+      )
       .then(result => {
         if (result.status === 200) {
           this.props.current_user.motto = newMotto;
           if (this._isMount) {
             this.setState({ motto: newMotto });
           }
-          alert('Motto reset.');
+          alert("Motto reset.");
           return true;
         } else {
-          alert('Motto failed to reset.');
+          alert("Motto failed to reset.");
           return false;
         }
       })
@@ -121,7 +125,7 @@ class AdminProfileFindUser extends React.Component {
         }
       })
       .catch(err => {
-        alert('Motto failed to reset.');
+        alert("Motto failed to reset.");
         console.log(err);
       });
   };
@@ -132,14 +136,14 @@ class AdminProfileFindUser extends React.Component {
       if (this._isMount) {
         this.setState({ banned: false });
       }
-      this.tempElements.display_banned.setAttribute('hidden', true);
-      this.tempElements.button_ban.innerHTML = 'Ban';
+      this.tempElements.display_banned.setAttribute("hidden", true);
+      this.tempElements.button_ban.innerHTML = "Ban";
     } else {
       if (this._isMount) {
         this.setState({ banned: true });
       }
-      this.tempElements.display_banned.removeAttribute('hidden');
-      this.tempElements.button_ban.innerHTML = 'Unban';
+      this.tempElements.display_banned.removeAttribute("hidden");
+      this.tempElements.button_ban.innerHTML = "Unban";
     }
   };
 
@@ -151,9 +155,9 @@ class AdminProfileFindUser extends React.Component {
         `/api/users/ban/${this.state.id}`,
         {
           banned: !this.state.banned,
-          unbanned_date: unbanDate,
+          unbanned_date: unbanDate
         },
-        this.tokenConfig(),
+        this.tokenConfig()
       )
       .then(result => {
         console.log(result.data);
@@ -163,11 +167,23 @@ class AdminProfileFindUser extends React.Component {
           }
           this.changeBan();
         } else {
-          alert('Failed to ban the user.');
+          alert("Failed to ban the user.");
         }
       })
       .catch(err => {
-        alert('Failed to ban the user.');
+        alert("Failed to ban the user.");
+        console.log(err);
+      });
+  };
+
+  // Permanently delete a post.
+  permDelete = () => {
+    axios
+      .delete("/api/users/" + this.state.id, this.tokenConfig())
+      .then(res => {
+        this.tempElements.display_user.setAttribute("hidden", true);
+      })
+      .catch(err => {
         console.log(err);
       });
   };
@@ -175,9 +191,13 @@ class AdminProfileFindUser extends React.Component {
   sendMsg = e => {
     e.preventDefault();
     if (this.state.inputmsg.length === 0) {
-      alert('A message must have some contant.');
+      alert("A message must have some contant.");
     } else {
-      this.sendMsgToServer(this.state.inputmsg, 'Message sent.', 'Message failed to send.');
+      this.sendMsgToServer(
+        this.state.inputmsg,
+        "Message sent.",
+        "Message failed to send."
+      );
     }
   };
 
@@ -186,7 +206,7 @@ class AdminProfileFindUser extends React.Component {
     const newMsg = {
       from: this.props.current_user._id,
       to: this.state.id,
-      body: msgBody,
+      body: msgBody
     };
 
     axios
@@ -211,15 +231,15 @@ class AdminProfileFindUser extends React.Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json',
-      },
+        "Content-type": "application/json"
+      }
     };
 
     // If token, add to headers
     if (token) {
-      config.headers['x-auth-token'] = token;
+      config.headers["x-auth-token"] = token;
     } else {
-      window.location.href = '/';
+      window.location.href = "/";
     }
 
     return config;
@@ -227,13 +247,13 @@ class AdminProfileFindUser extends React.Component {
 
   componentDidMount() {
     this._isMount = true;
-    this.tempElements.display_user = document.getElementById('display-user');
-    this.tempElements.display_user.setAttribute('hidden', true);
+    this.tempElements.display_user = document.getElementById("display-user");
+    this.tempElements.display_user.setAttribute("hidden", true);
 
-    this.tempElements.display_banned = document.getElementById('ban-warning');
-    this.tempElements.display_banned.setAttribute('hidden', true);
+    this.tempElements.display_banned = document.getElementById("ban-warning");
+    this.tempElements.display_banned.setAttribute("hidden", true);
 
-    this.tempElements.button_ban = document.getElementById('button-ban');
+    this.tempElements.button_ban = document.getElementById("button-ban");
   }
 
   componentWillUnmount() {
@@ -255,7 +275,11 @@ class AdminProfileFindUser extends React.Component {
             value={this.state.inputuser}
             onChange={this.handleInputChange}
           />
-          <button type="submit" className="btn btn-primary" onClick={this.getUserInfo}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={this.getUserInfo}
+          >
             Find
           </button>
         </form>
@@ -302,9 +326,12 @@ class AdminProfileFindUser extends React.Component {
               </div>
               {this.state.banned ? (
                 <h6 id="banned-msg">
-                  {'Will be unbanned in ' +
-                    Math.ceil((this.state.unbanned_date - Date.now()) / (1000 * 60 * 60 * 24)) +
-                    ' days.'}
+                  {"Will be unbanned in " +
+                    Math.ceil(
+                      (this.state.unbanned_date - Date.now()) /
+                        (1000 * 60 * 60 * 24)
+                    ) +
+                    " days."}
                 </h6>
               ) : (
                 <h5 id="not-banned-msg">Click Ban to Ban User</h5>
@@ -318,6 +345,14 @@ class AdminProfileFindUser extends React.Component {
                 onClick={this.changeBanToServer}
               >
                 Ban
+              </button>
+              <button
+                type="button"
+                id="button-delete"
+                className="btn btn-danger"
+                onClick={this.permDelete}
+              >
+                Delete
               </button>
             </div>
           </div>
@@ -337,7 +372,11 @@ class AdminProfileFindUser extends React.Component {
                 />
               </div>
               <div className="col-md-4">
-                <button type="submit" className="btn btn-info" onClick={this.sendMsg}>
+                <button
+                  type="submit"
+                  className="btn btn-info"
+                  onClick={this.sendMsg}
+                >
                   Send Message
                 </button>
               </div>
@@ -354,7 +393,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(AdminProfileFindUser);

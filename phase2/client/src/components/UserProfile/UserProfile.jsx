@@ -272,7 +272,7 @@ class UserProfile extends React.Component {
         ) : null}
         <div>
           {this.state.showPop ? (
-            <div className="popupWindow">
+            <div className="popupWindow" onHover={this.hideAvatarEditor}>
               <Animation />
             </div>
           ) : (
