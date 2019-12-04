@@ -152,10 +152,10 @@ class Home extends Component {
                       <span className="ml-3">Category:</span>
                       <select id="category-selection" name="category">
                         <option value="All">All</option>
-                        <option value="CS">Computer Science</option>
-                        <option value="Education">Travel</option>
-                        <option value="Travel">Education</option>
-                        <option value="Technology">Cooking</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Education">Education</option>
+                        <option value="Cooking">Cooking</option>
                         <option value="Other">Other</option>
                         <option value="Following">Following</option>
                       </select>
