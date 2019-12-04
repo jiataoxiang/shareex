@@ -42,7 +42,6 @@ router.get('/', isAuth, isAdminTolerant, (req, res) => {
   if (!req.user.admin) {
     filter.hidden = false;
   } // if not admin, hidden posts will not be displayed
-  console.log(req.query.sort_by);
   Post.find(filter)
     .sort({ [req.query.sort_by]: -1 })
     // .sort({ likes: -1 })

@@ -1,19 +1,34 @@
 # Phase2
 
+> We submitted late for 1 day to fix some bugs, please mark the latest version up to Nov.4th.
+
 ## Deployment
 
 https://shareex.huakunshen.com/
 
-We rent our own server, configured it with a domain name and installed SSL certificate for security, thus the connection is via `https` protocol.
+We rent our own server, configured it with a domain name and installed a SSL certificate for security, thus the connection is via `https` protocol.
+
+We also have a deployment on heroku, just in case.
+
+https://shareex.herokuapp.com/
 
 ### Run the app
 
 cd into phase2 folder
 
+```shell
+npm run install-all
+npm run test
 ```
+
+The above commands should install all dependencies and run the app.
+
+Just in case they don't work, here is the step by step commands
+
+```shell
 npm install
 cd client npm install
-npm start
+npm start&
 cd ..
 npm start
 ```
@@ -24,6 +39,8 @@ npm start
 | -------- | -------- |
 | user     | user     |
 | user2    | user2    |
+| user3    | user3    |
+| User4    | user4    |
 | admin    | admin    |
 
 ## Connect db through shell
