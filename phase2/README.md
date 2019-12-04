@@ -1,31 +1,63 @@
 # Phase2
 
-## commands for development
+## Deployment
 
-Running the app with debug mode: `DEBUG=phase2:* npm start`
-`phase2` is the app running and to have log displayed, \* means turn on all logs
+https://shareex.huakunshen.com/
+
+We rent our own server, configured it with a domain name and installed SSL certificate for security, thus the connection is via `https` protocol.
+
+### Run the app
+
+cd into phase2 folder
+
+```
+npm install
+cd client npm install
+npm start
+cd ..
+npm start
+```
+
+**users:**
+
+| username | password |
+| -------- | -------- |
+| user     | user     |
+| user2    | user2    |
+| admin    | admin    |
 
 ## Connect db through shell
 
 `mongo "mongodb+srv://shareex-36p7c.mongodb.net/test" --username dev`
 password: `dev`
 
-when server return info, use this format:
+**Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
-```json
-res.json{
-  message: "message",
-  otherData: otherData
-}
-```
+#### Home Page	`/`
 
-always use message instead of msg
+All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
 
+The search bar in the navbar can be used to search for posts and user by their title/username from anywhere in the app. After getting search results, you can still apply filters on those results.
 
+Recommendations are filtered out from all posts, sorted by created time and number of views, intending to recommend the latest and most popular posts to user.
 
+#### Post
 
+On Home Page, posts are displayed in card form. User can like or dislike a post. Unlike is only allowed if the user has liked the post.
 
-#### Create a new post.
+First 5 images in the post is displayed if there are any. You can click on the image and view the larger image. If description of the post is too long (longer than 500 characters), the description will be trimmed, complete post can only be read in single post page
+
+Admin user can like or dislike a post as many times as he/she wants. Inappropriate posts can be deleted or hidden by admin. If a post is hidden, regular user can no longer see it. But admin can still see it and a `hidden` label is displayed for admin.
+
+#### Navbar
+
+Content in navbar are displayed based on authentication. e.g. `logout` only appears when user is logged in. 
+
+#### Sign in & Sign up	`/login`, `/signup`
+
+Passwords are all encrypted with bcrypt. User session is set to be 2 hours long, i.e. expired after 2 hours.
+
+#### Create a new post. `/new_post`
 
 After you log in to your account. You could click the `New Post` button in the navber. Users are required to provide information `Title` and `Content` fields. The `Category` field has default option: `Computer Science`. If user leave any of `Title` or `Content` fields empty, the post will not be allowed to submit. 
 
@@ -45,7 +77,7 @@ After you log in to your account. You could click the `New Post` button in the n
 
 User can delete a post by clicking into his/her post, and then click the red `Delete` button on the top of the post. Notice that only the author of the post can delete the post. Otherwise, the delete button will not be shown.
 
-#### Edit a post
+#### Edit a post	`/edit_post`
 
 User can only edit his/her own post by clicking into the post he/she wants to modify, and click the green `Edit` button. This will direct user to the edit page. In the edit page, user can modify any parts of his/her post exactly like in the new post page. Click `Submit` after editing, and the modified post will be stored to database. Notice: a user will only be able to edit his/her own post.
 
@@ -65,9 +97,7 @@ User can report a post by clicking `Report Post` button located on the right sid
 
 User can favorite a post of others' by clicking the `Favourite` button  located on the right side of the post page. After clicking this button, the button will become transparent, and it cannot be clicked again. Notice: user will not be able to report or favourite his/her own post.
 
-
-
-User Profile `./userprofile`
+#### User Profile `./userprofile`
 
 Avatar: When you click upper half of avatar circle, animation will replace the banner, and it will be changed back if you click it again. If you click the lower half of the circle, you will be able to change your avatar (only support `.jpg`, `.jpeg`, `.png` file, but you will be warned if you choose other file).
 
@@ -89,9 +119,7 @@ when you click Follower Board, you will be able to see all the users you are fol
 
 when you click Notification, you will be able to see notifications that sent by either admin or other users. You can search your notification, delete notification, and see detail, which direct you to other profile or single post (source of your notification)
 
-
-
-Other profile: `./otherprofile/:id`
+#### Other profile: `./otherprofile/:id`
 
 You can go to other profile by clicking icons whenever other users' avatar appear.
 
@@ -102,4 +130,10 @@ options:
 when you click message board, you will be able to see all messages(comments) that other users describe this user, and you can also send message in other profile 
 
 when you click post, you will be able to see all posts that owned by this user.
+
+## Special features
+
+- All pages support mobile device display. Elements on page are set to change depending on screen sizes.
+- Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.
+- 
 
