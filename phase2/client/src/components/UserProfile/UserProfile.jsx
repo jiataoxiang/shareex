@@ -25,6 +25,7 @@ class UserProfile extends React.Component {
     curState: '',
     author: '',
     msgServer: false,
+    email: ''
   };
 
   msg =  {
@@ -157,6 +158,7 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following,
         motto: currentUser.motto,
+        email: currentUser.email
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -307,6 +309,9 @@ class UserProfile extends React.Component {
                 <div className="card-body">
                   <p>
                     <strong>Motto:</strong> {this.state.motto}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {this.state.email}
                   </p>
                   <p>
                     <strong>Posts:</strong> {this.state.numPosts}
