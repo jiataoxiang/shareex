@@ -171,8 +171,6 @@ when you click post, you will be able to see all posts that owned by this user.
 
 - All pages support mobile device display. Elements on page are set to change depending on screen sizes.
 - Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.
-  <<<<<<< HEAD
-  =======
 - Cascade delete, when a user is deleted, its avatar, banner images in cloudinary is also deleted, as well as its notifications, posts, and the posts' attachments, comments.
 
 ## Overview of Routes
@@ -195,5 +193,3 @@ In the routes folder in `phase2`, there are all of our route files.
   - Patch (edit) user's attributes like passwords, view-history
 
 There are too many routes, every route in these files has comments explaining their functions.
-
-> > > > > > > c0ed74121dd2d65d35b8b51b65435e3f9df58178
