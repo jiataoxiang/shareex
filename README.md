@@ -1,5 +1,7 @@
 # Phase2
 
+> We submitted late for 1 day to fix some bugs, please mark the latest version up to Nov.4th.
+
 ## Deployment
 
 https://shareex.huakunshen.com/
