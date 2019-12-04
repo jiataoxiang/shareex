@@ -131,7 +131,7 @@ class Post extends Component {
             </span>
           </Link>
           {this.props.isAuthenticated && this.props.current_user.admin ? (
-            <span className="float-right">Post id: {this.props.post._id}</span>
+            <span className="float-right user-id">Post id: {this.props.post._id}</span>
           ) : null}
         </div>
         <div className="card-body">

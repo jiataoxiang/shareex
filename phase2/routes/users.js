@@ -334,6 +334,8 @@ router.patch('/:user_id/add-view-history', isAuth, isAuthorizedUser, (req, res) 
     if (!user) return res.status(404).send('User not found!');
     user.view_history = user.view_history.filter(post_id => post_id !== req.body.post_id);
     user.view_history.unshift(req.body.post_id);
+    if (!user.views) user.views = 0;
+    user.views++;
     user
       .save()
       .then(user => {
