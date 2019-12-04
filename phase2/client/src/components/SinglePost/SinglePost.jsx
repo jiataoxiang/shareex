@@ -195,11 +195,8 @@ class SinglePost extends Component {
           '>',
         link: '/single_post/' + this.props.match.params.id,
       };
-      axios
-        .post('/api/notifications/create', body_send, this.tokenConfig())
-        .then(res => {
-          console.log(res);
-        })
+      axios.post("/api/notifications/create", body_send, this.tokenConfig())
+        .then()
         .catch(err => {
           console.log(err);
         });
@@ -317,9 +314,6 @@ class SinglePost extends Component {
       alert('Report message could not be empty.');
     } else {
       document.getElementById('report-input').value = '';
-      console.log(
-        this.props.current_user.username + ' reported post <' + this.state.post.title + '>: ' + msg,
-      );
       const notification = {
         from: this.state.cur_user_id,
         body:
@@ -330,11 +324,8 @@ class SinglePost extends Component {
           msg,
         link: '/single_post/' + this.props.match.params.id,
       };
-      axios
-        .post('/api/notifications/to-admin', notification, this.tokenConfig())
-        .then(res => {
-          console.log(res);
-        })
+      axios.post("/api/notifications/to-admin", (notification), this.tokenConfig())
+        .then()
         .catch(err => {
           console.log(err);
         });

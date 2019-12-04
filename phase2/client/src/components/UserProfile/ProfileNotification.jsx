@@ -5,6 +5,9 @@ import axios from 'axios';
 import NotificationCard from "../NotificationCard";
 
 class AdminProfileNotification extends React.Component {
+
+    _isMount = true;
+
     state = {
         readMsg: [],
         unreadMsg: [],
@@ -16,8 +19,9 @@ class AdminProfileNotification extends React.Component {
         const target = event.target;
         const name = target.name;
         const value = target.value;
-
-        this.setState({[name]: value});
+        if (this._isMount) {
+            this.setState({[name]: value});
+        }
     }
     
     // Check if a notification contains any word in the search inputbox.
@@ -69,6 +73,7 @@ class AdminProfileNotification extends React.Component {
     };
     
     componentDidMount() {
+        this._isMount = true;
         const readMsg = this.props.state.readMsg;
         const unreadMsg = this.props.state.unreadMsg;
         
@@ -78,10 +83,15 @@ class AdminProfileNotification extends React.Component {
         unreadMsg.sort(function(a, b){
             return Date.parse(b.time) - Date.parse(a.time);
         });
-        
-        this.setState({readMsg: readMsg, 
-                       unreadMsg: unreadMsg});
+        if (this._isMount) {
+            this.setState({readMsg: readMsg,
+                unreadMsg: unreadMsg});
+        }
         this.readNotifications();
+    }
+
+    componentWillUnmount() {
+        this._isMount = false;
     }
 
     render() {
