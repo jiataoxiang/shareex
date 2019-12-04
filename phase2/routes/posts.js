@@ -2,18 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
-const Comment = require('../models/Comment');
 const { ObjectID } = require('mongodb');
 const Attachment = require('../models/Attachment');
 const { isAuth, isAuthorizedPost, isAdmin, isAdminTolerant } = require('../middleware/auth');
 const cloudinary = require('cloudinary').v2;
-const config = require('config');
+require('dotenv').config();
 
 // setup file upload system
 cloudinary.config({
-  cloud_name: config.get('CLOUD_NAME'),
-  api_key: config.get('API_KEY'),
-  api_secret: config.get('API_SECRET'),
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
 // delete file from cloudinary

@@ -1,7 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority",
-  "jwtSecret": "jwt_team21_csc309_secret",
-  "CLOUD_NAME": "huakun",
-  "API_KEY": "454177563293312",
-  "API_SECRET": "3ZUh5CPpyFtqNM_sjyYggwLhpdw"
-}
