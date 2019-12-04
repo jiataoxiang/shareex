@@ -33,7 +33,7 @@ password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
-#### Home Page
+#### Home Page	`/`
 
 All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
 
@@ -45,17 +45,19 @@ Recommendations are filtered out from all posts, sorted by created time and numb
 
 On Home Page, posts are displayed in card form. User can like or dislike a post. Unlike is only allowed if the user has liked the post.
 
+First 5 images in the post is displayed if there are any. You can click on the image and view the larger image. If description of the post is too long (longer than 500 characters), the description will be trimmed, complete post can only be read in single post page
+
 Admin user can like or dislike a post as many times as he/she wants. Inappropriate posts can be deleted or hidden by admin. If a post is hidden, regular user can no longer see it. But admin can still see it and a `hidden` label is displayed for admin.
 
 #### Navbar
 
 Content in navbar are displayed based on authentication. e.g. `logout` only appears when user is logged in. 
 
-#### Sign in & Sign up
+#### Sign in & Sign up	`/login`, `/signup`
 
 Passwords are all encrypted with bcrypt. User session is set to be 2 hours long, i.e. expired after 2 hours.
 
-#### Create a new post.
+#### Create a new post. `/new_post`
 
 After you log in to your account. You could click the `New Post` button in the navber. Users are required to provide information `Title` and `Content` fields. The `Category` field has default option: `Computer Science`. If user leave any of `Title` or `Content` fields empty, the post will not be allowed to submit. 
 
@@ -75,7 +77,7 @@ After you log in to your account. You could click the `New Post` button in the n
 
 User can delete a post by clicking into his/her post, and then click the red `Delete` button on the top of the post. Notice that only the author of the post can delete the post. Otherwise, the delete button will not be shown.
 
-#### Edit a post
+#### Edit a post	`/edit_post`
 
 User can only edit his/her own post by clicking into the post he/she wants to modify, and click the green `Edit` button. This will direct user to the edit page. In the edit page, user can modify any parts of his/her post exactly like in the new post page. Click `Submit` after editing, and the modified post will be stored to database. Notice: a user will only be able to edit his/her own post.
 
@@ -99,3 +101,4 @@ User can favorite a post of others' by clicking the `Favourite` button  located 
 
 - All pages support mobile device display. Elements on page are set to change depending on screen sizes.
 - Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.
+- 

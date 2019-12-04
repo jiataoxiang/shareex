@@ -25,12 +25,12 @@ class UserProfile extends React.Component {
     curState: '',
     author: '',
     msgServer: false,
-    email: ''
+    email: '',
   };
 
-  msg =  {
+  msg = {
     readMsg: [],
-    unreadMsg: []
+    unreadMsg: [],
   };
 
   handlePopup = () => {
@@ -99,9 +99,9 @@ class UserProfile extends React.Component {
         curState: <FollowerBoard author={this.props.current_user._id} />,
       });
     } else if (option === 'Notifications') {
-      if(!this.state.msgServer) {
+      if (!this.state.msgServer) {
         alert('Please be patient, notifications are still loading');
-      }else {
+      } else {
         this.hideBadge();
         this.setState({
           curState: <Notification state={this.msg} />,
@@ -138,11 +138,13 @@ class UserProfile extends React.Component {
             this.msg.unreadMsg.push(msg);
           }
         });
-      }).then(() => {
-      this.setState({
-        msgServer: true
-      });
-    }).catch(error => {
+      })
+      .then(() => {
+        this.setState({
+          msgServer: true,
+        });
+      })
+      .catch(error => {
         console.log(error);
       });
   };
@@ -158,7 +160,7 @@ class UserProfile extends React.Component {
         followers: currentUser.followers,
         following: currentUser.following,
         motto: currentUser.motto,
-        email: currentUser.email
+        email: currentUser.email,
       });
       this.getNumPosts(currentUser);
       this.updatePosts();
@@ -192,13 +194,11 @@ class UserProfile extends React.Component {
 
   uploadImage = (type, inputFile) => {
     if (inputFile != null) {
-      // const isJPG = inputFile.type === 'image/jpeg';
-      // const isPNG = inputFile.type === 'image/png';
       const is_valid_image = ['image/jpeg', 'image/png', 'image/jpg'].includes(inputFile.type);
-
       if (!is_valid_image) {
         inputFile.status = 'error';
-        console.log('You can only upload png or jpg files.');
+        alert('You can only upload png, jpeg or jpg files.');
+        return;
       }
       const formData = new FormData();
       formData.append('file', inputFile); // get first file chosen
@@ -256,7 +256,6 @@ class UserProfile extends React.Component {
     const inputFile = event.target.files[0];
     this.uploadImage('avatar', inputFile);
   };
-
 
   render() {
     if (!this.props.isAuthenticated) {
