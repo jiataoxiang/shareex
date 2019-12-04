@@ -10,12 +10,12 @@ const PostSchema = new Schema({
   body: { type: String, required: true },
   hidden: { type: Boolean, default: false },
   delete_date: { type: Date, default: null },
-  created_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: new Date() },
   likes: { type: Number, default: 0 },
   likes_users: { type: Array, default: [] },
   favs: { type: Number, default: 0 },
   views: { type: Number, default: 0 },
-  attachments: { type: Array, default: [] }
+  attachments: { type: Array, default: [] },
 });
 
 PostSchema.pre('remove', function(next) {

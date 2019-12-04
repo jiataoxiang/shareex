@@ -21,7 +21,7 @@ const UserSchema = new Schema({
   },
   gender: { type: String },
   admin: { type: Boolean, required: true, default: 'false' },
-  created_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: new Date() },
   followers: { type: Array, default: [] },
   following: { type: Array, default: [] },
   banned: { type: Boolean, default: false },

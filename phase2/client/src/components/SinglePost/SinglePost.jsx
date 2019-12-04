@@ -350,11 +350,12 @@ class SinglePost extends Component {
     let username = '';
     let avatar = '';
     let post_id = '';
-    let cur_user_admin = true;
-    let is_cur_user;
-    if (this.state.cur_user) {
-      cur_user_admin = this.state.cur_user.admin;
+    let cur_user_admin;
+    let is_cur_user = true;
+    if (this.props.current_user) {
+      cur_user_admin = this.props.current_user.admin;
     }
+
     if (!this.props.isAuthenticated) this.props.history.push('/');
 
     if (this.props.current_user !== null) {
@@ -476,9 +477,11 @@ class SinglePost extends Component {
                 <div className="user-info">
                   <div className="row">
                     <div className="col-lg-3 col-3">
-                      <Link to={`/otherprofile/${this.state.post.author}`}>
+                      {is_cur_user ? <Link to={`/userprofile`}>
                         <img className="avatar" src={avatar} alt="" />
-                      </Link>
+                      </Link> : <Link to={`/otherprofile/${this.state.post.author}`}>
+                        <img className="avatar" src={avatar} alt="" />
+                      </Link>}
                     </div>
                     <div className="col-lg-9 col-9">
                       <strong id="username-display">{username}</strong>

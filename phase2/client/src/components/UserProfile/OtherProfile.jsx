@@ -24,6 +24,7 @@ class OtherProfile extends React.Component {
     current_message: '',
     posts: [],
     functions: [],
+    email: ''
   };
 
   showComponent = component => {
@@ -101,6 +102,7 @@ class OtherProfile extends React.Component {
             following: user.following,
             motto: user.motto,
             messages: user.messages,
+            email: user.email
           });
           this.getNumPosts(this.state.author);
           this.updatePosts();
@@ -230,6 +232,9 @@ class OtherProfile extends React.Component {
                 <div className="card-body">
                   <p>
                     <strong>Motto:</strong> {this.state.motto}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {this.state.email}
                   </p>
                   <p>
                     <strong>Posts:</strong> {this.state.numPosts}

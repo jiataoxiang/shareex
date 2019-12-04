@@ -411,19 +411,6 @@ router.patch(
   }
 );
 
-//router.patch('/:user_id', isAuth, isAuthorizedUser, (req, res) => {
-//  User.findByIdAndUpdate(req.params.user_id, req.body)
-//    .then(user => {
-//      if (!user) {
-//        res.status(404).send('User not found');
-//      }
-//      res.send('Successfully updated');
-//    })
-//    .catch(err => {
-//      res.status(500).send(err);
-//    });
-//});
-
 router.patch("/:user_id", isAuth, isAuthorizedUser, (req, res) => {
   User.findById(req.params.user_id)
     .then(user => {
