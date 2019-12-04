@@ -1,29 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import axios from 'axios';
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import axios from "axios";
 
 class AdminProfileFindPost extends React.Component {
 
   _isMount = false;
 
   state = {
-    avatar: process.env.PUBLIC_URL + './img/User_Avatar.png',
-    username: '',
-    id: '',
-    author: '',
-    title: '',
-    category: '',
+    avatar: process.env.PUBLIC_URL + "./img/User_Avatar.png",
+    username: "",
+    id: "",
+    author: "",
+    title: "",
+    category: "",
     deleted: false,
     delete_date: -1,
 
-    inputid: '',
+    inputid: ""
   };
   // Objects that may not visible depend on the post status.
   tempElements = {
     display_post: null,
     display_delete: null,
-    button_delete: null,
+    button_delete: null
   };
 
   // Input Change handler.
@@ -38,33 +38,33 @@ class AdminProfileFindPost extends React.Component {
 
   // Show the post found.
   showPost = () => {
-    this.tempElements.display_post.removeAttribute('hidden');
+    this.tempElements.display_post.removeAttribute("hidden");
     if (this.state.deleted) {
-      this.tempElements.display_delete.removeAttribute('hidden');
-      this.tempElements.button_delete.innerHTML = 'Recover';
+      this.tempElements.display_delete.removeAttribute("hidden");
+      this.tempElements.button_delete.innerHTML = "Recover";
     } else {
-      this.tempElements.display_delete.setAttribute('hidden', true);
-      this.tempElements.button_delete.innerHTML = 'Delete';
+      this.tempElements.display_delete.setAttribute("hidden", true);
+      this.tempElements.button_delete.innerHTML = "Hide";
     }
   };
 
   // Hide the post object when appropriate.
   hidePost = () => {
-    this.tempElements.display_post.setAttribute('hidden', true);
+    this.tempElements.display_post.setAttribute("hidden", true);
   };
 
   // Read post from server.
   getPostInfo = e => {
     e.preventDefault();
     if (this.state.inputid.length === 0) {
-      alert('Must input a id.');
+      alert("Must input a id.");
     } else {
       axios
         .get(`/api/posts/${this.state.inputid}`, this.tokenConfig())
         .then(post => {
           if (!post) {
             this.hidePost();
-            alert('This post does not exist.');
+            alert("This post does not exist.");
           } else {
             const curPost = post.data;
             if (this._isMount) {
@@ -82,7 +82,7 @@ class AdminProfileFindPost extends React.Component {
         })
         .catch(error => {
           this.hidePost();
-          alert('Failed to get post.');
+          alert("Failed to get post.");
           console.log(error);
         });
     }
@@ -95,7 +95,7 @@ class AdminProfileFindPost extends React.Component {
       .then(user => {
         if (!user) {
           this.hidePost();
-          alert('The author of this post no longer exists.');
+          alert("The author of this post no longer exists.");
         } else {
           const curUser = user.data;
           if (this._isMount) {
@@ -109,7 +109,7 @@ class AdminProfileFindPost extends React.Component {
       })
       .catch(error => {
         this.hidePost();
-        alert('Failed to get user.');
+        alert("Failed to get user.");
         console.log(error);
       });
   };
@@ -117,35 +117,38 @@ class AdminProfileFindPost extends React.Component {
   // Save post status to server.
   saveChange = () => {
     if (this.state.title.length === 0) {
-      alert('Title cannot be empty.');
+      alert("Title cannot be empty.");
     } else {
       axios
         .patch(
           `/api/posts/${this.state.id}`,
           {
             title: this.state.title,
-            category: this.state.category,
+            category: this.state.category
           },
-          this.tokenConfig(),
+          this.tokenConfig()
         )
         .then(post => {
           if (!post) {
-            alert('Failed to update post.');
+            alert("Failed to update post.");
           } else {
-            alert('Post saved.');
+            alert("Post saved.");
 
-            const msgBody = 'Your post ' + this.state.title + ' is edited by an administrator';
+            const msgBody =
+              "Your post " +
+              this.state.title +
+              " is edited by an administrator";
             const newMsg = {
               from: this.props.current_user._id,
               to: this.state.author,
               body: msgBody,
-              link: '/single_post/' + this.state.id,
+              link: "/single_post/" + this.state.id
             };
             this.sendMsg(newMsg);
           }
         })
         .catch(error => {
-          alert('Failed to update post.');
+          alert("Failed to update post.");
           console.log(error);
         });
     }
@@ -160,12 +163,15 @@ class AdminProfileFindPost extends React.Component {
       this.tempElements.display_delete.setAttribute('hidden', true);
       this.tempElements.button_delete.innerHTML = 'Delete';
 
-      const msgBody = 'Your post <<' + this.state.title + '>> is recovered by an administrator';
+      const msgBody =
+        "Your post <<" +
+        this.state.title +
+        ">> is recovered by an administrator";
       const newMsg = {
         from: this.props.current_user._id,
         to: this.state.author,
         body: msgBody,
-        link: '/single_post/' + this.state.id,
+        link: "/single_post/" + this.state.id
       };
       this.sendMsg(newMsg);
     } else {
@@ -175,11 +181,12 @@ class AdminProfileFindPost extends React.Component {
       this.tempElements.display_delete.removeAttribute('hidden');
       this.tempElements.button_delete.innerHTML = 'Recover';
 
-      const msgBody = 'Your post <<' + this.state.title + '>> is deleted by an administrator';
+      const msgBody =
+        "Your post <<" + this.state.title + ">> is deleted by an administrator";
       const newMsg = {
         from: this.props.current_user._id,
         to: this.state.author,
-        body: msgBody,
+        body: msgBody
       };
       this.sendMsg(newMsg);
     }
@@ -192,9 +199,9 @@ class AdminProfileFindPost extends React.Component {
         `/api/posts/delete/${this.state.id}`,
         {
           hidden: !this.state.deleted,
-          delete_date: Date.now(),
+          delete_date: Date.now()
         },
-        this.tokenConfig(),
+        this.tokenConfig()
       )
       .then(result => {
         if (result) {
@@ -203,11 +210,23 @@ class AdminProfileFindPost extends React.Component {
           }
           this.changeDelete();
         } else {
-          alert('Failed to delete the post.');
+          alert("Failed to delete the post.");
         }
       })
       .catch(err => {
-        alert('Failed to delete the post.');
+        alert("Failed to delete the post.");
+        console.log(err);
+      });
+  };
+
+  // Permanently delete a post.
+  permDelete = () => {
+    axios
+      .delete("/api/posts/permdelete/" + this.state.id, this.tokenConfig())
+      .then(res => {
+        this.hidePost();
+      })
+      .catch(err => {
         console.log(err);
       });
   };
@@ -218,13 +237,13 @@ class AdminProfileFindPost extends React.Component {
       .post(`/api/notifications/create`, msg, this.tokenConfig())
       .then(msg => {
         if (!msg) {
-          alert('Failed to notify the user.');
+          alert("Failed to notify the user.");
         } else {
-          alert('Notified the user.');
+          alert("Notified the user.");
         }
       })
       .catch(err => {
-        alert('Failed to notify the user.');
+        alert("Failed to notify the user.");
         console.log(err);
       });
   };
@@ -236,15 +255,15 @@ class AdminProfileFindPost extends React.Component {
     // Headers
     const config = {
       headers: {
-        'Content-type': 'application/json',
-      },
+        "Content-type": "application/json"
+      }
     };
 
     // If token, add to headers
     if (token) {
-      config.headers['x-auth-token'] = token;
+      config.headers["x-auth-token"] = token;
     } else {
-      window.location.href = '/';
+      window.location.href = "/";
     }
 
     return config;
@@ -255,10 +274,12 @@ class AdminProfileFindPost extends React.Component {
     this.tempElements.display_post = document.getElementById('display-post');
     this.tempElements.display_post.setAttribute('hidden', true);
 
-    this.tempElements.display_delete = document.getElementById('delete-warning');
-    this.tempElements.display_delete.setAttribute('hidden', true);
+    this.tempElements.display_delete = document.getElementById(
+      "delete-warning"
+    );
+    this.tempElements.display_delete.setAttribute("hidden", true);
 
-    this.tempElements.button_delete = document.getElementById('button-delete');
+    this.tempElements.button_delete = document.getElementById("button-delete");
   }
 
   componentWillUnmount() {
@@ -280,7 +301,11 @@ class AdminProfileFindPost extends React.Component {
             value={this.state.inputid}
             onChange={this.handleInputChange}
           />
-          <button type="submit" className="btn btn-primary ml-2" onClick={this.getPostInfo}>
+          <button
+            type="submit"
+            className="btn btn-primary ml-2"
+            onClick={this.getPostInfo}
+          >
             Find
           </button>
         </form>
@@ -325,15 +350,20 @@ class AdminProfileFindPost extends React.Component {
                   </div>
                   <div id="delete-warning">
                     <h6>
-                        Deleted{' '}
-                        {Math.floor((Date.now() - this.state.delete_date) / (1000 * 60 * 60 * 24))} days ago.
+                      Deleted{" "}
+                      {Math.floor(
+                        (Date.now() - this.state.delete_date) /
+                          (1000 * 60 * 60 * 24)
+                      )}{" "}
+                      days ago.
                     </h6>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-md-3 edit-post-buttons">
-              <button className="btn btn-success btn-block" 
+              <button
+                className="btn btn-success btn-block"
                 onClick={this.saveChange}
               >
                 Save Changes
@@ -343,6 +373,14 @@ class AdminProfileFindPost extends React.Component {
                 id="button-delete"
                 className="btn btn-danger btn-block"
                 onClick={this.changeDeleteToServer}
+              >
+                Hide
+              </button>
+              <button
+                type="button"
+                id="button-delete-perm"
+                className="btn btn-danger btn-block"
+                onClick={this.permDelete}
               >
                 Delete
               </button>
@@ -359,7 +397,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error,
   current_user: state.auth.user,
-  auth: state.auth,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(AdminProfileFindPost);
