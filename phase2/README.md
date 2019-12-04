@@ -33,15 +33,19 @@ password: `dev`
 
 **Connect db with IDE:** `mongodb+srv://dev:dev@shareex-36p7c.mongodb.net/shareex?retryWrites=true&w=majority`
 
-
-
 #### Home Page
 
 All latest posts (limit to be 100) are displayed by default. 2 filters: category and sort by can be applied to find the posts you want. 
 
 The search bar in the navbar can be used to search for posts and user by their title/username from anywhere in the app. After getting search results, you can still apply filters on those results.
 
-Recommendations are filtered out from all posts, sorted by created time and number of views.
+Recommendations are filtered out from all posts, sorted by created time and number of views, intending to recommend the latest and most popular posts to user.
+
+#### Post
+
+On Home Page, posts are displayed in card form. User can like or dislike a post. Unlike is only allowed if the user has liked the post.
+
+Admin user can like or dislike a post as many times as he/she wants. Inappropriate posts can be deleted or hidden by admin. If a post is hidden, regular user can no longer see it. But admin can still see it and a `hidden` label is displayed for admin.
 
 #### Navbar
 
@@ -49,7 +53,7 @@ Content in navbar are displayed based on authentication. e.g. `logout` only appe
 
 #### Sign in & Sign up
 
-Passwords are all encrypted with bcrypt.
+Passwords are all encrypted with bcrypt. User session is set to be 2 hours long, i.e. expired after 2 hours.
 
 #### Create a new post.
 
@@ -90,3 +94,8 @@ User can report a post by clicking `Report Post` button located on the right sid
 #### Favourite a post
 
 User can favorite a post of others' by clicking the `Favourite` button  located on the right side of the post page. After clicking this button, the button will become transparent, and it cannot be clicked again. Notice: user will not be able to report or favourite his/her own post.
+
+## Special features
+
+- All pages support mobile device display. Elements on page are set to change depending on screen sizes.
+- Dark and light theme: are remembered as user change it. In next login the same color theme is displayed for the user.

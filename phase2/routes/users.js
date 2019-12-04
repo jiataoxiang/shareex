@@ -80,7 +80,7 @@ router.post('/', (req, res) => {
         { id: user._id },
         process.env.jwtSecret,
         {
-          expiresIn: 12 * hour,
+          expiresIn: 2 * hour,
         },
         (err, token) => {
           if (err) throw err;
@@ -128,7 +128,7 @@ router.post('/login', (req, res) => {
             { id: user._id },
             process.env.jwtSecret,
             {
-              expiresIn: hour * 12,
+              expiresIn: hour * 2,
             },
             (err, token) => {
               if (err) throw err;

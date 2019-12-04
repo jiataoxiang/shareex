@@ -312,7 +312,7 @@ class OtherProfile extends React.Component {
                   </div>
                 )}
               </div>
-              <h2>Options</h2>
+              <h2 id="option">Options</h2>
               <div className="list-group options">
                 {this.state.functions.map(fun => (
                   <button
