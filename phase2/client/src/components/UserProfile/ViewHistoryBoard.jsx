@@ -6,9 +6,11 @@ import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 
 class ViewHistoryBoard extends Component {
+  _isMount = true;
   state = { post_ids: this.props.posts ? this.props.posts : [], posts: [] };
 
   componentDidMount() {
+    this._isMount = true;
     store.dispatch(loadUser());
     this.updatePosts();
   }
@@ -19,7 +21,9 @@ class ViewHistoryBoard extends Component {
     axios
       .get('/api/posts/post-array', config)
       .then(res => {
-        this.setState({ posts: res.data });
+        if (this._isMount){
+          this.setState({ posts: res.data });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -35,12 +39,18 @@ class ViewHistoryBoard extends Component {
       )
       .then(res => {
         store.dispatch(loadUser());
-        this.setState({ post_ids: [], posts: [] });
+        if (this._isMount) {
+          this.setState({ post_ids: [], posts: [] });
+        }
       })
       .catch(err => {
         console.log(err);
       });
   };
+
+  componentWillUnmount() {
+    this._isMount = false;
+  }
 
   render() {
     const { posts } = this.state;
