@@ -6,6 +6,10 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  h2,
+  h3 {
+    color: white;
+  }
   .container-fluid {
     .modal-backdrop {
       position: unset !important;
