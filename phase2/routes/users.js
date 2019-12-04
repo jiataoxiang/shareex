@@ -173,10 +173,6 @@ router.delete('/:user_id', isAuth, isAdmin, (req, res) => {
     user.remove().catch(err => {
       return res.status(500).json({ message: err.message });
     });
-
-    // req.flash("success", "Your account has been deleted.");
-    // req.logout();
-    // return res.redirect("/");
     return res.json({ message: 'user deleted' });
   });
 });

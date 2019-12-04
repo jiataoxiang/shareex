@@ -417,6 +417,7 @@ class SinglePost extends Component {
                   </div>
                 ) : null}
                 <h2>{this.state.post.title}</h2>
+                <h6 id="category-display">Category: {this.state.post.category}</h6>
                 <div className="post-content">
                   <Attachment
                     key={uid(rand_string())}
