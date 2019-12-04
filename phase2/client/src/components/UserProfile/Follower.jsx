@@ -36,8 +36,7 @@ class Follower extends React.Component {
 
   redirectProfile = () => {
     this.props.history.push({
-      pathname: '/otherprofile',
-      state: { post_id: null, author: this.state.follow },
+      pathname: '/otherprofile/' + this.state.follow,
     });
   };
 
