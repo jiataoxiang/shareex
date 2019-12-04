@@ -120,7 +120,7 @@ In the routes folder in `phase2`, there are all of our route files.
 
 There are too many routes, every route in these files has comments explaining their functions.
 
-
+In middleware folder, auth.js includes some middleware functions. We add these middlewares to routes as needed to check if user if authenticated, authorized or is an admin.
 
 #### User Profile `./userprofile`
 
