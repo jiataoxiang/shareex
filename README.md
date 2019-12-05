@@ -40,7 +40,8 @@ npm start
 | user     | user     |
 | user2    | user2    |
 | user3    | user3    |
-| User4    | user4    |
+| user4    | user4    |
+| user5    | user5    |
 | admin    | admin    |
 
 ## Connect db through shell
