@@ -11,6 +11,13 @@ class Follower extends React.Component {
     follow: this.props.follow,
   };
 
+  checkExist = () => {
+    if (this.state.follower_name) {
+      return true;
+    }
+    return false;
+  };
+
   componentDidMount() {
     this._isMount = true;
     //get follow avatar and name
@@ -43,11 +50,13 @@ class Follower extends React.Component {
   render() {
     return (
       <div>
-        <div className="follower" onClick={this.redirectProfile}>
-          <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" />
-          <span className="username-text username-color">{this.state.follower_name}</span>
-        </div>
-        <br />
+        {this.checkExist() ? (
+          <div className="follower" onClick={this.redirectProfile}>
+            <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" />
+            <span className="username-text username-color">{this.state.follower_name}</span>
+            <br />
+          </div>
+        ) : null}
       </div>
     );
   }
