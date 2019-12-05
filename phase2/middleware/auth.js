@@ -58,10 +58,8 @@ login as admin user could bypass this check
 if is admin, req.user.admin will be set to true
 */
 function isAuthorizedUser(req, res, next) {
-  console.log(req.user.id);
   User.findById(req.user.id)
     .then(user => {
-      console.log(user);
       if (!user) res.status(404).send('user not found');
       if (user.admin) {
         req.user.admin = true;
