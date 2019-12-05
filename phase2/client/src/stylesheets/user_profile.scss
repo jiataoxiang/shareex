@@ -254,8 +254,14 @@
     height: 400px;
   }
   .favorite-board {
+    h3 {
+      color: white;
+    }
   }
   .view-history-board {
+    h3 {
+      color: white;
+    }
     .btn-remove {
       margin-top: 5px;
     }

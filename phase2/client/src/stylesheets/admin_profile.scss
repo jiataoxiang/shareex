@@ -3,11 +3,11 @@
   padding-top: 100px;
   padding-bottom: 100px;
   p {
-    color: white;
+    color: var(--text);
   }
 
   .btn {
-    color: var(--text);
+    color: white;
   }
   button[text='Find'] {
     margin-left: 10px;
