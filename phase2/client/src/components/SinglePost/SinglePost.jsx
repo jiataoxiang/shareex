@@ -520,7 +520,10 @@ class SinglePost extends Component {
                       <div className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
                           <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLongTitle">
+                            <h5
+                              className="modal-title repost-post-title"
+                              id="exampleModalLongTitle"
+                            >
                               Report this post.
                             </h5>
                           </div>
