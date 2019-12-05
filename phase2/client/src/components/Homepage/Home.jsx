@@ -28,9 +28,26 @@ class Home extends Component {
         this.search();
       }
     }
+    this.updateColorTheme();
     this.updatePosts();
     this.updateRecommendations();
   }
+
+  updateColorTheme = () => {
+    if (this.props.isAuthenticated && this.props.current_user.color_theme) {
+      if (document.documentElement.getAttribute('theme') !== this.props.current_user.color_theme) {
+        this.colorTransition();
+        document.documentElement.setAttribute('theme', this.props.current_user.color_theme);
+      }
+    }
+  };
+
+  colorTransition = () => {
+    document.documentElement.classList.add('transition');
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('transition');
+    }, 800);
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location && nextProps.location.state) {
