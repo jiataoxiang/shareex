@@ -45,7 +45,7 @@ class Follower extends React.Component {
       <div>
         <div className="follower" onClick={this.redirectProfile}>
           <img src={this.state.follower_avatar} className="avatar-image" alt="avatar" />
-          <span className="username-text">{this.state.follower_name}</span>
+          <span className="username-text username-color">{this.state.follower_name}</span>
         </div>
         <br />
       </div>
